@@ -1,7 +1,7 @@
 DATA 622: Exponential Smoothing
 ========================================================
 author: Jeremy O'Brien & Juliann McEachern
-date: 17 October 2019
+date: 17 September 2019
 autosize: true
 incremental: true
 
@@ -11,84 +11,120 @@ library(ggplot2)
 ```
 
 
-Principle
+What's exponential smoothing?
 ========================================================
-Weight based on intervals from time of interest
-(and credit slides)
+* When making predictions, weight recent observations more than older observations
+* Specifically, decrease weights geometrically / exponentially when moving backward
+* Window function (a.k.a. apodization function or tapering function)
+  + zero-valued outside of some chosen interval
+  + normally symmetric around middle of interval
+  + typically near maximum in the middle and tapering away from there
+* Easily learned and applied (i.e. signal processing community in 1940's)
 
 
 Agenda
 ========================================================
 type: section
+* Simple methods
+* Trend methods
+* Seasonal methods
+* 
+* 
+* 
 
 
-(Simple exponential smoothing)
-
-Simple Methods
+Simple methods
 ========================================================
+Time series $y_1,y_2,\dots,y_T$.
 
-Time series $ y_1,y_2,\dots,y_T$.
-
-Random walk forecast
+**Random walk forecast**
 $$
 \begin{aligned}
-  \hat{y}{T+h}{T} = y_T$
+  \hat{y}_{T+h|T} = y_T
 \end{aligned}
 $$
 
-Average forecast
+**Average forecast** 
 $$
 \begin{aligned}
-   \hat{y}{T+h}{T} = \frac1T\sum_{t=1}^T y_t
+   \hat{y}_{T+h|T} = \frac1T\sum_{t=1}^T y_t
 \end{aligned}
 $$
 
-* Want something in between that weights most recent data more highly.
-* Simple exponential smoothing uses a weighted moving average with weights that decrease exponentially.
+Consider a happy median that privileges recent information...
 
 
-Simple Exponential Smoothing
+Simple exponential smoothing
 ========================================================
-
-Forecast equation
+**Forecast equation**
 $$
 \begin{aligned}
-   \hat{y}{T+1}{T} = \alpha y_T + \alpha(1-\alpha) y_{T-1} + \alpha(1-\alpha)^2 y_{T-2}+ \cdots
+   \hat{y}_{T+1|T} = \alpha y_T + \alpha(1-\alpha) y_{T-1} + \alpha(1-\alpha)^2 y_{T-2}+ \cdots
 \end{aligned}
 $$
-where $ 0 \le \alpha \le1$.
+where $0 \le \alpha \le1$
 
-Component form
+Weighted moving average with weights that decrease exponentially
+
+$$
+\small\begin{tabular}{lllll}
+\toprule
+& \multicolumn{4}{l}{Weights assigned to observations for:}\\
+Observation  &   $\alpha = 0.2$   &   $\alpha = 0.4$  &   $\alpha = 0.6$  & $\alpha = 0.8$ \\
+\midrule
+$y_{T}$      & 0.2         & 0.4          & 0.6         & 0.8\\
+$y_{T-1}$    & 0.16        & 0.24         & 0.24        & 0.16\\
+$y_{T-2}$    & 0.128       & 0.144        & 0.096       & 0.032\\
+$y_{T-3}$    & 0.1024      & 0.0864       & 0.0384      & 0.0064\\
+$y_{T-4}$    & $(0.2)(0.8)^4$  & $(0.4)(0.6)^4$   & $(0.6)(0.4)^4$  & $(0.8)(0.2)^4$\\
+$y_{T-5}$    & $(0.2)(0.8)^5$  & $(0.4)(0.6)^5$   & $(0.6)(0.4)^5$  & $(0.8)(0.2)^5$\\
+\bottomrule
+\end{tabular}
+$$
+
+
+Simple exponential smoothing
+========================================================
+**Component form: forecast equation**
 $$
 \begin{align*}
-   \text{Forecast equation}&&\hat{y}{t+h}{t} &= \ell_{t}\\
-   \text{Smoothing equation}&&\ell_{t} &= \alpha y_{t} + (1 - \alpha)\ell_{t-1}
+   \hat{y}_{t+h|t} = \ell_{t}
 \end{align*}
 $$
 
-* $ \ell_t$ is the level (or the smoothed value) of the series at time t.
-* $ \hat{y}{t+1}{t} = \alpha y_t + (1-\alpha) \hat{y}{t}{t-1}$\newline
-  Iterate to get exponentially weighted moving average form.
-
-Weighted average form
+**Component form: smoothing equation**
 $$
 \begin{align*}
-   \displaystyle\hat{y}{T+1}{T}=\sum_{j=0}^{T-1} \alpha(1-\alpha)^j y_{T-j}+(1-\alpha)^T \ell_{0}
+   \ell_{t} = \alpha y_{t} + (1 - \alpha)\ell_{t-1}
+\end{align*}
+$$
+
+$\ell_t$ is level / smoothed value of series at time $t$
+
+$\hat{y}_{t+1|t} = \alpha y_t + (1-\alpha) \hat{y}_{t|t-1}$  
+Iterate for exponentially weighted moving average form
+
+
+Simple exponential smoothing
+========================================================
+**Weighted average form**
+$$
+\begin{align*}
+   \hat{y}{T+1}{T}=\sum_{j=0}^{T-1} \alpha(1-\alpha)^j y_{T-j}+(1-\alpha)^T \ell_{0}
 \end{align*}
 $$
 
 
 Optimization
 ========================================================
-
-  * Need to choose value for $\alpha$ and $\ell_0$
-  * Similarly to regression --- we choose $\alpha$ and $\ell_0$ by minimising SSE:
+To choose value for $\alpha$ and $\ell_0$, minimize SSE:
 $$
 \begin{aligned}
-    \text{SSE}=\sum_{t=1}^T(y_t - \hat{y}{t}{t-1})^2.
+    \text{SSE}=\sum_{t=1}^T(y_t - \hat{y}_{t|t-1})^2.
 \end{aligned}
 $$
-  * Unlike regression there is no closed form solution --- use numerical optimization.
+
+Unlike regression, no closed-form solution so use numerical optimization
 
 
 Example: Oil production
@@ -96,7 +132,6 @@ Example: Oil production
 
 ```{r ses, echo=TRUE, cache=TRUE}
 oildata <- window(oil, start=1996)
-# Estimate parameters
 fc <- ses(oildata, h=5)
 autoplot(fc) +
   autolayer(fitted(fc), series="Fitted") +
@@ -104,27 +139,36 @@ autoplot(fc) +
 ```
 
 
-(Trend methods)
-
-Holt's linear trend
+Trend methods: Holt's linear trend
 ========================================================
-
-Component form
+**Component form: forecast**
 $$
 \begin{align*}
-   \text{Forecast }&& \hat{y}{t+h}{t} &= \ell_{t} + hb_{t} \\
-   \text{Level }&& \ell_{t} &= \alpha y_{t} + (1 - \alpha)(\ell_{t-1} + b_{t-1})\\
-   \text{Trend }&& b_{t} &= \beta^*(\ell_{t} - \ell_{t-1}) + (1 -\beta^*)b_{t-1},
+   \hat{y}_{t+h|t} &= \ell_{t+h}b_{t}
 \end{align*}
 $$
 
-  * Two smoothing parameters $\alpha$ and $ \beta^*$ ($0\le\alpha,\beta^*\le1$).
-  * $ \ell_t$ level: weighted average between $y_t$ and one-step ahead forecast for time $ t$, $ (\ell_{t-1} + b_{t-1}=\hat{y}{t}{t-1})$
-  * $ b_t$ slope: weighted average of $ (\ell_{t} - \ell_{t-1})$ and $ b_{t-1}$, current and previous estimate of slope.
-  * Choose $ \alpha, \beta^*, \ell_0, b_0$ to minimise SSE.
+**Component form: level**
+$$
+\begin{align*}
+    \ell_{t} &= \alpha y_{t} + (1 - \alpha)(\ell_{t-1} + b_{t-1})
+\end{align*}
+$$
+
+**Component form: trend**
+$$
+\begin{align*}
+   b_{t} &= \beta^*(\ell_{t} - \ell_{t-1}) + (1 -\beta^*)b_{t-1}
+\end{align*}
+$$
+
+* Two smoothing parameters $\alpha$ and $\beta^*$ $(0\le\alpha,\beta^*\le1)$  
+* $\ell_t$ level: weighted average between $y_t$ and one-step ahead forecast for time $t$, $(\ell_{t-1} + b_{t-1} = \hat{y}_{t|t-1})$  
+* $b_t$ slope: weighted average of $(\ell_{t} - \ell_{t-1})$ and $ b_{t-1}$, current and previous estimate of slope  
+* Select $\alpha, \beta^*, \ell_0, b_0$ to minimise SSE
 
 
-Holt's method in R
+Example: Holt's method
 ========================================================
 
 ```{r, fig.height=3.6, echo=TRUE}
@@ -136,25 +180,23 @@ window(ausair, start=1990, end=2004) %>%
 
 Damped trend method
 ========================================================
-
-Component form
+**Component form**
 $$
 \begin{align*}
-  \hat{y}{t+h}{t} &= \ell_{t} + (\phi+\phi^2 + \dots + \phi^{h})b_{t} \\
-   \ell_{t} &= \alpha y_{t} + (1 - \alpha)(\ell_{t-1} + \phi b_{t-1})\\
-   b_{t} &= \beta^*(\ell_{t} - \ell_{t-1}) + (1 -\beta^*)\phi b_{t-1}.
+  \hat{y}_{t+h|t} &= \ell_{t} + (\phi+\phi^2 + \dots + \phi^{h})b_{t} \\
+  \ell_{t} &= \alpha y_{t} + (1 - \alpha)(\ell_{t-1} + \phi b_{t-1})\\
+  b_{t} &= \beta^*(\ell_{t} - \ell_{t-1}) + (1 -\beta^*)\phi b_{t-1}
 \end{align*}
 $$
 
-  * Damping parameter $0<\phi<1$.
-  * If $ \phi=1$, identical to Holt's linear trend.
-  * As $ h\rightarrow\infty$, $ \hat{y}{T+h}{T}\rightarrow \ell_T+\phi b_T/(1-\phi)$.
-  * Short-run forecasts trended, long-run forecasts constant.
+* Damping parameter: $0<\phi<1$
+* If $\phi=1$, identical to Holt's linear trend
+* As $h\rightarrow\infty$, $\hat{y}_{T+h|T}\rightarrow \ell_T+\phi b_T/(1-\phi)$
+* Short-run forecasts trended, long-run forecasts constant
 
 
 Example: Air passengers
 ========================================================
-
 ```{r, echo=TRUE, fig.height=3.6}
 window(ausair, start=1990, end=2004) %>%
   holt(damped=TRUE, h=5, PI=FALSE) %>%
@@ -162,56 +204,50 @@ window(ausair, start=1990, end=2004) %>%
 ```
 
 
-(Seasonal methods)
-
-Holt-Winters additive method
+Seasonal methods: Holt-Winters additive method
 ========================================================
+Holt's method extended to capture seasonality
 
-Holt and Winters extended Holt's method to capture seasonality.
-
-Component form
+**Component form**
 $$
 \begin{align*}
-   \hat{y}{t+h}{t} &= \ell_{t} + hb _{t} + s_{t+h-m(k+1)} \\
+   \hat{y}_{t+h|t} &= \ell_{t} + hb _{t} + s_{t+h-m(k+1)} \\
    \ell_{t} &= \alpha(y_{t} - s_{t-m}) + (1 - \alpha)(\ell_{t-1} + b_{t-1})\\
    b_{t} &= \beta^*(\ell_{t} - \ell_{t-1}) + (1 - \beta^*)b_{t-1}\\
    s_{t} &= \gamma (y_{t}-\ell_{t-1}-b_{t-1}) + (1-\gamma)s_{t-m},
 \end{align*}
 $$
 
-  * $ k=$ integer part of $ (h-1)/m$. Ensures estimates from the final year are used for forecasting.
-  * Parameters:&nbsp; $ 0\le \alpha\le 1$,&nbsp; $ 0\le \beta^*\le 1$,&nbsp; $ 0\le \gamma\le 1-\alpha$&nbsp;  and $ m=$  period of seasonality (e.g. $ m=4$ for quarterly data).
+* $k$ is integer part of $(h-1)/m$, ensuring estimates from final year used in forecast
+* Parameters: $0\le \alpha\le 1$, $0\le \beta^*\le 1$, $0\le \gamma\le 1-\alpha$ and $m$ for period of seasonality (e.g. $m=4$ for quarterly data)
 
 
 Holt-Winters additive method
 ========================================================
-
-  * Seasonal component is usually expressed as
-        $ s_{t} = \gamma^* (y_{t}-\ell_{t})+ (1-\gamma^*)s_{t-m}.$
-  * Substitute in for $\ell_t$:
-        $ s_{t} = \gamma^*(1-\alpha) (y_{t}-\ell_{t-1}-b_{t-1})+ [1-\gamma^*(1-\alpha)]s_{t-m}$
-  * We set $ \gamma=\gamma^*(1-\alpha)$.
-  * The usual parameter restriction is $0\le\gamma^*\le1$, which translates to $ 0\le\gamma\le(1-\alpha)$.
+* Seasonal component usually expressed as $s_{t} = \gamma^* (y_{t}-\ell_{t}) + (1-\gamma^*)s_{t-m}$
+* Substitute for $\ell_t$: $s_{t} = \gamma^* (1-\alpha) (y_{t}-\ell_{t-1}-b_{t-1}) + [1-\gamma^*(1-\alpha)]s_{t-m}$
+* Set $\gamma=\gamma^*(1-\alpha)$
+* Usual parameter restriction is $0\le\gamma^*\le1$ or $0\le\gamma\le(1-\alpha)$
 
 
 Holt-Winters multiplicative method
 ========================================================
+When seasonal variations change in proportion to level of series
 
-For when seasonal variations are changing proportional to the level of the series.
-
-Component form
+**Component form**
 $$
 \begin{align*}
-   \hat{y}{t+h}{t} &= (\ell_{t} + hb_{t})s_{t+h-m(k+1)}. \\
+   \hat{y}_{t+h|t} &= (\ell_{t} + hb_{t})s_{t+h-m(k+1)}\\
    \ell_{t} &= \alpha \frac{y_{t}}{s_{t-m}} + (1 - \alpha)(\ell_{t-1} + b_{t-1})\\
-   b_{t} &= \beta^*(\ell_{t}-\ell_{t-1}) + (1 - \beta^*)b_{t-1}        \\
+   b_{t} &= \beta^*(\ell_{t}-\ell_{t-1}) + (1 - \beta^*)b_{t-1}\\
    s_{t} &= \gamma \frac{y_{t}}{(\ell_{t-1} + b_{t-1})} + (1 - \gamma)s_{t-m}
 \end{align*}
 $$
-
-  * $ k$ is integer part of $ (h-1)/m$.
-  * With additive method $ s_t$ is in absolute terms:\newline within each year $ \sum_i s_i \approx 0$.
-  * With multiplicative method $ s_t$ is in relative terms:\newline within each year $ \sum_i s_i \approx m$.
+  * $k$ is integer part of $(h-1)/m$
+  * For additive method, $s_t$ is in absolute terms:  
+  within each year $\sum_i s_i \approx 0$
+  * For multiplicative method, $s_t$ is in relative terms:  
+  within each year $\sum_i s_i \approx m$
 
 
 Example: Visitor Nights
@@ -254,20 +290,22 @@ gridExtra::grid.arrange(p1,p2,ncol=2)
 
 Holt-Winters damped method
 ========================================================
-
-Often the single most accurate forecasting method for seasonal data:
 $$
 \begin{align*}
-   \hat{y}{t+h}{t} &= [\ell_{t} + (\phi+\phi^2 + \dots + \phi^{h})b_{t}]s_{t+h-m(k+1)} \\
+   \hat{y}_{t+h|t} &= [\ell_{t} + (\phi+\phi^2 + \dots + \phi^{h})b_{t}]s_{t+h-m(k+1)} \\
    \ell_{t} &= \alpha(y_{t} / s_{t-m}) + (1 - \alpha)(\ell_{t-1} + \phi b_{t-1})\\
    b_{t} &= \beta^*(\ell_{t} - \ell_{t-1}) + (1 - \beta^*)\phi b_{t-1}       \\
    s_{t} &= \gamma \frac{y_{t}}{(\ell_{t-1} + \phi b_{t-1})} + (1 - \gamma)s_{t-m}
 \end{align*}
 $$
 
+Often single most accurate forecasting method for seasonal data
 
 
 Sources
 ========================================================
 
-1.	TBD
+1. https://github.com/robjhyndman/ETC3550Slides/raw/master/7-exponentialsmoothing.pdf
+2. https://en.wikipedia.org/wiki/Exponential_smoothing
+3. https://machinelearningmastery.com/exponential-smoothing-for-time-series-forecasting-in-python/
+3. 
