@@ -67,7 +67,7 @@ ATM1_arima <- auto.arima(ATM1d, seasonal=F, stepwise=F, approximation=F)
 # Forecast
 ATM1_fc <- ATM1_arima %>% forecast(h=17) 
 
-write.csv(ATM1_fc, file="../data/ATM1_Forecast.csv")
+write.csv(ATM1_fc, file="forecasts/ATM1_Forecast.csv")
 
 #-----ATM-2-----#
 
@@ -88,9 +88,7 @@ ATM2_arima <- auto.arima(ATM2d, seasonal=F, stepwise=F, approximation=F)
 # Forecast
 ATM2_fc <- ATM2_arima %>% forecast(h=17) 
 
-write.csv(ATM2_fc, file="../data/ATM2_Forecast.csv")
-
-
+write.csv(ATM2_fc, file="forecasts/ATM2_Forecast.csv")
 
 #-----ATM-4-----#
 
@@ -111,5 +109,5 @@ ATM4_arima <- auto.arima(ATM4d, seasonal=F, stepwise=F, approximation=F)
 # Forecast
 ATM4_fc <- ATM4_arima %>% forecast(h=17) 
 
-write.csv(ATM4_fc, file="../data/ATM4_Forecast.csv")
+write.csv(ATM4_fc, file="forecasts/ATM4_Forecast.csv")
 
