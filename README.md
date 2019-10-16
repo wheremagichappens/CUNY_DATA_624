@@ -1,5 +1,1 @@
-# CUNY_DATA_624
-
-CUNY DATA 624 Predictive Analytics
-<br>
-***Please keep root tidy and nest coursework materials in folders organized deliverable***
+This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). Please see the page "Get Started" at https://bookdown.org/ for how to compile this example.

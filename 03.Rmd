@@ -1,0 +1,57 @@
+# Part C: Forecasting Waterflow {-#part-C}
+
+```{r library-C, echo=F, message=F, warning=F, error=F, comment=F}
+# processing
+library(readxl)
+
+# graphs
+library(ggplot2)
+
+# formatting
+library(default)
+library(knitr)
+library(kableExtra)
+```
+
+```{r settings-C, echo=F, message=F, warning=F, error=F, comment=F}
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default augments for `kable_styling()` 
+default(kable) <- list("latex")
+default(kable_styling)  <- list(latex_options = c("hold_position", "striped"))
+
+# Set default for ggplot theme
+default(theme) <- list(axis.text.x = element_text(angle = 90, hjust = 1),
+                       axis.title.x = element_blank(),
+                       axis.title.y = element_blank(),
+                       plot.title = element_text(color="#B85231", size=10, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#F5E8E4", size=1, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# GGplot Palette
+default(scale_color_brewer) <- list(palette = "OrRd")
+```
+
+> **Instructions:** Part C consists of two data sets.  These are simple 2 columns sets, however they have different time stamps.  Your optional assignment is to time-base sequence the data and aggregate based on hour (example of what this looks like, follows).  Note for multiple recordings within an hour, take the mean.  Then to test appropriate assumptions and forecast a week forward with confidence bands (80 and 95%). Add these to your existing files above - clearly labeled. 
+
+## Data Exploration {-#c-exploration}
+```{r}
+pipe1_data <- read_excel("data/Waterflow_Pipe1.xlsx")
+pipe2_data <- read_excel("data/Waterflow_Pipe2.xlsx")
+```
+
+## Time-Based Sequence {-#c-model}
+
+Create time-based sequence. 
+
+## Forecast {-#c-forecast}
+
+Data forecast. 
+
+## Discussion {-#c-discussion}
+
+Discuss findings. 

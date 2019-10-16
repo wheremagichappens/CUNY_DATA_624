@@ -1,0 +1,26 @@
+\contentsline {chapter}{Overview}{3}{chapter*.2}% 
+\contentsline {section}{Dependencies}{3}{section*.3}% 
+\contentsline {section}{Data Aquisition}{3}{section*.3}% 
+\contentsline {chapter}{Part A: Forecasting ATM Withdrawals (JM)}{5}{chapter*.4}% 
+\contentsline {section}{Exploration}{5}{section*.5}% 
+\contentsline {section}{Forecast}{6}{section*.5}% 
+\contentsline {subsection}{ATM1}{6}{section*.5}% 
+\contentsline {subsection}{ATM2}{8}{section*.5}% 
+\contentsline {subsection}{ATM3}{9}{section*.5}% 
+\contentsline {subsection}{ATM4}{9}{section*.5}% 
+\contentsline {section}{Forecast}{10}{section*.5}% 
+\contentsline {section}{Discussion}{10}{section*.5}% 
+\contentsline {chapter}{Part A: Forecasting ATM Withdrawals}{11}{chapter*.6}% 
+\contentsline {section}{Exploration}{11}{section*.7}% 
+\contentsline {section}{Forecast}{11}{section*.7}% 
+\contentsline {section}{Discussion}{11}{section*.7}% 
+\contentsline {chapter}{Part B: Forecasting Power}{12}{chapter*.8}% 
+\contentsline {section}{Data Exploration}{12}{section*.9}% 
+\contentsline {section}{Data Model}{12}{section*.9}% 
+\contentsline {section}{Forecast}{12}{section*.9}% 
+\contentsline {section}{Discussion}{12}{section*.9}% 
+\contentsline {chapter}{Part C: Forecasting Waterflow}{13}{chapter*.10}% 
+\contentsline {section}{Data Exploration}{13}{section*.11}% 
+\contentsline {section}{Time-Based Sequence}{13}{section*.11}% 
+\contentsline {section}{Forecast}{13}{section*.11}% 
+\contentsline {section}{Discussion}{13}{section*.11}% 
