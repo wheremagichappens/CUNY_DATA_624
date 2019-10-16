@@ -1,0 +1,8 @@
+"0","#subset data "
+"0","ATM2 <- atm_ts[,2]"
+"0","p1<-autoplot(ATM2)+ labs(title=""Series: ATM2"")+ theme_bw()+theme()"
+"0","p2<-ggAcf(ATM2)+ labs(title=""Acf: ATM2"")+ theme_bw()+theme()"
+"0","p3<-ggPacf(ATM2)+ labs(title=""Pacf: ATM2"")+ theme_bw()+theme()"
+"0","grid.arrange(grob=p1, p2, p3,"
+"0","             layout_matrix = rbind(c(1,1),c(2,3)),"
+"0","             top=textGrob(""Daily ATM Transactions for ATM2"","
