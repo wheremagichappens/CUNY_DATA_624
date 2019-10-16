@@ -1,6 +1,11 @@
 ---
 title: 'DATA 624: Project 1'
-author: 'Juliann McEachern'
+author:
+- Vinicio Haro
+- Sang Yoon (Andy) Hwang
+- Julian McEachern
+- Jeremy O'Brien
+- Bethany Poulin
 date: 'October 22, 2019'
 documentclass: book
 subparagraph: yes
@@ -20,7 +25,7 @@ output:
 
 # Overview {-#overview}
 
-> I am leaving the project overview page here for us to compile our final report in one singular document. We will add additional information here regarding project one to include explanation of process, etc.
+> Insert Project Overview and explain work process. 
 
 ## Dependencies {-#dependencies}
 
@@ -29,22 +34,7 @@ output:
 The following R libraries were used to complete Project 1:
 
 ```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=F}
-# General
-library('easypackages')
-
-libraries('knitr', 'kableExtra', 'default')
-
-# Processing
-libraries('readxl', 'tidyverse', 'janitor', 'lubridate')
-
-# Graphing
-libraries('ggplot2', 'grid', 'gridExtra')
-
-# Timeseries 
-libraries('zoo', 'urca', 'tseries', 'timetk')
-
-# Math
-libraries('forecast')
+# Insert All Used Dependencies Here 
 ```
 
 ## Data {-#data}
@@ -61,14 +51,20 @@ pipe1_data <- read_excel("data/Waterflow_Pipe1.xlsx")
 pipe2_data <- read_excel("data/Waterflow_Pipe2.xlsx")
 
 # Source Code
-source("Part-A-JM.R")
+source("scripts/Part-A-JM.R") ## Example
 ```
 
 ```{r settings-A-JM, echo=F, message=F, warning=F, error=F, comment=F}
 ### UNIVERSAL DATA SOURCING & DEFAULT SETTINGS FOR PROJECT
 
-# Load All Sourced Code
-suppressWarnings(source("Part-A-JM.R"))
+library(knitr)
+library(kableExtra)
+library(default)
+
+# Load All Sourced Code Here >>> 
+
+### EXAMPLE:
+suppressWarnings(source("scripts/Part-A-JM.R"))
 
 # Set default augments for code chunks
 knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
@@ -94,106 +90,17 @@ default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
 ```
 
 
-# Part A 
+# Part A: ATMs
 
 >  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
 
-## Exploration
+# Part B: Power
 
-Through data exploration, we identified that the original data file contained `NA` values in our `ATM` and `Cash` columns for 14 observations in May 2010. We removed these missing values and transformed the dataset into a wide format.  Our cleaned dataframe was then converted into a timeseries format using the `zoo` package for forecasting in the next section. Our initial review of the data showed that ATM2 contained one missing value on 2009-10-25 and that ATM4 contained a potential outlier of $1123 on 2010-02-09. We replaced both values with the corresponding mean value of each machine. 
+>  **Instructions:** Forecasting Power: Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward.    Add these to your existing files above - clearly labeled.  
 
-Next, we used a scatterplot to take an initial look at the correlation between cash withdrawals and dates for each machine.  We can identified similiar patterns between ATM1 and ATM4, which show non-linear fluxuations that suggest a potential trend component in these timeseries. ATM2 follows a relatively linear path and decreases overtime. This changes in the last few observations, where withdrawals begin to increase. There are only 3 observed transactions for ATM3 that appear at the end of the captured time period. 
+# Part C: Waterflow
 
-```{r}
-# plot atms as scatterplot
-atm %>% 
-  # re-gather observations for facet plot
-  gather(key=ATM, value=Cash, ATM1,ATM2, ATM3,ATM4) %>% 
-  # remove NA value from ATM2
-  filter(complete.cases(.)) %>% 
-  # plot 
-  ggplot(aes(DATE, Cash, color=ATM)) +
-  geom_point() +
-  geom_smooth(method="loess") +
-  facet_wrap(~ATM, scales='free_x', nrow=1) +
-  labs(title="ATM Scatterplot")+
-  theme_bw()+
-  theme(legend.position = 'none', axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_brewer()
-```
-
-## Timeseries Plots 
-
-As mentioned in our data exploration, the time series for ATM3 only contains 3 transactions, thus we deemed this series not suitable for modeling and forecasting. As a result, our following sections focus on evaluating, modeling, and forecasting transactions for only the ATM1, ATM2, and ATM4 series.
-
-```{r, fig.height=5}
-autoplot(atm_zoo)+
-  labs(title = "Daily ATM Transactions", subtitle = "Series: ATM1", ylab="Withdrawals (in hundreds)")+ 
-  theme_bw()+ theme()
-```
-
-### Evaluation 
-
-```{r fig.height=4}
-p1<-ggAcf(ATM1_ts)+ labs(title="ACF: ATM1")+ theme_bw()+theme()
-p2<-ggPacf(ATM1_ts)+ labs(title="PACF: ATM1")+ theme_bw()+ theme()
-p3<-ggAcf(ATM2_ts)+ labs(title="ACF: ATM2")+ theme_bw()+theme()
-p4<-ggPacf(ATM2_ts)+ labs(title="PACF: ATM2")+ theme_bw()+ theme()
-p5<-ggAcf(ATM4_ts)+ labs(title="ACF: ATM4")+ theme_bw()+theme()
-p6<-ggPacf(ATM4_ts)+ labs(title="PACF: ATM4")+ theme_bw()+ theme()
-
-grid.arrange(grob=p1, p3, p5, p2, p4, p6, ncol=3)
-```
-
-Our ACF plots for each ATM showcases three large, decreasing lags at 7, 14, and 21. This confirms our assumption about seasonality within our observed data as these lags are indicative of a weekly pattern. These plot suggests our data is non-stationary, thus we performed a unit root test using the `ur.kpss()` function and determined differencing was required on all three series. 
-
-```{r}
-urATM1<-cbind("ATM"="ATM1", "Root Test"=round(ATM1_ur@teststat,4),"Diff Root Test" =round(ATM1d_ur@teststat,4))
-urATM2<-cbind("ATM"="ATM2", "Root Test"=round(ATM2_ur@teststat,4),"Diff Root Test" =round(ATM2d_ur@teststat,4))
-urATM4<-cbind("ATM"="ATM4", "Root Test"=round(ATM4_ur@teststat,4),"Diff Root Test" =round(ATM4d_ur@teststat,4))
-
-rbind(urATM1, urATM2,urATM4) %>% kable(caption="KPSS unit root test") %>% kable_styling() %>% row_spec()
-```
-
-### Modeling 
-
-We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The following models were selected for our series:
-
-*  **ATM1**: ARIMA(2,0,3) with zero mean 
-*  **ATM2**: ARIMA(1,0,4) with zero mean 
-*  **ATM4**: ARIMA(2,0,3) with zero mean 
-
-The following ACF plots show us that our differentiated data is now stationary and the residual histograms confirm that the model adequately fits the observed data. 
-
-```{r}
-p1<-ggAcf(ATM1d)+ labs(title="diff(ATM1)",x="Lag") +theme_bw()+theme()
-p2<- gghistogram(ATM1_arima$residuals, add.normal = T)+
-  labs(title="ATM1", subtitle="ARIMA(3,0,2)")+
-  theme_bw()+theme()
-p3<-ggAcf(ATM2d)+ labs(title="diff(ATM2)",x="Lag") +theme_bw()+theme()
-p4<-gghistogram(ATM2_arima$residuals, add.normal = T)+
-  labs(title="ATM2", subtitle="ARIMA(1,0,4)")+
-  theme_bw()+theme()
-p5<-ggAcf(ATM4d)+ labs(title="diff(ATM4)",x="Lag") +theme_bw()+theme()
-p6<-gghistogram(ATM4_arima$residuals, add.normal = T)+
-  labs(title="ATM4", subtitle="ARIMA(2,0,3)")+
-  theme_bw()+theme()
-
-grid.arrange(grob=p1, p3, p5, ncol=3, top=textGrob(label="ACF Plots"))
-             
-grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Residuals Plots"))
-```
-
-### Forecast
-
-Finally, we applied a forecast to each series for the remaining 17 days in May. The full forecasts can be viewed in the appendix section and are also located within our data output folder.   
-
-```{r}
-ATM1_fc %>% autoplot()+labs(subtitle = "ATM1 Series", x="Days", y="")+theme_bw()+theme()
-ATM2_fc %>% autoplot()+labs(subtitle = "ATM2 Series", x="Days", y="")+theme_bw()+theme()
-ATM4_fc %>% autoplot()+labs(subtitle = "ATM4 Series", x="Days", y="")+theme_bw()+theme()
-```
-
+>  **Instructions:** Part C consists of two data sets.  These are simple 2 columns sets, however they have different time stamps.  Your optional assignment is to time-base sequence the data and aggregate based on hour (example of what this looks like, follows).  Note for multiple recordings within an hour, take the mean.  Then to test appropriate assumptions and forecast a week forward with confidence bands (80 and 95%). Add these to your existing files above - clearly labeled.  
 
 # Appendix {-#Appendix}
 
@@ -202,131 +109,65 @@ ATM4_fc %>% autoplot()+labs(subtitle = "ATM4 Series", x="Days", y="")+theme_bw()
 ### ATM1 Forecast {-#Part-A-FC1}
 
 ```{r}
-ATM1_fc %>% kable(caption="ATM1 Forecast") %>% kable_styling() %>% row_spec()
+#Insert Forecast Here 
 ```
 
 ### ATM2 Forecast {-#Part-A-FC2}
 
 ```{r}
-ATM2_fc %>% kable(caption="ATM2 Forecast") %>% kable_styling() %>% row_spec()
+#Insert Forecast Here 
+```
+
+### ATM3 Forecast {-#Part-A-FC3}
+
+```{r}
+#Insert Forecast Here 
 ```
 
 ### ATM4 Forecast {-#Part-A-FC4}
 
 ```{r}
-ATM4_fc %>% kable(caption="ATM4 Forecast") %>% kable_styling() %>% row_spec()
+#Insert Forecast Here 
 ```
 
 ### R Script {-#Part-A-RScript}
 
-```{r, echo=T, eval=F}
-#-----DEPENDENCIES-----#
-
-library(readxl); library(tidyverse); library(janitor); 
-library(zoo); library(urca); library(forecast)
-
-#-----PRE-PROCESSING-----#
-
-# load data
-atm_data <- read_excel("data/ATM624Data.xlsx") 
-
-# clean dataframe
-atm <- atm_data %>% 
-  # create wide dataframe
-  spread(ATM, Cash) %>% 
-  # remove NA column using function from janitor package
-  remove_empty(which = "cols") %>%
-  # filter unobserved values from May 2010
-  filter(DATE < as.Date("2010-05-01")) %>%
-  # ensure dates are ascending
-  arrange(DATE) 
-
-## remove NA
-atm$ATM2[is.na(atm$ATM2)] <- mean(atm$ATM2, na.rm = TRUE)
-
-## remove outlier
-atm$ATM4[which.max(atm$ATM4)] <- mean(atm$ATM4, na.rm = TRUE)
-
-# create zoo time series   
-atm_zoo <- atm %>%  
-  # remove column & generate date in timeseries using zoo
-  select(-DATE) %>% 
-  # generate ts using zoo 
-  zoo(seq(from = as.Date("2009-05-01"), to = as.Date("2010-05-14"), by = 1))
-
-# create standard time series   
-atm_ts <- atm %>%  
-  # remove column & generate date in timeseries using zoo
-  select(-DATE) %>% 
-  # generate ts using zoo 
-  ts(end=c(2010,4))
-
-#-----ATM-1-----#
-
-#subset data 
-ATM1_zoo <- atm_zoo[,1]
-ATM1_ts <- atm_ts[,1]
-
-#differentiated
-ATM1d <-  diff(ATM1_ts, lag=7)
-
-#unit root test
-ATM1_ur <-ur.kpss(ATM1_ts)
-ATM1d_ur <-ur.kpss(ATM1d)
-
-# ARIMA
-ATM1_arima <- auto.arima(ATM1d, seasonal=F, stepwise=F, approximation=F)
-
-# Forecast
-ATM1_fc <- ATM1_arima %>% forecast(h=17) 
-
-# Save output
-write.csv(ATM1_fc, file="ATM1_Forecast.csv")
-
-#-----ATM-2-----#
-
-#subset data 
-ATM2_zoo <- atm_zoo[,2]
-ATM2_ts <- atm_ts[,2]
-
-#differentiated
-ATM2d <-  diff(ATM2_ts, lag=7)
-
-#unit root test
-ATM2_ur <-ur.kpss(ATM2_ts)
-ATM2d_ur <-ur.kpss(ATM2d)
-
-# ARIMA
-ATM2_arima <- auto.arima(ATM2d, seasonal=F, stepwise=F, approximation=F)
-
-# Forecast
-ATM2_fc <- ATM2_arima %>% forecast(h=17) 
-
-# Save output
-write.csv(ATM2_fc, file="ATM2_Forecast.csv")
-
-#-----ATM-4-----#
-
-#subset data 
-ATM4_zoo <- atm_zoo[,4]
-ATM4_ts <- atm_ts[,4]
-
-#differentiated
-ATM4d <-  diff(ATM4_ts, lag=7)
-
-#unit root test
-ATM4_ur <-ur.kpss(ATM4_ts)
-ATM4d_ur <-ur.kpss(ATM4d)
-
-# ARIMA
-ATM4_arima <- auto.arima(ATM4d, seasonal=F, stepwise=F, approximation=F)
-
-# Forecast
-ATM4_fc <- ATM4_arima %>% forecast(h=17) 
-
-# Save output
-write.csv(ATM4_fc, file="ATM4_Forecast.csv")
+```{r, echo=T}
+#Insert Script Here 
 ```
 
+## Part B {-#Part-B}
+
+### Power Forecast {-#Part-B-FC1}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### R Script {-#Part-B-RScript}
+
+```{r, echo=T}
+#Insert Script Here 
+```
+
+## Part C {-#Part-C}
+
+### Pipes1 Forecast {-#Part-C-FC1}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### Pipes2 Forecast {-#Part-C-FC2}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### R Script {-#Part-C-RScript}
+
+```{r, echo=T}
+#Insert Script Here 
+```
 
 
