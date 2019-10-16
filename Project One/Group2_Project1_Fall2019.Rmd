@@ -1,0 +1,173 @@
+---
+title: 'DATA 624: Project 1'
+author:
+- Vinicio Haro
+- Sang Yoon (Andy) Hwang
+- Julian McEachern
+- Jeremy O'Brien
+- Bethany Poulin
+date: 'October 22, 2019'
+documentclass: book
+subparagraph: yes
+classoption: openany
+output: 
+  pdf_document:
+    highlight: tango
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    citation_package: natbib
+    keep_tex: yes
+    number_sections: true
+    toc: yes
+    toc_depth: 2
+---
+
+# Overview {-#overview}
+
+> Insert Project Overview and explain work process. 
+
+## Dependencies {-#dependencies}
+
+> Please add all libraries used here.
+
+The following R libraries were used to complete Project 1:
+
+```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=F}
+# Insert All Used Dependencies Here 
+```
+
+## Data {-#data}
+
+Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report for discussion purposes. The R scripts are available within our appendix for replication purposes. 
+
+For grading purposes, we exported and saved all forecasts as a csv in our data folder.
+
+```{r, eval=F}
+# Data Aquisition
+atm_data <- read_excel("data/ATM624Data.xlsx") 
+power_data <- read_excel("data/ResidentialCustomerForecastLoad-624.xlsx") 
+pipe1_data <- read_excel("data/Waterflow_Pipe1.xlsx")
+pipe2_data <- read_excel("data/Waterflow_Pipe2.xlsx")
+
+# Source Code
+source("scripts/Part-A-JM.R") ## Example
+```
+
+```{r settings-A-JM, echo=F, message=F, warning=F, error=F, comment=F}
+### UNIVERSAL DATA SOURCING & DEFAULT SETTINGS FOR PROJECT
+
+library(knitr)
+library(kableExtra)
+library(default)
+
+# Load All Sourced Code Here >>> 
+
+### EXAMPLE:
+suppressWarnings(source("scripts/Part-A-JM.R"))
+
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default augments for `kable_styling()` 
+default(kable) <- list(format="latex")
+default(kable_styling)  <- list(latex_options = c("HOLD_position", "striped"))
+default(row_spec) <- list(row=0, bold=T)
+
+# Set default for ggplot theme
+default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
+                       axis.title.x = element_blank(),
+                       axis.title.y = element_blank(),
+                       plot.title = element_text(color="#4c4c4c", size=12, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#cccdd0", size=.75, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# GGplot Palette
+default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
+```
+
+
+# Part A: ATMs
+
+>  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
+
+# Part B: Power
+
+>  **Instructions:** Forecasting Power: Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward.    Add these to your existing files above - clearly labeled.  
+
+# Part C: Waterflow
+
+>  **Instructions:** Part C consists of two data sets.  These are simple 2 columns sets, however they have different time stamps.  Your optional assignment is to time-base sequence the data and aggregate based on hour (example of what this looks like, follows).  Note for multiple recordings within an hour, take the mean.  Then to test appropriate assumptions and forecast a week forward with confidence bands (80 and 95%). Add these to your existing files above - clearly labeled.  
+
+# Appendix {-#Appendix}
+
+## Part A {-#Part-A}
+
+### ATM1 Forecast {-#Part-A-FC1}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### ATM2 Forecast {-#Part-A-FC2}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### ATM3 Forecast {-#Part-A-FC3}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### ATM4 Forecast {-#Part-A-FC4}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### R Script {-#Part-A-RScript}
+
+```{r, echo=T}
+#Insert Script Here 
+```
+
+## Part B {-#Part-B}
+
+### Power Forecast {-#Part-B-FC1}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### R Script {-#Part-B-RScript}
+
+```{r, echo=T}
+#Insert Script Here 
+```
+
+## Part C {-#Part-C}
+
+### Pipes1 Forecast {-#Part-C-FC1}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### Pipes2 Forecast {-#Part-C-FC2}
+
+```{r}
+#Insert Forecast Here 
+```
+
+### R Script {-#Part-C-RScript}
+
+```{r, echo=T}
+#Insert Script Here 
+```
+
+
