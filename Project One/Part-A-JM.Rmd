@@ -80,8 +80,6 @@ default(row_spec) <- list(row=0, bold=T)
 
 # Set default for ggplot theme
 default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
-                       axis.title.x = element_blank(),
-                       axis.title.y = element_blank(),
                        plot.title = element_text(color="#4c4c4c", size=12, face="bold"),
                        plot.subtitle = (element_text(size=8, color="#000000")),
                        legend.title = (element_text(size=10, color="#000000", face="bold")),
@@ -116,7 +114,7 @@ atm %>%
   geom_point() +
   geom_smooth(method="loess") +
   facet_wrap(~ATM, scales='free_x', nrow=1) +
-  labs(title="ATM Scatterplot")+
+  labs(title="ATM Scatterplot",x="", y="Cash (in hundreds)")+
   theme_bw()+
   theme(legend.position = 'none', axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_color_brewer()
@@ -128,7 +126,7 @@ As mentioned in our data exploration, the time series for ATM3 only contains 3 t
 
 ```{r, fig.height=5}
 autoplot(atm_zoo)+
-  labs(title = "Daily ATM Transactions", subtitle = "Series: ATM1", ylab="Withdrawals (in hundreds)")+ 
+  labs(title = "Daily ATM Transactions", subtitle = "Series: ATM1", y="Cash (in hundreds)", x="")+ 
   theme_bw()+ theme()
 ```
 
@@ -150,11 +148,11 @@ grid.arrange(grob=p1, p3, p5, p2, p4, p6, ncol=3)
 Our plots further suggest that the ATM data is non-stationary. We performed a unit root test using the `ur.kpss()` function to confirm this observation. The test results below show that second differencing is required on all three series. 
 
 ```{r}
-urATM1<-cbind("ATM"="ATM1", "No-Diff"=round(ATM1_ur@teststat,4),"Diff-1" =round(ATM1d_ur@teststat,4),"Log-Diff-1" =round(ATM1sd_ur@teststat,4),"Log-Diff-2" =round(ATM1sdd_ur@teststat,4))
+urATM1<-cbind("ATM"="ATM1", "No-Diff"=round(ATM1_ur@teststat,4),"Diff-1" =round(ATM1d_ur@teststat,4))
 
-urATM2<-cbind("ATM"="ATM2", "No-Diff"=round(ATM2_ur@teststat,4),"Diff-1" =round(ATM2d_ur@teststat,4),"Log-Diff-1" =round(ATM2sd_ur@teststat,4),"Log-Diff-2" =round(ATM2sdd_ur@teststat,4))
+urATM2<-cbind("ATM"="ATM2", "No-Diff"=round(ATM2_ur@teststat,4),"Diff-1" =round(ATM2d_ur@teststat,4))
 
-urATM4<-cbind("ATM"="ATM4", "No-Diff"=round(ATM4_ur@teststat,4),"Diff-1" =round(ATM4d_ur@teststat,4),"Log-Diff-1" =round(ATM4sd_ur@teststat,4),"Log-Diff-2" =round(ATM4sdd_ur@teststat,4))
+urATM4<-cbind("ATM"="ATM4", "No-Diff"=round(ATM4_ur@teststat,4),"Diff-1" =round(ATM4d_ur@teststat,4))
 
 rbind(urATM1, urATM2,urATM4) %>% kable(caption="KPSS unit root test") %>% kable_styling() %>% row_spec()
 ```
@@ -170,17 +168,17 @@ We used `auto.arima()` on our differenced data to select the best ARIMA model fo
 The following ACF plots show us that our differentiated data is now stationary and the residual histograms confirm that the model adequately fits the observed data. 
 
 ```{r}
-p1<-ggAcf(ATM1_arima$residuals, lag=21)+ labs(title="ATM1", x="Lag") +theme_bw()+theme()
+p1<-ggAcf(ATM1_arima$residuals, lag=21)+ labs(title="ATM1", x="Lag", y="") +theme_bw()+theme()
 p2<- gghistogram(ATM1_arima$residuals, add.normal = T)+
-  labs(title="ATM1", subtitle="ARIMA(0,1,2)(0,2,1)[7]")+
+  labs(title="ATM1", subtitle="ARIMA(0,1,2)(0,2,1)[7]",x="")+
   theme_bw()+theme()
-p3<-ggAcf(ATM2_arima$residuals, lag=21)+ labs(title="ATM2",x="Lag") +theme_bw()+theme()
+p3<-ggAcf(ATM2_arima$residuals, lag=21)+ labs(title="ATM2",x="Lag", y="") +theme_bw()+theme()
 p4<-gghistogram(ATM2_arima$residuals, add.normal = T)+
-  labs(title="ATM2", subtitle="ARIMA(0,1,3)(0,2,1)[7]")+
+  labs(title="ATM2", subtitle="ARIMA(0,1,3)(0,2,1)[7]",x="")+
   theme_bw()+theme()
-p5<-ggAcf(ATM4_arima$residuals, lag=21)+ labs(title="ATM3",x="Lag") +theme_bw()+theme()
+p5<-ggAcf(ATM4_arima$residuals, lag=21)+ labs(title="ATM3",x="Lag", y="") +theme_bw()+theme()
 p6<-gghistogram(ATM4_arima$residuals, add.normal = T)+
-  labs(title="ATM4", subtitle="ARIMA(0,1,2)(0,2,1)[7]")+
+  labs(title="ATM4", subtitle="ARIMA(0,1,2)(0,2,1)[7]", x="")+
   theme_bw()+theme()
 
 grid.arrange(grob=p1, p3, p5, ncol=3, top=textGrob(label="ACF Plots"))
@@ -195,13 +193,13 @@ Finally, we applied a forecast to each series for 4 weeks of May. The full forec
 ```{r}
 p1<-autoplot(ATM1_arima$fitted)+autolayer(ATM1_fc)+
   coord_cartesian(xlim = c(45, 54))+
-  labs(subtitle = "ATM1 Series", x="Days", y="")+theme_bw()+theme()
+  labs(subtitle = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 p2<-autoplot(ATM2_arima$fitted)+autolayer(ATM2_fc)+
   coord_cartesian(xlim = c(45, 54))+
-  labs(subtitle = "ATM2 Series", x="Days", y="")+theme_bw()+theme()
+  labs(subtitle = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 p3<-autoplot(ATM4_arima$fitted)+autolayer(ATM4_fc)+
   coord_cartesian(xlim = c(45, 54))+
-  labs(subtitle = "ATM4 Series", x="Days", y="")+theme_bw()+theme()
+  labs(subtitle = "ATM4 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 
 grid.arrange(p1, p2, p3, ncol=3, top=textGrob(label="ATM Forecasts"))
 ```
