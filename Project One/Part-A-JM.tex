@@ -324,8 +324,8 @@ ATM2 & 2.0006 & 0.016\\
 \subsection{Modeling}\label{modeling}}
 
 We used \texttt{auto.arima()} on our differenced data to select the best
-ARIMA model for our series. The following models were selected based on
-minimizing AIC values:
+ARIMA model for our series. The full models and accuracy statistics can
+be viewed in the appendix.
 
 \begin{itemize}
 \tightlist
@@ -361,7 +361,11 @@ located within our data output folder.
 \section*{Part A}\label{Part-A}}
 \addcontentsline{toc}{section}{Part A}
 
-\textbf{\texttt{ATM1} ARIMA Model:}
+\hypertarget{Part-A-arima}{%
+\subsection*{ARIMA Model Summary}\label{Part-A-arima}}
+\addcontentsline{toc}{subsection}{ARIMA Model Summary}
+
+\textbf{\texttt{ATM1}:}
 
 \begin{verbatim}
 FALSE Series: ATM1_ts 
@@ -377,7 +381,7 @@ FALSE sigma^2 estimated as 1.726:  log likelihood=-606.1
 FALSE AIC=1220.2   AICc=1220.32   BIC=1235.72
 \end{verbatim}
 
-\textbf{\texttt{ATM2} ARIMA Model:}
+\textbf{\texttt{ATM2}:}
 
 \begin{verbatim}
 FALSE Series: ATM2_ts 
@@ -393,7 +397,7 @@ FALSE sigma^2 estimated as 38.94:  log likelihood=-1162.96
 FALSE AIC=2337.93   AICc=2338.17   BIC=2361.21
 \end{verbatim}
 
-\textbf{\texttt{ATM4} ARIMA Model:}
+\textbf{\texttt{ATM4}:}
 
 \begin{verbatim}
 FALSE Series: ATM4_ts 
