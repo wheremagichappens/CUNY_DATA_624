@@ -163,7 +163,7 @@ We used `auto.arima()` on our differenced data to select the best ARIMA model fo
 
 *  **ATM1**: ARIMA$(0,0,2)(0,1,1)_7$ 
 *  **ATM2**: ARIMA$(2,0,2)(0,1,1)_7$
-*  **ATM4**: ARIMA$(0,0,2)(0,1,1)_7$ with errors 
+*  **ATM4**: ARIMA$(0,0,2)(0,1,1)_7$ 
 
 The following ACF plots show us that our differentiated data is now stationary and the residual histograms confirm that the model adequately fits the observed data. 
 
