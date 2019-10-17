@@ -75,9 +75,9 @@ ATM2_lambda <- BoxCox.lambda(ATM2_ts)
 ATM4_lambda <- BoxCox.lambda(ATM4_ts)
 
 ## ARIMA
-ATM1_arima<-Arima(ATM1_ts, order = c(1, 0, 1), seasonal=list(order=c(0, 2, 1),period = 7), lambda=ATM1_lambda,  method="ML")
-ATM2_arima<-Arima(ATM2_ts, order = c(2, 1, 2), seasonal=list(order=c(2, 1, 2),period = 7), lambda=ATM2_lambda,  method="ML")
-ATM4_arima<-Arima(ATM4_ts, order = c(1, 0, 1), seasonal=list(order=c(1, 1, 1),period = 7), lambda=ATM1_lambda, method="ML")
+ATM1_arima <-auto.arima(ATM1_ts, D = 1, lambda = ATM1_lambda, approximation = F, stepwise = T)
+ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2_lambda, approximation = F, stepwise = T)
+ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4_lambda, approximation = F, stepwise = T)
 
 # Forecast
 ATM1_fc <- forecast(ATM1_arima,h=4)
