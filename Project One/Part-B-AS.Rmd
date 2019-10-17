@@ -1,0 +1,195 @@
+---
+title: 'DATA 624: Project 1 - Part B'
+author: 'Sang Yoon (Andy) Hwang'
+date: 'October 22, 2019'
+documentclass: book
+subparagraph: yes
+classoption: openany
+output: 
+  pdf_document:
+    highlight: tango
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    citation_package: natbib
+    keep_tex: yes
+    number_sections: true
+    toc: yes
+    toc_depth: 2
+---
+
+# Part B: Forecasting Power 
+
+```{r library-B, echo=F, message=F, warning=F, error=F, comment=F}
+# processing
+library(readxl)
+
+# timeseries
+library(forecast)
+
+# graphs
+library(ggplot2)
+
+# formatting
+library(default)
+library(knitr)
+library(kableExtra)
+```
+
+```{r settings-B, echo=F, message=F, warning=F, error=F, comment=F}
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default augments for `kable_styling()` 
+default(kable) <- list("latex")
+default(kable_styling)  <- list(latex_options = c("hold_position", "striped"))
+
+# Set default for ggplot theme
+default(theme) <- list(axis.text.x = element_text(angle = 90, hjust = 1),
+                       axis.title.x = element_blank(),
+                       axis.title.y = element_blank(),
+                       plot.title = element_text(color="#B85231", size=10, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#F5E8E4", size=1, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# GGplot Palette
+default(scale_color_brewer) <- list(palette = "OrRd")
+```
+
+> **Instructions:** Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward.    Add these to your existing files above - clearly labeled.  
+
+## Data Exploration 
+
+Explore data. 
+
+```{r}
+power_data <- read_excel("data/ResidentialCustomerForecastLoad-624.xlsx") 
+```
+# Data preprocessing
+
+Transformed data into time-series with freq - 12.
+```{r}
+ts_data <- ts(power_data$KWH, frequency = 12, start = c(1998,1))
+```
+# EDA - mean imputation, seasonal plots, STL decomposition, Acf graphs, summary statistics
+
+Box-Ljung test shows the series is not white noise (non-stationary with a weak positive trend and strong seasonality). 2008-Sep is missing and it was handled by mean imputation of all Septembers. On Jul 2010, we see that KWH suddenly drops dramatically (indeed outlier) - it could be due to input error but we are not so sure so we will keep it. During summer and winter time, we see the usage is usually higher. Seasonplot and ggAcf show that seasonality is pretty much consistent every year.  
+
+```{r}
+# Missing data detected
+ts_data
+
+# Mean imputation - with September
+sept <- subset(power_data, grepl("Sep", power_data$`YYYY-MMM`))[3]
+sept_mean <- mean(sept$KWH, na.rm=TRUE)
+
+# Apply mean to missing row
+power_data$KWH[is.na(power_data$KWH) == TRUE]  <- sept_mean
+
+# Re-created ts
+ts_data <- ts(power_data$KWH, frequency = 12, start = c(1998,1))
+
+# general series plot
+autoplot(ts_data)
+
+# seasonal plot
+ggseasonplot(ts_data)
+
+# sub-seasonal plot
+ggsubseriesplot(ts_data)
+
+# STL decomposition
+stl(ts_data, s.window = 'periodic') %>% autoplot()
+
+# Autocorrelation
+ggAcf(ts_data)
+Box.test(ts_data, type = c("Ljung-Box"))
+
+# summary statistics
+summary(ts_data)
+summary(power_data)
+
+# Boxplot
+boxplot(ts_data~cycle(ts_data))
+```
+
+
+## Data Model 
+
+From residual test (Box-Ljung), we found that ets - MNM is not reliable predictor as residuals are not white noise. Other models are all valid as residuals are all white noise (p > 0.05 from checkresiduals()). We will compare Arima and ets - AAN and ets - AAdN from stl decomposition in terms of RMSE on test set in the next section.
+
+### Model #1: ARIMA
+```{r}
+# auto.arima
+arima_model <- auto.arima(ts_data)
+
+# forecast values
+arima_model <- forecast(arima_model, h=3)
+
+# forecast plot
+autoplot(arima_model) + autolayer(fitted(arima_model))
+accuracy(arima_model)
+
+checkresiduals(arima_model)
+```
+###  Model #2: STL (no-demped) - ANN
+```{r}
+#stlf - etsmodel estimation --- A,N,N is chosen.
+stl_ndemp <- stlf(ts_data, damped=FALSE, s.window = "periodic", robust=TRUE, h = 3)
+
+# forecast plot
+autoplot(stl_ndemp) + autolayer(fitted(stl_ndemp))
+
+checkresiduals(stl_ndemp)
+```
+###  Model #2-2: STL (demped) - AAdN
+```{r}
+#stlf - etsmodel estimation --- M, Ad, N is chosen.
+stl_demp <- stlf(ts_data, damped=TRUE, s.window = "periodic", robust=TRUE, h = 3)
+
+# forecast plot
+autoplot(stl_demp) + autolayer(fitted(stl_demp))
+
+checkresiduals(stl_demp)
+```
+###  Model #3: ets - MNM
+```{r}
+# ETS models - MNM
+ets_model <- ets(ts_data)
+
+# forecast plot
+autoplot(forecast(ets_model, h=3)) + autolayer(fitted(ets_model))
+
+checkresiduals(ets_model)
+```
+
+## Forecast accuracy 
+
+Using Time series cross-validation, we compute RMSE on testset (h=3). We will pick the model with the lowest RMSE on testset as our final model.
+
+###  Model #1: ARIMA
+```{r}
+arima_cv <- function(x, h){forecast(Arima(ts_data, order = c(0, 0, 1), seasonal = c(1, 1, 1),  include.drift = TRUE), h=h)}
+e <- tsCV(ts_data, arima_cv, h=3)
+
+sqrt(mean(e^2, na.rm=TRUE))
+```
+###  Model #2: STL (no-demped) - ANN
+```{r}
+e <- tsCV(ts_data, stlf, damped=FALSE, s.window = "periodic", robust=TRUE, h=3)
+
+sqrt(mean(e^2, na.rm=TRUE))
+```
+###  Model #2-2: STL (demped) - AAdN
+```{r}
+e <- tsCV(ts_data, stlf, damped=TRUE, s.window = "periodic", robust=TRUE, h=3)
+
+sqrt(mean(e^2, na.rm=TRUE))
+```
+
+## Discussion 
+
+From above, we found that ARIMA is the worst predictor and STL (demped) - AAdN is the best model as RMSE on testset is the lowest. We will pick Model #2-2.
