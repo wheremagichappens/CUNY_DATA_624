@@ -198,7 +198,7 @@ The following R libraries were used to complete Project 1:
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'readxl'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'lubridate'}\NormalTok{)}
 
 \CommentTok{# Graphing}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'gridExtra'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'gridExtra'}\NormalTok{, }\StringTok{'ggfortify'}\NormalTok{,}\StringTok{'ggpubr'}\NormalTok{)}
 
 \CommentTok{# Timeseries }
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'zoo'}\NormalTok{, }\StringTok{'urca'}\NormalTok{, }\StringTok{'tseries'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{)}
@@ -347,7 +347,7 @@ observed data.
 \includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-6-2.pdf}
 
 \hypertarget{forecast}{%
-\subsection{Forecast}\label{forecast}}
+\section{Forecast}\label{forecast}}
 
 Finally, we applied a forecast to each series for 4 weeks of May 2010.
 The full forecasts can be viewed in the appendix section and are also
@@ -533,14 +533,14 @@ FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
 
 \CommentTok{# Modeling }
 \CommentTok{## Lambda for Box-cox transformation}
-\NormalTok{ATM1_lambda <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM1_ts)}
-\NormalTok{ATM2_lambda <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM2_ts)}
-\NormalTok{ATM4_lambda <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM4_ts)}
+\NormalTok{ATM1l <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM1_ts)}
+\NormalTok{ATM2l <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM2_ts)}
+\NormalTok{ATM4l <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM4_ts)}
 
 \CommentTok{## ARIMA}
-\NormalTok{ATM1_arima <-}\KeywordTok{auto.arima}\NormalTok{(ATM1_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM1_lambda, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
-\NormalTok{ATM2_arima<-}\KeywordTok{auto.arima}\NormalTok{(ATM2_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM2_lambda, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
-\NormalTok{ATM4_arima<-}\KeywordTok{auto.arima}\NormalTok{(ATM4_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM4_lambda, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+\NormalTok{ATM1_arima <-}\KeywordTok{auto.arima}\NormalTok{(ATM1_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM1l, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+\NormalTok{ATM2_arima<-}\KeywordTok{auto.arima}\NormalTok{(ATM2_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM2l, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+\NormalTok{ATM4_arima<-}\KeywordTok{auto.arima}\NormalTok{(ATM4_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM4l, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
 
 \CommentTok{# Forecast}
 \NormalTok{ATM1_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM1_arima,}\DataTypeTok{h=}\DecValTok{4}\NormalTok{)}
