@@ -159,26 +159,26 @@ rbind(urATM1, urATM2,urATM4) %>% kable(caption="KPSS unit root test") %>% kable_
 
 ### Modeling 
 
-We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The following models were selected based on AICc values:
+We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The following models were selected based on minimizing AIC values:
 
-*  **ATM1**: ARIMA(0,1,2)(0,2,1)$_7$ with errors 
-*  **ATM2**: ARIMA(0,1,3)(0,2,1)$_7$ with errors 
-*  **ATM4**: ARIMA(0,1,2)(0,2,1)$_7$ with errors 
+*  **ATM1**: ARIMA$(0,0,2)(0,1,1)_7$ 
+*  **ATM2**: ARIMA$(2,0,2)(0,1,1)_7$
+*  **ATM4**: ARIMA$(0,0,2)(0,1,1)_7$ with errors 
 
 The following ACF plots show us that our differentiated data is now stationary and the residual histograms confirm that the model adequately fits the observed data. 
 
 ```{r}
 p1<-ggAcf(ATM1_arima$residuals, lag=21)+ labs(title="ATM1", x="Lag", y="") +theme_bw()+theme()
 p2<- gghistogram(ATM1_arima$residuals, add.normal = T)+
-  labs(title="ATM1", subtitle="ARIMA(0,1,2)(0,2,1)[7]",x="")+
+  labs(title="ATM1", subtitle="ARIMA(0,0,2)(0,1,1)[7]",x="")+
   theme_bw()+theme()
 p3<-ggAcf(ATM2_arima$residuals, lag=21)+ labs(title="ATM2",x="Lag", y="") +theme_bw()+theme()
 p4<-gghistogram(ATM2_arima$residuals, add.normal = T)+
-  labs(title="ATM2", subtitle="ARIMA(0,1,3)(0,2,1)[7]",x="")+
+  labs(title="ATM2", subtitle="ARIMA(2,0,2)(0,1,1)[7]",x="")+
   theme_bw()+theme()
 p5<-ggAcf(ATM4_arima$residuals, lag=21)+ labs(title="ATM3",x="Lag", y="") +theme_bw()+theme()
 p6<-gghistogram(ATM4_arima$residuals, add.normal = T)+
-  labs(title="ATM4", subtitle="ARIMA(0,1,2)(0,2,1)[7]", x="")+
+  labs(title="ATM4", subtitle="ARIMA(0,0,2)(0,1,1)[7]", x="")+
   theme_bw()+theme()
 
 grid.arrange(grob=p1, p3, p5, ncol=3, top=textGrob(label="ACF Plots"))
@@ -188,26 +188,40 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Residuals Plots"))
 
 ### Forecast
 
-Finally, we applied a forecast to each series for 4 weeks of May. The full forecasts can be viewed in the appendix section and are also located within our data output folder.   
+Finally, we applied a forecast to each series for 4 weeks of May 2010. The full forecasts can be viewed in the appendix section and are also located within our data output folder.   
 
 ```{r}
 p1<-autoplot(ATM1_arima$fitted)+autolayer(ATM1_fc)+
-  coord_cartesian(xlim = c(45, 54))+
+  coord_cartesian(xlim = c(48, 54))+
   labs(subtitle = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 p2<-autoplot(ATM2_arima$fitted)+autolayer(ATM2_fc)+
-  coord_cartesian(xlim = c(45, 54))+
+  coord_cartesian(xlim = c(48, 54))+
   labs(subtitle = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 p3<-autoplot(ATM4_arima$fitted)+autolayer(ATM4_fc)+
-  coord_cartesian(xlim = c(45, 54))+
+  coord_cartesian(xlim = c(48, 54))+
   labs(subtitle = "ATM4 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 
 grid.arrange(p1, p2, p3, ncol=3, top=textGrob(label="ATM Forecasts"))
 ```
 
-
 # Appendix {-#Appendix}
 
 ## Part A {-#Part-A}
+
+**`ATM1` ARIMA Model:**
+```{r}
+ATM1_arima
+```
+
+**`ATM2` ARIMA Model:**
+```{r}
+ATM2_arima
+```
+
+**`ATM4` ARIMA Model:**
+```{r}
+ATM4_arima
+```
 
 ### Forecast Tables {-#Part-A-FC}
 

@@ -325,16 +325,16 @@ ATM2 & 2.0006 & 0.016\\
 
 We used \texttt{auto.arima()} on our differenced data to select the best
 ARIMA model for our series. The following models were selected based on
-AICc values:
+minimizing AIC values:
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{ATM1}: ARIMA(0,1,2)(0,2,1)\(_7\) with errors
+  \textbf{ATM1}: ARIMA\((0,0,2)(0,1,1)_7\)
 \item
-  \textbf{ATM2}: ARIMA(0,1,3)(0,2,1)\(_7\) with errors
+  \textbf{ATM2}: ARIMA\((2,0,2)(0,1,1)_7\)
 \item
-  \textbf{ATM4}: ARIMA(0,1,2)(0,2,1)\(_7\) with errors
+  \textbf{ATM4}: ARIMA\((0,0,2)(0,1,1)_7\) with errors
 \end{itemize}
 
 The following ACF plots show us that our differentiated data is now
@@ -347,8 +347,8 @@ fits the observed data.
 \hypertarget{forecast}{%
 \subsection{Forecast}\label{forecast}}
 
-Finally, we applied a forecast to each series for 4 weeks of May. The
-full forecasts can be viewed in the appendix section and are also
+Finally, we applied a forecast to each series for 4 weeks of May 2010.
+The full forecasts can be viewed in the appendix section and are also
 located within our data output folder.
 
 \includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-7-1.pdf}
@@ -361,63 +361,111 @@ located within our data output folder.
 \section*{Part A}\label{Part-A}}
 \addcontentsline{toc}{section}{Part A}
 
+\textbf{\texttt{ATM1} ARIMA Model:}
+
+\begin{verbatim}
+FALSE Series: ATM1_ts 
+FALSE ARIMA(0,0,2)(0,1,1)[7] 
+FALSE Box Cox transformation: lambda= 0.2584338 
+FALSE 
+FALSE Coefficients:
+FALSE          ma1      ma2     sma1
+FALSE       0.1085  -0.1089  -0.6425
+FALSE s.e.  0.0524   0.0521   0.0431
+FALSE 
+FALSE sigma^2 estimated as 1.726:  log likelihood=-606.1
+FALSE AIC=1220.2   AICc=1220.32   BIC=1235.72
+\end{verbatim}
+
+\textbf{\texttt{ATM2} ARIMA Model:}
+
+\begin{verbatim}
+FALSE Series: ATM2_ts 
+FALSE ARIMA(2,0,2)(0,1,1)[7] 
+FALSE Box Cox transformation: lambda= 0.661752 
+FALSE 
+FALSE Coefficients:
+FALSE           ar1      ar2     ma1     ma2     sma1
+FALSE       -0.4238  -0.8978  0.4766  0.7875  -0.7064
+FALSE s.e.   0.0592   0.0473  0.0883  0.0608   0.0417
+FALSE 
+FALSE sigma^2 estimated as 38.94:  log likelihood=-1162.96
+FALSE AIC=2337.93   AICc=2338.17   BIC=2361.21
+\end{verbatim}
+
+\textbf{\texttt{ATM4} ARIMA Model:}
+
+\begin{verbatim}
+FALSE Series: ATM4_ts 
+FALSE ARIMA(0,0,2)(0,1,1)[7] 
+FALSE Box Cox transformation: lambda= 0.2328582 
+FALSE 
+FALSE Coefficients:
+FALSE          ma1      ma2     sma1
+FALSE       0.1095  -0.1088  -0.6474
+FALSE s.e.  0.0524   0.0523   0.0420
+FALSE 
+FALSE sigma^2 estimated as 1.439:  log likelihood=-573.5
+FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
+\end{verbatim}
+
 \hypertarget{Part-A-FC}{%
 \subsection*{Forecast Tables}\label{Part-A-FC}}
 \addcontentsline{toc}{subsection}{Forecast Tables}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-8}ATM1 Forecast}
+\caption{\label{tab:unnamed-chunk-11}ATM1 Forecast}
 \centering
 \begin{tabular}{l|r|r|r|r|r}
 \hline
 \textbf{ } & \textbf{Point Forecast} & \textbf{Lo 80} & \textbf{Hi 80} & \textbf{Lo 95} & \textbf{Hi 95}\\
 \hline
-\rowcolor{gray!6}  53.14286 & 83.817966 & 41.4903974 & 151.93962 & 26.9523824 & 201.31621\\
+\rowcolor{gray!6}  53.14286 & 86.682223 & 48.937327 & 142.63088 & 34.8072635 & 181.28052\\
 \hline
-53.28571 & 110.038431 & 57.0176652 & 192.99088 & 38.2480730 & 252.14714\\
+53.28571 & 100.569238 & 57.906034 & 163.01809 & 41.7309116 & 205.83358\\
 \hline
-\rowcolor{gray!6}  53.42857 & 73.573807 & 35.1840074 & 136.67614 & 22.2984834 & 182.96563\\
+\rowcolor{gray!6}  53.42857 & 73.710292 & 40.220763 & 124.43478 & 27.9573875 & 159.92833\\
 \hline
-53.57143 & 3.627256 & 0.5780783 & 12.53861 & 0.1288479 & 21.18631\\
+53.57143 & 4.229029 & 1.044442 & 11.78734 & 0.3790053 & 18.47789\\
 \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-8}ATM2 Forecast}
+\caption{\label{tab:unnamed-chunk-11}ATM2 Forecast}
 \centering
 \begin{tabular}{l|r|r|r|r|r}
 \hline
 \textbf{ } & \textbf{Point Forecast} & \textbf{Lo 80} & \textbf{Hi 80} & \textbf{Lo 95} & \textbf{Hi 95}\\
 \hline
-\rowcolor{gray!6}  53.14286 & 70.399901 & 38.764054 & 107.86146 & 24.778907 & 129.77780\\
+\rowcolor{gray!6}  53.14286 & 65.913008 & 35.8986677 & 101.54660 & 22.681696 & 122.41793\\
 \hline
-53.28571 & 68.085302 & 36.835282 & 105.24426 & 23.106848 & 127.02440\\
+53.28571 & 71.267875 & 40.2481208 & 107.77822 & 26.412979 & 129.07899\\
 \hline
-\rowcolor{gray!6}  53.42857 & 10.504707 & -0.641800 & 33.57068 & -7.075581 & 48.97866\\
+\rowcolor{gray!6}  53.42857 & 11.469466 & -0.1794763 & 34.28206 & -5.665135 & 49.36418\\
 \hline
-53.57143 & 1.612731 & -8.480086 & 18.35305 & -19.006485 & 31.29272\\
+53.57143 & 2.464152 & -6.7261243 & 19.59437 & -16.373937 & 32.40892\\
 \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-8}ATM4 Forecast}
+\caption{\label{tab:unnamed-chunk-11}ATM4 Forecast}
 \centering
 \begin{tabular}{l|r|r|r|r|r}
 \hline
 \textbf{ } & \textbf{Point Forecast} & \textbf{Lo 80} & \textbf{Hi 80} & \textbf{Lo 95} & \textbf{Hi 95}\\
 \hline
-\rowcolor{gray!6}  53.14286 & 86.584988 & 48.985849 & 142.24258 & 34.8911333 & 180.66018\\
+\rowcolor{gray!6}  53.14286 & 86.714879 & 48.483322 & 144.69401 & 34.4084146 & 185.45461\\
 \hline
-53.28571 & 101.530138 & 58.590610 & 164.29318 & 42.2872278 & 207.28680\\
+53.28571 & 100.581689 & 57.229595 & 165.56192 & 41.0835082 & 210.92017\\
 \hline
-\rowcolor{gray!6}  53.42857 & 73.317040 & 40.109597 & 123.53235 & 27.9290828 & 158.63577\\
+\rowcolor{gray!6}  53.42857 & 73.645362 & 39.882279 & 125.94463 & 27.7136726 & 163.18586\\
 \hline
-53.57143 & 4.356301 & 1.098715 & 12.00592 & 0.4070117 & 18.74379\\
+53.57143 & 4.221433 & 1.165285 & 11.35003 & 0.4840215 & 17.69213\\
 \hline
 \end{tabular}
 \end{table}

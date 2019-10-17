@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  16 OCT 2019 23:49
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  17 OCT 2019 00:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1243,10 +1243,10 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \TeXr@lab=\toks45
 ) (./Part-A-JM.aux
 
-LaTeX Warning: Label `tab:unnamed-chunk-8' multiply defined.
+LaTeX Warning: Label `tab:unnamed-chunk-11' multiply defined.
 
 
-LaTeX Warning: Label `tab:unnamed-chunk-8' multiply defined.
+LaTeX Warning: Label `tab:unnamed-chunk-11' multiply defined.
 
 )
 \openout1 = `Part-A-JM.aux'.
@@ -1449,51 +1449,52 @@ File: "Part-A-JM_files/figure-latex/""unnamed-chunk-7-1".pdf Graphic file (type
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 362.
 
-
-Package xcolor Warning: Incompatible color definition on input line 429.
-
-
-Package xcolor Warning: Incompatible color definition on input line 517.
-
-
-Package xcolor Warning: Incompatible color definition on input line 517.
-
-
-Package xcolor Warning: Incompatible color definition on input line 517.
-
 [7
 
 ]
 
-Package xcolor Warning: Incompatible color definition on input line 517.
+Package xcolor Warning: Incompatible color definition on input line 477.
 
 
-Package xcolor Warning: Incompatible color definition on input line 517.
+Package xcolor Warning: Incompatible color definition on input line 565.
 
 
-Underfull \vbox (badness 10000) detected at line 517
- []
+Package xcolor Warning: Incompatible color definition on input line 565.
 
 
-Underfull \vbox (badness 10000) detected at line 517
- []
-
-
-Package xcolor Warning: Incompatible color definition on input line 517.
+Package xcolor Warning: Incompatible color definition on input line 565.
 
 [8]
 
-Package xcolor Warning: Incompatible color definition on input line 517.
+Package xcolor Warning: Incompatible color definition on input line 565.
 
 
-Package xcolor Warning: Incompatible color definition on input line 517.
+Package xcolor Warning: Incompatible color definition on input line 565.
+
+
+Underfull \vbox (badness 10000) detected at line 565
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 565
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 565.
 
 [9]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 520.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 520.
+
+Package xcolor Warning: Incompatible color definition on input line 565.
+
+
+Package xcolor Warning: Incompatible color definition on input line 565.
+
+[10]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 568.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 568.
 (./Part-A-JM.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 520.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 520.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 568.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 568.
 Package rerunfilecheck Info: File `Part-A-JM.out' has not changed.
 (rerunfilecheck)             Checksum: ABFF5632610DB5243962CCA2492A4667.
 
@@ -1502,11 +1503,11 @@ LaTeX Warning: There were multiply-defined labels.
  ) 
 Here is how much of TeX's memory you used:
  35064 strings out of 494468
- 679230 string characters out of 6172222
- 785299 words of memory out of 5000000
+ 679231 string characters out of 6172222
+ 784297 words of memory out of 5000000
  38951 multiletter control sequences out of 15000+600000
  545259 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  59i,9n,116p,806b,466s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Part-A-JM.pdf (9 pages).
+Output written on Part-A-JM.pdf (10 pages).
