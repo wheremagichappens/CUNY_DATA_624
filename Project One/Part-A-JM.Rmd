@@ -159,7 +159,7 @@ rbind(urATM1, urATM2,urATM4) %>% kable(caption="KPSS unit root test") %>% kable_
 
 ### Modeling 
 
-We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The following models were selected based on minimizing AIC values:
+We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The full models and accuracy statistics can be viewed in the appendix.
 
 *  **ATM1**: ARIMA$(0,0,2)(0,1,1)_7$ 
 *  **ATM2**: ARIMA$(2,0,2)(0,1,1)_7$
@@ -208,17 +208,19 @@ grid.arrange(p1, p2, p3, ncol=3, top=textGrob(label="ATM Forecasts"))
 
 ## Part A {-#Part-A}
 
-**`ATM1` ARIMA Model:**
+### ARIMA Model Summary {-#Part-A-arima}
+
+**`ATM1`:**
 ```{r}
 ATM1_arima
 ```
 
-**`ATM2` ARIMA Model:**
+**`ATM2`:**
 ```{r}
 ATM2_arima
 ```
 
-**`ATM4` ARIMA Model:**
+**`ATM4`:**
 ```{r}
 ATM4_arima
 ```
