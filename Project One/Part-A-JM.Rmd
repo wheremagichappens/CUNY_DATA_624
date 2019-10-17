@@ -159,13 +159,13 @@ rbind(urATM1, urATM2,urATM4) %>% kable(caption="KPSS unit root test") %>% kable_
 
 ### Modeling 
 
-We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The full models and accuracy statistics can be viewed in the appendix.
+We used `auto.arima()` and set `D=1` to account for seasonal differencing of our data to select the best ARIMA models. The full models and accuracy statistics for each series can be viewed in the appendix.
 
 *  **ATM1**: ARIMA$(0,0,2)(0,1,1)_7$ 
 *  **ATM2**: ARIMA$(2,0,2)(0,1,1)_7$
 *  **ATM4**: ARIMA$(0,0,2)(0,1,1)_7$ 
 
-The following ACF plots show us that our differentiated data is now stationary and the residual histograms confirm that the model adequately fits the observed data. 
+The following ACF plots show us that our differentiated data is now stationary. Further, the residual histograms follow a relatively normal distribution, which confirms that the models adequately fits the observed data. 
 
 ```{r}
 p1<-ggAcf(ATM1_arima$residuals, lag=21)+ labs(title="ATM1", x="Lag", y="") +theme_bw()+theme()
@@ -237,6 +237,7 @@ ATM4_fc %>% kable(caption="ATM4 Forecast") %>% kable_styling() %>% row_spec()
 ### R Script {-#Part-A-RScript}
 
 ```{r, echo=T, eval=F}
+
 # load data
 atm_data <- read_excel("data/ATM624Data.xlsx") 
 
@@ -285,14 +286,6 @@ ATM4_ur <-ur.kpss(ATM4_ts)
 ATM1d_ur <-ur.kpss(diff(ATM1_ts, lag=7))
 ATM2d_ur <-ur.kpss(diff(ATM2_ts, lag=7))
 ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
-## seasonal diff
-ATM1sd_ur <-ur.kpss(diff(log(ATM1_ts), lag=7))
-ATM2sd_ur <-ur.kpss(diff(log(ATM2_ts), lag=7))
-ATM4sd_ur <-ur.kpss(diff(log(ATM4_ts), lag=7))
-## seasonal diff-diff
-ATM1sdd_ur <-ur.kpss(diff(diff(log(ATM1_ts)), lag=7))
-ATM2sdd_ur <-ur.kpss(diff(diff(log(ATM2_ts)), lag=7))
-ATM4sdd_ur <-ur.kpss(diff(diff(log(ATM4_ts)), lag=7))
 
 # Modeling 
 ## Lambda for Box-cox transformation
@@ -301,17 +294,9 @@ ATM2_lambda <- BoxCox.lambda(ATM2_ts)
 ATM4_lambda <- BoxCox.lambda(ATM4_ts)
 
 ## ARIMA
-ATM1_arima<-Arima(ATM1_ts, order = c(1, 0, 1), 
-                  seasonal=list(order=c(0, 2, 1),period = 7), 
-                  lambda=ATM1_lambda,  method="ML")
-
-ATM2_arima<-Arima(ATM2_ts, order = c(2, 1, 2), 
-                  seasonal=list(order=c(2, 1, 2),period = 7), 
-                  lambda=ATM2_lambda,  method="ML")
-
-ATM4_arima<-Arima(ATM4_ts, order = c(1, 0, 1), 
-                  seasonal=list(order=c(1, 1, 1),period = 7), 
-                  lambda=ATM1_lambda, method="ML")
+ATM1_arima <-auto.arima(ATM1_ts, D = 1, lambda = ATM1_lambda, approximation = F, stepwise = T)
+ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2_lambda, approximation = F, stepwise = T)
+ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4_lambda, approximation = F, stepwise = T)
 
 # Forecast
 ATM1_fc <- forecast(ATM1_arima,h=4)

@@ -323,9 +323,10 @@ ATM2 & 2.0006 & 0.016\\
 \hypertarget{modeling}{%
 \subsection{Modeling}\label{modeling}}
 
-We used \texttt{auto.arima()} on our differenced data to select the best
-ARIMA model for our series. The full models and accuracy statistics can
-be viewed in the appendix.
+We used \texttt{auto.arima()} and set \texttt{D=1} to account for
+seasonal differencing of our data to select the best ARIMA models. The
+full models and accuracy statistics for each series can be viewed in the
+appendix.
 
 \begin{itemize}
 \tightlist
@@ -338,8 +339,9 @@ be viewed in the appendix.
 \end{itemize}
 
 The following ACF plots show us that our differentiated data is now
-stationary and the residual histograms confirm that the model adequately
-fits the observed data.
+stationary. Further, the residual histograms follow a relatively normal
+distribution, which confirms that the models adequately fits the
+observed data.
 
 \includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-6-1.pdf}
 \includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-6-2.pdf}
@@ -528,14 +530,6 @@ FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
 \NormalTok{ATM1d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM1_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
 \NormalTok{ATM2d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM2_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
 \NormalTok{ATM4d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM4_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
-\CommentTok{## seasonal diff}
-\NormalTok{ATM1sd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM1_ts), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
-\NormalTok{ATM2sd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM2_ts), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
-\NormalTok{ATM4sd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM4_ts), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
-\CommentTok{## seasonal diff-diff}
-\NormalTok{ATM1sdd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM1_ts)), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
-\NormalTok{ATM2sdd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM2_ts)), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
-\NormalTok{ATM4sdd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM4_ts)), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
 
 \CommentTok{# Modeling }
 \CommentTok{## Lambda for Box-cox transformation}
@@ -544,17 +538,9 @@ FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
 \NormalTok{ATM4_lambda <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM4_ts)}
 
 \CommentTok{## ARIMA}
-\NormalTok{ATM1_arima<-}\KeywordTok{Arima}\NormalTok{(ATM1_ts, }\DataTypeTok{order =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }
-                  \DataTypeTok{seasonal=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{order=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{),}\DataTypeTok{period =} \DecValTok{7}\NormalTok{), }
-                  \DataTypeTok{lambda=}\NormalTok{ATM1_lambda,  }\DataTypeTok{method=}\StringTok{"ML"}\NormalTok{)}
-
-\NormalTok{ATM2_arima<-}\KeywordTok{Arima}\NormalTok{(ATM2_ts, }\DataTypeTok{order =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }
-                  \DataTypeTok{seasonal=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{order=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{),}\DataTypeTok{period =} \DecValTok{7}\NormalTok{), }
-                  \DataTypeTok{lambda=}\NormalTok{ATM2_lambda,  }\DataTypeTok{method=}\StringTok{"ML"}\NormalTok{)}
-
-\NormalTok{ATM4_arima<-}\KeywordTok{Arima}\NormalTok{(ATM4_ts, }\DataTypeTok{order =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }
-                  \DataTypeTok{seasonal=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{order=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{),}\DataTypeTok{period =} \DecValTok{7}\NormalTok{), }
-                  \DataTypeTok{lambda=}\NormalTok{ATM1_lambda, }\DataTypeTok{method=}\StringTok{"ML"}\NormalTok{)}
+\NormalTok{ATM1_arima <-}\KeywordTok{auto.arima}\NormalTok{(ATM1_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM1_lambda, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+\NormalTok{ATM2_arima<-}\KeywordTok{auto.arima}\NormalTok{(ATM2_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM2_lambda, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+\NormalTok{ATM4_arima<-}\KeywordTok{auto.arima}\NormalTok{(ATM4_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =}\NormalTok{ ATM4_lambda, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
 
 \CommentTok{# Forecast}
 \NormalTok{ATM1_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM1_arima,}\DataTypeTok{h=}\DecValTok{4}\NormalTok{)}

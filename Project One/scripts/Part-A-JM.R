@@ -59,14 +59,6 @@ ATM4_ur <-ur.kpss(ATM4_ts)
 ATM1d_ur <-ur.kpss(diff(ATM1_ts, lag=7))
 ATM2d_ur <-ur.kpss(diff(ATM2_ts, lag=7))
 ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
-## seasonal diff
-ATM1sd_ur <-ur.kpss(diff(log(ATM1_ts), lag=7))
-ATM2sd_ur <-ur.kpss(diff(log(ATM2_ts), lag=7))
-ATM4sd_ur <-ur.kpss(diff(log(ATM4_ts), lag=7))
-## seasonal diff-diff
-ATM1sdd_ur <-ur.kpss(diff(diff(log(ATM1_ts)), lag=7))
-ATM2sdd_ur <-ur.kpss(diff(diff(log(ATM2_ts)), lag=7))
-ATM4sdd_ur <-ur.kpss(diff(diff(log(ATM4_ts)), lag=7))
 
 # Modeling 
 ## Lambda for Box-cox transformation
