@@ -188,17 +188,17 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Residuals Plots"))
 
 ## Forecast
 
-Finally, we applied a forecast to each series for 4 weeks of May 2010. The full forecasts can be viewed in the appendix section and are also located within our data output folder.   
+Finally, we applied a forecast to each series for 31 days, roughly 4.5 weeks, for May 2010. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.   
 
 ```{r}
 p1<-autoplot(ATM1_arima$fitted)+autolayer(ATM1_fc, color="peachpuff1")+
-  coord_cartesian(xlim = c(48, 54))+
+  coord_cartesian(xlim = c(40, 58))+
   labs(subtitle = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 p2<-autoplot(ATM2_arima$fitted)+autolayer(ATM2_fc,  color="lightpink")+
-  coord_cartesian(xlim = c(48, 54))+
+  coord_cartesian(xlim = c(40, 58))+
   labs(subtitle = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 p3<-autoplot(ATM4_arima$fitted)+autolayer(ATM4_fc, color="deeppink4")+
-  coord_cartesian(xlim = c(48, 54))+
+  coord_cartesian(xlim = c(40, 58))+
   labs(subtitle = "ATM4 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 
 grid.arrange(p1, p2, p3, ncol=3, top=textGrob(label="ATM Forecasts"))
@@ -298,9 +298,9 @@ ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2l, approximation = F, stepwi
 ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4l, approximation = F, stepwise = T)
 
 # Forecast
-ATM1_fc <- forecast(ATM1_arima,h=4)
-ATM2_fc <- forecast(ATM2_arima,h=4)
-ATM4_fc <- forecast(ATM4_arima,h=4)
+ATM1_fc <- forecast(ATM1_arima,h=31)
+ATM2_fc <- forecast(ATM2_arima,h=31)
+ATM4_fc <- forecast(ATM4_arima,h=31)
 
 # Save output
 write.csv(ATM1_fc, file="forecasts/ATM1_Forecast.csv")

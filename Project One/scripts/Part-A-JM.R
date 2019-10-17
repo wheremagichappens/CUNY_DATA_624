@@ -72,9 +72,9 @@ ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2l, approximation = F, stepwi
 ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4l, approximation = F, stepwise = T)
 
 # Forecast
-ATM1_fc <- forecast(ATM1_arima,h=4)
-ATM2_fc <- forecast(ATM2_arima,h=4)
-ATM4_fc <- forecast(ATM4_arima,h=4)
+ATM1_fc <- forecast(ATM1_arima,h=31)
+ATM2_fc <- forecast(ATM2_arima,h=31)
+ATM4_fc <- forecast(ATM4_arima,h=31)
 
 # Save output
 write.csv(ATM1_fc, file="forecasts/ATM1_Forecast.csv")
