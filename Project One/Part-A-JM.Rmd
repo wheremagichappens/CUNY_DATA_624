@@ -132,7 +132,9 @@ autoplot(atm_zoo)+
   theme_bw()+ theme()
 ```
 
-### Evaluation 
+## Evaluation 
+
+We constructed our timeseries using a weekly frequency. Our ACF plots for each ATM showcases large, decreasing lags starting at 7. This pattern continues in a multiple of seven, which confirms our assumption about seasonality within the observed data. These lags are indicative of a weekly pattern. 
 
 ```{r fig.height=4}
 p1<-ggAcf(ATM1_ts)+ labs(title="ACF: ATM1")+ theme_bw()+theme()
@@ -145,38 +147,40 @@ p6<-ggPacf(ATM4_ts)+ labs(title="PACF: ATM4")+ theme_bw()+ theme()
 grid.arrange(grob=p1, p3, p5, p2, p4, p6, ncol=3)
 ```
 
-Our ACF plots for each ATM showcases three large, decreasing lags at 7, 14, and 21. This confirms our assumption about seasonality within our observed data as these lags are indicative of a weekly pattern. These plot suggests our data is non-stationary, thus we performed a unit root test using the `ur.kpss()` function and determined differencing was required on all three series. 
+Our plots further suggest that the ATM data is non-stationary. We performed a unit root test using the `ur.kpss()` function to confirm this observation. The test results below show that second differencing is required on all three series. 
 
 ```{r}
-urATM1<-cbind("ATM"="ATM1", "Root Test"=round(ATM1_ur@teststat,4),"Diff Root Test" =round(ATM1d_ur@teststat,4))
-urATM2<-cbind("ATM"="ATM2", "Root Test"=round(ATM2_ur@teststat,4),"Diff Root Test" =round(ATM2d_ur@teststat,4))
-urATM4<-cbind("ATM"="ATM4", "Root Test"=round(ATM4_ur@teststat,4),"Diff Root Test" =round(ATM4d_ur@teststat,4))
+urATM1<-cbind("ATM"="ATM1", "No-Diff"=round(ATM1_ur@teststat,4),"Diff-1" =round(ATM1d_ur@teststat,4),"Log-Diff-1" =round(ATM1sd_ur@teststat,4),"Log-Diff-2" =round(ATM1sdd_ur@teststat,4))
+
+urATM2<-cbind("ATM"="ATM2", "No-Diff"=round(ATM2_ur@teststat,4),"Diff-1" =round(ATM2d_ur@teststat,4),"Log-Diff-1" =round(ATM2sd_ur@teststat,4),"Log-Diff-2" =round(ATM2sdd_ur@teststat,4))
+
+urATM4<-cbind("ATM"="ATM4", "No-Diff"=round(ATM4_ur@teststat,4),"Diff-1" =round(ATM4d_ur@teststat,4),"Log-Diff-1" =round(ATM4sd_ur@teststat,4),"Log-Diff-2" =round(ATM4sdd_ur@teststat,4))
 
 rbind(urATM1, urATM2,urATM4) %>% kable(caption="KPSS unit root test") %>% kable_styling() %>% row_spec()
 ```
 
 ### Modeling 
 
-We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The following models were selected for our series:
+We used `auto.arima()` on our differenced data to select the best ARIMA model for our series. The following models were selected based on AICc values:
 
-*  **ATM1**: ARIMA(2,0,3) with zero mean 
-*  **ATM2**: ARIMA(1,0,4) with zero mean 
-*  **ATM4**: ARIMA(2,0,3) with zero mean 
+*  **ATM1**: ARIMA(0,1,2)(0,2,1)$_7$ with errors 
+*  **ATM2**: ARIMA(0,1,3)(0,2,1)$_7$ with errors 
+*  **ATM4**: ARIMA(0,1,2)(0,2,1)$_7$ with errors 
 
 The following ACF plots show us that our differentiated data is now stationary and the residual histograms confirm that the model adequately fits the observed data. 
 
 ```{r}
-p1<-ggAcf(ATM1d)+ labs(title="diff(ATM1)",x="Lag") +theme_bw()+theme()
+p1<-ggAcf(ATM1_arima$residuals, lag=21)+ labs(title="ATM1", x="Lag") +theme_bw()+theme()
 p2<- gghistogram(ATM1_arima$residuals, add.normal = T)+
-  labs(title="ATM1", subtitle="ARIMA(3,0,2)")+
+  labs(title="ATM1", subtitle="ARIMA(0,1,2)(0,2,1)[7]")+
   theme_bw()+theme()
-p3<-ggAcf(ATM2d)+ labs(title="diff(ATM2)",x="Lag") +theme_bw()+theme()
+p3<-ggAcf(ATM2_arima$residuals, lag=21)+ labs(title="ATM2",x="Lag") +theme_bw()+theme()
 p4<-gghistogram(ATM2_arima$residuals, add.normal = T)+
-  labs(title="ATM2", subtitle="ARIMA(1,0,4)")+
+  labs(title="ATM2", subtitle="ARIMA(0,1,3)(0,2,1)[7]")+
   theme_bw()+theme()
-p5<-ggAcf(ATM4d)+ labs(title="diff(ATM4)",x="Lag") +theme_bw()+theme()
+p5<-ggAcf(ATM4_arima$residuals, lag=21)+ labs(title="ATM3",x="Lag") +theme_bw()+theme()
 p6<-gghistogram(ATM4_arima$residuals, add.normal = T)+
-  labs(title="ATM4", subtitle="ARIMA(2,0,3)")+
+  labs(title="ATM4", subtitle="ARIMA(0,1,2)(0,2,1)[7]")+
   theme_bw()+theme()
 
 grid.arrange(grob=p1, p3, p5, ncol=3, top=textGrob(label="ACF Plots"))
@@ -186,12 +190,20 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Residuals Plots"))
 
 ### Forecast
 
-Finally, we applied a forecast to each series for the remaining 17 days in May. The full forecasts can be viewed in the appendix section and are also located within our data output folder.   
+Finally, we applied a forecast to each series for 4 weeks of May. The full forecasts can be viewed in the appendix section and are also located within our data output folder.   
 
 ```{r}
-ATM1_fc %>% autoplot()+labs(subtitle = "ATM1 Series", x="Days", y="")+theme_bw()+theme()
-ATM2_fc %>% autoplot()+labs(subtitle = "ATM2 Series", x="Days", y="")+theme_bw()+theme()
-ATM4_fc %>% autoplot()+labs(subtitle = "ATM4 Series", x="Days", y="")+theme_bw()+theme()
+p1<-autoplot(ATM1_arima$fitted)+autolayer(ATM1_fc)+
+  coord_cartesian(xlim = c(45, 54))+
+  labs(subtitle = "ATM1 Series", x="Days", y="")+theme_bw()+theme()
+p2<-autoplot(ATM2_arima$fitted)+autolayer(ATM2_fc)+
+  coord_cartesian(xlim = c(45, 54))+
+  labs(subtitle = "ATM2 Series", x="Days", y="")+theme_bw()+theme()
+p3<-autoplot(ATM4_arima$fitted)+autolayer(ATM4_fc)+
+  coord_cartesian(xlim = c(45, 54))+
+  labs(subtitle = "ATM4 Series", x="Days", y="")+theme_bw()+theme()
+
+grid.arrange(p1, p2, p3, ncol=3, top=textGrob(label="ATM Forecasts"))
 ```
 
 
@@ -199,34 +211,18 @@ ATM4_fc %>% autoplot()+labs(subtitle = "ATM4 Series", x="Days", y="")+theme_bw()
 
 ## Part A {-#Part-A}
 
-### ATM1 Forecast {-#Part-A-FC1}
+### Forecast Tables {-#Part-A-FC}
 
 ```{r}
 ATM1_fc %>% kable(caption="ATM1 Forecast") %>% kable_styling() %>% row_spec()
-```
-
-### ATM2 Forecast {-#Part-A-FC2}
-
-```{r}
 ATM2_fc %>% kable(caption="ATM2 Forecast") %>% kable_styling() %>% row_spec()
-```
-
-### ATM4 Forecast {-#Part-A-FC4}
-
-```{r}
 ATM4_fc %>% kable(caption="ATM4 Forecast") %>% kable_styling() %>% row_spec()
 ```
+
 
 ### R Script {-#Part-A-RScript}
 
 ```{r, echo=T, eval=F}
-#-----DEPENDENCIES-----#
-
-library(readxl); library(tidyverse); library(janitor); 
-library(zoo); library(urca); library(forecast)
-
-#-----PRE-PROCESSING-----#
-
 # load data
 atm_data <- read_excel("data/ATM624Data.xlsx") 
 
@@ -252,80 +248,66 @@ atm_zoo <- atm %>%
   # remove column & generate date in timeseries using zoo
   select(-DATE) %>% 
   # generate ts using zoo 
-  zoo(seq(from = as.Date("2009-05-01"), to = as.Date("2010-05-14"), by = 1))
+  zoo(seq(from = as.Date("2009-05-01"), to = as.Date("2010-05-01"), by = 1))
 
 # create standard time series   
 atm_ts <- atm %>%  
   # remove column & generate date in timeseries using zoo
   select(-DATE) %>% 
   # generate ts using zoo 
-  ts(end=c(2010,4))
-
-#-----ATM-1-----#
+  ts(start=1,  frequency = 7)
 
 #subset data 
-ATM1_zoo <- atm_zoo[,1]
-ATM1_ts <- atm_ts[,1]
-
-#differentiated
-ATM1d <-  diff(ATM1_ts, lag=7)
+ATM1_zoo <- atm_zoo[,1]; ATM1_ts <- atm_ts[,1]
+ATM4_zoo <- atm_zoo[,4]; ATM4_ts <- atm_ts[,4]
+ATM2_zoo <- atm_zoo[,2]; ATM2_ts <- atm_ts[,2]
 
 #unit root test
+## no diff
 ATM1_ur <-ur.kpss(ATM1_ts)
-ATM1d_ur <-ur.kpss(ATM1d)
-
-# ARIMA
-ATM1_arima <- auto.arima(ATM1d, seasonal=F, stepwise=F, approximation=F)
-
-# Forecast
-ATM1_fc <- ATM1_arima %>% forecast(h=17) 
-
-# Save output
-write.csv(ATM1_fc, file="ATM1_Forecast.csv")
-
-#-----ATM-2-----#
-
-#subset data 
-ATM2_zoo <- atm_zoo[,2]
-ATM2_ts <- atm_ts[,2]
-
-#differentiated
-ATM2d <-  diff(ATM2_ts, lag=7)
-
-#unit root test
 ATM2_ur <-ur.kpss(ATM2_ts)
-ATM2d_ur <-ur.kpss(ATM2d)
-
-# ARIMA
-ATM2_arima <- auto.arima(ATM2d, seasonal=F, stepwise=F, approximation=F)
-
-# Forecast
-ATM2_fc <- ATM2_arima %>% forecast(h=17) 
-
-# Save output
-write.csv(ATM2_fc, file="ATM2_Forecast.csv")
-
-#-----ATM-4-----#
-
-#subset data 
-ATM4_zoo <- atm_zoo[,4]
-ATM4_ts <- atm_ts[,4]
-
-#differentiated
-ATM4d <-  diff(ATM4_ts, lag=7)
-
-#unit root test
 ATM4_ur <-ur.kpss(ATM4_ts)
-ATM4d_ur <-ur.kpss(ATM4d)
+## first order diff
+ATM1d_ur <-ur.kpss(diff(ATM1_ts, lag=7))
+ATM2d_ur <-ur.kpss(diff(ATM2_ts, lag=7))
+ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
+## seasonal diff
+ATM1sd_ur <-ur.kpss(diff(log(ATM1_ts), lag=7))
+ATM2sd_ur <-ur.kpss(diff(log(ATM2_ts), lag=7))
+ATM4sd_ur <-ur.kpss(diff(log(ATM4_ts), lag=7))
+## seasonal diff-diff
+ATM1sdd_ur <-ur.kpss(diff(diff(log(ATM1_ts)), lag=7))
+ATM2sdd_ur <-ur.kpss(diff(diff(log(ATM2_ts)), lag=7))
+ATM4sdd_ur <-ur.kpss(diff(diff(log(ATM4_ts)), lag=7))
 
-# ARIMA
-ATM4_arima <- auto.arima(ATM4d, seasonal=F, stepwise=F, approximation=F)
+# Modeling 
+## Lambda for Box-cox transformation
+ATM1_lambda <- BoxCox.lambda(ATM1_ts)
+ATM2_lambda <- BoxCox.lambda(ATM2_ts)
+ATM4_lambda <- BoxCox.lambda(ATM4_ts)
+
+## ARIMA
+ATM1_arima<-Arima(ATM1_ts, order = c(1, 0, 1), 
+                  seasonal=list(order=c(0, 2, 1),period = 7), 
+                  lambda=ATM1_lambda,  method="ML")
+
+ATM2_arima<-Arima(ATM2_ts, order = c(2, 1, 2), 
+                  seasonal=list(order=c(2, 1, 2),period = 7), 
+                  lambda=ATM2_lambda,  method="ML")
+
+ATM4_arima<-Arima(ATM4_ts, order = c(1, 0, 1), 
+                  seasonal=list(order=c(1, 1, 1),period = 7), 
+                  lambda=ATM1_lambda, method="ML")
 
 # Forecast
-ATM4_fc <- ATM4_arima %>% forecast(h=17) 
+ATM1_fc <- forecast(ATM1_arima,h=4)
+ATM2_fc <- forecast(ATM2_arima,h=4)
+ATM4_fc <- forecast(ATM4_arima,h=4)
 
 # Save output
-write.csv(ATM4_fc, file="ATM4_Forecast.csv")
+write.csv(ATM1_fc, file="forecasts/ATM1_Forecast.csv")
+write.csv(ATM2_fc, file="forecasts/ATM2_Forecast.csv")
+write.csv(ATM4_fc, file="forecasts/ATM4_Forecast.csv")
 ```
 
 

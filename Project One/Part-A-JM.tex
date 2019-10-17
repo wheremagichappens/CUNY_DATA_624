@@ -288,30 +288,34 @@ ATM2, and ATM4 series.
 \includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-3-1.pdf}
 
 \hypertarget{evaluation}{%
-\subsection{Evaluation}\label{evaluation}}
+\section{Evaluation}\label{evaluation}}
+
+We constructed our timeseries using a weekly frequency. Our ACF plots
+for each ATM showcases large, decreasing lags starting at 7. This
+pattern continues in a multiple of seven, which confirms our assumption
+about seasonality within the observed data. These lags are indicative of
+a weekly pattern.
 
 \includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-4-1.pdf}
 
-Our ACF plots for each ATM showcases three large, decreasing lags at 7,
-14, and 21. This confirms our assumption about seasonality within our
-observed data as these lags are indicative of a weekly pattern. These
-plot suggests our data is non-stationary, thus we performed a unit root
-test using the \texttt{ur.kpss()} function and determined differencing
-was required on all three series.
+Our plots further suggest that the ATM data is non-stationary. We
+performed a unit root test using the \texttt{ur.kpss()} function to
+confirm this observation. The test results below show that second
+differencing is required on all three series.
 
 \begin{table}[H]
 
 \caption{\label{tab:unnamed-chunk-5}KPSS unit root test}
 \centering
-\begin{tabular}{l|l|l}
+\begin{tabular}{l|l|l|l|l}
 \hline
-\textbf{ATM} & \textbf{Root Test} & \textbf{Diff Root Test}\\
+\textbf{ATM} & \textbf{No-Diff} & \textbf{Diff-1} & \textbf{Log-Diff-1} & \textbf{Log-Diff-2}\\
 \hline
-\rowcolor{gray!6}  ATM1 & 0.4967 & 0.0219\\
+\rowcolor{gray!6}  ATM1 & 0.4967 & 0.0219 & 0.0129 & 0.0077\\
 \hline
-ATM2 & 2.0006 & 0.016\\
+ATM2 & 2.0006 & 0.016 & NaN & NaN\\
 \hline
-\rowcolor{gray!6}  ATM4 & 0.5182 & 0.0211\\
+\rowcolor{gray!6}  ATM4 & 0.5182 & 0.0211 & 0.0128 & 0.0077\\
 \hline
 \end{tabular}
 \end{table}
@@ -320,17 +324,17 @@ ATM2 & 2.0006 & 0.016\\
 \subsection{Modeling}\label{modeling}}
 
 We used \texttt{auto.arima()} on our differenced data to select the best
-ARIMA model for our series. The following models were selected for our
-series:
+ARIMA model for our series. The following models were selected based on
+AICc values:
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{ATM1}: ARIMA(2,0,3) with zero mean
+  \textbf{ATM1}: ARIMA(0,1,2)(0,2,1)\(_7\) with errors
 \item
-  \textbf{ATM2}: ARIMA(1,0,4) with zero mean
+  \textbf{ATM2}: ARIMA(0,1,3)(0,2,1)\(_7\) with errors
 \item
-  \textbf{ATM4}: ARIMA(2,0,3) with zero mean
+  \textbf{ATM4}: ARIMA(0,1,2)(0,2,1)\(_7\) with errors
 \end{itemize}
 
 The following ACF plots show us that our differentiated data is now
@@ -343,13 +347,11 @@ fits the observed data.
 \hypertarget{forecast}{%
 \subsection{Forecast}\label{forecast}}
 
-Finally, we applied a forecast to each series for the remaining 17 days
-in May. The full forecasts can be viewed in the appendix section and are
-also located within our data output folder.
+Finally, we applied a forecast to each series for 4 weeks of May. The
+full forecasts can be viewed in the appendix section and are also
+located within our data output folder.
 
 \includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-7-1.pdf}
-\includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-7-2.pdf}
-\includegraphics{Part-A-JM_files/figure-latex/unnamed-chunk-7-3.pdf}
 
 \hypertarget{Appendix}{%
 \chapter*{Appendix}\label{Appendix}}
@@ -359,9 +361,9 @@ also located within our data output folder.
 \section*{Part A}\label{Part-A}}
 \addcontentsline{toc}{section}{Part A}
 
-\hypertarget{Part-A-FC1}{%
-\subsection*{ATM1 Forecast}\label{Part-A-FC1}}
-\addcontentsline{toc}{subsection}{ATM1 Forecast}
+\hypertarget{Part-A-FC}{%
+\subsection*{Forecast Tables}\label{Part-A-FC}}
+\addcontentsline{toc}{subsection}{Forecast Tables}
 
 \begin{table}[H]
 
@@ -371,137 +373,51 @@ also located within our data output folder.
 \hline
 \textbf{ } & \textbf{Point Forecast} & \textbf{Lo 80} & \textbf{Hi 80} & \textbf{Lo 95} & \textbf{Hi 95}\\
 \hline
-\rowcolor{gray!6}  2014 & -1.5476468 & -34.83474 & 31.73945 & -52.45586 & 49.36057\\
+\rowcolor{gray!6}  53.14286 & 83.817966 & 41.4903974 & 151.93962 & 26.9523824 & 201.31621\\
 \hline
-2015 & -2.2246957 & -35.76049 & 31.31110 & -53.51327 & 49.06388\\
+53.28571 & 110.038431 & 57.0176652 & 192.99088 & 38.2480730 & 252.14714\\
 \hline
-\rowcolor{gray!6}  2016 & -2.4082528 & -35.98207 & 31.16556 & -53.75497 & 48.93847\\
+\rowcolor{gray!6}  53.42857 & 73.573807 & 35.1840074 & 136.67614 & 22.2984834 & 182.96563\\
 \hline
-2017 & -0.9095920 & -35.28357 & 33.46439 & -53.48006 & 51.66087\\
-\hline
-\rowcolor{gray!6}  2018 & 0.7491377 & -34.21898 & 35.71725 & -52.72998 & 54.22825\\
-\hline
-2019 & 1.3990794 & -33.59777 & 36.39593 & -52.12398 & 54.92214\\
-\hline
-\rowcolor{gray!6}  2020 & 0.9070426 & -34.22027 & 36.03435 & -52.81554 & 54.62963\\
-\hline
-2021 & -0.0484768 & -35.41166 & 35.31471 & -54.13180 & 54.03485\\
-\hline
-\rowcolor{gray!6}  2022 & -0.6816097 & -36.10459 & 34.74137 & -54.85638 & 53.49316\\
-\hline
-2023 & -0.6624510 & -36.09316 & 34.76826 & -54.84905 & 53.52414\\
-\hline
-\rowcolor{gray!6}  2024 & -0.2016687 & -35.69998 & 35.29664 & -54.49165 & 54.08831\\
-\hline
-2025 & 0.2556483 & -35.28435 & 35.79565 & -54.09809 & 54.60939\\
-\hline
-\rowcolor{gray!6}  2026 & 0.4016704 & -35.13908 & 35.94243 & -53.95322 & 54.75656\\
-\hline
-2027 & 0.2321338 & -35.32165 & 35.78592 & -54.14268 & 54.60695\\
-\hline
-\rowcolor{gray!6}  2028 & -0.0427988 & -35.61500 & 35.52940 & -54.44579 & 54.36019\\
-\hline
-2029 & -0.2054847 & -35.78118 & 35.37021 & -54.61382 & 54.20285\\
-\hline
-\rowcolor{gray!6}  2030 & -0.1800679 & -35.75693 & 35.39680 & -54.59019 & 54.23005\\
+53.57143 & 3.627256 & 0.5780783 & 12.53861 & 0.1288479 & 21.18631\\
 \hline
 \end{tabular}
 \end{table}
 
-\hypertarget{Part-A-FC2}{%
-\subsection*{ATM2 Forecast}\label{Part-A-FC2}}
-\addcontentsline{toc}{subsection}{ATM2 Forecast}
-
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-9}ATM2 Forecast}
+\caption{\label{tab:unnamed-chunk-8}ATM2 Forecast}
 \centering
 \begin{tabular}{l|r|r|r|r|r}
 \hline
 \textbf{ } & \textbf{Point Forecast} & \textbf{Lo 80} & \textbf{Hi 80} & \textbf{Lo 95} & \textbf{Hi 95}\\
 \hline
-\rowcolor{gray!6}  2014 & 13.6179414 & -21.82098 & 49.05686 & -40.58121 & 67.81710\\
+\rowcolor{gray!6}  53.14286 & 70.399901 & 38.764054 & 107.86146 & 24.778907 & 129.77780\\
 \hline
-2015 & -11.0244123 & -47.18551 & 25.13668 & -66.32803 & 44.27921\\
+53.28571 & 68.085302 & 36.835282 & 105.24426 & 23.106848 & 127.02440\\
 \hline
-\rowcolor{gray!6}  2016 & 5.8052816 & -30.57732 & 42.18788 & -49.83710 & 61.44766\\
+\rowcolor{gray!6}  53.42857 & 10.504707 & -0.641800 & 33.57068 & -7.075581 & 48.97866\\
 \hline
-2017 & 15.8186530 & -21.06766 & 52.70497 & -40.59410 & 72.23141\\
-\hline
-\rowcolor{gray!6}  2018 & -12.4667974 & -50.90070 & 25.96711 & -71.24638 & 46.31279\\
-\hline
-2019 & 9.8251753 & -29.53934 & 49.18969 & -50.37765 & 70.02800\\
-\hline
-\rowcolor{gray!6}  2020 & -7.7432933 & -47.67490 & 32.18831 & -68.81342 & 53.32683\\
-\hline
-2021 & 6.1025467 & -34.17727 & 46.38237 & -55.50012 & 67.70521\\
-\hline
-\rowcolor{gray!6}  2022 & -4.8094622 & -45.30405 & 35.68513 & -66.74059 & 57.12167\\
-\hline
-2023 & 3.7903727 & -36.83704 & 44.41779 & -58.34390 & 65.92464\\
-\hline
-\rowcolor{gray!6}  2024 & -2.9872208 & -43.69692 & 37.72248 & -65.24733 & 59.27289\\
-\hline
-2025 & 2.3542508 & -38.40647 & 43.11497 & -59.98389 & 64.69239\\
-\hline
-\rowcolor{gray!6}  2026 & -1.8554025 & -42.64778 & 38.93698 & -64.24196 & 60.53116\\
-\hline
-2027 & 1.4622564 & -39.34977 & 42.27429 & -60.95436 & 63.87887\\
-\hline
-\rowcolor{gray!6}  2028 & -1.1524151 & -41.97665 & 39.67182 & -63.58769 & 61.28286\\
-\hline
-2029 & 0.9082269 & -39.92358 & 41.74003 & -61.53863 & 63.35509\\
-\hline
-\rowcolor{gray!6}  2030 & -0.7157803 & -41.55229 & 40.12073 & -63.16984 & 61.73828\\
+53.57143 & 1.612731 & -8.480086 & 18.35305 & -19.006485 & 31.29272\\
 \hline
 \end{tabular}
 \end{table}
 
-\hypertarget{Part-A-FC4}{%
-\subsection*{ATM4 Forecast}\label{Part-A-FC4}}
-\addcontentsline{toc}{subsection}{ATM4 Forecast}
-
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-10}ATM4 Forecast}
+\caption{\label{tab:unnamed-chunk-8}ATM4 Forecast}
 \centering
 \begin{tabular}{l|r|r|r|r|r}
 \hline
 \textbf{ } & \textbf{Point Forecast} & \textbf{Lo 80} & \textbf{Hi 80} & \textbf{Lo 95} & \textbf{Hi 95}\\
 \hline
-\rowcolor{gray!6}  2014 & -1.7397027 & -35.02165 & 31.54225 & -52.64005 & 49.16065\\
+\rowcolor{gray!6}  53.14286 & 86.584988 & 48.985849 & 142.24258 & 34.8911333 & 180.66018\\
 \hline
-2015 & -1.8523041 & -35.43051 & 31.72590 & -53.20573 & 49.50112\\
+53.28571 & 101.530138 & 58.590610 & 164.29318 & 42.2872278 & 207.28680\\
 \hline
-\rowcolor{gray!6}  2016 & -1.8915445 & -35.49987 & 31.71678 & -53.29104 & 49.50795\\
+\rowcolor{gray!6}  53.42857 & 73.317040 & 40.109597 & 123.53235 & 27.9290828 & 158.63577\\
 \hline
-2017 & -0.6521306 & -35.06829 & 33.76403 & -53.28710 & 51.98284\\
-\hline
-\rowcolor{gray!6}  2018 & 0.6409033 & -34.40024 & 35.68205 & -52.94991 & 54.23171\\
-\hline
-2019 & 1.1052058 & -33.97279 & 36.18320 & -52.54196 & 54.75237\\
-\hline
-\rowcolor{gray!6}  2020 & 0.6860038 & -34.51254 & 35.88455 & -53.14553 & 54.51754\\
-\hline
-2021 & -0.0629775 & -35.49761 & 35.37166 & -54.25558 & 54.12962\\
-\hline
-\rowcolor{gray!6}  2022 & -0.5383252 & -36.03872 & 34.96207 & -54.83149 & 53.75484\\
-\hline
-2023 & -0.5063232 & -36.01206 & 34.99941 & -54.80766 & 53.79501\\
-\hline
-\rowcolor{gray!6}  2024 & -0.1451906 & -35.71422 & 35.42384 & -54.54333 & 54.25295\\
-\hline
-2025 & 0.2015531 & -35.41007 & 35.81317 & -54.26172 & 54.66483\\
-\hline
-\rowcolor{gray!6}  2026 & 0.3061844 & -35.30681 & 35.91918 & -54.15919 & 54.77156\\
-\hline
-2027 & 0.1734676 & -35.45049 & 35.79742 & -54.30867 & 54.65560\\
-\hline
-\rowcolor{gray!6}  2028 & -0.0343836 & -35.67590 & 35.60713 & -54.54337 & 54.47461\\
-\hline
-2029 & -0.1549780 & -35.80046 & 35.49050 & -54.67004 & 54.36008\\
-\hline
-\rowcolor{gray!6}  2030 & -0.1345348 & -35.78076 & 35.51169 & -54.65073 & 54.38166\\
+53.57143 & 4.356301 & 1.098715 & 12.00592 & 0.4070117 & 18.74379\\
 \hline
 \end{tabular}
 \end{table}
@@ -512,13 +428,6 @@ also located within our data output folder.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#-----DEPENDENCIES-----#}
-
-\KeywordTok{library}\NormalTok{(readxl); }\KeywordTok{library}\NormalTok{(tidyverse); }\KeywordTok{library}\NormalTok{(janitor); }
-\KeywordTok{library}\NormalTok{(zoo); }\KeywordTok{library}\NormalTok{(urca); }\KeywordTok{library}\NormalTok{(forecast)}
-
-\CommentTok{#-----PRE-PROCESSING-----#}
-
 \CommentTok{# load data}
 \NormalTok{atm_data <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"data/ATM624Data.xlsx"}\NormalTok{) }
 
@@ -544,80 +453,66 @@ also located within our data output folder.
 \StringTok{  }\CommentTok{# remove column & generate date in timeseries using zoo}
 \StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{DATE) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\CommentTok{# generate ts using zoo }
-\StringTok{  }\KeywordTok{zoo}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \KeywordTok{as.Date}\NormalTok{(}\StringTok{"2009-05-01"}\NormalTok{), }\DataTypeTok{to =} \KeywordTok{as.Date}\NormalTok{(}\StringTok{"2010-05-14"}\NormalTok{), }\DataTypeTok{by =} \DecValTok{1}\NormalTok{))}
+\StringTok{  }\KeywordTok{zoo}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \KeywordTok{as.Date}\NormalTok{(}\StringTok{"2009-05-01"}\NormalTok{), }\DataTypeTok{to =} \KeywordTok{as.Date}\NormalTok{(}\StringTok{"2010-05-01"}\NormalTok{), }\DataTypeTok{by =} \DecValTok{1}\NormalTok{))}
 
 \CommentTok{# create standard time series   }
 \NormalTok{atm_ts <-}\StringTok{ }\NormalTok{atm }\OperatorTok{%>%}\StringTok{  }
 \StringTok{  }\CommentTok{# remove column & generate date in timeseries using zoo}
 \StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{DATE) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\CommentTok{# generate ts using zoo }
-\StringTok{  }\KeywordTok{ts}\NormalTok{(}\DataTypeTok{end=}\KeywordTok{c}\NormalTok{(}\DecValTok{2010}\NormalTok{,}\DecValTok{4}\NormalTok{))}
-
-\CommentTok{#-----ATM-1-----#}
+\StringTok{  }\KeywordTok{ts}\NormalTok{(}\DataTypeTok{start=}\DecValTok{1}\NormalTok{,  }\DataTypeTok{frequency =} \DecValTok{7}\NormalTok{)}
 
 \CommentTok{#subset data }
-\NormalTok{ATM1_zoo <-}\StringTok{ }\NormalTok{atm_zoo[,}\DecValTok{1}\NormalTok{]}
-\NormalTok{ATM1_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{1}\NormalTok{]}
-
-\CommentTok{#differentiated}
-\NormalTok{ATM1d <-}\StringTok{  }\KeywordTok{diff}\NormalTok{(ATM1_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{)}
+\NormalTok{ATM1_zoo <-}\StringTok{ }\NormalTok{atm_zoo[,}\DecValTok{1}\NormalTok{]; ATM1_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{ATM4_zoo <-}\StringTok{ }\NormalTok{atm_zoo[,}\DecValTok{4}\NormalTok{]; ATM4_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{4}\NormalTok{]}
+\NormalTok{ATM2_zoo <-}\StringTok{ }\NormalTok{atm_zoo[,}\DecValTok{2}\NormalTok{]; ATM2_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{2}\NormalTok{]}
 
 \CommentTok{#unit root test}
+\CommentTok{## no diff}
 \NormalTok{ATM1_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM1_ts)}
-\NormalTok{ATM1d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM1d)}
-
-\CommentTok{# ARIMA}
-\NormalTok{ATM1_arima <-}\StringTok{ }\KeywordTok{auto.arima}\NormalTok{(ATM1d, }\DataTypeTok{seasonal=}\NormalTok{F, }\DataTypeTok{stepwise=}\NormalTok{F, }\DataTypeTok{approximation=}\NormalTok{F)}
-
-\CommentTok{# Forecast}
-\NormalTok{ATM1_fc <-}\StringTok{ }\NormalTok{ATM1_arima }\OperatorTok{%>%}\StringTok{ }\KeywordTok{forecast}\NormalTok{(}\DataTypeTok{h=}\DecValTok{17}\NormalTok{) }
-
-\CommentTok{# Save output}
-\KeywordTok{write.csv}\NormalTok{(ATM1_fc, }\DataTypeTok{file=}\StringTok{"ATM1_Forecast.csv"}\NormalTok{)}
-
-\CommentTok{#-----ATM-2-----#}
-
-\CommentTok{#subset data }
-\NormalTok{ATM2_zoo <-}\StringTok{ }\NormalTok{atm_zoo[,}\DecValTok{2}\NormalTok{]}
-\NormalTok{ATM2_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{2}\NormalTok{]}
-
-\CommentTok{#differentiated}
-\NormalTok{ATM2d <-}\StringTok{  }\KeywordTok{diff}\NormalTok{(ATM2_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{)}
-
-\CommentTok{#unit root test}
 \NormalTok{ATM2_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM2_ts)}
-\NormalTok{ATM2d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM2d)}
-
-\CommentTok{# ARIMA}
-\NormalTok{ATM2_arima <-}\StringTok{ }\KeywordTok{auto.arima}\NormalTok{(ATM2d, }\DataTypeTok{seasonal=}\NormalTok{F, }\DataTypeTok{stepwise=}\NormalTok{F, }\DataTypeTok{approximation=}\NormalTok{F)}
-
-\CommentTok{# Forecast}
-\NormalTok{ATM2_fc <-}\StringTok{ }\NormalTok{ATM2_arima }\OperatorTok{%>%}\StringTok{ }\KeywordTok{forecast}\NormalTok{(}\DataTypeTok{h=}\DecValTok{17}\NormalTok{) }
-
-\CommentTok{# Save output}
-\KeywordTok{write.csv}\NormalTok{(ATM2_fc, }\DataTypeTok{file=}\StringTok{"ATM2_Forecast.csv"}\NormalTok{)}
-
-\CommentTok{#-----ATM-4-----#}
-
-\CommentTok{#subset data }
-\NormalTok{ATM4_zoo <-}\StringTok{ }\NormalTok{atm_zoo[,}\DecValTok{4}\NormalTok{]}
-\NormalTok{ATM4_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{4}\NormalTok{]}
-
-\CommentTok{#differentiated}
-\NormalTok{ATM4d <-}\StringTok{  }\KeywordTok{diff}\NormalTok{(ATM4_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{)}
-
-\CommentTok{#unit root test}
 \NormalTok{ATM4_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM4_ts)}
-\NormalTok{ATM4d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM4d)}
+\CommentTok{## first order diff}
+\NormalTok{ATM1d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM1_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\NormalTok{ATM2d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM2_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\NormalTok{ATM4d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM4_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\CommentTok{## seasonal diff}
+\NormalTok{ATM1sd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM1_ts), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\NormalTok{ATM2sd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM2_ts), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\NormalTok{ATM4sd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM4_ts), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\CommentTok{## seasonal diff-diff}
+\NormalTok{ATM1sdd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM1_ts)), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\NormalTok{ATM2sdd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM2_ts)), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\NormalTok{ATM4sdd_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{diff}\NormalTok{(}\KeywordTok{log}\NormalTok{(ATM4_ts)), }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
 
-\CommentTok{# ARIMA}
-\NormalTok{ATM4_arima <-}\StringTok{ }\KeywordTok{auto.arima}\NormalTok{(ATM4d, }\DataTypeTok{seasonal=}\NormalTok{F, }\DataTypeTok{stepwise=}\NormalTok{F, }\DataTypeTok{approximation=}\NormalTok{F)}
+\CommentTok{# Modeling }
+\CommentTok{## Lambda for Box-cox transformation}
+\NormalTok{ATM1_lambda <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM1_ts)}
+\NormalTok{ATM2_lambda <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM2_ts)}
+\NormalTok{ATM4_lambda <-}\StringTok{ }\KeywordTok{BoxCox.lambda}\NormalTok{(ATM4_ts)}
+
+\CommentTok{## ARIMA}
+\NormalTok{ATM1_arima<-}\KeywordTok{Arima}\NormalTok{(ATM1_ts, }\DataTypeTok{order =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }
+                  \DataTypeTok{seasonal=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{order=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{),}\DataTypeTok{period =} \DecValTok{7}\NormalTok{), }
+                  \DataTypeTok{lambda=}\NormalTok{ATM1_lambda,  }\DataTypeTok{method=}\StringTok{"ML"}\NormalTok{)}
+
+\NormalTok{ATM2_arima<-}\KeywordTok{Arima}\NormalTok{(ATM2_ts, }\DataTypeTok{order =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }
+                  \DataTypeTok{seasonal=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{order=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{),}\DataTypeTok{period =} \DecValTok{7}\NormalTok{), }
+                  \DataTypeTok{lambda=}\NormalTok{ATM2_lambda,  }\DataTypeTok{method=}\StringTok{"ML"}\NormalTok{)}
+
+\NormalTok{ATM4_arima<-}\KeywordTok{Arima}\NormalTok{(ATM4_ts, }\DataTypeTok{order =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }
+                  \DataTypeTok{seasonal=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{order=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{),}\DataTypeTok{period =} \DecValTok{7}\NormalTok{), }
+                  \DataTypeTok{lambda=}\NormalTok{ATM1_lambda, }\DataTypeTok{method=}\StringTok{"ML"}\NormalTok{)}
 
 \CommentTok{# Forecast}
-\NormalTok{ATM4_fc <-}\StringTok{ }\NormalTok{ATM4_arima }\OperatorTok{%>%}\StringTok{ }\KeywordTok{forecast}\NormalTok{(}\DataTypeTok{h=}\DecValTok{17}\NormalTok{) }
+\NormalTok{ATM1_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM1_arima,}\DataTypeTok{h=}\DecValTok{4}\NormalTok{)}
+\NormalTok{ATM2_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM2_arima,}\DataTypeTok{h=}\DecValTok{4}\NormalTok{)}
+\NormalTok{ATM4_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM4_arima,}\DataTypeTok{h=}\DecValTok{4}\NormalTok{)}
 
 \CommentTok{# Save output}
-\KeywordTok{write.csv}\NormalTok{(ATM4_fc, }\DataTypeTok{file=}\StringTok{"ATM4_Forecast.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ATM1_fc, }\DataTypeTok{file=}\StringTok{"forecasts/ATM1_Forecast.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ATM2_fc, }\DataTypeTok{file=}\StringTok{"forecasts/ATM2_Forecast.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ATM4_fc, }\DataTypeTok{file=}\StringTok{"forecasts/ATM4_Forecast.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
