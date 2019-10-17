@@ -38,7 +38,7 @@ libraries('knitr', 'kableExtra', 'default')
 libraries('readxl', 'tidyverse', 'janitor', 'lubridate')
 
 # Graphing
-libraries('ggplot2', 'grid', 'gridExtra')
+libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr')
 
 # Timeseries 
 libraries('zoo', 'urca', 'tseries', 'timetk')
@@ -169,15 +169,15 @@ The following ACF plots show us that our differentiated data is now stationary. 
 
 ```{r}
 p1<-ggAcf(ATM1_arima$residuals, lag=21)+ labs(title="ATM1", x="Lag", y="") +theme_bw()+theme()
-p2<- gghistogram(ATM1_arima$residuals, add.normal = T)+
+p2<- ggpubr::gghistogram(ATM1_arima$residuals, fill="peachpuff1")+
   labs(title="ATM1", subtitle="ARIMA(0,0,2)(0,1,1)[7]",x="")+
   theme_bw()+theme()
 p3<-ggAcf(ATM2_arima$residuals, lag=21)+ labs(title="ATM2",x="Lag", y="") +theme_bw()+theme()
-p4<-gghistogram(ATM2_arima$residuals, add.normal = T)+
+p4<-ggpubr::gghistogram(ATM2_arima$residuals,  fill="lightpink")+
   labs(title="ATM2", subtitle="ARIMA(2,0,2)(0,1,1)[7]",x="")+
   theme_bw()+theme()
 p5<-ggAcf(ATM4_arima$residuals, lag=21)+ labs(title="ATM3",x="Lag", y="") +theme_bw()+theme()
-p6<-gghistogram(ATM4_arima$residuals, add.normal = T)+
+p6<-ggpubr::gghistogram(ATM4_arima$residuals,fill="deeppink4")+
   labs(title="ATM4", subtitle="ARIMA(0,0,2)(0,1,1)[7]", x="")+
   theme_bw()+theme()
 
@@ -186,18 +186,18 @@ grid.arrange(grob=p1, p3, p5, ncol=3, top=textGrob(label="ACF Plots"))
 grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Residuals Plots"))
 ```
 
-### Forecast
+## Forecast
 
 Finally, we applied a forecast to each series for 4 weeks of May 2010. The full forecasts can be viewed in the appendix section and are also located within our data output folder.   
 
 ```{r}
-p1<-autoplot(ATM1_arima$fitted)+autolayer(ATM1_fc)+
+p1<-autoplot(ATM1_arima$fitted)+autolayer(ATM1_fc, color="peachpuff1")+
   coord_cartesian(xlim = c(48, 54))+
   labs(subtitle = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()
-p2<-autoplot(ATM2_arima$fitted)+autolayer(ATM2_fc)+
+p2<-autoplot(ATM2_arima$fitted)+autolayer(ATM2_fc,  color="lightpink")+
   coord_cartesian(xlim = c(48, 54))+
   labs(subtitle = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()
-p3<-autoplot(ATM4_arima$fitted)+autolayer(ATM4_fc)+
+p3<-autoplot(ATM4_arima$fitted)+autolayer(ATM4_fc, color="deeppink4")+
   coord_cartesian(xlim = c(48, 54))+
   labs(subtitle = "ATM4 Series", x="Weeks", y="Cash")+theme_bw()+theme()
 
@@ -237,7 +237,6 @@ ATM4_fc %>% kable(caption="ATM4 Forecast") %>% kable_styling() %>% row_spec()
 ### R Script {-#Part-A-RScript}
 
 ```{r, echo=T, eval=F}
-
 # load data
 atm_data <- read_excel("data/ATM624Data.xlsx") 
 
@@ -289,14 +288,14 @@ ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
 
 # Modeling 
 ## Lambda for Box-cox transformation
-ATM1_lambda <- BoxCox.lambda(ATM1_ts)
-ATM2_lambda <- BoxCox.lambda(ATM2_ts)
-ATM4_lambda <- BoxCox.lambda(ATM4_ts)
+ATM1l <- BoxCox.lambda(ATM1_ts)
+ATM2l <- BoxCox.lambda(ATM2_ts)
+ATM4l <- BoxCox.lambda(ATM4_ts)
 
 ## ARIMA
-ATM1_arima <-auto.arima(ATM1_ts, D = 1, lambda = ATM1_lambda, approximation = F, stepwise = T)
-ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2_lambda, approximation = F, stepwise = T)
-ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4_lambda, approximation = F, stepwise = T)
+ATM1_arima <-auto.arima(ATM1_ts, D = 1, lambda = ATM1l, approximation = F, stepwise = T)
+ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2l, approximation = F, stepwise = T)
+ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4l, approximation = F, stepwise = T)
 
 # Forecast
 ATM1_fc <- forecast(ATM1_arima,h=4)

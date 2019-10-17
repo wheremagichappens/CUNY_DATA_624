@@ -62,14 +62,14 @@ ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
 
 # Modeling 
 ## Lambda for Box-cox transformation
-ATM1_lambda <- BoxCox.lambda(ATM1_ts)
-ATM2_lambda <- BoxCox.lambda(ATM2_ts)
-ATM4_lambda <- BoxCox.lambda(ATM4_ts)
+ATM1l <- BoxCox.lambda(ATM1_ts)
+ATM2l <- BoxCox.lambda(ATM2_ts)
+ATM4l <- BoxCox.lambda(ATM4_ts)
 
 ## ARIMA
-ATM1_arima <-auto.arima(ATM1_ts, D = 1, lambda = ATM1_lambda, approximation = F, stepwise = T)
-ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2_lambda, approximation = F, stepwise = T)
-ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4_lambda, approximation = F, stepwise = T)
+ATM1_arima <-auto.arima(ATM1_ts, D = 1, lambda = ATM1l, approximation = F, stepwise = T)
+ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2l, approximation = F, stepwise = T)
+ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4l, approximation = F, stepwise = T)
 
 # Forecast
 ATM1_fc <- forecast(ATM1_arima,h=4)
