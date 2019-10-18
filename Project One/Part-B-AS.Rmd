@@ -247,4 +247,4 @@ Using Time series cross-validation, we compute RMSE on testset (h=12). We will p
 
 Given that 4 models we created did not vary much in terms of RMSE on training, while STL - ANN has significantly lower RMSE on test set than ARIMA, we will choose STL - ANN as our final model.
 
-We found that ARIMA is the worst predictor and STL - AAN is the best model as RMSE on test set is the lowest, contradicting to its' RMSE on train set. It comes down to the discussion of bias-variance trade off; overfitted model cannot generalize the outcome of predictions on unseen data well.
+We found that ARIMA is the worst predictor and STL - ANN is the best model as RMSE on test set is the lowest, contradicting to its' RMSE on train set. It comes down to the discussion of bias-variance trade off; overfitted model cannot generalize the outcome of predictions on unseen data well.
