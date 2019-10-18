@@ -25,7 +25,8 @@ output:
 library(readxl)
 #install.packages('tinytex')
 library(tinytex)
-
+#library(l3backend)
+#install.packages('MiKTeX')
 # graphs
 library(ggplot2)
 
