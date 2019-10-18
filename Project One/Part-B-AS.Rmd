@@ -1,6 +1,6 @@
 ---
 title: 'DATA 624: Project 1 - Part B'
-author: 'Sang Yoon (Andy) Hwang'
+author: 'Sang Yoon (Andy) Hwang & Vinicio Haro'
 date: 'October 22, 2019'
 documentclass: book
 subparagraph: yes
