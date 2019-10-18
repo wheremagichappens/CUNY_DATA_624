@@ -4,10 +4,7 @@ library(readxl)
 library(tidyverse)
 library(janitor)
 
-## timeseries
-library(zoo)
-
-## math packages
+## forecasting packages
 library(urca)
 library(forecast)
 
@@ -25,30 +22,12 @@ atm <- atm_data %>%
   # ensure dates are ascending
   arrange(DATE) 
 
-## remove NA
-atm$ATM2[is.na(atm$ATM2)] <- mean(atm$ATM2, na.rm = TRUE)
+atm$ATM2[is.na(atm$ATM2)] <- mean(atm$ATM2, na.rm = TRUE) ## remove NA
+atm$ATM4[which.max(atm$ATM4)] <- mean(atm$ATM4, na.rm = TRUE) ## remove outlier
 
-## remove outlier
-atm$ATM4[which.max(atm$ATM4)] <- mean(atm$ATM4, na.rm = TRUE)
-
-# create zoo time series   
-atm_zoo <- atm %>%  
-  # remove column & generate date in timeseries using zoo
-  select(-DATE) %>% 
-  # generate ts using zoo 
-  zoo(seq(from = as.Date("2009-05-01"), to = as.Date("2010-05-01"), by = 1))
-
-# create standard time series   
-atm_ts <- atm %>%  
-  # remove column & generate date in timeseries using zoo
-  select(-DATE) %>% 
-  # generate ts using zoo 
-  ts(start=1,  frequency = 7)
-
-#subset data 
-ATM1_zoo <- atm_zoo[,1]; ATM1_ts <- atm_ts[,1]
-ATM4_zoo <- atm_zoo[,4]; ATM4_ts <- atm_ts[,4]
-ATM2_zoo <- atm_zoo[,2]; ATM2_ts <- atm_ts[,2]
+# create TS with weekly frequency & subset data
+atm_ts <- atm %>% select(-DATE) %>% ts(start=1,  frequency = 7)
+ATM1_ts <- atm_ts[,1]; ATM2_ts <- atm_ts[,2]; ATM4_ts <- atm_ts[,4]
 
 #unit root test
 ## no diff
@@ -60,24 +39,20 @@ ATM1d_ur <-ur.kpss(diff(ATM1_ts, lag=7))
 ATM2d_ur <-ur.kpss(diff(ATM2_ts, lag=7))
 ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
 
-# Modeling 
-## Lambda for Box-cox transformation
-ATM1l <- BoxCox.lambda(ATM1_ts)
-ATM2l <- BoxCox.lambda(ATM2_ts)
-ATM4l <- BoxCox.lambda(ATM4_ts)
+# AUTO.ARIMA function; set D=1 for seasonal differencing
+ATM1_AA <-auto.arima(ATM1_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+ATM2_AA <-auto.arima(ATM2_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+ATM4_AA <-auto.arima(ATM4_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
 
-## ARIMA
-ATM1_arima <-auto.arima(ATM1_ts, D = 1, lambda = ATM1l, approximation = F, stepwise = T)
-ATM2_arima<-auto.arima(ATM2_ts, D = 1, lambda = ATM2l, approximation = F, stepwise = T)
-ATM4_arima<-auto.arima(ATM4_ts, D = 1, lambda = ATM4l, approximation = F, stepwise = T)
+# Forecast Results
+ATM1_fc <- forecast(ATM1_AA,h=31)
+ATM2_fc <- forecast(ATM2_AA,h=31)
+ATM4_fc <- forecast(ATM4_AA,h=31)
 
-# Forecast
-ATM1_fc <- forecast(ATM1_arima,h=31)
-ATM2_fc <- forecast(ATM2_arima,h=31)
-ATM4_fc <- forecast(ATM4_arima,h=31)
+date <- as.character(seq(as.Date('2010-05-01'), length.out=31, by=1))
+ATM_FC <-  cbind("Date"=date, "ATM1"=ATM1_fc$mean, "ATM2"=ATM2_fc$mean,
+                 "ATM3"=c(NA,NA,NA,NA),"ATM4"=ATM4_fc$mean) %>% as.data.frame()
 
 # Save output
-write.csv(ATM1_fc, file="forecasts/ATM1_Forecast.csv")
-write.csv(ATM2_fc, file="forecasts/ATM2_Forecast.csv")
-write.csv(ATM4_fc, file="forecasts/ATM4_Forecast.csv")
+write.csv(ATM_FC, file="forecasts/ATM_ARIMA_FC.csv")
 
