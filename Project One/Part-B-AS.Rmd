@@ -91,17 +91,13 @@ partb_data<-read_csv(url(power))
 head(partb_data)
 ```
 
-Transformed data into time-series with freq - 12.
+Transformed data into time-series with freq - 12. We are missing 2008 Sep data point.
 ```{r}
 ts_data <- ts(partb_data$KWH, frequency = 12, start = c(1998,1))
+ts_data
 ```
 
-Missing value check 
-```{r warning=FALSE, message=FALSE}
-sum(is.na(ts_data))
-```
-
-Impute Missing Data using TSImpute
+We impute missing data using TSImpute's interpolation method. 
 ```{r warning=FALSE, message=FALSE}
 ts_data<-na.interpolation(ts_data)
 ```
@@ -111,11 +107,13 @@ Review the cycle of the time series to get an idea of the positions within the c
 cycle(ts_data)
 ```
 
-Summary Statistics
+Let's do quick EDA on ts_data. Outlier is detected - Min is significantly lower than median. We will handle this outlier. In general, data is fairly normally distributed as mean is not far from median.
 ```{r warning=FALSE, message=FALSE}
 summary(ts_data)
+hist(ts_data)
 ```
 
+Let's do deeper EDA on ts_data and handle outlier using tsoutliers().
 ```{r warning=FALSE, message=FALSE}
 #disable scientific notation (ONLY RUN ONCE)
 options(scipen = 99999)
@@ -133,8 +131,13 @@ ggsubseriesplot(ts_data);
 stl(ts_data, s.window = 'periodic') %>% autoplot();
 
 ggAcf(ts_data);
+#Box.test(ts_data, type = c("Ljung-Box"))
 
-tsoutliers(ts_data, iterate = 2, lambda = "auto")
+
+# handling outlier
+#fit <- nnetar(tsclean(ts_data))
+outlier_func <- tsoutliers(ts_data, iterate = 2, lambda = "auto")
+ts_data[outlier_func$index] <- outlier_func$replacements
 ```
 
 Our initial plots reveal annual seasonality within this time series. The box plot/seasonality plot actually reveals where power consumption fluctuations occur within each of the cycke positions. We can speculate that this could be due to there being no major Holidays that require power draining decor plus we assume minimal AC usage during the cold months. 
@@ -143,7 +146,7 @@ We see power consumption increase between the months of June and August. This mu
 
 Within the overall TS plot, we see a dip in July 2010. This could be due to a power outtage during a hot summer month. This can certainly be considered to be an outlier within this TS. Using TSOutliers, we can actually identify the index where our outliers may be. TSoutliers also replaces the outlier using Box-Cox. If set lambda=auto, then TSoutliers will automatically perform Box-Cox transformation. 
 
-The ACF plot shows that autocorrelations are well outside the significant space indicating white noise. 
+The ACF plot shows that autocorrelations are well outside the significant space indicating the series is not white noise, non-stationary. 
 
 
 ## Data Model {-#b-model}
@@ -160,10 +163,10 @@ checkresiduals(arima_model)
 ```
 
 
-### Model #2: STL (no-demped) - ANN
+### Model #2: STL (no-demped) - MNN
 ```{r warning=FALSE, message=FALSE}
-#stlf - etsmodel estimation --- A,N,N is chosen.
-stl_ndemp <- stlf(ts_data, damped=FALSE, s.window = "periodic", robust=TRUE, h = 12)
+#stlf - etsmodel estimation --- M,N,N is chosen.
+stl_ndemp <- stlf(ts_data, s.window = "periodic", robust=TRUE, h = 12)
 
 # forecast plot
 autoplot(stl_ndemp) + autolayer(fitted(stl_ndemp))
@@ -171,7 +174,7 @@ autoplot(stl_ndemp) + autolayer(fitted(stl_ndemp))
 checkresiduals(stl_ndemp)
 ```
 
-# Model #2-2: STL (demped) - AAdN
+### Model #2-2: STL (demped) - MAdN
 ```{r warning=FALSE, message=FALSE}
 #stlf - etsmodel estimation --- M, Ad, N is chosen.
 stl_demp <- stlf(ts_data, damped=TRUE, s.window = "periodic", robust=TRUE, h = 12)
@@ -182,7 +185,7 @@ autoplot(stl_demp) + autolayer(fitted(stl_demp))
 checkresiduals(stl_demp)
 ```
 
-# Model #3: ets - MNM
+### Model #3: ets - MNM
 ```{r warning=FALSE, message=FALSE}
 # ETS models - MNM
 ets_model <- ets(ts_data)
@@ -193,7 +196,29 @@ autoplot(forecast(ets_model, h=12)) + autolayer(fitted(ets_model))
 checkresiduals(ets_model)
 ```
 
-Accuracy of Models
+### Model #4: Regression
+```{r warning=FALSE, message=FALSE}
+fit.reg <- tslm(ts_data ~ trend + season)
+reg_model <- forecast(fit.reg, h = 12)
+
+# forecast plot
+autoplot(reg_model) + autolayer(fitted(reg_model))
+
+checkresiduals(reg_model)
+```
+
+### Model #5: TBATS
+```{r warning=FALSE, message=FALSE}
+fit.tbats <- tbats(ts_data)
+tbats_model <- forecast(fit.tbats, h = 12)
+
+# forecast plot
+autoplot(tbats_model) + autolayer(fitted(tbats_model))
+
+checkresiduals(tbats_model)
+```
+
+### Accuracy of Models
 ```{r warning=FALSE, message=FALSE}
 accuracy(arima_model);
 
@@ -201,50 +226,40 @@ accuracy(stl_ndemp);
 
 accuracy(stl_demp);
 
-accuracy(ets_model)
+accuracy(ets_model);
 
+accuracy(reg_model);
 
+accuracy(tbats_model)
 ```
 
- Out of the models we built,we can make some preliminary observations. The residuals for each of our models does not have a major deviance from normality, however Model #1: ARIMA residuals do not have an extended number of bins distorting the normality proximity. 
+ Out of the models we built, we can make some preliminary observations. The residuals for each of our models does not have a major deviance from normality, however Model #1: ARIMA residuals do not have an extended number of bins distorting the normality proximity but we can say it is still fairly normally distributed. 
  
- The ACF plots show autocorrelations for each of our 4 models. Model #1: ARIMA has less autocorrelation than the other three models. Model 1 is well within the 95% limits indicated by the dotted blue lines. 
+ The residual ACF plots show residual autocorrelations for each of our models. Model #1: ARIMA has less autocorrelation than the other three models. Model 1 is well within the 95% limits indicated by the dotted blue lines. 
  
- If we examine the Ljung-Box test results for our models, the only model with a pvalue < 0.05 is Model #3: ets - MNM. This implies that the residuals are not independent. 
+ If we examine the Ljung-Box test results for our models, the only model with a p-value > 0.05 is Model #1: ARIMA. This implies that the residuals from other models are not independent, hence not white noise. 
+ 
+ In contrast, when we first attempted the analysis by building models without handling outlier (2010 Jul), the only model with a p-value < 0.05 was Model #3: ets - MNN and hence we accepted all the other models except for #3.
+ 
+ Handling 1 outlier dramatically changed the outcome of Ljung-Box test.
 
 
 ## Forecast {-#b-forecast}
 
-We will impliment a cross validation method of testing for h=12. The process randomly chooses 12 points to measure and generate the RMSE.By definition, a lower RMSE is attributed with a better fit.
+We will implement a cross validation method of testing for h=12. The process randomly chooses 12 points to measure and take the average of RMSEs. By definition, a lower RMSE on test set is attributed with a better forecast on unseen data. We only accepted Model #1 from Ljung-Box test and hence it is our final choice.
 
-# Model #1: ARIMA
+### Model #1: ARIMA
 ```{r warning=FALSE, message=FALSE}
-arima_cv <- function(x, h){forecast(Arima(ts_data, order = c(0, 0, 1), seasonal = c(1, 1, 1),  include.drift = TRUE), h=h)}
+arima_cv <- function(x, h){forecast(Arima(x, order = c(3, 0, 2), seasonal = c(2, 1, 0), include.drift = TRUE), h=h)}
+
 e <- tsCV(ts_data, arima_cv, h=12)
 
 sqrt(mean(e^2, na.rm=TRUE))
 ```
 
-# Model #2: STL (no-demped) - ANN
-```{r warning=FALSE, message=FALSE}
-e <- tsCV(ts_data, stlf, damped=FALSE, s.window = "periodic", robust=TRUE, h=12)
-
-sqrt(mean(e^2, na.rm=TRUE))
-```
-
-# Model #2-2: STL (demped) - AAdN
-```{r warning=FALSE, message=FALSE}
-e <- tsCV(ts_data, stlf, damped=TRUE, s.window = "periodic", robust=TRUE, h=12)
-
-sqrt(mean(e^2, na.rm=TRUE))
-```
-
-Using Time series cross-validation, we compute RMSE on testset (h=12). We will pick the model with the lowest RMSE on testset as our final model. ARIMA is the worst predictor in terms of RMSE on test set (the highest RMSE) which shows that the model is seriously overfitted - low bias but very high variance. Surprisingly, STL (no-demped) - ANN, which was the worst predictor in terms of RMSE on training set, has the lowest RMSE on test set among all models. Since this is yearly forecast, tsCV(h = 12) would make sense.
-
+ Using Time series cross-validation, we compute RMSE on testset (h=12). We would have to pick the model with the lowest RMSE on test set as our final model if we had more than 1 model to compare. In our case, since we only have 1 model left after Ljung test, we  have no choice but to pick seasonal ARIMA model as our final choice. Cross-validation test shows that RMSE on test is around 720k when RMSE on training is around 589k. We can conclude the model is not necessarily overfitted. Given that MAPE on training is less than 7, it is not a suprising result.
 
 
 ## Discussion {-#b-discussion}
 
-Given that 4 models we created did not vary much in terms of RMSE on training, while STL - ANN has significantly lower RMSE on test set than ARIMA, we will choose STL - ANN as our final model.
-
-We found that ARIMA is the worst predictor and STL - ANN is the best model as RMSE on test set is the lowest, contradicting to its' RMSE on train set. It comes down to the discussion of bias-variance trade off; overfitted model cannot generalize the outcome of predictions on unseen data well.
+In our first phased implicit analysis, which is not recorded on this Rmd, where outlier (2010 - Jul) was not handled, STL - ANN was the best model in terms of RMSE on test set. As outlier was handled, on the other hand, STL models became invalid predictors as residuals were autocorrelated. We learned that handling outlier, even if it is just one data point, makes the result of modelling outcome completely.
