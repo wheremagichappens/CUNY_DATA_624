@@ -26,9 +26,9 @@ library(forecast)
 ## outlier & imputation
 library(imputeTS)
 library(tsoutliers)
-
+getwd()
 # load data
-power_data <- read_csv("https://raw.githubusercontent.com/vindication09/DATA-624/master/ResidentialCustomerForecastLoad-624.csv")
+power_data <- read_excel("data/ResidentialCustomerForecastLoad-624.xlsx")
 
 # Time Series
 ts_data <- ts(power_data$KWH, frequency = 12, start = c(1998,1))
