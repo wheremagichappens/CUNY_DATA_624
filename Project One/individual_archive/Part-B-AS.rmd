@@ -129,7 +129,20 @@ Since ARIMA is the only reliable model, as other models failed Ljung test, we wi
 
 ### Model #1: ARIMA
 ```{r}
-autoplot(arima_model) + autolayer(arima_model$fitted)
+#autoplot(arima_model) + autolayer(arima_model$fitted)
+for_plot <- ggfortify:::fortify.forecast(arima_model,
+                                         ts.connect = TRUE)
+
+for_plot <- rename(for_plot, Month = Index, KWH = Data)
+
+ggplot(data = for_plot) +
+  geom_line(aes(x= Month, y = KWH, color = "observed")) +
+  geom_line(aes(x= Month, y = Fitted, color = "fitted")) +
+  geom_line(aes(x= Month, y = `Point Forecast`, color = "point forecast")) +
+  geom_ribbon(aes(x= Month, ymin = `Lo 80`, ymax = `Hi 80`,  fill = "80"),  alpha = 0.2) +
+  geom_ribbon(aes(x= Month, ymin = `Lo 95`, ymax = `Hi 95`,  fill = "95"),  alpha = 0.2) +
+  scale_fill_manual("CI", values = c("blue", "dodgerblue")) +
+  scale_color_manual("Legend", values = c("red", "darkgreen", "blue")) 
 ```
 
 ## Discussion {-#b-discussion}
