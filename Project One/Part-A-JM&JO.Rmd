@@ -363,10 +363,10 @@ ATM3_plotdata <- ATM3_ts %>%
                  # "ATM3"=c(NA,NA,NA,NA),"ATM4"=ATM4_fc$mean) %>% as.data.frame()
 
 # Combine the forecasts for the different ATMS
-ATM_ALL_FC <- bind_cols(as.data.frame(ATM1_AA[4:6]),
-                    as.data.frame(ATM2_AA[4:6]),
-                    as.data.frame(ATM3_AA[5]),
-                    as.data.frame(ATM4_AA[4:6]),) %>% 
+ATM_ALL_FC <- bind_cols(as.data.frame(ATM1_fc[4:6]),
+                    as.data.frame(ATM2_fc[4:6]),
+                    as.data.frame(ATM3_fc[5:7]),
+                    as.data.frame(ATM4_fc[4:6])) %>% 
   rename(ATM1_mean = 'mean',
          ATM1_low80CI = 'lower.80.',
          ATM1_low95CI = 'lower.95.',
@@ -378,11 +378,15 @@ ATM_ALL_FC <- bind_cols(as.data.frame(ATM1_AA[4:6]),
          ATM2_upper80CI = 'upper.80.1',
          ATM2_upper95CI = 'upper.95.1',
          ATM3_mean = 'mean2',
+         ATM3_low80CI = 'lower.80.2',
+         ATM3_low95CI = 'lower.95.2',
+         ATM3_upper80CI = 'upper.80.2',
+         ATM3_upper95CI = 'upper.95.2',
          ATM4_mean = 'mean3',
-         ATM4_low80CI = 'lower.80.2',
-         ATM4_low95CI = 'lower.95.2',
-         ATM4_upper80CI = 'upper.80.2',
-         ATM4_upper95CI = 'upper.95.2'
+         ATM4_low80CI = 'lower.80.3',
+         ATM4_low95CI = 'lower.95.3',
+         ATM4_upper80CI = 'upper.80.3',
+         ATM4_upper95CI = 'upper.95.3'
          )
 
 # Save output
