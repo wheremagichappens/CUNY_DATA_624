@@ -1,11 +1,10 @@
-
-require(tidyverse)
-require(readxl)
-require(fpp2)
-require(forecast)
-require(lubridate)
-require(psych)
-require(xlsx)
+library(tidyverse)
+library(readxl)
+library(fpp2)
+library(forecast)
+library(lubridate)
+library(psych)
+#library(xlsx)
 options(scipen = 999)
 
 # Reading Data
@@ -13,9 +12,9 @@ waterflow_1 <- read_excel("data/Waterflow_Pipe1.xlsx")
 waterflow_2 <- read_excel("data/Waterflow_Pipe2.xlsx")
 
 # Writing original data to submission file
-file ='forecasts/water-pipes.xlsx'
-write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", col.names = TRUE, row.names = TRUE, append = FALSE)
-write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", col.names = TRUE, row.names = TRUE, append = TRUE)
+#file ='forecasts/water-pipes.xlsx'
+#write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", col.names = TRUE, row.names = TRUE, append = FALSE)
+#write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", col.names = TRUE, row.names = TRUE, append = TRUE)
 
 # Grooming, aligning dates and aggregating Data
 waterflow_1<-waterflow_1 %>% 
@@ -134,7 +133,7 @@ preds_ws<-preds_ws%>%
     select(DateTime, `Point Forecast`, `Lo 80`,`Hi 80`, `Lo 95`, `Hi 95`)
 
 # Writing forecasts and final data to the 'XLSX' file
-write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", col.names = TRUE, row.names = FALSE, append = TRUE)
-write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)
+#write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", col.names = TRUE, row.names = FALSE, append = TRUE)
+#write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)
 
 

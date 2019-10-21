@@ -67,7 +67,7 @@ source("scripts/Part-C-BP.R")
 ### UNIVERSAL DATA SOURCING & DEFAULT SETTINGS FOR PROJECT
 #source("scripts/Part-C-BP.R")
 # Load All Sourced Code
-suppressWarnings(source("scripts/Part-C-BP.R"))
+suppressWarnings(source("scripts/Part-C.R"))
 
 # Set default augments for code chunks
 knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
@@ -130,7 +130,7 @@ Because it was concievable that there might be a daily periodicity, it was impor
 
 ```{r }
 
-suppressWarnings(source("scripts/Part-C-BP.R"))
+#suppressWarnings(source("scripts/Part-C-BP.R"))
 waterflow_1<-waterflow_1 
 
 waterflow_2<-waterflow_2 
