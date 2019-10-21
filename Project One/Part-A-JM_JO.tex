@@ -201,7 +201,7 @@ The following R libraries were used to complete Project 1:
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'gridExtra'}\NormalTok{, }\StringTok{'ggfortify'}\NormalTok{,}\StringTok{'ggpubr'}\NormalTok{)}
 
 \CommentTok{# Timeseries }
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'zoo'}\NormalTok{, }\StringTok{'urca'}\NormalTok{, }\StringTok{'tseries'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'urca'}\NormalTok{, }\StringTok{'tseries'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{)}
 
 \CommentTok{# Math}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'forecast'}\NormalTok{)}
@@ -216,10 +216,8 @@ Data was stored within our group repository and imported below using the
 \texttt{readxl} package. Each individual question was solved within an R
 script and the data was sourced into our main report for discussion
 purposes. The R scripts are available within our appendix for
-replication purposes.
-
-For grading purposes, we exported and saved all forecasts as a csv in
-our data folder.
+replication purposes. For grading purposes, we exported and saved all
+forecasts as a csv in our data folder.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -256,62 +254,31 @@ the format of the data I provide.
 \section{Exploration}\label{exploration}}
 
 The data covers a period of Friday May 1, 2010 through Saturday April
-30, 2010. A forecast for the month of May will be 31 days in length.
-
-While reviewing the data, we identified that the original data file
-contained \texttt{NA} values in our \texttt{ATM} and \texttt{Cash}
+30, 2010. While reviewing the data, we identified that the original data
+file contained \texttt{NA} values in our \texttt{ATM} and \texttt{Cash}
 columns for 14 observations between May 1 and 14, 2010. As these contain
 no information, we removed these missing values and transformed the
 dataset into a wide format.
 
-We examined summary statistics for each ATM time series: * ATM1 and ATM2
-have pretty normal distributions; ATM1's daily mean cash dispensed is
-\$84, and ATM2's is \$62. * ATM3 only dispensed cash on the last three
-days of the time series - as this provides few data points on which to
-forecast, we'll need to treat it specially. * ATM4 has a similar mean to
-ATM1, but skew and kurtosis suggest the impact of an outlier Wednesday,
-February 10, 2010. If this ATM is located in the Northeastern United
-States, this may have a relationship to a blizzard which struck on that
-day.
-
 \includegraphics{Part-A-JM_JO_files/figure-latex/unnamed-chunk-2-1.pdf}
 
-\begin{table}[t]
+Our initial review also revealed that ATM2 contained one missing value
+on 2009-10-25 and that ATM4 contained a potential outlier of \$1,123 on
+2010-02-09. We replaced both values with the corresponding mean value of
+each machine.
 
-\caption{\label{tab:unnamed-chunk-2}ATM Summary Statistics}
-\centering
-\begin{tabular}{l|r|r|r|r|r|r|r|r|r|r|r|r}
-\hline
-group1 & n & mean & sd & median & trimmed & mad & min & max & range & skew & kurtosis & se\\
-\hline
-\rowcolor{gray!6}  ATM1 & 365 & 84.1013699 & 36.604256 & 91.0 & 86.86348 & 25.2042 & 1 & 180 & 179 & -0.7186635 & 0.2087397 & 1.9159543\\
-\hline
-ATM2 & 364 & 62.4642857 & 38.901108 & 66.5 & 62.08904 & 49.6671 & 0 & 147 & 147 & -0.0268252 & -1.0988678 & 2.0389721\\
-\hline
-\rowcolor{gray!6}  ATM3 & 365 & 0.7205479 & 7.944778 & 0.0 & 0.00000 & 0.0000 & 0 & 96 & 96 & 10.9291078 & 118.3807595 & 0.4158487\\
-\hline
-ATM4 & 365 & 86.8410959 & 65.523479 & 91.0 & 86.86348 & 25.2042 & 1 & 1123 & 1122 & 10.6692960 & 168.6630832 & 3.4296557\\
-\hline
-\end{tabular}
-\end{table}
+We examined summary statistics for each ATM time series:\\
+* ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash
+dispensed is \$84, and ATM2's is \$62.\\
+* ATM3 only dispensed cash on the last three days of the time series -
+as this provides few data points on which to forecast, we'll need to
+treat it specially.\\
+* ATM4 has a similar mean to ATM1, but skew and kurtosis suggest the
+impact of an outlier Wednesday, February 10, 2010. If this ATM is
+located in the Northeastern United States, this may have a relationship
+to a blizzard which struck on that day.
 
-\begin{verbatim}
-FALSE # A tibble: 3 x 2
-FALSE   DATE                 Cash
-FALSE   <dttm>              <dbl>
-FALSE 1 2010-04-28 00:00:00    96
-FALSE 2 2010-04-29 00:00:00    82
-FALSE 3 2010-04-30 00:00:00    85
-\end{verbatim}
-
-Our cleaned dataframe was then converted into a timeseries format using
-the \texttt{zoo} package for forecasting in the next section. Our
-initial review of the data showed that ATM2 contained one missing value
-on October 25, 2019 and that ATM4 contained a potential outlier of
-\$1,123 on 2010-02-09. We replaced both values with the corresponding
-mean value of each machine.
-
-Next, we used a scatterplot to examine the correlation between cash
+We used a scatterplot to examine the correlation between cash
 withdrawals and dates for each machine. We identified similiar patterns
 between ATM1 and ATM4, which show non-linear fluctuations that suggest a
 potential trend component in these timeseries. ATM2 follows a relatively
@@ -325,8 +292,9 @@ time period.
 \hypertarget{timeseries-plots}{%
 \section{Timeseries Plots}\label{timeseries-plots}}
 
-The time series plots show high weekly variance, for ATM1, ATM2, and
-ATM4 - consistent with our takeaway from the scatterplots.
+Our cleaned dataframe was then converted into a timeseries format. The
+time series plots show high weekly variance, for ATM1, ATM2, and ATM4 -
+consistent with our takeaway from the scatterplots.
 
 These plots also remind us that ATM3 only dispensed cash on 3 days at
 the end of the timespan, with a daily range between \$82 and \$96. Given
@@ -353,8 +321,8 @@ Our plots further suggest that the ATM data is non-stationary. We
 performed a unit root test using the \texttt{ur.kpss()} function to
 confirm this observation. The test results below show that differencing
 is required on all ATM2 and ATM4 series. ATM1 falls just below the
-cut-off critical value, but could still use differencing due to the
-observed seasonal pattern.
+cut-off critical value, but could still benefit from differencing due to
+the observed seasonal pattern.
 
 \begin{table}[H]
 
@@ -404,10 +372,11 @@ observed data.
 \hypertarget{forecast}{%
 \section{Forecast}\label{forecast}}
 
-Finally, we applied a forecast to each series for 31 days, which span
-across 5 weeks, in May 2010. The numeric forecasts can be viewed in a
-table output in the appendix section and are also located within our
-data output folder.
+A forecast for the month of May will be 31 days in length. Finally, we
+applied a forecast to each series for 31 days, which span across 5
+weeks, in May 2010. The numeric forecasts can be viewed in a table
+output in the appendix section and are also located within our data
+output folder.
 
 \includegraphics{Part-A-JM_JO_files/figure-latex/unnamed-chunk-8-1.pdf}
 
