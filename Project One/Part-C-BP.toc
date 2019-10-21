@@ -1,0 +1,17 @@
+\contentsline {chapter}{Overview}{3}{chapter*.2}% 
+\contentsline {section}{Dependencies}{3}{section*.3}% 
+\contentsline {section}{Data}{4}{section*.3}% 
+\contentsline {chapter}{\numberline {1}Part C}{5}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Exploration}{5}{section.1.1}% 
+\contentsline {subsection}{\numberline {1.1.1}Time Series Plots}{6}{subsection.1.1.1}% 
+\contentsline {subsection}{\numberline {1.1.2}Decomposition}{6}{subsection.1.1.2}% 
+\contentsline {section}{\numberline {1.2}Estimating Stationarity}{6}{section.1.2}% 
+\contentsline {section}{\numberline {1.3}Estimating Orders for ARIMA}{7}{section.1.3}% 
+\contentsline {section}{\numberline {1.4}\texttt {auto.arima()}}{8}{section.1.4}% 
+\contentsline {subsection}{\numberline {1.4.1}Interpreting \texttt {auto.arima()}}{9}{subsection.1.4.1}% 
+\contentsline {subsection}{\numberline {1.4.2}Manual ARIMA testing}{10}{subsection.1.4.2}% 
+\contentsline {subsubsection}{\numberline {1.4.2.1}Forecasting From the ARIMA}{11}{subsubsection.1.4.2.1}% 
+\contentsline {subsubsection}{\numberline {1.4.2.2}\(ARIMA(2,1,3)(0,0,1)[24]\)}{11}{subsubsection.1.4.2.2}% 
+\contentsline {subsection}{\numberline {1.4.3}Accepting the \texttt {auto.arima()}}{13}{subsection.1.4.3}% 
+\contentsline {subsubsection}{\numberline {1.4.3.1}Forecast Accuracy}{13}{subsubsection.1.4.3.1}% 
+\contentsline {section}{\numberline {1.5}Summary}{14}{section.1.5}% 
