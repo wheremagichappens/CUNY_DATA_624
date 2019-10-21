@@ -25,23 +25,30 @@ output:
 
 # Overview {-#overview}
 
-> Insert Project Overview and explain work process. 
+We split the work into three sections for Project 1. Individual team members each took lead on individual problem. Jermey and Julian focused on Part A, Sang Yoon (Andy) and Vinicio worked on Part B, and Bethany took lead on Part C.  Juliann created an overall format for the assignment to be used and all team members collectively worked together on reviewing and merging our finished product. 
 
 ## Dependencies {-#dependencies}
 
-> Please add all libraries used here.
-
-The following R libraries were used to complete Project 1:
+The following R libraries were used to complete this assignment:
 
 ```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=F}
-# Insert All Used Dependencies Here 
+library(easypackages)
+
+libraries('knitr', 'kableExtra', 'default')
+
+# Processing
+libraries('readxl', 'tidyverse', 'janitor', 'imputeTS', 'tsoutliers')
+
+# Timeseries 
+libraries('urca', 'forecast', 'timetk')
+
+# Graphing
+libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr', 'scales')
 ```
 
 ## Data {-#data}
 
-Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report for discussion purposes. The R scripts are available within our appendix for replication purposes. 
-
-For grading purposes, we exported and saved all forecasts as a csv in our data folder.
+Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report. For replication purposes, we also made our R scripts available within our appendix. All forecasts were exported and saved a `.csv` file in our [github repository]((https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project%20One/) folder named forecasts.
 
 ```{r, eval=F}
 # Data Aquisition
@@ -51,7 +58,9 @@ pipe1_data <- read_excel("data/Waterflow_Pipe1.xlsx")
 pipe2_data <- read_excel("data/Waterflow_Pipe2.xlsx")
 
 # Source Code
-source("scripts/Part-A-JM.R") ## Example
+source('~/GitHub/CUNY_DATA_624/Project One/scripts/Part-A.R')
+source('~/GitHub/CUNY_DATA_624/Project One/scripts/Part-B.R')
+source('~/GitHub/CUNY_DATA_624/Project One/scripts/Part-C.R')
 ```
 
 ```{r settings-A-JM, echo=F, message=F, warning=F, error=F, comment=F}
@@ -62,9 +71,7 @@ library(kableExtra)
 library(default)
 
 # Load All Sourced Code Here >>> 
-
-### EXAMPLE:
-suppressWarnings(source("scripts/Part-A-JM.R"))
+suppressWarnings(source("scripts/Part-B.R"))
 
 # Set default augments for code chunks
 knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
@@ -76,13 +83,11 @@ default(row_spec) <- list(row=0, bold=T)
 
 # Set default for ggplot theme
 default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
-                       axis.title.x = element_blank(),
-                       axis.title.y = element_blank(),
                        plot.title = element_text(color="#4c4c4c", size=12, face="bold"),
                        plot.subtitle = (element_text(size=8, color="#000000")),
                        legend.title = (element_text(size=10, color="#000000", face="bold")),
                        strip.background = element_rect(color="#000000", 
-                                                       fill="#cccdd0", size=.75, linetype="solid"),
+                                                       fill="#cccdd0", size=.75,linetype="solid"),
                        strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
 
 # GGplot Palette
@@ -94,80 +99,223 @@ default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
 
 >  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
 
-# Part B: Power
+# Part B: Forecasting Power
 
->  **Instructions:** Forecasting Power: Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward.    Add these to your existing files above - clearly labeled.  
+> **Instructions:** Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward.    Add these to your existing files above - clearly labeled.  
+
+## Exploration
+
+We observed there was a missing value in September 2008. We used imputation method called na.interpolation which performs a technique in numerical analysis which estimates a value from known data points. For our case, linear method using first order Taylor polynomial is used.
+
+## Time Series Plot 
+
+```{r}
+# time series plot
+autoplot(ts_data) +
+labs(title = "Monthly Residential Power Usage", subtitle = "Time Series: 01/98 - 12/13", y = "KWH (in Millions)")+
+theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+```
+
+Our initial time series plot reveal annual seasonality within this time series. The box plot/seasonality plot actually reveals where power consumption fluctuations occur within each of the cycle positions. We can speculate that this could be due to there being no major Holidays that require power draining decor plus we assume minimal AC usage during the cold months. 
+
+## Evaluation 
+
+We see power consumption increase between the months of June and August. This must be tied to AC usage during the warmer months of a year and finally power usage dips from September to Novemeber with a small spike in December. We speculate that thisis due to transitioning out of summer. The spike in December could be connected to the usage or Holiday lights being kept on. 
+
+Within the overall TS plot, we see a dip in July 2010. This could be due to a power outtage during a hot summer month. This can certainly be considered to be an outlier within this TS. Using TSOutliers, we can actually identify the index where our outliers may be. TSoutliers also replaces the outlier using Box-Cox. If set lambda=auto, then TSoutliers will automatically perform Box-Cox transformation.
+
+The ACF plot shows that autocorrelations are well outside the significant space indicating the series is not white noise, non-stationary. 
+
+```{r, fig.height=6}
+# season plot
+p1 <- ggseasonplot(ts_data)+
+  labs(title="Seasonal Plot")+theme_bw()+theme(legend.position = 'none')+
+  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+
+# sub-season plot
+p2 <- ggsubseriesplot(ts_data)+labs(title="Subseries Plot", y="")+theme_bw()+theme()+
+  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+
+# ggAcf
+p3 <- ggAcf(ts_data)+labs(title="ACF Plot", y="")+theme_bw()+theme()
+
+# STL decomposition
+p4 <- autoplot(stl1)+theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+
+grid.arrange(grob=p1, p2, p3, p4, ncol=2,   
+             layout_matrix = rbind(c(1, 4),
+                                   c(2, 4),
+                                   c(3, 4)),
+             top=textGrob(label="Diagnostic Plots"))
+```
+
+## Data Model 
+
+Out of the models we built, we can make some preliminary observations. The residuals for each of our models does not have a major deviance from normality, however residuals of Model #1: ARIMA do not have an extended number of bins distorting the normality proximity but we can say it is still fairly normally distributed. 
+ 
+The residual ACF plots show residual autocorrelations for each of our models. Model #1: ARIMA has less autocorrelation than the other three models. Model 1 is well within the 95% limits indicated by the dotted blue lines. 
+ 
+If we examine the Ljung-Box test results for our models, the only model with a p-value > 0.05 is Model #1: ARIMA. This implies that the residuals from other models are not independent, hence not white noise. The full model summary can be viewed in the appendix.
+
+### Model #1: ARIMA
+
+```{r warning=FALSE, message=FALSE}
+checkresiduals(arima_fc)
+```
+
+### Model #2: STL (no-demped) - MNN
+
+```{r}
+checkresiduals(stl_ndemp)
+```
+
+### Model #2-2: STL (demped) - MAdN
+
+```{r}
+checkresiduals(stl_demp)
+```
+
+### Model #3: ets - MNM
+```{r}
+checkresiduals(ets_model)
+```
+
+## Forecast
+
+The `auto.arima()` function performs cross validation on hyperparameter tuning to find the best model with parameters  of `order` and `seasonal` that minimize `AIC`. This gave us **arima_model**: ARIMA$(3,0,2)(2,1,0)12$ with drift resulting `AIC` = 5332.24. 
+
+Since ARIMA is the only reliable model, as other models failed Ljung test, we will plot forecasts of ARIMA only. The forecasted values can be viewed in the appendix. 
+
+### Model #1: ARIMA
+
+```{r}
+autoplot(arima_fc)+
+  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))+ 
+  labs(title="Forecast: Residential Power - Model 1", subtitle="ARIMA(3,0,2)(2,1,0)[12] with drift", y = "KWH (in Millions)")+theme_bw()+theme()
+
+## unable to get autoplot autolayer working :(
+## Error: Invalid input: date_trans works with objects of class Date only
+
+#forecast::autoplot(arima_fc)+forecast::autolayer(arima_auto$fitted, series="Fitted")
+#  labs(y = "KWH (in Millions)")+
+#  theme_classic()+theme(legend.position = 'bottom')+
+#  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+```
+
+## Discussion 
+
+We implemented a cross validation method of testing for `h=12`. The process randomly chooses 12 points to measure and take the average of RMSEs. By definition, a lower RMSE on test set is attributed with a better forecast on unseen data. 
+
+Using Time series cross-validation, we compute RMSE on testset (`h=12`). We would have to pick the model with the lowest RMSE on test set as our final model if we had more than 1 model to compare. In our case, since we only have 1 model left after Ljung test, we  have no choice but to pick seasonal ARIMA model as our final choice. Cross-validation test shows that RMSE on test is around 720k when RMSE on training is around 589k. We can conclude the model is not necessarily overfitted. Given that MAPE on training is less than 7, it is not a suprising result.
+
+```{r}
+paste("RMSE - train:",rmse_train_arima) 
+paste("RMSE - test:",rmse_test_arima)
+```
+
+
 
 # Part C: Waterflow
 
 >  **Instructions:** Part C consists of two data sets.  These are simple 2 columns sets, however they have different time stamps.  Your optional assignment is to time-base sequence the data and aggregate based on hour (example of what this looks like, follows).  Note for multiple recordings within an hour, take the mean.  Then to test appropriate assumptions and forecast a week forward with confidence bands (80 and 95%). Add these to your existing files above - clearly labeled.  
 
-# Appendix {-#Appendix}
-
-## Part A {-#Part-A}
-
-### ATM1 Forecast {-#Part-A-FC1}
+## Pipes1 Forecast 
 
 ```{r}
 #Insert Forecast Here 
 ```
 
-### ATM2 Forecast {-#Part-A-FC2}
+## Pipes2 Forecast
 
 ```{r}
 #Insert Forecast Here 
 ```
 
-### ATM3 Forecast {-#Part-A-FC3}
-
-```{r}
-#Insert Forecast Here 
-```
-
-### ATM4 Forecast {-#Part-A-FC4}
-
-```{r}
-#Insert Forecast Here 
-```
-
-### R Script {-#Part-A-RScript}
+## R Script 
 
 ```{r, echo=T}
 #Insert Script Here 
 ```
 
-## Part B {-#Part-B}
+# Appendix 
 
-### Power Forecast {-#Part-B-FC1}
+## Part B 
 
+### Model Summary 
+
+**`ARIMA`:**
 ```{r}
-#Insert Forecast Here 
+summary(arima_auto)
 ```
 
-### R Script {-#Part-B-RScript}
-
-```{r, echo=T}
-#Insert Script Here 
-```
-
-## Part C {-#Part-C}
-
-### Pipes1 Forecast {-#Part-C-FC1}
-
+**`STL - MNN`:**
 ```{r}
-#Insert Forecast Here 
+summary(stl_ndemp)
 ```
 
-### Pipes2 Forecast {-#Part-C-FC2}
-
+**`STL - MAdN`:**
 ```{r}
-#Insert Forecast Here 
+summary(stl_demp)
 ```
 
-### R Script {-#Part-C-RScript}
-
-```{r, echo=T}
-#Insert Script Here 
+**`ets - MNM`:**
+```{r}
+summary(ets_model)
 ```
 
+\newpage
+### R Script 
+```{r, echo=T, eval=F}
+library(readxl)
+library(tidyverse)
+library(forecast)
+library(imputeTS)
+library(tsoutliers)
 
+# load data
+power_data <- read_excel("data/ResidentialCustomerForecastLoad-624.xlsx")
+
+# Time Series
+ts_data <- ts(power_data$KWH, frequency = 12, start = c(1998,1))
+
+# Missing value imputation
+ts_data <- na_interpolation(ts_data)
+
+# STL decomposition
+stl1 <- stl(ts_data, s.window = 'periodic')
+
+# Handling outlier
+outlier_func <- tsoutliers(ts_data, iterate = 2, lambda = "auto")
+
+# Time Series - After outlier and imputation handeled
+ts_data_o <- ts_data  # Let's treate outlier handled data seperatly for Modelling part.
+ts_data_o[outlier_func$index] <- outlier_func$replacements
+
+# Model#1: ARIMA
+arima_auto <- auto.arima(ts_data_o)
+arima_fc <- forecast(arima_auto, h=12)
+
+# Model #2: STL (no-demped) - MNN
+stl_ndemp <- stlf(ts_data_o, s.window = "periodic", robust=TRUE, h = 12)
+
+# Model #2-2: STL (demped) - MAdN
+stl_demp <- stlf(ts_data_o, damped=TRUE, s.window = "periodic", robust=TRUE, h = 12)
+
+# Model #3: ets - MNM
+ets_auto <- ets(ts_data_o)
+ets_model <- forecast(ets_auto, h=12)
+
+# tsCv - ARIMA -> it takes so much time. I got the results and saved them
+##arima_cv <- function(x, h){forecast(Arima(x, order = c(3, 0, 2), seasonal = c(2, 1, 0), include.drift = TRUE), h=h)}
+##e <- tsCV(ts_data_o, arima_cv, h=12)
+
+# RMSEs -> tsCV takes lot of time to process so just saved the output
+#rmse_train_arima <- arima_auto[2]
+#rmse_test_arima <- sqrt(mean(e^2, na.rm=TRUE))
+
+rmse_train_arima <- 589381.7
+rmse_test_arima <- 725175
+
+# Save output
+write.csv(arima_fc, file="forecasts/POWER_ARIMA_FC.csv")
+```
