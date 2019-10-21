@@ -194,7 +194,7 @@ The following R libraries were used to complete this assignment:
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'readxl'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'imputeTS'}\NormalTok{, }\StringTok{'tsoutliers'}\NormalTok{)}
 
 \CommentTok{# Timeseries }
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'urca'}\NormalTok{, }\StringTok{'forecast'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'urca'}\NormalTok{, }\StringTok{'forecast'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{, }\StringTok{'fpp2'}\NormalTok{)}
 
 \CommentTok{# Graphing}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'gridExtra'}\NormalTok{, }\StringTok{'ggfortify'}\NormalTok{,}\StringTok{'ggpubr'}\NormalTok{, }\StringTok{'scales'}\NormalTok{)}
@@ -246,6 +246,141 @@ you are making! Your forecast is a simple CSV or Excel file that MATCHES
 the format of the data I provide.
 \end{quote}
 
+\hypertarget{exploration}{%
+\section{Exploration}\label{exploration}}
+
+The data covers a period of Friday May 1, 2010 through Saturday April
+30, 2010. While reviewing the data, we identified that the original data
+file contained \texttt{NA} values in our \texttt{ATM} and \texttt{Cash}
+columns for 14 observations between May 1 and 14, 2010. As these contain
+no information, we removed these missing values and transformed the
+dataset into a wide format.
+
+Our initial review also revealed that ATM2 contained one missing value
+on 2009-10-25 and that ATM4 contained a potential outlier of \$1,123 on
+2010-02-09. We replaced both values with the corresponding mean value of
+each machine.
+
+We examined summary statistics for each ATM time series:
+
+\begin{itemize}
+\tightlist
+\item
+  ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash
+  dispensed is \$84, and ATM2's is \$62.
+\item
+  ATM3 only dispensed cash on the last three days of the time series -
+  as this provides few data points on which to forecast, we'll need to
+  treat it specially.
+\item
+  ATM4 has a similar mean to ATM1, but skew and kurtosis suggest the
+  impact of an outlier Wednesday, February 10, 2010. If this ATM is
+  located in the Northeastern United States, this may have a
+  relationship to a blizzard which struck on that day.
+\end{itemize}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+Last, we used a scatterplot to examine the correlation between cash
+withdrawals and dates for each machine. We identified similiar patterns
+between ATM1 and ATM4, which show non-linear fluctuations that suggest a
+potential trend component in these timeseries. ATM2 follows a relatively
+linear path and decreases overtime. This changes in the last few
+observations, where withdrawals begin to increase. As mentioned, there
+are only 3 observed transactions for ATM3 that appear at the end of the
+captured time period.
+
+\hypertarget{timeseries-plots}{%
+\section{Timeseries Plots}\label{timeseries-plots}}
+
+Our cleaned dataframe was then converted into a timeseries format. The
+time series plots show high weekly variance, for ATM1, ATM2, and ATM4 -
+consistent with our takeaway from the scatterplots.
+
+These plots also remind us that ATM3 only dispensed cash on 3 days at
+the end of the timespan, with a daily range between \$82 and \$96. Given
+the paucity of observations in the training data, the simplest possible
+approach to forecasting ATM3, averaging, is likely best. Given that ATM3
+distributed no cash until April 28, 2010, we'll assume that it was not
+operating until then and only include the three day window of non-zero
+observations in the forecast.
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\hypertarget{evaluation}{%
+\section{Evaluation}\label{evaluation}}
+
+We constructed our initial timeseries for ATM1, ATM2, and ATM4 using a
+weekly frequency. Our ACF plots for each ATM showcases large, decreasing
+lags starting at 7. This pattern continues in a multiple of seven, which
+confirms our assumption about seasonality within the observed data.
+These lags are indicative of a weekly pattern. \newline
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+Our plots further suggest that the ATM data is non-stationary. We
+performed a unit root test using the \texttt{ur.kpss()} function to
+confirm this observation. The test results below show that differencing
+is required on all ATM2 and ATM4 series. ATM1 falls just below the
+cut-off critical value, but could still benefit from differencing due to
+the observed seasonal pattern.
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-6}KPSS unit root test}
+\centering
+\begin{tabular}{l|l|l}
+\hline
+\textbf{ATM} & \textbf{No-Diff} & \textbf{Diff-1}\\
+\hline
+\rowcolor{gray!6}  ATM1 & 0.4967 & 0.0219\\
+\hline
+ATM2 & 2.0006 & 0.016\\
+\hline
+\rowcolor{gray!6}  ATM4 & 0.5182 & 0.0211\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{modeling}{%
+\subsection{Modeling}\label{modeling}}
+
+We used \texttt{auto.arima()} and set \texttt{D=1} to account for
+seasonal differencing of our data to select the best ARIMA models for
+ATM1, ATM2, and ATM4. The full models and accuracy statistics for each
+series can be viewed in the appendix.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{ATM1}: ARIMA\((0,0,2)(0,1,1)_7\)
+\item
+  \textbf{ATM2}: ARIMA\((2,0,2)(0,1,1)_7\)
+\item
+  \textbf{ATM3}: MEAN
+\item
+  \textbf{ATM4}: ARIMA\((0,0,2)(0,1,1)_7\)
+\end{itemize}
+
+The residual ACF plots contain no pattern and the lags fall within the
+critical value, which suggest they are white noise and not
+autocorrelated. Further, the residual histograms follow a relatively
+normal distribution, which confirms that the models adequately fits the
+observed data.
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\hypertarget{forecast}{%
+\section{Forecast}\label{forecast}}
+
+A forecast for the month of May will be 31 days in length. We applied a
+forecast to each series for 31 days, which span across 5 weeks, in May
+2010. The numeric forecasts can be viewed in a table output in the
+appendix section and are also located within our data output folder.
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-8-1.pdf}
+
 \hypertarget{part-b-forecasting-power}{%
 \chapter{Part B: Forecasting Power}\label{part-b-forecasting-power}}
 
@@ -258,8 +393,8 @@ in Kilowatt hours, the rest is straight forward. Add these to your
 existing files above - clearly labeled.
 \end{quote}
 
-\hypertarget{exploration}{%
-\section{Exploration}\label{exploration}}
+\hypertarget{exploration-1}{%
+\section{Exploration}\label{exploration-1}}
 
 We observed there was a missing value in September 2008. We used
 imputation method called na.interpolation which performs a technique in
@@ -269,7 +404,7 @@ our case, linear method using first order Taylor polynomial is used.
 \hypertarget{time-series-plot}{%
 \section{Time Series Plot}\label{time-series-plot}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-2-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 Our initial time series plot reveal annual seasonality within this time
 series. The box plot/seasonality plot actually reveals where power
@@ -278,8 +413,8 @@ can speculate that this could be due to there being no major Holidays
 that require power draining decor plus we assume minimal AC usage during
 the cold months.
 
-\hypertarget{evaluation}{%
-\section{Evaluation}\label{evaluation}}
+\hypertarget{evaluation-1}{%
+\section{Evaluation}\label{evaluation-1}}
 
 We see power consumption increase between the months of June and August.
 This must be tied to AC usage during the warmer months of a year and
@@ -299,7 +434,7 @@ The ACF plot shows that autocorrelations are well outside the
 significant space indicating the series is not white noise,
 non-stationary.
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-10-1.pdf}
 
 \hypertarget{data-model}{%
 \section{Data Model}\label{data-model}}
@@ -323,7 +458,7 @@ white noise. The full model summary can be viewed in the appendix.
 \hypertarget{model-1-arima}{%
 \subsection{Model \#1: ARIMA}\label{model-1-arima}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-11-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -339,7 +474,7 @@ FALSE Model df: 8.   Total lags used: 24
 \subsection{Model \#2: STL (no-demped) -
 MNN}\label{model-2-stl-no-demped---mnn}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-5-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-12-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -355,7 +490,7 @@ FALSE Model df: 2.   Total lags used: 24
 \subsection{Model \#2-2: STL (demped) -
 MAdN}\label{model-2-2-stl-demped---madn}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-13-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -370,7 +505,7 @@ FALSE Model df: 5.   Total lags used: 24
 \hypertarget{model-3-ets---mnm}{%
 \subsection{Model \#3: ets - MNM}\label{model-3-ets---mnm}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-14-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -382,8 +517,8 @@ FALSE
 FALSE Model df: 14.   Total lags used: 24
 \end{verbatim}
 
-\hypertarget{forecast}{%
-\section{Forecast}\label{forecast}}
+\hypertarget{forecast-1}{%
+\section{Forecast}\label{forecast-1}}
 
 The \texttt{auto.arima()} function performs cross validation on
 hyperparameter tuning to find the best model with parameters of
@@ -398,7 +533,7 @@ viewed in the appendix.
 \hypertarget{model-1-arima-1}{%
 \subsection{Model \#1: ARIMA}\label{model-1-arima-1}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-15-1.pdf}
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
@@ -446,23 +581,206 @@ labeled.
 \hypertarget{pipes2-forecast}{%
 \section{Pipes2 Forecast}\label{pipes2-forecast}}
 
-\hypertarget{r-script}{%
-\section{R Script}\label{r-script}}
+\hypertarget{appendix-a}{%
+\chapter*{Appendix A}\label{appendix-a}}
+\addcontentsline{toc}{chapter}{Appendix A}
+
+\hypertarget{arima-a}{%
+\section*{ARIMA Model Summary}\label{arima-a}}
+\addcontentsline{toc}{section}{ARIMA Model Summary}
+
+\textbf{\texttt{ATM1}:}
+
+\begin{verbatim}
+FALSE Series: ATM1_ts 
+FALSE ARIMA(0,0,2)(0,1,1)[7] 
+FALSE Box Cox transformation: lambda= 0.2584338 
+FALSE 
+FALSE Coefficients:
+FALSE          ma1      ma2     sma1
+FALSE       0.1085  -0.1089  -0.6425
+FALSE s.e.  0.0524   0.0521   0.0431
+FALSE 
+FALSE sigma^2 estimated as 1.726:  log likelihood=-606.1
+FALSE AIC=1220.2   AICc=1220.32   BIC=1235.72
+\end{verbatim}
+
+\textbf{\texttt{ATM2}:}
+
+\begin{verbatim}
+FALSE Series: ATM2_ts 
+FALSE ARIMA(2,0,2)(0,1,1)[7] 
+FALSE Box Cox transformation: lambda= 0.661752 
+FALSE 
+FALSE Coefficients:
+FALSE           ar1      ar2     ma1     ma2     sma1
+FALSE       -0.4238  -0.8978  0.4766  0.7875  -0.7064
+FALSE s.e.   0.0592   0.0473  0.0883  0.0608   0.0417
+FALSE 
+FALSE sigma^2 estimated as 38.94:  log likelihood=-1162.96
+FALSE AIC=2337.93   AICc=2338.17   BIC=2361.21
+\end{verbatim}
+
+\textbf{\texttt{ATM4}:}
+
+\begin{verbatim}
+FALSE Series: ATM4_ts 
+FALSE ARIMA(0,0,2)(0,1,1)[7] 
+FALSE Box Cox transformation: lambda= 0.2328582 
+FALSE 
+FALSE Coefficients:
+FALSE          ma1      ma2     sma1
+FALSE       0.1095  -0.1088  -0.6474
+FALSE s.e.  0.0524   0.0523   0.0420
+FALSE 
+FALSE sigma^2 estimated as 1.439:  log likelihood=-573.5
+FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
+\end{verbatim}
+
+\hypertarget{forecast-a}{%
+\section*{Point Forecasts}\label{forecast-a}}
+\addcontentsline{toc}{section}{Point Forecasts}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-22}ATM Mean Point Forecast}
+\centering
+\begin{tabular}{l|r|r|r|r}
+\hline
+\textbf{Date} & \textbf{ATM1} & \textbf{ATM2} & \textbf{ATM3} & \textbf{ATM4}\\
+\hline
+\rowcolor{gray!6}  2010-05-01 & 86.68 & 65.91 & 87.67 & 86.71\\
+\hline
+2010-05-02 & 100.57 & 71.27 & 87.67 & 100.58\\
+\hline
+\rowcolor{gray!6}  2010-05-03 & 73.71 & 11.47 & 87.67 & 73.65\\
+\hline
+2010-05-04 & 4.23 & 2.46 & 87.67 & 4.22\\
+\hline
+\rowcolor{gray!6}  2010-05-05 & 100.16 & 98.34 & 87.67 & 100.16\\
+\hline
+2010-05-06 & 79.35 & 89.06 & 87.67 & 79.34\\
+\hline
+\rowcolor{gray!6}  2010-05-07 & 85.74 & 66.07 & 87.67 & 85.78\\
+\hline
+2010-05-08 & 87.18 & 65.91 & 87.67 & 87.22\\
+\hline
+\rowcolor{gray!6}  2010-05-09 & 100.39 & 71.30 & 87.67 & 100.40\\
+\hline
+2010-05-10 & 73.71 & 11.47 & 87.67 & 73.65\\
+\hline
+\rowcolor{gray!6}  2010-05-11 & 4.23 & 2.46 & 87.67 & 4.22\\
+\hline
+2010-05-12 & 100.16 & 98.36 & 87.67 & 100.16\\
+\hline
+\rowcolor{gray!6}  2010-05-13 & 79.35 & 89.08 & 87.67 & 79.34\\
+\hline
+2010-05-14 & 85.74 & 66.05 & 87.67 & 85.78\\
+\hline
+\rowcolor{gray!6}  2010-05-15 & 87.18 & 65.90 & 87.67 & 87.22\\
+\hline
+2010-05-16 & 100.39 & 71.32 & 87.67 & 100.40\\
+\hline
+\rowcolor{gray!6}  2010-05-17 & 73.71 & 11.46 & 87.67 & 73.65\\
+\hline
+2010-05-18 & 4.23 & 2.45 & 87.67 & 4.22\\
+\hline
+\rowcolor{gray!6}  2010-05-19 & 100.16 & 98.37 & 87.67 & 100.16\\
+\hline
+2010-05-20 & 79.35 & 89.09 & 87.67 & 79.34\\
+\hline
+\rowcolor{gray!6}  2010-05-21 & 85.74 & 66.03 & 87.67 & 85.78\\
+\hline
+2010-05-22 & 87.18 & 65.90 & 87.67 & 87.22\\
+\hline
+\rowcolor{gray!6}  2010-05-23 & 100.39 & 71.34 & 87.67 & 100.40\\
+\hline
+2010-05-24 & 73.71 & 11.46 & 87.67 & 73.65\\
+\hline
+\rowcolor{gray!6}  2010-05-25 & 4.23 & 2.45 & 87.67 & 4.22\\
+\hline
+2010-05-26 & 100.16 & 98.38 & 87.67 & 100.16\\
+\hline
+\rowcolor{gray!6}  2010-05-27 & 79.35 & 89.10 & 87.67 & 79.34\\
+\hline
+2010-05-28 & 85.74 & 66.02 & 87.67 & 85.78\\
+\hline
+\rowcolor{gray!6}  2010-05-29 & 87.18 & 65.90 & 87.67 & 87.22\\
+\hline
+2010-05-30 & 100.39 & 71.35 & 87.67 & 100.40\\
+\hline
+\rowcolor{gray!6}  2010-05-31 & 73.71 & 11.46 & 87.67 & 73.65\\
+\hline
+\end{tabular}
+\end{table}
+
+\newpage
+
+\hypertarget{script-a}{%
+\subsection*{R Script}\label{script-a}}
+\addcontentsline{toc}{subsection}{R Script}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Insert Script Here }
+\CommentTok{# Load data}
+\NormalTok{atm_data <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"data/ATM624Data.xlsx"}\NormalTok{) }
+
+\CommentTok{# clean dataframe}
+\NormalTok{atm <-}\StringTok{ }\NormalTok{atm_data }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\CommentTok{# create wide dataframe}
+\StringTok{  }\KeywordTok{spread}\NormalTok{(ATM, Cash) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\CommentTok{# remove NA column using function from janitor package}
+\StringTok{  }\KeywordTok{remove_empty}\NormalTok{(}\DataTypeTok{which =} \StringTok{"cols"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{# filter unobserved values from May 2010 }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(DATE }\OperatorTok{<}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"2010-05-01"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(DATE) }
+
+\NormalTok{atm}\OperatorTok{$}\NormalTok{ATM2[}\KeywordTok{is.na}\NormalTok{(atm}\OperatorTok{$}\NormalTok{ATM2)] <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(atm}\OperatorTok{$}\NormalTok{ATM2, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{) }\CommentTok{## remove NA}
+\NormalTok{atm}\OperatorTok{$}\NormalTok{ATM4[}\KeywordTok{which.max}\NormalTok{(atm}\OperatorTok{$}\NormalTok{ATM4)] <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(atm}\OperatorTok{$}\NormalTok{ATM4, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{) }\CommentTok{## remove outlier}
+
+\CommentTok{# create TS with weekly frequency & subset data}
+\NormalTok{atm_ts <-}\StringTok{ }\NormalTok{atm }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{DATE) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ts}\NormalTok{(}\DataTypeTok{start=}\DecValTok{1}\NormalTok{,  }\DataTypeTok{frequency =} \DecValTok{7}\NormalTok{)}
+\NormalTok{ATM1_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{1}\NormalTok{]; ATM2_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{2}\NormalTok{]; ATM3_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{3}\NormalTok{]; ATM4_ts <-}\StringTok{ }\NormalTok{atm_ts[,}\DecValTok{4}\NormalTok{]}
+
+\CommentTok{#unit root test: }
+\NormalTok{ATM1_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM1_ts); ATM2_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM2_ts); ATM4_ur <-}\KeywordTok{ur.kpss}\NormalTok{(ATM4_ts)}
+\NormalTok{ATM1d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM1_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{)); ATM2d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM2_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+\NormalTok{ATM4d_ur <-}\KeywordTok{ur.kpss}\NormalTok{(}\KeywordTok{diff}\NormalTok{(ATM4_ts, }\DataTypeTok{lag=}\DecValTok{7}\NormalTok{))}
+
+\CommentTok{# AUTO.ARIMA function; set D=1 for seasonal differencing}
+\NormalTok{ATM1_AA <-}\KeywordTok{auto.arima}\NormalTok{(ATM1_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =} \StringTok{"auto"}\NormalTok{, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+\NormalTok{ATM2_AA <-}\KeywordTok{auto.arima}\NormalTok{(ATM2_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =} \StringTok{"auto"}\NormalTok{, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+\NormalTok{ATM4_AA <-}\KeywordTok{auto.arima}\NormalTok{(ATM4_ts, }\DataTypeTok{D =} \DecValTok{1}\NormalTok{, }\DataTypeTok{lambda =} \StringTok{"auto"}\NormalTok{, }\DataTypeTok{approximation =}\NormalTok{ F, }\DataTypeTok{stepwise =}\NormalTok{ T)}
+
+\CommentTok{# Forecast Results}
+\NormalTok{ATM1_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM1_AA,}\DataTypeTok{h=}\DecValTok{31}\NormalTok{); ATM2_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM2_AA,}\DataTypeTok{h=}\DecValTok{31}\NormalTok{)}
+\NormalTok{ATM3_fc <-}\StringTok{ }\KeywordTok{meanf}\NormalTok{(ATM3_ts[ATM3_ts }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{], }\DataTypeTok{h=}\DecValTok{31}\NormalTok{); ATM4_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ATM4_AA,}\DataTypeTok{h=}\DecValTok{31}\NormalTok{)}
+
+\CommentTok{# Prepare dataframe for ATM3 mean forcast plotting }
+\NormalTok{ATM3_plotdata_fc <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \DecValTok{366}\NormalTok{, }\DataTypeTok{to =} \DecValTok{396}\NormalTok{), ATM3_fc[[}\DecValTok{5}\NormalTok{]], ATM3_fc[[}\DecValTok{6}\NormalTok{]], }
+\NormalTok{                          ATM3_fc[[}\DecValTok{7}\NormalTok{]]) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{()}
+
+\KeywordTok{colnames}\NormalTok{(ATM3_plotdata_fc) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'Date'}\NormalTok{, }\StringTok{'Point Forecast'}\NormalTok{, }
+                                \StringTok{'Lo 80'}\NormalTok{, }\StringTok{'Lo 95'}\NormalTok{, }\StringTok{'Hi 80'}\NormalTok{, }\StringTok{'Hi 95'}\NormalTok{)}
+\NormalTok{ATM3_plotdata <-}\StringTok{ }\NormalTok{ATM3_ts }\OperatorTok{%>%}\StringTok{ }\KeywordTok{fortify}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{Index) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{Cash =}\NormalTok{ Data) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Date =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{row.names}\NormalTok{(.))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(Date, Cash) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{full_join}\NormalTok{(ATM3_plotdata_fc, }\DataTypeTok{by =} \StringTok{'Date'}\NormalTok{)}
+
+\CommentTok{#Revert results back into original form}
+\NormalTok{date <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\KeywordTok{as.Date}\NormalTok{(}\StringTok{'2010-05-01'}\NormalTok{), }\DataTypeTok{length.out=}\DecValTok{31}\NormalTok{, }\DataTypeTok{by=}\DecValTok{1}\NormalTok{))}
+\NormalTok{ATM_FC <-}\StringTok{  }\KeywordTok{cbind}\NormalTok{(}\StringTok{"Date"}\NormalTok{=date, }\StringTok{"ATM1"}\NormalTok{=ATM1_fc}\OperatorTok{$}\NormalTok{mean, }\StringTok{"ATM2"}\NormalTok{=ATM2_fc}\OperatorTok{$}\NormalTok{mean,}
+                 \StringTok{"ATM3"}\NormalTok{=ATM3_fc}\OperatorTok{$}\NormalTok{mean,}\StringTok{"ATM4"}\NormalTok{=ATM4_fc}\OperatorTok{$}\NormalTok{mean) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{()}
+
+\KeywordTok{write_csv}\NormalTok{(ATM_FC, }\DataTypeTok{path =} \StringTok{"forecasts/ATM_all_forecast.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{appendix}{%
-\chapter{Appendix}\label{appendix}}
+\hypertarget{appendix-b}{%
+\chapter*{Appendix B}\label{appendix-b}}
+\addcontentsline{toc}{chapter}{Appendix B}
 
-\hypertarget{part-b}{%
-\section{Part B}\label{part-b}}
-
-\hypertarget{model-summary}{%
-\subsection{Model Summary}\label{model-summary}}
+\hypertarget{model-b}{%
+\section*{Model Summary}\label{model-b}}
+\addcontentsline{toc}{section}{Model Summary}
 
 \textbf{\texttt{ARIMA}:}
 
@@ -628,8 +946,9 @@ FALSE Dec 2014        8020901 6920610  9121192 6338151  9703651
 
 \newpage
 
-\hypertarget{r-script-1}{%
-\subsection{R Script}\label{r-script-1}}
+\hypertarget{script-b}{%
+\section*{R Script}\label{script-b}}
+\addcontentsline{toc}{section}{R Script}
 
 \begin{Shaded}
 \begin{Highlighting}[]

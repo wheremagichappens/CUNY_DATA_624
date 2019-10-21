@@ -40,7 +40,7 @@ libraries('knitr', 'kableExtra', 'default')
 libraries('readxl', 'tidyverse', 'janitor', 'imputeTS', 'tsoutliers')
 
 # Timeseries 
-libraries('urca', 'forecast', 'timetk')
+libraries('urca', 'forecast', 'timetk', 'fpp2')
 
 # Graphing
 libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr', 'scales')
@@ -225,15 +225,15 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Histograms of Residuals"))
 
 A forecast for the month of May will be 31 days in length. We applied a forecast to each series for 31 days, which span across 5 weeks, in May 2010. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.   
 
-```{r, fig.height=10}
+```{r, fig.height=12}
 
 p1<-autoplot(ATM1_AA$fitted)+autolayer(ATM1_fc, color="peachpuff1")+
-  coord_cartesian(xlim = c(40, 57.5))+
+  coord_cartesian(xlim = c(1, 57.5))+
   labs(title = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
   scale_x_continuous(breaks=seq(1,60,by=3))
 
 p2<-autoplot(ATM2_AA$fitted)+autolayer(ATM1_fc,  color="lightpink")+
-  coord_cartesian(xlim = c(40, 57.5))+
+  coord_cartesian(xlim = c(1, 57.5))+
   labs(title = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
   scale_x_continuous(breaks=seq(1,60,by=3))
 
@@ -388,17 +388,93 @@ paste("RMSE - test:",rmse_test_arima)
 #Insert Forecast Here 
 ```
 
-## R Script 
+# Appendix A {-#appendix-a}
 
-```{r, echo=T}
-#Insert Script Here 
+## ARIMA Model Summary {-#arima-a}
+
+**`ATM1`:**
+```{r}
+ATM1_AA
 ```
 
-# Appendix 
+**`ATM2`:**
+```{r}
+ATM2_AA
+```
 
-## Part B 
+**`ATM4`:**
+```{r}
+ATM4_AA
+```
 
-### Model Summary 
+## Point Forecasts {-#forecast-a}
+
+```{r}
+ATM_FC %>% mutate(ATM1=as.numeric(as.character(ATM1)),
+                  ATM2=as.numeric(as.character(ATM2)),
+                  ATM3=as.numeric(as.character(ATM3)),
+                  ATM4=as.numeric(as.character(ATM4))) %>%
+  kable(caption="ATM Mean Point Forecast",digits=2) %>% kable_styling() %>% row_spec()
+```
+
+\newpage
+### R Script {-#script-a}
+
+```{r, echo=T, eval=F}
+# Load data
+atm_data <- read_excel("data/ATM624Data.xlsx") 
+
+# clean dataframe
+atm <- atm_data %>% 
+  # create wide dataframe
+  spread(ATM, Cash) %>% 
+  # remove NA column using function from janitor package
+  remove_empty(which = "cols") %>%
+  # filter unobserved values from May 2010 
+  filter(DATE < as.Date("2010-05-01")) %>% arrange(DATE) 
+
+atm$ATM2[is.na(atm$ATM2)] <- mean(atm$ATM2, na.rm = TRUE) ## remove NA
+atm$ATM4[which.max(atm$ATM4)] <- mean(atm$ATM4, na.rm = TRUE) ## remove outlier
+
+# create TS with weekly frequency & subset data
+atm_ts <- atm %>% select(-DATE) %>% ts(start=1,  frequency = 7)
+ATM1_ts <- atm_ts[,1]; ATM2_ts <- atm_ts[,2]; ATM3_ts <- atm_ts[,3]; ATM4_ts <- atm_ts[,4]
+
+#unit root test: 
+ATM1_ur <-ur.kpss(ATM1_ts); ATM2_ur <-ur.kpss(ATM2_ts); ATM4_ur <-ur.kpss(ATM4_ts)
+ATM1d_ur <-ur.kpss(diff(ATM1_ts, lag=7)); ATM2d_ur <-ur.kpss(diff(ATM2_ts, lag=7))
+ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
+
+# AUTO.ARIMA function; set D=1 for seasonal differencing
+ATM1_AA <-auto.arima(ATM1_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+ATM2_AA <-auto.arima(ATM2_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+ATM4_AA <-auto.arima(ATM4_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+
+# Forecast Results
+ATM1_fc <- forecast(ATM1_AA,h=31); ATM2_fc <- forecast(ATM2_AA,h=31)
+ATM3_fc <- meanf(ATM3_ts[ATM3_ts > 0], h=31); ATM4_fc <- forecast(ATM4_AA,h=31)
+
+# Prepare dataframe for ATM3 mean forcast plotting 
+ATM3_plotdata_fc <- cbind(seq(from = 366, to = 396), ATM3_fc[[5]], ATM3_fc[[6]], 
+                          ATM3_fc[[7]]) %>% as.data.frame()
+
+colnames(ATM3_plotdata_fc) <- c('Date', 'Point Forecast', 
+                                'Lo 80', 'Lo 95', 'Hi 80', 'Hi 95')
+ATM3_plotdata <- ATM3_ts %>% fortify() %>% select(-Index) %>% rename(Cash = Data) %>% 
+  mutate(Date = as.numeric(row.names(.))) %>% select(Date, Cash) %>% 
+  full_join(ATM3_plotdata_fc, by = 'Date')
+
+#Revert results back into original form
+date <- as.character(seq(as.Date('2010-05-01'), length.out=31, by=1))
+ATM_FC <-  cbind("Date"=date, "ATM1"=ATM1_fc$mean, "ATM2"=ATM2_fc$mean,
+                 "ATM3"=ATM3_fc$mean,"ATM4"=ATM4_fc$mean) %>% as.data.frame()
+
+write_csv(ATM_FC, path = "forecasts/ATM_all_forecast.csv")
+```
+
+# Appendix B {-#appendix-b}
+
+## Model Summary {-#model-b}
 
 **`ARIMA`:**
 ```{r}
@@ -421,7 +497,7 @@ summary(ets_model)
 ```
 
 \newpage
-### R Script 
+## R Script {-#script-b}
 ```{r, echo=T, eval=F}
 library(readxl)
 library(tidyverse)
