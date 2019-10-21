@@ -21,6 +21,7 @@
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
+\usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
             pdftitle={DATA 624: Project 1},
@@ -170,23 +171,33 @@
 \chapter*{Overview}\label{overview}}
 \addcontentsline{toc}{chapter}{Overview}
 
-\begin{quote}
-Insert Project Overview and explain work process.
-\end{quote}
+We split the work into three sections for Project 1. Individual team
+members each took lead on individual problem. Jermey and Julian focused
+on Part A, Sang Yoon (Andy) and Vinicio worked on Part B, and Bethany
+took lead on Part C. Juliann created an overall format for the
+assignment to be used and all team members collectively worked together
+on reviewing and merging our finished product.
 
 \hypertarget{dependencies}{%
 \section*{Dependencies}\label{dependencies}}
 \addcontentsline{toc}{section}{Dependencies}
 
-\begin{quote}
-Please add all libraries used here.
-\end{quote}
-
-The following R libraries were used to complete Project 1:
+The following R libraries were used to complete this assignment:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Insert All Used Dependencies Here }
+\KeywordTok{library}\NormalTok{(easypackages)}
+
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'knitr'}\NormalTok{, }\StringTok{'kableExtra'}\NormalTok{, }\StringTok{'default'}\NormalTok{)}
+
+\CommentTok{# Processing}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'readxl'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'imputeTS'}\NormalTok{, }\StringTok{'tsoutliers'}\NormalTok{)}
+
+\CommentTok{# Timeseries }
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'urca'}\NormalTok{, }\StringTok{'forecast'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{)}
+
+\CommentTok{# Graphing}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'gridExtra'}\NormalTok{, }\StringTok{'ggfortify'}\NormalTok{,}\StringTok{'ggpubr'}\NormalTok{, }\StringTok{'scales'}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -196,12 +207,11 @@ The following R libraries were used to complete Project 1:
 
 Data was stored within our group repository and imported below using the
 \texttt{readxl} package. Each individual question was solved within an R
-script and the data was sourced into our main report for discussion
-purposes. The R scripts are available within our appendix for
-replication purposes.
-
-For grading purposes, we exported and saved all forecasts as a csv in
-our data folder.
+script and the data was sourced into our main report. For replication
+purposes, we also made our R scripts available within our appendix. All
+forecasts were exported and saved a \texttt{.csv} file in our {[}github
+repository{]}((\url{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project\%20One/})
+folder named forecasts.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -212,7 +222,9 @@ our data folder.
 \NormalTok{pipe2_data <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"data/Waterflow_Pipe2.xlsx"}\NormalTok{)}
 
 \CommentTok{# Source Code}
-\KeywordTok{source}\NormalTok{(}\StringTok{"scripts/Part-A-JM.R"}\NormalTok{) }\CommentTok{## Example}
+\KeywordTok{source}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Project One/scripts/Part-A.R'}\NormalTok{)}
+\KeywordTok{source}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Project One/scripts/Part-B.R'}\NormalTok{)}
+\KeywordTok{source}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Project One/scripts/Part-C.R'}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -234,17 +246,185 @@ you are making! Your forecast is a simple CSV or Excel file that MATCHES
 the format of the data I provide.
 \end{quote}
 
-\hypertarget{part-b-power}{%
-\chapter{Part B: Power}\label{part-b-power}}
+\hypertarget{part-b-forecasting-power}{%
+\chapter{Part B: Forecasting Power}\label{part-b-forecasting-power}}
 
 \begin{quote}
-\textbf{Instructions:} Forecasting Power: Part B consists of a simple
-dataset of residential power usage for January 1998 until December 2013.
-Your assignment is to model these data and a monthly forecast for 2014.
-The data is given in a single file. The variable `KWH' is power
-consumption in Kilowatt hours, the rest is straight forward. Add these
-to your existing files above - clearly labeled.
+\textbf{Instructions:} Part B consists of a simple dataset of
+residential power usage for January 1998 until December 2013. Your
+assignment is to model these data and a monthly forecast for 2014. The
+data is given in a single file. The variable `KWH' is power consumption
+in Kilowatt hours, the rest is straight forward. Add these to your
+existing files above - clearly labeled.
 \end{quote}
+
+\hypertarget{exploration}{%
+\section{Exploration}\label{exploration}}
+
+We observed there was a missing value in September 2008. We used
+imputation method called na.interpolation which performs a technique in
+numerical analysis which estimates a value from known data points. For
+our case, linear method using first order Taylor polynomial is used.
+
+\hypertarget{time-series-plot}{%
+\section{Time Series Plot}\label{time-series-plot}}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+Our initial time series plot reveal annual seasonality within this time
+series. The box plot/seasonality plot actually reveals where power
+consumption fluctuations occur within each of the cycle positions. We
+can speculate that this could be due to there being no major Holidays
+that require power draining decor plus we assume minimal AC usage during
+the cold months.
+
+\hypertarget{evaluation}{%
+\section{Evaluation}\label{evaluation}}
+
+We see power consumption increase between the months of June and August.
+This must be tied to AC usage during the warmer months of a year and
+finally power usage dips from September to Novemeber with a small spike
+in December. We speculate that thisis due to transitioning out of
+summer. The spike in December could be connected to the usage or Holiday
+lights being kept on.
+
+Within the overall TS plot, we see a dip in July 2010. This could be due
+to a power outtage during a hot summer month. This can certainly be
+considered to be an outlier within this TS. Using TSOutliers, we can
+actually identify the index where our outliers may be. TSoutliers also
+replaces the outlier using Box-Cox. If set lambda=auto, then TSoutliers
+will automatically perform Box-Cox transformation.
+
+The ACF plot shows that autocorrelations are well outside the
+significant space indicating the series is not white noise,
+non-stationary.
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\hypertarget{data-model}{%
+\section{Data Model}\label{data-model}}
+
+Out of the models we built, we can make some preliminary observations.
+The residuals for each of our models does not have a major deviance from
+normality, however residuals of Model \#1: ARIMA do not have an extended
+number of bins distorting the normality proximity but we can say it is
+still fairly normally distributed.
+
+The residual ACF plots show residual autocorrelations for each of our
+models. Model \#1: ARIMA has less autocorrelation than the other three
+models. Model 1 is well within the 95\% limits indicated by the dotted
+blue lines.
+
+If we examine the Ljung-Box test results for our models, the only model
+with a p-value \textgreater{} 0.05 is Model \#1: ARIMA. This implies
+that the residuals from other models are not independent, hence not
+white noise. The full model summary can be viewed in the appendix.
+
+\hypertarget{model-1-arima}{%
+\subsection{Model \#1: ARIMA}\label{model-1-arima}}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{verbatim}
+FALSE 
+FALSE   Ljung-Box test
+FALSE 
+FALSE data:  Residuals from ARIMA(3,0,2)(2,1,0)[12] with drift
+FALSE Q* = 12.555, df = 16, p-value = 0.705
+FALSE 
+FALSE Model df: 8.   Total lags used: 24
+\end{verbatim}
+
+\hypertarget{model-2-stl-no-demped---mnn}{%
+\subsection{Model \#2: STL (no-demped) -
+MNN}\label{model-2-stl-no-demped---mnn}}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{verbatim}
+FALSE 
+FALSE   Ljung-Box test
+FALSE 
+FALSE data:  Residuals from STL +  ETS(M,N,N)
+FALSE Q* = 65.934, df = 22, p-value = 2.84e-06
+FALSE 
+FALSE Model df: 2.   Total lags used: 24
+\end{verbatim}
+
+\hypertarget{model-2-2-stl-demped---madn}{%
+\subsection{Model \#2-2: STL (demped) -
+MAdN}\label{model-2-2-stl-demped---madn}}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{verbatim}
+FALSE 
+FALSE   Ljung-Box test
+FALSE 
+FALSE data:  Residuals from STL +  ETS(M,Ad,N)
+FALSE Q* = 63.375, df = 19, p-value = 1.119e-06
+FALSE 
+FALSE Model df: 5.   Total lags used: 24
+\end{verbatim}
+
+\hypertarget{model-3-ets---mnm}{%
+\subsection{Model \#3: ets - MNM}\label{model-3-ets---mnm}}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{verbatim}
+FALSE 
+FALSE   Ljung-Box test
+FALSE 
+FALSE data:  Residuals from ETS(M,N,M)
+FALSE Q* = 32.042, df = 10, p-value = 0.000394
+FALSE 
+FALSE Model df: 14.   Total lags used: 24
+\end{verbatim}
+
+\hypertarget{forecast}{%
+\section{Forecast}\label{forecast}}
+
+The \texttt{auto.arima()} function performs cross validation on
+hyperparameter tuning to find the best model with parameters of
+\texttt{order} and \texttt{seasonal} that minimize \texttt{AIC}. This
+gave us \textbf{arima\_model}: ARIMA\((3,0,2)(2,1,0)12\) with drift
+resulting \texttt{AIC} = 5332.24.
+
+Since ARIMA is the only reliable model, as other models failed Ljung
+test, we will plot forecasts of ARIMA only. The forecasted values can be
+viewed in the appendix.
+
+\hypertarget{model-1-arima-1}{%
+\subsection{Model \#1: ARIMA}\label{model-1-arima-1}}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+We implemented a cross validation method of testing for \texttt{h=12}.
+The process randomly chooses 12 points to measure and take the average
+of RMSEs. By definition, a lower RMSE on test set is attributed with a
+better forecast on unseen data.
+
+Using Time series cross-validation, we compute RMSE on testset
+(\texttt{h=12}). We would have to pick the model with the lowest RMSE on
+test set as our final model if we had more than 1 model to compare. In
+our case, since we only have 1 model left after Ljung test, we have no
+choice but to pick seasonal ARIMA model as our final choice.
+Cross-validation test shows that RMSE on test is around 720k when RMSE
+on training is around 589k. We can conclude the model is not necessarily
+overfitted. Given that MAPE on training is less than 7, it is not a
+suprising result.
+
+\begin{verbatim}
+FALSE [1] "RMSE - train: 589381.7"
+\end{verbatim}
+
+\begin{verbatim}
+FALSE [1] "RMSE - test: 725175"
+\end{verbatim}
 
 \hypertarget{part-c-waterflow}{%
 \chapter{Part C: Waterflow}\label{part-c-waterflow}}
@@ -260,33 +440,14 @@ bands (80 and 95\%). Add these to your existing files above - clearly
 labeled.
 \end{quote}
 
-\hypertarget{Appendix}{%
-\chapter*{Appendix}\label{Appendix}}
-\addcontentsline{toc}{chapter}{Appendix}
+\hypertarget{pipes1-forecast}{%
+\section{Pipes1 Forecast}\label{pipes1-forecast}}
 
-\hypertarget{Part-A}{%
-\section*{Part A}\label{Part-A}}
-\addcontentsline{toc}{section}{Part A}
+\hypertarget{pipes2-forecast}{%
+\section{Pipes2 Forecast}\label{pipes2-forecast}}
 
-\hypertarget{Part-A-FC1}{%
-\subsection*{ATM1 Forecast}\label{Part-A-FC1}}
-\addcontentsline{toc}{subsection}{ATM1 Forecast}
-
-\hypertarget{Part-A-FC2}{%
-\subsection*{ATM2 Forecast}\label{Part-A-FC2}}
-\addcontentsline{toc}{subsection}{ATM2 Forecast}
-
-\hypertarget{Part-A-FC3}{%
-\subsection*{ATM3 Forecast}\label{Part-A-FC3}}
-\addcontentsline{toc}{subsection}{ATM3 Forecast}
-
-\hypertarget{Part-A-FC4}{%
-\subsection*{ATM4 Forecast}\label{Part-A-FC4}}
-\addcontentsline{toc}{subsection}{ATM4 Forecast}
-
-\hypertarget{Part-A-RScript}{%
-\subsection*{R Script}\label{Part-A-RScript}}
-\addcontentsline{toc}{subsection}{R Script}
+\hypertarget{r-script}{%
+\section{R Script}\label{r-script}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -294,43 +455,236 @@ labeled.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{Part-B}{%
-\section*{Part B}\label{Part-B}}
-\addcontentsline{toc}{section}{Part B}
+\hypertarget{appendix}{%
+\chapter{Appendix}\label{appendix}}
 
-\hypertarget{Part-B-FC1}{%
-\subsection*{Power Forecast}\label{Part-B-FC1}}
-\addcontentsline{toc}{subsection}{Power Forecast}
+\hypertarget{part-b}{%
+\section{Part B}\label{part-b}}
 
-\hypertarget{Part-B-RScript}{%
-\subsection*{R Script}\label{Part-B-RScript}}
-\addcontentsline{toc}{subsection}{R Script}
+\hypertarget{model-summary}{%
+\subsection{Model Summary}\label{model-summary}}
+
+\textbf{\texttt{ARIMA}:}
+
+\begin{verbatim}
+FALSE Series: ts_data_o 
+FALSE ARIMA(3,0,2)(2,1,0)[12] with drift 
+FALSE 
+FALSE Coefficients:
+FALSE           ar1      ar2     ar3     ma1     ma2     sar1     sar2     drift
+FALSE       -0.5606  -0.2216  0.3284  0.8902  0.4827  -0.7249  -0.4152  9018.405
+FALSE s.e.   0.3992   0.3382  0.0960  0.4120  0.4551   0.0797   0.0841  3027.685
+FALSE 
+FALSE sigma^2 estimated as 3.878e+11:  log likelihood=-2657.12
+FALSE AIC=5332.24   AICc=5333.3   BIC=5360.97
+FALSE 
+FALSE Training set error measures:
+FALSE                     ME     RMSE      MAE        MPE     MAPE      MASE
+FALSE Training set -8455.077 589381.7 427752.5 -0.7944782 6.475365 0.6904053
+FALSE                      ACF1
+FALSE Training set 0.0006090194
+\end{verbatim}
+
+\textbf{\texttt{STL\ -\ MNN}:}
+
+\begin{verbatim}
+FALSE 
+FALSE Forecast method: STL +  ETS(M,N,N)
+FALSE 
+FALSE Model Information:
+FALSE ETS(M,N,N) 
+FALSE 
+FALSE Call:
+FALSE  ets(y = x, model = etsmodel, allow.multiplicative.trend = allow.multiplicative.trend) 
+FALSE 
+FALSE   Smoothing parameters:
+FALSE     alpha = 0.1159 
+FALSE 
+FALSE   Initial states:
+FALSE     l = 6317745.8917 
+FALSE 
+FALSE   sigma:  0.097
+FALSE 
+FALSE      AIC     AICc      BIC 
+FALSE 6139.631 6139.758 6149.403 
+FALSE 
+FALSE Error measures:
+FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
+FALSE Training set 56926.03 633571.7 460713.4 -0.03288687 6.945185 0.7436052
+FALSE                   ACF1
+FALSE Training set 0.2570241
+FALSE 
+FALSE Forecasts:
+FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+FALSE Jan 2014        8992609 8049591  9935628 7550387 10434831
+FALSE Feb 2014        7908116 6958724  8857508 6456146  9360086
+FALSE Mar 2014        7079434 6123709  8035158 5617779  8541088
+FALSE Apr 2014        6435209 5473193  7397225 4963933  7906486
+FALSE May 2014        6161593 5193326  7129860 4680756  7642430
+FALSE Jun 2014        7728705 6754226  8703185 6238368  9219043
+FALSE Jul 2014        8837980 7857327  9818633 7338201 10337759
+FALSE Aug 2014        9376841 8390053 10363630 7867678 10886004
+FALSE Sep 2014        8601001 7608114  9593888 7082511 10119490
+FALSE Oct 2014        6670419 5671470  7669368 5142658  8198180
+FALSE Nov 2014        6035845 5030870  7040821 4498868  7572822
+FALSE Dec 2014        7189087 6178120  8200053 5642947  8735226
+\end{verbatim}
+
+\textbf{\texttt{STL\ -\ MAdN}:}
+
+\begin{verbatim}
+FALSE 
+FALSE Forecast method: STL +  ETS(M,Ad,N)
+FALSE 
+FALSE Model Information:
+FALSE ETS(M,Ad,N) 
+FALSE 
+FALSE Call:
+FALSE  ets(y = x, model = etsmodel, damped = TRUE, allow.multiplicative.trend = allow.multiplicative.trend) 
+FALSE 
+FALSE   Smoothing parameters:
+FALSE     alpha = 0.1233 
+FALSE     beta  = 1e-04 
+FALSE     phi   = 0.8 
+FALSE 
+FALSE   Initial states:
+FALSE     l = 5615471.7851 
+FALSE     b = 173606.4508 
+FALSE 
+FALSE   sigma:  0.0972
+FALSE 
+FALSE      AIC     AICc      BIC 
+FALSE 6143.452 6143.906 6162.997 
+FALSE 
+FALSE Error measures:
+FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
+FALSE Training set 54337.68 631081.9 458777.5 -0.07364717 6.937249 0.7404807
+FALSE                   ACF1
+FALSE Training set 0.2528558
+FALSE 
+FALSE Forecasts:
+FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+FALSE Jan 2014        9007707 8060947  9954467 7559763 10455651
+FALSE Feb 2014        7923348 6969325  8877372 6464295  9382401
+FALSE Mar 2014        7094774 6133536  8056011 5624687  8564860
+FALSE Apr 2014        6450635 5482232  7419038 4969591  7931680
+FALSE May 2014        6177088 5201569  7152607 4685160  7669016
+FALSE Jun 2014        7744256 6761668  8726843 6241518  9246993
+FALSE Jul 2014        8853574 7863967  9843182 7340100 10367048
+FALSE Aug 2014        9392471 8395890 10389052 7868332 10916609
+FALSE Sep 2014        8616658 7613151  9620166 7081926 10151391
+FALSE Oct 2014        6686100 5675711  7696488 5140843  8231356
+FALSE Nov 2014        6051544 5034319  7068769 4495832  7607255
+FALSE Dec 2014        7204799 6180782  8228817 5638700  8770899
+\end{verbatim}
+
+\textbf{\texttt{ets\ -\ MNM}:}
+
+\begin{verbatim}
+FALSE 
+FALSE Forecast method: ETS(M,N,M)
+FALSE 
+FALSE Model Information:
+FALSE ETS(M,N,M) 
+FALSE 
+FALSE Call:
+FALSE  ets(y = ts_data_o) 
+FALSE 
+FALSE   Smoothing parameters:
+FALSE     alpha = 0.1428 
+FALSE     gamma = 0.2119 
+FALSE 
+FALSE   Initial states:
+FALSE     l = 6189149.8743 
+FALSE     s = 0.8984 0.7596 0.938 1.2229 1.2597 1.2396
+FALSE            1.0059 0.7638 0.8078 0.8864 1.0269 1.191
+FALSE 
+FALSE   sigma:  0.0967
+FALSE 
+FALSE      AIC     AICc      BIC 
+FALSE 6144.033 6146.760 6192.895 
+FALSE 
+FALSE Error measures:
+FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
+FALSE Training set 45241.77 628252.5 481520.9 -0.04000239 7.277118 0.7771892
+FALSE                   ACF1
+FALSE Training set 0.1927438
+FALSE 
+FALSE Forecasts:
+FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+FALSE Jan 2014        9917654 8689211 11146096 8038913 11796394
+FALSE Feb 2014        8522973 7456477  9589469 6891908 10154038
+FALSE Mar 2014        7012478 6126191  7898765 5657019  8367937
+FALSE Apr 2014        6208601 5416196  7001006 4996722  7420480
+FALSE May 2014        5928833 5164834  6692832 4760398  7097269
+FALSE Jun 2014        7840532 6820624  8860440 6280717  9400347
+FALSE Jul 2014        9115823 7919004 10312642 7285446 10946200
+FALSE Aug 2014        9648549 8370229 10926869 7693527 11603571
+FALSE Sep 2014        8553364 7409986  9696742 6804718 10302010
+FALSE Oct 2014        6266745 5421655  7111835 4974291  7559199
+FALSE Nov 2014        5938289 5130560  6746017 4702975  7173603
+FALSE Dec 2014        8020901 6920610  9121192 6338151  9703651
+\end{verbatim}
+
+\newpage
+
+\hypertarget{r-script-1}{%
+\subsection{R Script}\label{r-script-1}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Insert Script Here }
-\end{Highlighting}
-\end{Shaded}
+\KeywordTok{library}\NormalTok{(readxl)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(forecast)}
+\KeywordTok{library}\NormalTok{(imputeTS)}
+\KeywordTok{library}\NormalTok{(tsoutliers)}
 
-\hypertarget{Part-C}{%
-\section*{Part C}\label{Part-C}}
-\addcontentsline{toc}{section}{Part C}
+\CommentTok{# load data}
+\NormalTok{power_data <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"data/ResidentialCustomerForecastLoad-624.xlsx"}\NormalTok{)}
 
-\hypertarget{Part-C-FC1}{%
-\subsection*{Pipes1 Forecast}\label{Part-C-FC1}}
-\addcontentsline{toc}{subsection}{Pipes1 Forecast}
+\CommentTok{# Time Series}
+\NormalTok{ts_data <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(power_data}\OperatorTok{$}\NormalTok{KWH, }\DataTypeTok{frequency =} \DecValTok{12}\NormalTok{, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{1998}\NormalTok{,}\DecValTok{1}\NormalTok{))}
 
-\hypertarget{Part-C-FC2}{%
-\subsection*{Pipes2 Forecast}\label{Part-C-FC2}}
-\addcontentsline{toc}{subsection}{Pipes2 Forecast}
+\CommentTok{# Missing value imputation}
+\NormalTok{ts_data <-}\StringTok{ }\KeywordTok{na_interpolation}\NormalTok{(ts_data)}
 
-\hypertarget{Part-C-RScript}{%
-\subsection*{R Script}\label{Part-C-RScript}}
-\addcontentsline{toc}{subsection}{R Script}
+\CommentTok{# STL decomposition}
+\NormalTok{stl1 <-}\StringTok{ }\KeywordTok{stl}\NormalTok{(ts_data, }\DataTypeTok{s.window =} \StringTok{'periodic'}\NormalTok{)}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#Insert Script Here }
+\CommentTok{# Handling outlier}
+\NormalTok{outlier_func <-}\StringTok{ }\KeywordTok{tsoutliers}\NormalTok{(ts_data, }\DataTypeTok{iterate =} \DecValTok{2}\NormalTok{, }\DataTypeTok{lambda =} \StringTok{"auto"}\NormalTok{)}
+
+\CommentTok{# Time Series - After outlier and imputation handeled}
+\NormalTok{ts_data_o <-}\StringTok{ }\NormalTok{ts_data  }\CommentTok{# Let's treate outlier handled data seperatly for Modelling part.}
+\NormalTok{ts_data_o[outlier_func}\OperatorTok{$}\NormalTok{index] <-}\StringTok{ }\NormalTok{outlier_func}\OperatorTok{$}\NormalTok{replacements}
+
+\CommentTok{# Model#1: ARIMA}
+\NormalTok{arima_auto <-}\StringTok{ }\KeywordTok{auto.arima}\NormalTok{(ts_data_o)}
+\NormalTok{arima_fc <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(arima_auto, }\DataTypeTok{h=}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{# Model #2: STL (no-demped) - MNN}
+\NormalTok{stl_ndemp <-}\StringTok{ }\KeywordTok{stlf}\NormalTok{(ts_data_o, }\DataTypeTok{s.window =} \StringTok{"periodic"}\NormalTok{, }\DataTypeTok{robust=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
+
+\CommentTok{# Model #2-2: STL (demped) - MAdN}
+\NormalTok{stl_demp <-}\StringTok{ }\KeywordTok{stlf}\NormalTok{(ts_data_o, }\DataTypeTok{damped=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{s.window =} \StringTok{"periodic"}\NormalTok{, }\DataTypeTok{robust=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
+
+\CommentTok{# Model #3: ets - MNM}
+\NormalTok{ets_auto <-}\StringTok{ }\KeywordTok{ets}\NormalTok{(ts_data_o)}
+\NormalTok{ets_model <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ets_auto, }\DataTypeTok{h=}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{# tsCv - ARIMA -> it takes so much time. I got the results and saved them}
+\CommentTok{##arima_cv <- function(x, h)\{forecast(Arima(x, order = c(3, 0, 2), seasonal = c(2, 1, 0), include.drift = TRUE), h=h)\}}
+\CommentTok{##e <- tsCV(ts_data_o, arima_cv, h=12)}
+
+\CommentTok{# RMSEs -> tsCV takes lot of time to process so just saved the output}
+\CommentTok{#rmse_train_arima <- arima_auto[2]}
+\CommentTok{#rmse_test_arima <- sqrt(mean(e^2, na.rm=TRUE))}
+
+\NormalTok{rmse_train_arima <-}\StringTok{ }\FloatTok{589381.7}
+\NormalTok{rmse_test_arima <-}\StringTok{ }\DecValTok{725175}
+
+\CommentTok{# Save output}
+\KeywordTok{write.csv}\NormalTok{(arima_fc, }\DataTypeTok{file=}\StringTok{"forecasts/POWER_ARIMA_FC.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
