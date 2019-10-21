@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  21 OCT 2019 00:18
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  21 OCT 2019 00:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1423,7 +1423,7 @@ File: "Part-A-JM_JO_files/figure-latex/""unnamed-chunk-4-1".pdf Graphic file (t
 ype pdf)
 <use "Part-A-JM_JO_files/figure-latex/""unnamed-chunk-4-1".pdf>
 
-Underfull \hbox (badness 10000) in paragraph at lines 309--314
+Underfull \hbox (badness 10000) in paragraph at lines 317--322
 
  []
 
@@ -1432,7 +1432,7 @@ ype pdf)
 <use "Part-A-JM_JO_files/figure-latex/""unnamed-chunk-5-1".pdf>
 [5]
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 9.97394pt on input line 342.
+(Font)              scaled to size 9.97394pt on input line 350.
 File: "Part-A-JM_JO_files/figure-latex/""unnamed-chunk-7-1".pdf Graphic file (t
 ype pdf)
 <use "Part-A-JM_JO_files/figure-latex/""unnamed-chunk-7-1".pdf>
@@ -1446,36 +1446,36 @@ ype pdf)
 [7]
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 387.
+(hyperref)                be the same. Added a new anchor on input line 394.
 
 [8
 
 ] [9]
 
-Package xcolor Warning: Incompatible color definition on input line 530.
+Package xcolor Warning: Incompatible color definition on input line 537.
 
 
-Package xcolor Warning: Incompatible color definition on input line 611.
+Package xcolor Warning: Incompatible color definition on input line 618.
 
 
-Package xcolor Warning: Incompatible color definition on input line 611.
+Package xcolor Warning: Incompatible color definition on input line 618.
 
 
-Package xcolor Warning: Incompatible color definition on input line 611.
+Package xcolor Warning: Incompatible color definition on input line 618.
 
 [10]
 
-Package xcolor Warning: Incompatible color definition on input line 611.
+Package xcolor Warning: Incompatible color definition on input line 618.
 
 
-Package xcolor Warning: Incompatible color definition on input line 611.
+Package xcolor Warning: Incompatible color definition on input line 618.
 
 [11]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 614.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 614.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 621.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 621.
 (./Part-A-JM_JO.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 614.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 614.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 621.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 621.
 Package rerunfilecheck Info: File `Part-A-JM_JO.out' has not changed.
 (rerunfilecheck)             Checksum: 7EC6E5DB85335E9D3579078285BE5A36.
  ) 

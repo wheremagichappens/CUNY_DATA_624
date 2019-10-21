@@ -265,15 +265,23 @@ on 2009-10-25 and that ATM4 contained a potential outlier of \$1,123 on
 2010-02-09. We replaced both values with the corresponding mean value of
 each machine.
 
-We examined summary statistics for each ATM time series:\\
-+ ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash
-dispensed is \$84, and ATM2's is \$62. + ATM3 only dispensed cash on the
-last three days of the time series - as this provides few data points on
-which to forecast, we'll need to treat it specially. + ATM4 has a
-similar mean to ATM1, but skew and kurtosis suggest the impact of an
-outlier Wednesday, February 10, 2010. If this ATM is located in the
-Northeastern United States, this may have a relationship to a blizzard
-which struck on that day.
+We examined summary statistics for each ATM time series:
+
+\begin{itemize}
+\tightlist
+\item
+  ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash
+  dispensed is \$84, and ATM2's is \$62.
+\item
+  ATM3 only dispensed cash on the last three days of the time series -
+  as this provides few data points on which to forecast, we'll need to
+  treat it specially.
+\item
+  ATM4 has a similar mean to ATM1, but skew and kurtosis suggest the
+  impact of an outlier Wednesday, February 10, 2010. If this ATM is
+  located in the Northeastern United States, this may have a
+  relationship to a blizzard which struck on that day.
+\end{itemize}
 
 \includegraphics{Part-A-JM_JO_files/figure-latex/unnamed-chunk-3-1.pdf}
 
@@ -370,11 +378,10 @@ observed data.
 \hypertarget{forecast}{%
 \section{Forecast}\label{forecast}}
 
-A forecast for the month of May will be 31 days in length. Finally, we
-applied a forecast to each series for 31 days, which span across 5
-weeks, in May 2010. The numeric forecasts can be viewed in a table
-output in the appendix section and are also located within our data
-output folder.
+A forecast for the month of May will be 31 days in length. We applied a
+forecast to each series for 31 days, which span across 5 weeks, in May
+2010. The numeric forecasts can be viewed in a table output in the
+appendix section and are also located within our data output folder.
 
 \includegraphics{Part-A-JM_JO_files/figure-latex/unnamed-chunk-8-1.pdf}
 
