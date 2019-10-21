@@ -41,7 +41,7 @@ libraries('readxl', 'tidyverse', 'janitor', 'lubridate')
 libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr')
 
 # Timeseries 
-libraries('zoo', 'urca', 'tseries', 'timetk')
+libraries('urca', 'tseries', 'timetk')
 
 # Math
 libraries('forecast')
@@ -50,7 +50,6 @@ libraries('forecast')
 ## Data {-#data}
 
 Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report for discussion purposes. The R scripts are available within our appendix for replication purposes. 
-
 For grading purposes, we exported and saved all forecasts as a csv in our data folder.
 
 ```{r, eval=F}
@@ -98,48 +97,30 @@ default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
 
 ## Exploration
 
-The data covers a period of Friday May 1, 2010 through Saturday April 30, 2010.  A forecast for the month of May will be 31 days in length.
-
-While reviewing the data, we identified that the original data file contained `NA` values in our `ATM` and `Cash` columns for 14 observations between May 1 and 14, 2010. As these contain no information, we removed these missing values and transformed the dataset into a wide format.  
-
-We examined summary statistics for each ATM time series:
-* ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash dispensed is \$84, and ATM2's is \$62. 
-* ATM3 only dispensed cash on the last three days of the time series - as this provides few data points on which to forecast, we'll need to treat it specially.
-* ATM4 has a similar mean to ATM1, but skew and kurtosis suggest the impact of an outlier Wednesday, February 10, 2010.  If this ATM is located in the Northeastern United States, this may have a relationship to a blizzard which struck on that day.
+The data covers a period of Friday May 1, 2010 through Saturday April 30, 2010. While reviewing the data, we identified that the original data file contained `NA` values in our `ATM` and `Cash` columns for 14 observations between May 1 and 14, 2010. As these contain no information, we removed these missing values and transformed the dataset into a wide format. 
 
 ```{r}
-
 # Examine distribution of values to identify outliers
 atm_data %>% 
   group_by(ATM) %>% 
-  ggplot(aes(x = ATM, y = Cash)) +
+  ggplot(aes(x = ATM, y = Cash,fill=ATM)) +
   geom_boxplot() +
   labs(title="ATM Boxplot",x="", y="Cash (in hundreds)") +
   theme_bw() +
   theme(legend.position = 'none', 
         axis.text.x = element_text(angle = 45, 
                                    hjust = 1)) +
-  scale_color_brewer()
-
-# Examine summary statistics
-psych::describeBy(atm_data$Cash,  # look at distribution of cash distributed
-                  group = atm_data$ATM,  # group by which ATM
-                  mat = TRUE) %>%  # output matrix rather than lists
-  dplyr::select(-item, - vars) %>% 
-  kable(caption = 'ATM Summary Statistics', 
-        row.names = FALSE) %>% 
-  kable_styling(latex_options = 'striped')
-
-# Examine ATM3 observations
-atm_data %>%
-  dplyr::filter(ATM == 'ATM3' & Cash > 0) %>% 
-  select(DATE, Cash)
-  
+  scale_fill_brewer(palette = 'RdPu')
 ```
 
-Our cleaned dataframe was then converted into a timeseries format using the `zoo` package for forecasting in the next section. Our initial review of the data showed that ATM2 contained one missing value on October 25, 2019 and that ATM4 contained a potential outlier of \$1,123 on 2010-02-09. We replaced both values with the corresponding mean value of each machine. 
+Our initial review also revealed that ATM2 contained one missing value on 2009-10-25 and that ATM4 contained a potential outlier of \$1,123 on 2010-02-09. We replaced both values with the corresponding mean value of each machine. 
 
-Next, we used a scatterplot to examine the correlation between cash withdrawals and dates for each machine.  We identified similiar patterns between ATM1 and ATM4, which show non-linear fluctuations that suggest a potential trend component in these timeseries. ATM2 follows a relatively linear path and decreases overtime. This changes in the last few observations, where withdrawals begin to increase. There are only 3 observed transactions for ATM3 that appear at the end of the captured time period. 
+We examined summary statistics for each ATM time series:  
+*  ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash dispensed is \$84, and ATM2's is \$62.  
+*  ATM3 only dispensed cash on the last three days of the time series - as this provides few data points on which to forecast, we'll need to treat it specially.  
+*  ATM4 has a similar mean to ATM1, but skew and kurtosis suggest the impact of an outlier Wednesday, February 10, 2010.  If this ATM is located in the Northeastern United States, this may have a relationship to a blizzard which struck on that day.
+
+We used a scatterplot to examine the correlation between cash withdrawals and dates for each machine.  We identified similiar patterns between ATM1 and ATM4, which show non-linear fluctuations that suggest a potential trend component in these timeseries. ATM2 follows a relatively linear path and decreases overtime. This changes in the last few observations, where withdrawals begin to increase. There are only 3 observed transactions for ATM3 that appear at the end of the captured time period. 
 
 ```{r}
 # plot atms as scatterplot
@@ -161,7 +142,7 @@ atm %>%
 
 ## Timeseries Plots 
 
-The time series plots show high weekly variance, for ATM1, ATM2, and ATM4 - consistent with our takeaway from the scatterplots. 
+Our cleaned dataframe was then converted into a timeseries format. The time series plots show high weekly variance, for ATM1, ATM2, and ATM4 - consistent with our takeaway from the scatterplots. 
 
 These plots also remind us that ATM3 only dispensed cash on 3 days at the end of the timespan, with a daily range between \$82 and \$96.  Given the paucity of observations in the training data, the simplest possible approach to forecasting ATM3 - averaging - is likely best.  Given that ATM3 distributed no cash until April 28, 2010, we'll assume that it was not operating until then and only include the three day window of non-zero observations in the forecast.
 
@@ -187,7 +168,7 @@ p6<-ggPacf(ATM4_ts)+ labs(title="PACF: ATM4")+ theme_bw()+ theme()
 grid.arrange(grob=p1, p3, p5, p2, p4, p6, ncol=3)
 ```
 
-Our plots further suggest that the ATM data is non-stationary. We performed a unit root test using the `ur.kpss()` function to confirm this observation. The test results below show that differencing is required on all ATM2 and ATM4 series. ATM1 falls just below the cut-off critical value, but could still use differencing due to the observed seasonal pattern.   
+Our plots further suggest that the ATM data is non-stationary. We performed a unit root test using the `ur.kpss()` function to confirm this observation. The test results below show that differencing is required on all ATM2 and ATM4 series. ATM1 falls just below the cut-off critical value, but could still benefit from differencing due to the observed seasonal pattern.   
 
 ```{r}
 urATM1<-cbind("ATM"="ATM1", "No-Diff"=round(ATM1_ur@teststat,4),"Diff-1" =round(ATM1d_ur@teststat,4))
@@ -231,7 +212,7 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Residuals Plots"))
 
 ## Forecast
 
-Finally, we applied a forecast to each series for 31 days, which span across 5 weeks, in May 2010. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.   
+A forecast for the month of May will be 31 days in length. Finally, we applied a forecast to each series for 31 days, which span across 5 weeks, in May 2010. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.   
 
 ```{r}
 

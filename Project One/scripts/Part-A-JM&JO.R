@@ -68,38 +68,38 @@ ATM3_plotdata <- ATM3_ts %>%
   select(Date, Cash) %>% 
   full_join(ATM3_plotdata_fc, by = 'Date')
 
-# Revert results back into original form
-# date <- as.character(seq(as.Date('2010-05-01'), length.out=31, by=1))
-# ATM_FC <-  cbind("Date"=date, "ATM1"=ATM1_fc$mean, "ATM2"=ATM2_fc$mean,
-# "ATM3"=c(NA,NA,NA,NA),"ATM4"=ATM4_fc$mean) %>% as.data.frame()
+#Revert results back into original form
+date <- as.character(seq(as.Date('2010-05-01'), length.out=31, by=1))
+ATM_FC <-  cbind("Date"=date, 
+                 "ATM1"=ATM1_fc$mean, 
+                 "ATM2"=ATM2_fc$mean,
+                 "ATM3"=ATM3_fc$mean,
+                 "ATM4"=ATM4_fc$mean) %>% as.data.frame()
 
 # Combine the forecasts for the different ATMS
+#atm_all_fc <- bind_cols(as.data.frame(seq(from = 366,
+      #                                    to = 396, 
+     #                                     by = 1)),
+    #                    as.data.frame(ATM1_fc[4:6]),
+   #                     as.data.frame(ATM1_fc[4:6]),
+  #                      as.data.frame(ATM3_mean_fc[5]),
+ #                       as.data.frame(ATM1_fc[4:6])) %>% 
+#  rename(Day = 'seq(from = 366, to = 396, by = 1)',
+        # ATM1_mean = 'mean',
+       #  ATM1_low80CI = 'lower.80.',
+      #   ATM1_low95CI = 'lower.95.',
+        # ATM1_upper80CI = 'upper.80.',
+         #ATM1_upper95CI = 'upper.95.',
+       #  ATM2_mean = 'mean1',
+      #   ATM2_low80CI = 'lower.80.1',
+    #     ATM2_low95CI = 'lower.95.1',
+     #    ATM2_upper80CI = 'upper.80.1',
+   #      ATM2_upper95CI = 'upper.95.1',
+  #       ATM3_mean = 'mean2',
+   #      ATM4_mean = 'mean3',
+    #     ATM4_low80CI = 'lower.80.2',
+  #       ATM4_low95CI = 'lower.95.2',
+ #        ATM4_upper80CI = 'upper.80.2',
+#         ATM4_upper95CI = 'upper.95.2')
 
-# Combine the forecasts for the different ATMS
-atm_all_fc <- bind_cols(as.data.frame(seq(from = 366,
-                                          to = 396, 
-                                          by = 1)),
-                        as.data.frame(ATM1_arima_fc[4:6]),
-                        as.data.frame(ATM2_arima_fc[4:6]),
-                        as.data.frame(ATM3_mean_fc[5]),
-                        as.data.frame(ATM4_arima_fc[4:6])) %>% 
-  rename(Day = 'seq(from = 366, to = 396, by = 1)',
-         ATM1_mean = 'mean',
-         ATM1_low80CI = 'lower.80.',
-         ATM1_low95CI = 'lower.95.',
-         ATM1_upper80CI = 'upper.80.',
-         ATM1_upper95CI = 'upper.95.',
-         ATM2_mean = 'mean1',
-         ATM2_low80CI = 'lower.80.1',
-         ATM2_low95CI = 'lower.95.1',
-         ATM2_upper80CI = 'upper.80.1',
-         ATM2_upper95CI = 'upper.95.1',
-         ATM3_mean = 'mean2',
-         ATM4_mean = 'mean3',
-         ATM4_low80CI = 'lower.80.2',
-         ATM4_low95CI = 'lower.95.2',
-         ATM4_upper80CI = 'upper.80.2',
-         ATM4_upper95CI = 'upper.95.2'
-  )
-
-write_csv(atm_all_fc, path = "forecasts/ATM_all_forecast.csv")
+write_csv(ATM_FC, path = "forecasts/ATM_all_forecast.csv")
