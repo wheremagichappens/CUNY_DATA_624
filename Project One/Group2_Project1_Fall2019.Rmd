@@ -161,7 +161,7 @@ These plots also remind us that ATM3 only dispensed cash on 3 days at the end of
 
 ```{r, fig.height=5}
 autoplot(atm_ts, facets = T)+
-  geom_line(color="#4B0082")+
+  geom_line(color="darkorange4")+
   labs(title = "Daily ATM Transactions", 
        subtitle = "Series: ATM1", y="Cash (in hundreds)", x="Weeks")+
   theme_bw()+ theme()
@@ -276,7 +276,7 @@ We observed there was a missing value in September 2008. We used imputation meth
 
 ```{r}
 # time series plot
-autoplot(ts_data) +
+autoplot(ts_data, colour='darkorange4') +
 labs(title = "Monthly Residential Power Usage", subtitle = "Time Series: 01/98 - 12/13", y = "KWH (in Millions)")+
 theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
 ```
@@ -305,7 +305,7 @@ p2 <- ggsubseriesplot(ts_data)+labs(title="Subseries Plot", y="")+theme_bw()+the
 p3 <- ggAcf(ts_data,color = 'darkorange4')+labs(title="ACF Plot", y="")+theme_bw()+theme()
 
 # STL decomposition
-p4 <- autoplot(stl1)+theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+p4 <- autoplot(stl1, colour = 'darkorange4')+theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
 
 grid.arrange(grob=p1, p2, p3, p4, ncol=2,   
              layout_matrix = rbind(c(1, 4),
@@ -350,8 +350,6 @@ checkresiduals(ets_model)
 The `auto.arima()` function performs cross validation on hyperparameter tuning to find the best model with parameters  of `order` and `seasonal` that minimize `AIC`. This gave us **arima_model**: ARIMA$(3,0,2)(2,1,0)12$ with drift resulting `AIC` = 5332.24. 
 
 Since ARIMA is the only reliable model, as other models failed Ljung test, we will plot forecasts of ARIMA only. The forecasted values can be viewed in the appendix. 
-
-### Model #1: ARIMA
 
 ```{r}
 autoplot(arima_fc)+
@@ -438,7 +436,7 @@ grid.arrange(grob=w1plot, w2plot, wsplot, ncol=3)
 
 It is clear from the combined plot that there is a pretty notable change in the trend when the readings from Pipe One wane. Let's look at the decomposed seriesand see if it gives us some insight into a good model.
 
-```{r, fig.height=5}
+```{r, fig.height=6}
 ws_decomp
 ```
 From the decomposition, the appears to be a seasonal component in agreement with the assessment that there might be a daily flowrate periodicity. Also, as expected, around day 306 where Pipe One flow rates go silent there is a trend down and then relatively flat trend thereafter. 

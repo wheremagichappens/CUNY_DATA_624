@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  21 OCT 2019 01:56
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  21 OCT 2019 02:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1474,12 +1474,12 @@ aphic file (type pdf)
 [11] [12]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 623--625
+Underfull \hbox (badness 10000) in paragraph at lines 620--622
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 632--633
+Underfull \hbox (badness 10000) in paragraph at lines 629--630
 
  []
 
@@ -1501,7 +1501,7 @@ aphic file (type pdf)
 <use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-21-1".pdf>
 [15]
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/it' will be
-(Font)              scaled to size 8.31161pt on input line 733.
+(Font)              scaled to size 8.31161pt on input line 730.
 File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-22-1".pdf Gr
 aphic file (type pdf)
 <use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-22-1".pdf>
@@ -1510,17 +1510,17 @@ aphic file (type pdf)
 <use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-23-1".pdf>
 [16]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 780.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 777.
 File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-24-1".pdf Gr
 aphic file (type pdf)
 <use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-24-1".pdf>
 [17]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 826.
+(Font)              <12> on input line 823.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 826.
+(Font)              <8> on input line 823.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 826.
+(Font)              <6> on input line 823.
 File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-25-1".pdf Gr
 aphic file (type pdf)
 <use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-25-1".pdf>
@@ -1542,16 +1542,16 @@ aphic file (type pdf)
 
 ] [23]
 
-Package xcolor Warning: Incompatible color definition on input line 1098.
+Package xcolor Warning: Incompatible color definition on input line 1095.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1150.
+Package xcolor Warning: Incompatible color definition on input line 1147.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1150.
+Package xcolor Warning: Incompatible color definition on input line 1147.
 
 [24]
-Overfull \hbox (13.24498pt too wide) in paragraph at lines 1191--1191
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1188--1188
 []\TU/lmtt/m/n/10 FALSE  ets(y = x, model = etsmodel, allow.multiplicative.tren
 d = allow.multiplicative.trend)[] 
  []
@@ -1559,78 +1559,78 @@ d = allow.multiplicative.trend)[]
 [25
 
 ]
-Overfull \hbox (91.99498pt too wide) in paragraph at lines 1236--1236
+Overfull \hbox (91.99498pt too wide) in paragraph at lines 1233--1233
 []\TU/lmtt/m/n/10 FALSE  ets(y = x, model = etsmodel, damped = TRUE, allow.mult
 iplicative.trend = allow.multiplicative.trend)[] 
  []
 
 [26]
 
-Package xcolor Warning: Incompatible color definition on input line 1326.
+Package xcolor Warning: Incompatible color definition on input line 1323.
 
 [27]
 
-Package xcolor Warning: Incompatible color definition on input line 1377.
+Package xcolor Warning: Incompatible color definition on input line 1374.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1377.
+Package xcolor Warning: Incompatible color definition on input line 1374.
 
 [28] [29
 
 ]
 
-Package xcolor Warning: Incompatible color definition on input line 1464.
+Package xcolor Warning: Incompatible color definition on input line 1461.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 [30]
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 
-Underfull \vbox (badness 10000) detected at line 1604
+Underfull \vbox (badness 10000) detected at line 1601
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1604
+Underfull \vbox (badness 10000) detected at line 1601
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 [31]
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1604.
+Package xcolor Warning: Incompatible color definition on input line 1601.
 
 [32]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1607.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1607.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1604.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1604.
 (./Group2_Project1_Fall2019.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1607.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1607.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1604.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1604.
 
 Package rerunfilecheck Info: File `Group2_Project1_Fall2019.out' has not change
 d.
 (rerunfilecheck)             Checksum: 2217A2890531F99975E6995BA946BCAA.
  ) 
 Here is how much of TeX's memory you used:
- 35318 strings out of 494468
- 689277 string characters out of 6172222
- 789725 words of memory out of 5000000
- 39176 multiletter control sequences out of 15000+600000
+ 35317 strings out of 494468
+ 689260 string characters out of 6172222
+ 789675 words of memory out of 5000000
+ 39175 multiletter control sequences out of 15000+600000
  557311 words of font info for 84 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  59i,15n,116p,821b,485s stack positions out of 5000i,500n,10000p,200000b,80000s
