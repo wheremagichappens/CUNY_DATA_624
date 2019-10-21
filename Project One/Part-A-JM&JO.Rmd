@@ -68,7 +68,7 @@ source("scripts/Part-A-JM.R")
 ### UNIVERSAL DATA SOURCING & DEFAULT SETTINGS FOR PROJECT
 
 # Load All Sourced Code
-suppressWarnings(source("scripts/Part-A-JM.R"))
+suppressWarnings(source("scripts/Part-A-JM&JO.R"))
 
 # Set default augments for code chunks
 knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)

@@ -74,11 +74,17 @@ ATM3_plotdata <- ATM3_ts %>%
 # "ATM3"=c(NA,NA,NA,NA),"ATM4"=ATM4_fc$mean) %>% as.data.frame()
 
 # Combine the forecasts for the different ATMS
-ATM_ALL_FC <- bind_cols(as.data.frame(ATM1_AA[4:6]),
-                        as.data.frame(ATM2_AA[4:6]),
-                        as.data.frame(ATM3_AA[5]),
-                        as.data.frame(ATM4_AA[4:6]),) %>% 
-  rename(ATM1_mean = 'mean',
+
+# Combine the forecasts for the different ATMS
+atm_all_fc <- bind_cols(as.data.frame(seq(from = 366,
+                                          to = 396, 
+                                          by = 1)),
+                        as.data.frame(ATM1_arima_fc[4:6]),
+                        as.data.frame(ATM2_arima_fc[4:6]),
+                        as.data.frame(ATM3_mean_fc[5]),
+                        as.data.frame(ATM4_arima_fc[4:6])) %>% 
+  rename(Day = 'seq(from = 366, to = 396, by = 1)',
+         ATM1_mean = 'mean',
          ATM1_low80CI = 'lower.80.',
          ATM1_low95CI = 'lower.95.',
          ATM1_upper80CI = 'upper.80.',
@@ -96,5 +102,4 @@ ATM_ALL_FC <- bind_cols(as.data.frame(ATM1_AA[4:6]),
          ATM4_upper95CI = 'upper.95.2'
   )
 
-# Save output
-write.csv(ATM_ALL_FC, file="forecasts/ATM_FC.csv")
+write_csv(atm_all_fc, path = "forecasts/ATM_all_forecast.csv")
