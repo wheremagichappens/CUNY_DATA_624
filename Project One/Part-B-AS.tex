@@ -179,234 +179,21 @@ in Kilowatt hours, the rest is straight forward. Add these to your
 existing files above - clearly labeled.
 \end{quote}
 
-\section*{Data Exploration and Processing}\label{b-exploration}
-\addcontentsline{toc}{section}{Data Exploration and Processing}
+\section*{Exploration}\label{b-exploration}
+\addcontentsline{toc}{section}{Exploration}
 
-Explore data. Process as needed.
+From our time series data (frequency = 12, monthly power\_data) we
+observed there is a missing value in September 2008. We used imputation
+method called na.interpolation which performs a technique in numerical
+analysis which estimates a value from known data points. For our case,
+linear method using first order Taylor polynomial is used.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(tidyverse)}
-\KeywordTok{library}\NormalTok{(scales)}
-\KeywordTok{library}\NormalTok{(readxl)}
-\KeywordTok{library}\NormalTok{(forecast)}
-\KeywordTok{library}\NormalTok{(lubridate)}
-\KeywordTok{library}\NormalTok{(fpp2)}
-\KeywordTok{library}\NormalTok{(ggplot2)}
-\KeywordTok{library}\NormalTok{(forecast)}
-\KeywordTok{library}\NormalTok{(tseries)}
-\KeywordTok{library}\NormalTok{(imputeTS)}
-\KeywordTok{library}\NormalTok{(tsoutliers)}
-\CommentTok{#install.packages('tsoutliers')}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#power_data <- read_excel("data/ResidentialCustomerForecastLoad-624.xlsx") }
-\KeywordTok{library}\NormalTok{ (readr)}
-
-\NormalTok{power=}\StringTok{"https://raw.githubusercontent.com/vindication09/DATA-624/master/ResidentialCustomerForecastLoad-624.csv"}
-
-\NormalTok{partb_data<-}\KeywordTok{read_csv}\NormalTok{(}\KeywordTok{url}\NormalTok{(power))}
-
-\KeywordTok{head}\NormalTok{(partb_data)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE # A tibble: 6 x 3
-FALSE   CaseSequence `YYYY-MMM`     KWH
-FALSE          <dbl> <chr>        <dbl>
-FALSE 1          733 1998-Jan   6862583
-FALSE 2          734 1998-Feb   5838198
-FALSE 3          735 1998-Mar   5420658
-FALSE 4          736 1998-Apr   5010364
-FALSE 5          737 1998-May   4665377
-FALSE 6          738 1998-Jun   6467147
-\end{verbatim}
-
-Transformed data into time-series with freq - 12. We are missing 2008
-Sep data point.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{ts_data <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(partb_data}\OperatorTok{$}\NormalTok{KWH, }\DataTypeTok{frequency =} \DecValTok{12}\NormalTok{, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{1998}\NormalTok{,}\DecValTok{1}\NormalTok{))}
-\NormalTok{ts_data}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE           Jan      Feb      Mar      Apr      May      Jun      Jul
-FALSE 1998  6862583  5838198  5420658  5010364  4665377  6467147  8914755
-FALSE 1999  7183759  5759262  4847656  5306592  4426794  5500901  7444416
-FALSE 2000  7068296  5876083  4807961  4873080  5050891  7092865  6862662
-FALSE 2001  7538529  6602448  5779180  4835210  4787904  6283324  7855129
-FALSE 2002  7099063  6413429  5839514  5371604  5439166  5850383  7039702
-FALSE 2003  7256079  6190517  6120626  4885643  5296096  6051571  6900676
-FALSE 2004  7584596  6560742  6526586  4831688  4878262  6421614  7307931
-FALSE 2005  8225477  6564338  5581725  5563071  4453983  5900212  8337998
-FALSE 2006  7793358  5914945  5819734  5255988  4740588  7052275  7945564
-FALSE 2007  8031295  7928337  6443170  4841979  4862847  5022647  6426220
-FALSE 2008  7964293  7597060  6085644  5352359  4608528  6548439  7643987
-FALSE 2009  8072330  6976800  5691452  5531616  5264439  5804433  7713260
-FALSE 2010  9397357  8390677  7347915  5776131  4919289  6696292   770523
-FALSE 2011  8394747  8898062  6356903  5685227  5506308  8037779 10093343
-FALSE 2012  8991267  7952204  6356961  5569828  5783598  7926956  8886851
-FALSE 2013 10655730  7681798  6517514  6105359  5940475  7920627  8415321
-FALSE           Aug      Sep      Oct      Nov      Dec
-FALSE 1998  8607428  6989888  6345620  4640410  4693479
-FALSE 1999  7564391  7899368  5358314  4436269  4419229
-FALSE 2000  7517830  8912169  5844352  5041769  6220334
-FALSE 2001  8450717  7112069  5242535  4461979  5240995
-FALSE 2002  8058748  8245227  5865014  4908979  5779958
-FALSE 2003  8476499  7791791  5344613  4913707  5756193
-FALSE 2004  7309774  6690366  5444948  4824940  5791208
-FALSE 2005  7786659  7057213  6694523  4313019  6181548
-FALSE 2006  8241110  7296355  5104799  4458429  6226214
-FALSE 2007  7447146  7666970  5785964  4907057  6047292
-FALSE 2008  8037137       NA  5101803  4555602  6442746
-FALSE 2009  8350517  7583146  5566075  5339890  7089880
-FALSE 2010  7922701  7819472  5875917  4800733  6152583
-FALSE 2011 10308076  8943599  5603920  6154138  8273142
-FALSE 2012  9612423  7559148  5576852  5731899  6609694
-FALSE 2013  9080226  7968220  5759367  5769083  9606304
-\end{verbatim}
-
-We impute missing data using TSImpute's interpolation method.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{ts_data<-}\KeywordTok{na.interpolation}\NormalTok{(ts_data)}
-\end{Highlighting}
-\end{Shaded}
-
-Review the cycle of the time series to get an idea of the positions
-within the cycle.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{cycle}\NormalTok{(ts_data)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
-FALSE 1998   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 1999   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2000   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2001   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2002   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2003   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2004   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2005   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2006   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2007   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2008   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2009   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2010   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2011   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2012   1   2   3   4   5   6   7   8   9  10  11  12
-FALSE 2013   1   2   3   4   5   6   7   8   9  10  11  12
-\end{verbatim}
-
-Let's do quick EDA on ts\_data. Outlier is detected - Min is
-significantly lower than median. We will handle this outlier. In
-general, data is fairly normally distributed as mean is not far from
-median.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{summary}\NormalTok{(ts_data)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-FALSE   770523  5434539  6314472  6502824  7608792 10655730
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{hist}\NormalTok{(ts_data)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-6-1.pdf}
-
-Let's do deeper EDA on ts\_data and handle outlier using tsoutliers().
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#disable scientific notation (ONLY RUN ONCE)}
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen =} \DecValTok{99999}\NormalTok{)}
-
-\KeywordTok{autoplot}\NormalTok{(ts_data) }\OperatorTok{+}
-\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Monthly Residential Power Usage"}\NormalTok{, }\DataTypeTok{subtitle =} \StringTok{"01/98 - 12/13"}\NormalTok{)}\OperatorTok{+}
-\KeywordTok{theme_classic}\NormalTok{();}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-7-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{ggseasonplot}\NormalTok{(ts_data);}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-7-2.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{boxplot}\NormalTok{(ts_data}\OperatorTok{~}\KeywordTok{cycle}\NormalTok{(ts_data),}\DataTypeTok{xlab=}\StringTok{"Month"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"Monthly Residential Power Usage"}\NormalTok{);}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-7-3.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{ggsubseriesplot}\NormalTok{(ts_data);}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-7-4.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{stl}\NormalTok{(ts_data, }\DataTypeTok{s.window =} \StringTok{'periodic'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{autoplot}\NormalTok{();}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-7-5.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{ggAcf}\NormalTok{(ts_data);}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-7-6.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#Box.test(ts_data, type = c("Ljung-Box"))}
-
-
-\CommentTok{# handling outlier}
-\CommentTok{#fit <- nnetar(tsclean(ts_data))}
-\NormalTok{outlier_func <-}\StringTok{ }\KeywordTok{tsoutliers}\NormalTok{(ts_data, }\DataTypeTok{iterate =} \DecValTok{2}\NormalTok{, }\DataTypeTok{lambda =} \StringTok{"auto"}\NormalTok{)}
-\NormalTok{ts_data[outlier_func}\OperatorTok{$}\NormalTok{index] <-}\StringTok{ }\NormalTok{outlier_func}\OperatorTok{$}\NormalTok{replacements}
-\end{Highlighting}
-\end{Shaded}
-
-Our initial plots reveal annual seasonality within this time series. The
-box plot/seasonality plot actually reveals where power consumption
-fluctuations occur within each of the cycke positions. We can speculate
-that this could be due to there being no major Holidays that require
-power draining decor plus we assume minimal AC usage during the cold
-months.
+Our initial time series plot reveal annual seasonality within this time
+series. The box plot/seasonality plot actually reveals where power
+consumption fluctuations occur within each of the cycke positions. We
+can speculate that this could be due to there being no major Holidays
+that require power draining decor plus we assume minimal AC usage during
+the cold months.
 
 We see power consumption increase between the months of June and August.
 This must be tied to AC usage during the warmer months of a year and
@@ -426,30 +213,40 @@ The ACF plot shows that autocorrelations are well outside the
 significant space indicating the series is not white noise,
 non-stationary.
 
+\subsection{Series plot}\label{series-plot}
+
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\subsection{Seasonal plots}\label{seasonal-plots}
+
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\subsection{Diagnostic plots}\label{diagnostic-plots}
+
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-3-1.pdf}
+
 \section*{Data Model}\label{b-model}
 \addcontentsline{toc}{section}{Data Model}
 
+Out of the models we built, we can make some preliminary observations.
+The residuals for each of our models does not have a major deviance from
+normality, however residuals of Model \#1: ARIMA do not have an extended
+number of bins distorting the normality proximity but we can say it is
+still fairly normally distributed.
+
+The residual ACF plots show residual autocorrelations for each of our
+models. Model \#1: ARIMA has less autocorrelation than the other three
+models. Model 1 is well within the 95\% limits indicated by the dotted
+blue lines.
+
+If we examine the Ljung-Box test results for our models, the only model
+with a p-value \textgreater{} 0.05 is Model \#1: ARIMA. This implies
+that the residuals from other models are not independent, hence not
+white noise. The full model summary can be viewed in the appendix.
+
 \subsection{Model \#1: ARIMA}\label{model-1-arima}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{arima_model <-}\StringTok{ }\KeywordTok{auto.arima}\NormalTok{(ts_data)}
-
-\NormalTok{arima_model <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(arima_model, }\DataTypeTok{h=}\DecValTok{12}\NormalTok{)}
-
-\KeywordTok{autoplot}\NormalTok{(arima_model) }\OperatorTok{+}\StringTok{ }\KeywordTok{autolayer}\NormalTok{(}\KeywordTok{fitted}\NormalTok{(arima_model))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-8-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{checkresiduals}\NormalTok{(arima_model)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-8-2.pdf}
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-4-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -464,32 +261,14 @@ FALSE Model df: 8.   Total lags used: 24
 \subsection{Model \#2: STL (no-demped) -
 MNN}\label{model-2-stl-no-demped---mnn}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#stlf - etsmodel estimation --- M,N,N is chosen.}
-\NormalTok{stl_ndemp <-}\StringTok{ }\KeywordTok{stlf}\NormalTok{(ts_data, }\DataTypeTok{s.window =} \StringTok{"periodic"}\NormalTok{, }\DataTypeTok{robust=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
-
-\CommentTok{# forecast plot}
-\KeywordTok{autoplot}\NormalTok{(stl_ndemp) }\OperatorTok{+}\StringTok{ }\KeywordTok{autolayer}\NormalTok{(}\KeywordTok{fitted}\NormalTok{(stl_ndemp))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-9-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{checkresiduals}\NormalTok{(stl_ndemp)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-9-2.pdf}
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-5-1.pdf}
 
 \begin{verbatim}
 FALSE 
 FALSE   Ljung-Box test
 FALSE 
 FALSE data:  Residuals from STL +  ETS(M,N,N)
-FALSE Q* = 65.934, df = 22, p-value = 0.00000284
+FALSE Q* = 65.934, df = 22, p-value = 2.84e-06
 FALSE 
 FALSE Model df: 2.   Total lags used: 24
 \end{verbatim}
@@ -497,57 +276,21 @@ FALSE Model df: 2.   Total lags used: 24
 \subsection{Model \#2-2: STL (demped) -
 MAdN}\label{model-2-2-stl-demped---madn}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#stlf - etsmodel estimation --- M, Ad, N is chosen.}
-\NormalTok{stl_demp <-}\StringTok{ }\KeywordTok{stlf}\NormalTok{(ts_data, }\DataTypeTok{damped=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{s.window =} \StringTok{"periodic"}\NormalTok{, }\DataTypeTok{robust=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
-
-\CommentTok{# forecast plot}
-\KeywordTok{autoplot}\NormalTok{(stl_demp) }\OperatorTok{+}\StringTok{ }\KeywordTok{autolayer}\NormalTok{(}\KeywordTok{fitted}\NormalTok{(stl_demp))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-10-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{checkresiduals}\NormalTok{(stl_demp)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-10-2.pdf}
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-6-1.pdf}
 
 \begin{verbatim}
 FALSE 
 FALSE   Ljung-Box test
 FALSE 
 FALSE data:  Residuals from STL +  ETS(M,Ad,N)
-FALSE Q* = 63.375, df = 19, p-value = 0.000001119
+FALSE Q* = 63.375, df = 19, p-value = 1.119e-06
 FALSE 
 FALSE Model df: 5.   Total lags used: 24
 \end{verbatim}
 
 \subsection{Model \#3: ets - MNM}\label{model-3-ets---mnm}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# ETS models - MNM}
-\NormalTok{ets_model <-}\StringTok{ }\KeywordTok{ets}\NormalTok{(ts_data)}
-
-\CommentTok{# forecast plot}
-\KeywordTok{autoplot}\NormalTok{(}\KeywordTok{forecast}\NormalTok{(ets_model, }\DataTypeTok{h=}\DecValTok{12}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{autolayer}\NormalTok{(}\KeywordTok{fitted}\NormalTok{(ets_model))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-11-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{checkresiduals}\NormalTok{(ets_model)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-11-2.pdf}
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-7-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -559,197 +302,30 @@ FALSE
 FALSE Model df: 14.   Total lags used: 24
 \end{verbatim}
 
-\subsection{Model \#4: Regression}\label{model-4-regression}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fit.reg <-}\StringTok{ }\KeywordTok{tslm}\NormalTok{(ts_data }\OperatorTok{~}\StringTok{ }\NormalTok{trend }\OperatorTok{+}\StringTok{ }\NormalTok{season)}
-\NormalTok{reg_model <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(fit.reg, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
-
-\CommentTok{# forecast plot}
-\KeywordTok{autoplot}\NormalTok{(reg_model) }\OperatorTok{+}\StringTok{ }\KeywordTok{autolayer}\NormalTok{(}\KeywordTok{fitted}\NormalTok{(reg_model))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-12-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{checkresiduals}\NormalTok{(reg_model)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-12-2.pdf}
-
-\begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from Linear regression model
-FALSE Q* = 80.001, df = 11, p-value = 0.000000000001475
-FALSE 
-FALSE Model df: 13.   Total lags used: 24
-\end{verbatim}
-
-\subsection{Model \#5: TBATS}\label{model-5-tbats}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fit.tbats <-}\StringTok{ }\KeywordTok{tbats}\NormalTok{(ts_data)}
-\NormalTok{tbats_model <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(fit.tbats, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
-
-\CommentTok{# forecast plot}
-\KeywordTok{autoplot}\NormalTok{(tbats_model) }\OperatorTok{+}\StringTok{ }\KeywordTok{autolayer}\NormalTok{(}\KeywordTok{fitted}\NormalTok{(tbats_model))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-13-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{checkresiduals}\NormalTok{(tbats_model)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Part-B-AS_files/figure-latex/unnamed-chunk-13-2.pdf}
-
-\begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from TBATS(0.002, {0,1}, -, {<12,5>})
-FALSE Q* = 26.054, df = 7, p-value = 0.0004925
-FALSE 
-FALSE Model df: 17.   Total lags used: 24
-\end{verbatim}
-
-\subsection{Accuracy of Models}\label{accuracy-of-models}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{accuracy}\NormalTok{(arima_model);}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE                     ME     RMSE      MAE        MPE     MAPE      MASE
-FALSE Training set -8455.077 589381.7 427752.5 -0.7944782 6.475365 0.6904053
-FALSE                      ACF1
-FALSE Training set 0.0006090194
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{accuracy}\NormalTok{(stl_ndemp);}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
-FALSE Training set 56926.03 633571.7 460713.4 -0.03288687 6.945185 0.7436052
-FALSE                   ACF1
-FALSE Training set 0.2570241
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{accuracy}\NormalTok{(stl_demp);}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
-FALSE Training set 54337.68 631081.9 458777.5 -0.07364717 6.937249 0.7404807
-FALSE                   ACF1
-FALSE Training set 0.2528558
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{accuracy}\NormalTok{(ets_model);}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
-FALSE Training set 45241.77 628252.5 481520.9 -0.04000239 7.277118 0.7771892
-FALSE                   ACF1
-FALSE Training set 0.1927438
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{accuracy}\NormalTok{(reg_model);}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE                                ME     RMSE      MAE        MPE     MAPE
-FALSE Training set -0.00000000001455192 637832.8 480849.1 -0.8253442 7.286874
-FALSE                   MASE      ACF1
-FALSE Training set 0.7761049 0.3597939
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{accuracy}\NormalTok{(tbats_model)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE                    ME     RMSE      MAE       MPE    MAPE      MASE
-FALSE Training set 97092.89 577485.8 433659.7 0.7290721 6.54268 0.6999398
-FALSE                    ACF1
-FALSE Training set 0.01196249
-\end{verbatim}
-
-Out of the models we built, we can make some preliminary observations.
-The residuals for each of our models does not have a major deviance from
-normality, however Model \#1: ARIMA residuals do not have an extended
-number of bins distorting the normality proximity but we can say it is
-still fairly normally distributed.
-
-The residual ACF plots show residual autocorrelations for each of our
-models. Model \#1: ARIMA has less autocorrelation than the other three
-models. Model 1 is well within the 95\% limits indicated by the dotted
-blue lines.
-
-If we examine the Ljung-Box test results for our models, the only model
-with a p-value \textgreater{} 0.05 is Model \#1: ARIMA. This implies
-that the residuals from other models are not independent, hence not
-white noise.
-
-In contrast, when we first attempted the analysis by building models
-without handling outlier (2010 Jul), the only model with a p-value
-\textless{} 0.05 was Model \#3: ets - MNN and hence we accepted all the
-other models except for \#3.
-
-Handling 1 outlier dramatically changed the outcome of Ljung-Box test.
-
 \section*{Forecast}\label{b-forecast}
 \addcontentsline{toc}{section}{Forecast}
 
-We will implement a cross validation method of testing for h=12. The
-process randomly chooses 12 points to measure and take the average of
-RMSEs. By definition, a lower RMSE on test set is attributed with a
-better forecast on unseen data. We only accepted Model \#1 from
-Ljung-Box test and hence it is our final choice.
+\texttt{auto.arima()} performs cross validation on hyperparameter tuning
+to find the best model with parameters of \texttt{order} and
+\texttt{seasonal} that minimize \texttt{AIC}. This gave us
+\textbf{arima\_model}: ARIMA\((3,0,2)(2,1,0)12\) with drift resulting
+\texttt{AIC} = 5332.24.
+
+Since ARIMA is the only reliable model, as other models failed Ljung
+test, we will plot forecasts of ARIMA only. The forecasted values can be
+viewed in the appendix.
 
 \subsection{Model \#1: ARIMA}\label{model-1-arima-1}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{arima_cv <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x, h)\{}\KeywordTok{forecast}\NormalTok{(}\KeywordTok{Arima}\NormalTok{(x, }\DataTypeTok{order =} \KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{), }\DataTypeTok{seasonal =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{), }\DataTypeTok{include.drift =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{h=}\NormalTok{h)\}}
+\includegraphics{Part-B-AS.final.firstparameter_files/figure-latex/unnamed-chunk-8-1.pdf}
 
-\NormalTok{e <-}\StringTok{ }\KeywordTok{tsCV}\NormalTok{(ts_data, arima_cv, }\DataTypeTok{h=}\DecValTok{12}\NormalTok{)}
+\section*{Discussion}\label{b-discussion}
+\addcontentsline{toc}{section}{Discussion}
 
-\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{mean}\NormalTok{(e}\OperatorTok{^}\DecValTok{2}\NormalTok{, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-FALSE [1] 725175
-\end{verbatim}
+We implemented a cross validation method of testing for h=12. The
+process randomly chooses 12 points to measure and take the average of
+RMSEs. By definition, a lower RMSE on test set is attributed with a
+better forecast on unseen data.
 
 Using Time series cross-validation, we compute RMSE on testset (h=12).
 We would have to pick the model with the lowest RMSE on test set as our
@@ -760,15 +336,288 @@ shows that RMSE on test is around 720k when RMSE on training is around
 589k. We can conclude the model is not necessarily overfitted. Given
 that MAPE on training is less than 7, it is not a suprising result.
 
-\section*{Discussion}\label{b-discussion}
-\addcontentsline{toc}{section}{Discussion}
+\begin{verbatim}
+FALSE [1] "RMSE - train: 589381.7"
+\end{verbatim}
 
-In our first phased implicit analysis, which is not recorded on this
-Rmd, where outlier (2010 - Jul) was not handled, STL - ANN was the best
-model in terms of RMSE on test set. As outlier was handled, on the other
-hand, STL models became invalid predictors as residuals were
-autocorrelated. We learned that handling outlier, even if it is just one
-data point, makes the result of modelling outcome completely.
+\begin{verbatim}
+FALSE [1] "RMSE - test: 725175"
+\end{verbatim}
+
+\chapter*{Appendix}\label{Appendix}
+\addcontentsline{toc}{chapter}{Appendix}
+
+\section*{Part B}\label{Part-B}
+\addcontentsline{toc}{section}{Part B}
+
+\subsection*{Model Summary}\label{Part-B-summary}
+\addcontentsline{toc}{subsection}{Model Summary}
+
+\textbf{\texttt{ARIMA}:}
+
+\begin{verbatim}
+FALSE 
+FALSE Forecast method: ARIMA(3,0,2)(2,1,0)[12] with drift
+FALSE 
+FALSE Model Information:
+FALSE Series: ts_data_o 
+FALSE ARIMA(3,0,2)(2,1,0)[12] with drift 
+FALSE 
+FALSE Coefficients:
+FALSE           ar1      ar2     ar3     ma1     ma2     sar1     sar2     drift
+FALSE       -0.5606  -0.2216  0.3284  0.8902  0.4827  -0.7249  -0.4152  9018.405
+FALSE s.e.   0.3992   0.3382  0.0960  0.4120  0.4551   0.0797   0.0841  3027.685
+FALSE 
+FALSE sigma^2 estimated as 3.878e+11:  log likelihood=-2657.12
+FALSE AIC=5332.24   AICc=5333.3   BIC=5360.97
+FALSE 
+FALSE Error measures:
+FALSE                     ME     RMSE      MAE        MPE     MAPE      MASE
+FALSE Training set -8455.077 589381.7 427752.5 -0.7944782 6.475365 0.6904053
+FALSE                      ACF1
+FALSE Training set 0.0006090194
+FALSE 
+FALSE Forecasts:
+FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+FALSE Jan 2014       10210619 9412589 11008649 8990138 11431100
+FALSE Feb 2014        8722658 7882412  9562903 7437613 10007702
+FALSE Mar 2014        7137962 6295514  7980411 5849548  8426376
+FALSE Apr 2014        5919874 5060514  6779234 4605596  7234152
+FALSE May 2014        5946730 5087082  6806377 4632012  7261448
+FALSE Jun 2014        8383812 7524148  9243475 7069070  9698553
+FALSE Jul 2014        9362213 8500206 10224219 8043888 10680538
+FALSE Aug 2014       10018953 9155935 10881971 8699080 11338826
+FALSE Sep 2014        8547612 7684559  9410664 7227687  9867536
+FALSE Oct 2014        5781906 4918467  6645344 4461391  7102421
+FALSE Nov 2014        6193673 5329717  7057629 4872367  7514980
+FALSE Dec 2014        8373767 7509705  9237829 7052298  9695236
+\end{verbatim}
+
+\textbf{\texttt{STL\ -\ MNN}:}
+
+\begin{verbatim}
+FALSE 
+FALSE Forecast method: STL +  ETS(M,N,N)
+FALSE 
+FALSE Model Information:
+FALSE ETS(M,N,N) 
+FALSE 
+FALSE Call:
+FALSE  ets(y = x, model = etsmodel, allow.multiplicative.trend = allow.multiplicative.trend) 
+FALSE 
+FALSE   Smoothing parameters:
+FALSE     alpha = 0.1159 
+FALSE 
+FALSE   Initial states:
+FALSE     l = 6317745.8917 
+FALSE 
+FALSE   sigma:  0.097
+FALSE 
+FALSE      AIC     AICc      BIC 
+FALSE 6139.631 6139.758 6149.403 
+FALSE 
+FALSE Error measures:
+FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
+FALSE Training set 56926.03 633571.7 460713.4 -0.03288687 6.945185 0.7436052
+FALSE                   ACF1
+FALSE Training set 0.2570241
+FALSE 
+FALSE Forecasts:
+FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+FALSE Jan 2014        8992609 8049591  9935628 7550387 10434831
+FALSE Feb 2014        7908116 6958724  8857508 6456146  9360086
+FALSE Mar 2014        7079434 6123709  8035158 5617779  8541088
+FALSE Apr 2014        6435209 5473193  7397225 4963933  7906486
+FALSE May 2014        6161593 5193326  7129860 4680756  7642430
+FALSE Jun 2014        7728705 6754226  8703185 6238368  9219043
+FALSE Jul 2014        8837980 7857327  9818633 7338201 10337759
+FALSE Aug 2014        9376841 8390053 10363630 7867678 10886004
+FALSE Sep 2014        8601001 7608114  9593888 7082511 10119490
+FALSE Oct 2014        6670419 5671470  7669368 5142658  8198180
+FALSE Nov 2014        6035845 5030870  7040821 4498868  7572822
+FALSE Dec 2014        7189087 6178120  8200053 5642947  8735226
+\end{verbatim}
+
+\textbf{\texttt{STL\ -\ MAdN}:}
+
+\begin{verbatim}
+FALSE 
+FALSE Forecast method: STL +  ETS(M,Ad,N)
+FALSE 
+FALSE Model Information:
+FALSE ETS(M,Ad,N) 
+FALSE 
+FALSE Call:
+FALSE  ets(y = x, model = etsmodel, damped = TRUE, allow.multiplicative.trend = allow.multiplicative.trend) 
+FALSE 
+FALSE   Smoothing parameters:
+FALSE     alpha = 0.1233 
+FALSE     beta  = 1e-04 
+FALSE     phi   = 0.8 
+FALSE 
+FALSE   Initial states:
+FALSE     l = 5615471.7851 
+FALSE     b = 173606.4508 
+FALSE 
+FALSE   sigma:  0.0972
+FALSE 
+FALSE      AIC     AICc      BIC 
+FALSE 6143.452 6143.906 6162.997 
+FALSE 
+FALSE Error measures:
+FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
+FALSE Training set 54337.68 631081.9 458777.5 -0.07364717 6.937249 0.7404807
+FALSE                   ACF1
+FALSE Training set 0.2528558
+FALSE 
+FALSE Forecasts:
+FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+FALSE Jan 2014        9007707 8060947  9954467 7559763 10455651
+FALSE Feb 2014        7923348 6969325  8877372 6464295  9382401
+FALSE Mar 2014        7094774 6133536  8056011 5624687  8564860
+FALSE Apr 2014        6450635 5482232  7419038 4969591  7931680
+FALSE May 2014        6177088 5201569  7152607 4685160  7669016
+FALSE Jun 2014        7744256 6761668  8726843 6241518  9246993
+FALSE Jul 2014        8853574 7863967  9843182 7340100 10367048
+FALSE Aug 2014        9392471 8395890 10389052 7868332 10916609
+FALSE Sep 2014        8616658 7613151  9620166 7081926 10151391
+FALSE Oct 2014        6686100 5675711  7696488 5140843  8231356
+FALSE Nov 2014        6051544 5034319  7068769 4495832  7607255
+FALSE Dec 2014        7204799 6180782  8228817 5638700  8770899
+\end{verbatim}
+
+\textbf{\texttt{ets\ -\ MNM}:}
+
+\begin{verbatim}
+FALSE 
+FALSE Forecast method: ETS(M,N,M)
+FALSE 
+FALSE Model Information:
+FALSE ETS(M,N,M) 
+FALSE 
+FALSE Call:
+FALSE  ets(y = ts_data_o) 
+FALSE 
+FALSE   Smoothing parameters:
+FALSE     alpha = 0.1428 
+FALSE     gamma = 0.2119 
+FALSE 
+FALSE   Initial states:
+FALSE     l = 6189149.8743 
+FALSE     s = 0.8984 0.7596 0.938 1.2229 1.2597 1.2396
+FALSE            1.0059 0.7638 0.8078 0.8864 1.0269 1.191
+FALSE 
+FALSE   sigma:  0.0967
+FALSE 
+FALSE      AIC     AICc      BIC 
+FALSE 6144.033 6146.760 6192.895 
+FALSE 
+FALSE Error measures:
+FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
+FALSE Training set 45241.77 628252.5 481520.9 -0.04000239 7.277118 0.7771892
+FALSE                   ACF1
+FALSE Training set 0.1927438
+FALSE 
+FALSE Forecasts:
+FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+FALSE Jan 2014        9917654 8689211 11146096 8038913 11796394
+FALSE Feb 2014        8522973 7456477  9589469 6891908 10154038
+FALSE Mar 2014        7012478 6126191  7898765 5657019  8367937
+FALSE Apr 2014        6208601 5416196  7001006 4996722  7420480
+FALSE May 2014        5928833 5164834  6692832 4760398  7097269
+FALSE Jun 2014        7840532 6820624  8860440 6280717  9400347
+FALSE Jul 2014        9115823 7919004 10312642 7285446 10946200
+FALSE Aug 2014        9648549 8370229 10926869 7693527 11603571
+FALSE Sep 2014        8553364 7409986  9696742 6804718 10302010
+FALSE Oct 2014        6266745 5421655  7111835 4974291  7559199
+FALSE Nov 2014        5938289 5130560  6746017 4702975  7173603
+FALSE Dec 2014        8020901 6920610  9121192 6338151  9703651
+\end{verbatim}
+
+\newpage
+
+\subsection*{R Script}\label{Part-B-RScript}
+\addcontentsline{toc}{subsection}{R Script}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Dependencies}
+\NormalTok{## processing}
+\KeywordTok{library}\NormalTok{(readxl)}
+\KeywordTok{library}\NormalTok{(tinytex)}
+\KeywordTok{library}\NormalTok{(readr)}
+
+\NormalTok{## graphs}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(janitor)}
+\KeywordTok{library}\NormalTok{(gridExtra)}
+\KeywordTok{library}\NormalTok{(grid)}
+
+\NormalTok{## formatting}
+\KeywordTok{library}\NormalTok{(default)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(scales)}
+\KeywordTok{library}\NormalTok{(readxl)}
+\KeywordTok{library}\NormalTok{(lubridate)}
+
+\NormalTok{## forecasting packages}
+\KeywordTok{library}\NormalTok{(fpp2)}
+\KeywordTok{library}\NormalTok{(forecast)}
+
+\NormalTok{## outlier & imputation}
+\KeywordTok{library}\NormalTok{(imputeTS)}
+\KeywordTok{library}\NormalTok{(tsoutliers)}
+
+\CommentTok{# load data}
+\NormalTok{power_data <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/vindication09/DATA-624/master/ResidentialCustomerForecastLoad-624.csv"}\NormalTok{)}
+
+\CommentTok{# Time Series}
+\NormalTok{ts_data <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(power_data}\OperatorTok{$}\NormalTok{KWH, }\DataTypeTok{frequency =} \DecValTok{12}\NormalTok{, }\DataTypeTok{start =} \KeywordTok{c}\NormalTok{(}\DecValTok{1998}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+
+\CommentTok{# Missing value imputation}
+\NormalTok{ts_data <-}\StringTok{ }\KeywordTok{na_interpolation}\NormalTok{(ts_data)}
+
+\CommentTok{# STL decomposition}
+\NormalTok{stl1 <-}\StringTok{ }\KeywordTok{stl}\NormalTok{(ts_data, }\DataTypeTok{s.window =} \StringTok{'periodic'}\NormalTok{)}
+
+\CommentTok{# Handling outlier}
+\NormalTok{outlier_func <-}\StringTok{ }\KeywordTok{tsoutliers}\NormalTok{(ts_data, }\DataTypeTok{iterate =} \DecValTok{2}\NormalTok{, }\DataTypeTok{lambda =} \StringTok{"auto"}\NormalTok{)}
+
+\CommentTok{# Time Series - After outlier and imputation handeled}
+\NormalTok{ts_data_o <-}\StringTok{ }\NormalTok{ts_data  }\CommentTok{# Let's treate outlier handled data seperatly for Modelling part.}
+\NormalTok{ts_data_o[outlier_func}\OperatorTok{$}\NormalTok{index] <-}\StringTok{ }\NormalTok{outlier_func}\OperatorTok{$}\NormalTok{replacements}
+
+\CommentTok{# Model#1: ARIMA}
+\NormalTok{arima_auto <-}\StringTok{ }\KeywordTok{auto.arima}\NormalTok{(ts_data_o)}
+\NormalTok{arima_model <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(arima_auto, }\DataTypeTok{h=}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{# Model #2: STL (no-demped) - MNN}
+\NormalTok{stl_ndemp <-}\StringTok{ }\KeywordTok{stlf}\NormalTok{(ts_data_o, }\DataTypeTok{s.window =} \StringTok{"periodic"}\NormalTok{, }\DataTypeTok{robust=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
+
+\CommentTok{# Model #2-2: STL (demped) - MAdN}
+\NormalTok{stl_demp <-}\StringTok{ }\KeywordTok{stlf}\NormalTok{(ts_data_o, }\DataTypeTok{damped=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{s.window =} \StringTok{"periodic"}\NormalTok{, }\DataTypeTok{robust=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{h =} \DecValTok{12}\NormalTok{)}
+
+\CommentTok{# Model #3: ets - MNM}
+\NormalTok{ets_auto <-}\StringTok{ }\KeywordTok{ets}\NormalTok{(ts_data_o)}
+\NormalTok{ets_model <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(ets_auto, }\DataTypeTok{h=}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{# tsCv - ARIMA -> it takes so much time. I got the results and saved them}
+\NormalTok{##arima_cv <- function(x, h)\{forecast(Arima(x, order = c(3, 0, 2), seasonal = c(2, 1, 0), include.drift = TRUE), h=h)\}}
+\NormalTok{##e <- tsCV(ts_data_o, arima_cv, h=12)}
+
+\CommentTok{# RMSEs -> tsCV takes lot of time to process so just saved the output}
+\CommentTok{#rmse_train_arima <- arima_auto[2]}
+\CommentTok{#rmse_test_arima <- sqrt(mean(e^2, na.rm=TRUE))}
+
+\NormalTok{rmse_train_arima <-}\StringTok{ }\FloatTok{589381.7}
+\NormalTok{rmse_test_arima <-}\StringTok{ }\DecValTok{725175}
+
+\CommentTok{# Save output}
+\KeywordTok{write.csv}\NormalTok{(arima_model, }\DataTypeTok{file=}\StringTok{"forecasts/POWER_ARIMA_FC.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 
 \end{document}
