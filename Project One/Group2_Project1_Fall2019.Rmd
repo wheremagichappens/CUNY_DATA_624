@@ -50,7 +50,7 @@ libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr', 'scales')
 
 ## Data {-#data}
 
-Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report. For replication purposes, we also made our R scripts available within our appendix. All forecasts were exported and saved a `.csv` file in our [github repository]((https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project%20One/) folder named forecasts.
+Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report. For replication purposes, we also made our R scripts available within our appendix. All forecasts were exported and saved a `.csv` file in our [github repository](https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project%20One/) folder named forecasts.
 
 ```{r, eval=F}
 # Data Aquisition
@@ -153,8 +153,6 @@ atm %>%
 
 Last, we used a scatterplot to examine the correlation between cash withdrawals and dates for each machine.  We identified similiar patterns between ATM1 and ATM4, which show non-linear fluctuations that suggest a potential trend component in these timeseries. ATM2 follows a relatively linear path and decreases overtime. This changes in the last few observations, where withdrawals begin to increase. As mentioned, there are only 3 observed transactions for ATM3 that appear at the end of the captured time period. 
 
-### Timeseries Plots 
-
 Our cleaned dataframe was then converted into a timeseries format. The time series plots show high weekly variance, for ATM1, ATM2, and ATM4 - consistent with our takeaway from the scatterplots. 
 
 These plots also remind us that ATM3 only dispensed cash on 3 days at the end of the timespan, with a daily range between \$82 and \$96.  Given the paucity of observations in the training data, the simplest possible approach to forecasting ATM3, averaging, is likely best.  Given that ATM3 distributed no cash until April 28, 2010, we'll assume that it was not operating until then and only include the three day window of non-zero observations in the forecast.
@@ -204,7 +202,7 @@ We used `auto.arima()` and set `D=1` to account for seasonal differencing of our
 *  **ATM3**: MEAN
 *  **ATM4**: ARIMA$(0,0,2)(0,1,1)_7$ 
 
-The residual ACF plots contain no pattern and the lags fall within the critical value, which suggest they are white noise and not autocorrelated. Further, the residual histograms follow a relatively normal distribution, which confirms that the models adequately fits the observed data. 
+The residual ACF plots contain no pattern and the lags fall within the critical value, which suggest they are white noise and not autocorrelated. The residual histograms follow a relatively normal distribution that is centered around zero. The p-value from the Ljung-Box test for ATM1, ATM2, and ATM4 all exceeds 0.05, which futher supports that residuals happen by chance and the models adequately fit the observed data. 
 
 ```{r}
 p1<-ggAcf(ATM1_AA$residuals, lag=21, color = 'darkorange4')+ labs(title="ATM1", x="Lag", y="") +theme_bw()+theme()
@@ -232,12 +230,10 @@ A forecast for the month of May will be 31 days in length. We applied a forecast
 ```{r, fig.height=10}
 
 p1<-autoplot(ATM1_AA$fitted)+autolayer(ATM1_fc, color="peachpuff1")+
-  coord_cartesian(xlim = c(1, 57.5))+
   labs(title = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
   scale_x_continuous(breaks=seq(1,60,by=3))
 
 p2<-autoplot(ATM2_AA$fitted)+autolayer(ATM1_fc,  color="lightpink")+
-  coord_cartesian(xlim = c(1, 57.5))+
   labs(title = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
   scale_x_continuous(breaks=seq(1,60,by=3))
 
@@ -247,12 +243,10 @@ p3<-ATM3_plotdata %>%
   geom_line(aes(x = Date/7, y=`Point Forecast`))+
   geom_ribbon(aes(x = Date/7, ymin = `Lo 95`, ymax = `Hi 95`), linetype = 'blank', fill = 'deeppink4', alpha = .4)+
   geom_ribbon(aes(x = Date/7, ymin = `Lo 80`, ymax = `Hi 80`), linetype = 'blank', fill = 'deeppink4', alpha = .2)+
-  coord_cartesian(xlim = c(1, 57.5))+
   labs(title = "ATM3 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
   scale_x_continuous(breaks=seq(1,60,by=3))
 
 p4<-autoplot(ATM4_AA$fitted)+autolayer(ATM1_fc, color="darkorchid4")+
-  coord_cartesian(xlim = c(1, 57.5))+
   labs(title = "ATM4 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
   scale_x_continuous(breaks=seq(1,60,by=3))
 
@@ -271,8 +265,6 @@ Jeremy & Juliann - synthesize findings
 ## Exploration
 
 We observed there was a missing value in September 2008. We used imputation method called na.interpolation which performs a technique in numerical analysis which estimates a value from known data points. For our case, linear method using first order Taylor polynomial is used.
-
-### Timeseries Plot 
 
 ```{r}
 # time series plot
@@ -316,40 +308,43 @@ grid.arrange(grob=p1, p2, p3, p4, ncol=2,
 
 ## Modeling
 
-Out of the models we built, we can make some preliminary observations. The residuals for each of our models does not have a major deviance from normality, however residuals of Model #1: ARIMA do not have an extended number of bins distorting the normality proximity but we can say it is still fairly normally distributed. 
- 
+We built four different models on the power data. Methods included ARIMA, STL (with and without dampening), and ETS. We can make some preliminary observations on the reliability of these models from checking the residuals.
+
 The residual ACF plots show residual autocorrelations for each of our models. Model #1: ARIMA has less autocorrelation than the other three models. Model 1 is well within the 95% limits indicated by the dotted blue lines. 
- 
-If we examine the Ljung-Box test results for our models, the only model with a p-value > 0.05 is Model #1: ARIMA. This implies that the residuals from other models are not independent, hence not white noise. The full model summary can be viewed in the appendix.
-
-### Model #1: ARIMA
-
-```{r warning=FALSE, message=FALSE}
-checkresiduals(arima_fc)
-```
-
-### Model #2: STL (no-demped) - MNN
 
 ```{r}
-checkresiduals(stl_ndemp)
+p1<-ggAcf(arima_fc$residuals, lag=24, color = 'darkorange4')+ labs(title= "ARIMA(3,0,2)(2,1,0)[12]", x="Lag", y="") +theme_bw()+theme()
+p2<- ggpubr::gghistogram(arima_fc$residuals, fill="peachpuff1")+
+  labs(title="ARIMA(3,0,2)(2,1,0)[12]",x="", y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p3<-ggAcf(stl_ndemp$residuals, lag=24,color = 'darkorange4')+ labs(title="STL +  ETS(M,N,N)",x="Lag", y="") +theme_bw()+theme()
+p4<-ggpubr::gghistogram(stl_ndemp$residuals,  fill="lightpink")+
+  labs(title="STL +  ETS(M,N,N)",x="",y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p5<-ggAcf(stl_demp$residuals, lag=24,color = 'darkorange4')+ labs(title="STL +  ETS(M,Ad,N)",x="Lag", y="") +theme_bw()+theme()
+p6<-ggpubr::gghistogram(stl_demp$residuals,fill="deeppink4")+
+  labs(title="STL +  ETS(M,Ad,N)", x="", y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p7<-ggAcf(ets_model$residuals, lag=24,color = 'darkorange4')+ labs(title="ETS(M,N,M)",x="Lag", y="") +theme_bw()+theme()
+p8<-ggpubr::gghistogram(ets_model$residuals,fill="darkorchid4")+
+  labs(title="ETS(M,N,M)", x="",y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+grid.arrange(grob=p1, p3, p5, p7, ncol=4, top=textGrob(label="ACF Plots of Residuals"))
 ```
 
-### Model #2-2: STL (demped) - MAdN
+The residuals for each of our models does not have a major deviance from normality, however residuals of Model #1: ARIMA do not have an extended number of bins distorting the normality proximity but we can say it is still fairly normally distributed. 
 
 ```{r}
-checkresiduals(stl_demp)
+grid.arrange(grob=p2, p4, p6, p8, ncol=4, top=textGrob(label="Histograms of Residuals"))
 ```
 
-### Model #3: ets - MNM
-```{r}
-checkresiduals(ets_model)
-```
+Our last residual check, the Ljung-Box test, showed that only model had a p-value > 0.05: Model #1: ARIMA. This implies that the residuals from other models are not independent, hence not white noise. As a result, we will continue with this model for forcasting. We have included the full model summary for ARIMA and our other attempts in the appendix.
 
 ## Forecast
-
-The `auto.arima()` function performs cross validation on hyperparameter tuning to find the best model with parameters  of `order` and `seasonal` that minimize `AIC`. This gave us **arima_model**: ARIMA$(3,0,2)(2,1,0)12$ with drift resulting `AIC` = 5332.24. 
-
-Since ARIMA is the only reliable model, as other models failed Ljung test, we will plot forecasts of ARIMA only. The forecasted values can be viewed in the appendix. 
 
 ```{r}
 autoplot(arima_fc)+
@@ -364,6 +359,7 @@ autoplot(arima_fc)+
 #  theme_classic()+theme(legend.position = 'bottom')+
 #  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
 ```
+The `auto.arima()` function performs cross validation on hyperparameter tuning to find the best model with parameters  of `order` and `seasonal` that minimize `AIC`. This gave us **arima_model**: ARIMA$(3,0,2)(2,1,0)12$ with drift resulting `AIC` = 5332.24. Since ARIMA is the only reliable model, as other models failed Ljung test, we will plot forecasts of ARIMA only. The forecasted values can be viewed in the appendix. 
 
 ## Summary 
 
@@ -372,8 +368,7 @@ We implemented a cross validation method of testing for `h=12`. The process rand
 Using Time series cross-validation, we compute RMSE on testset (`h=12`). We would have to pick the model with the lowest RMSE on test set as our final model if we had more than 1 model to compare. In our case, since we only have 1 model left after Ljung test, we  have no choice but to pick seasonal ARIMA model as our final choice. Cross-validation test shows that RMSE on test is around 720k when RMSE on training is around 589k. We can conclude the model is not necessarily overfitted. Given that MAPE on training is less than 7, it is not a suprising result.
 
 ```{r}
-paste("RMSE - train:",rmse_train_arima) 
-paste("RMSE - test:",rmse_test_arima)
+paste("RMSE - Train:",rmse_train_arima, "; RMSE - Test:",rmse_test_arima)
 ```
 
 
@@ -413,8 +408,6 @@ Both data sets posed an interesting conundrum. With two possible ways of handlin
 
 Because it was concievable that there might be a daily periodicity, it was important to have a frequency of 24, which made numbering by day of year and grooming the time series to start on the 7081 hour aligning with October 23 01:00 AM.
 
-
-### Timeseries Plots 
 
 ```{r}
 w1plot<-autoplot(w1,colour ='peachpuff')+
@@ -602,10 +595,7 @@ ATM4_AA
 ### Point Forecasts {-#forecast-a}
 
 ```{r}
-ATM_FC %>% mutate(ATM1=as.numeric(as.character(ATM1)),
-                  ATM2=as.numeric(as.character(ATM2)),
-                  ATM3=as.numeric(as.character(ATM3)),
-                  ATM4=as.numeric(as.character(ATM4))) %>%
+ATM_FC %>% spread(ATM, Cash)%>%
   kable(caption="ATM Mean Point Forecast",digits=2) %>% kable_styling(full_width = T) %>% row_spec()
 ```
 
@@ -659,7 +649,10 @@ ATM3_plotdata <- ATM3_ts %>% fortify() %>% select(-Index) %>% rename(Cash = Data
 #Revert results back into original form
 date <- as.character(seq(as.Date('2010-05-01'), length.out=31, by=1))
 ATM_FC <-  cbind("Date"=date, "ATM1"=ATM1_fc$mean, "ATM2"=ATM2_fc$mean,
-                 "ATM3"=ATM3_fc$mean,"ATM4"=ATM4_fc$mean) %>% as.data.frame()
+                 "ATM3"=ATM3_fc$mean, "ATM4"=ATM4_fc$mean) %>% 
+  as.data.frame() %>% gather("ATM", "cash", -Date) %>%
+  mutate(Date = as.Date(as.character(Date)), Cash = round(as.numeric(cash))) %>% 
+  select(-cash)
 
 write_csv(ATM_FC, path = "forecasts/ATM_all_forecast.csv")
 ```

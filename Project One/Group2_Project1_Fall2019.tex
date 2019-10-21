@@ -211,9 +211,9 @@ Data was stored within our group repository and imported below using the
 \texttt{readxl} package. Each individual question was solved within an R
 script and the data was sourced into our main report. For replication
 purposes, we also made our R scripts available within our appendix. All
-forecasts were exported and saved a \texttt{.csv} file in our {[}github
-repository{]}((\url{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project\%20One/})
-folder named forecasts.
+forecasts were exported and saved a \texttt{.csv} file in our
+\href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project\%20One/}{github
+repository} folder named forecasts.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -292,9 +292,6 @@ observations, where withdrawals begin to increase. As mentioned, there
 are only 3 observed transactions for ATM3 that appear at the end of the
 captured time period.
 
-\hypertarget{timeseries-plots}{%
-\subsection{Timeseries Plots}\label{timeseries-plots}}
-
 Our cleaned dataframe was then converted into a timeseries format. The
 time series plots show high weekly variance, for ATM1, ATM2, and ATM4 -
 consistent with our takeaway from the scatterplots.
@@ -366,9 +363,11 @@ series can be viewed in the appendix.
 
 The residual ACF plots contain no pattern and the lags fall within the
 critical value, which suggest they are white noise and not
-autocorrelated. Further, the residual histograms follow a relatively
-normal distribution, which confirms that the models adequately fits the
-observed data.
+autocorrelated. The residual histograms follow a relatively normal
+distribution that is centered around zero. The p-value from the
+Ljung-Box test for ATM1, ATM2, and ATM4 all exceeds 0.05, which futher
+supports that residuals happen by chance and the models adequately fit
+the observed data.
 
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf}
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-2.pdf}
@@ -408,9 +407,6 @@ imputation method called na.interpolation which performs a technique in
 numerical analysis which estimates a value from known data points. For
 our case, linear method using first order Taylor polynomial is used.
 
-\hypertarget{timeseries-plot}{%
-\subsection{Timeseries Plot}\label{timeseries-plot}}
-
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 Our initial time series plot reveal annual seasonality within this time
@@ -446,98 +442,43 @@ non-stationary.
 \hypertarget{modeling-1}{%
 \section{Modeling}\label{modeling-1}}
 
-Out of the models we built, we can make some preliminary observations.
-The residuals for each of our models does not have a major deviance from
-normality, however residuals of Model \#1: ARIMA do not have an extended
-number of bins distorting the normality proximity but we can say it is
-still fairly normally distributed.
+We built four different models on the power data. Methods included
+ARIMA, STL (with and without dampening), and ETS. We can make some
+preliminary observations on the reliability of these models from
+checking the residuals.
 
 The residual ACF plots show residual autocorrelations for each of our
 models. Model \#1: ARIMA has less autocorrelation than the other three
 models. Model 1 is well within the 95\% limits indicated by the dotted
 blue lines.
 
-If we examine the Ljung-Box test results for our models, the only model
-with a p-value \textgreater{} 0.05 is Model \#1: ARIMA. This implies
-that the residuals from other models are not independent, hence not
-white noise. The full model summary can be viewed in the appendix.
-
-\hypertarget{model-1-arima}{%
-\subsection{Model \#1: ARIMA}\label{model-1-arima}}
-
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-11-1.pdf}
 
-\begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ARIMA(3,0,2)(2,1,0)[12] with drift
-FALSE Q* = 12.555, df = 16, p-value = 0.705
-FALSE 
-FALSE Model df: 8.   Total lags used: 24
-\end{verbatim}
-
-\hypertarget{model-2-stl-no-demped---mnn}{%
-\subsection{Model \#2: STL (no-demped) -
-MNN}\label{model-2-stl-no-demped---mnn}}
+The residuals for each of our models does not have a major deviance from
+normality, however residuals of Model \#1: ARIMA do not have an extended
+number of bins distorting the normality proximity but we can say it is
+still fairly normally distributed.
 
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-12-1.pdf}
 
-\begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from STL +  ETS(M,N,N)
-FALSE Q* = 65.934, df = 22, p-value = 0.00000284
-FALSE 
-FALSE Model df: 2.   Total lags used: 24
-\end{verbatim}
-
-\hypertarget{model-2-2-stl-demped---madn}{%
-\subsection{Model \#2-2: STL (demped) -
-MAdN}\label{model-2-2-stl-demped---madn}}
-
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-13-1.pdf}
-
-\begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from STL +  ETS(M,Ad,N)
-FALSE Q* = 63.375, df = 19, p-value = 0.000001119
-FALSE 
-FALSE Model df: 5.   Total lags used: 24
-\end{verbatim}
-
-\hypertarget{model-3-ets---mnm}{%
-\subsection{Model \#3: ets - MNM}\label{model-3-ets---mnm}}
-
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-14-1.pdf}
-
-\begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ETS(M,N,M)
-FALSE Q* = 32.042, df = 10, p-value = 0.000394
-FALSE 
-FALSE Model df: 14.   Total lags used: 24
-\end{verbatim}
+Our last residual check, the Ljung-Box test, showed that only model had
+a p-value \textgreater{} 0.05: Model \#1: ARIMA. This implies that the
+residuals from other models are not independent, hence not white noise.
+As a result, we will continue with this model for forcasting. We have
+included the full model summary for ARIMA and our other attempts in the
+appendix.
 
 \hypertarget{forecast-1}{%
 \section{Forecast}\label{forecast-1}}
 
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-13-1.pdf}
 The \texttt{auto.arima()} function performs cross validation on
 hyperparameter tuning to find the best model with parameters of
 \texttt{order} and \texttt{seasonal} that minimize \texttt{AIC}. This
 gave us \textbf{arima\_model}: ARIMA\((3,0,2)(2,1,0)12\) with drift
-resulting \texttt{AIC} = 5332.24.
-
-Since ARIMA is the only reliable model, as other models failed Ljung
-test, we will plot forecasts of ARIMA only. The forecasted values can be
-viewed in the appendix.
-
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-15-1.pdf}
+resulting \texttt{AIC} = 5332.24. Since ARIMA is the only reliable
+model, as other models failed Ljung test, we will plot forecasts of
+ARIMA only. The forecasted values can be viewed in the appendix.
 
 \hypertarget{summary-1}{%
 \section{Summary}\label{summary-1}}
@@ -558,11 +499,7 @@ overfitted. Given that MAPE on training is less than 7, it is not a
 suprising result.
 
 \begin{verbatim}
-FALSE [1] "RMSE - train: 589381.7"
-\end{verbatim}
-
-\begin{verbatim}
-FALSE [1] "RMSE - test: 725175"
+FALSE [1] "RMSE - Train: 589381.7 ; RMSE - Test: 725175"
 \end{verbatim}
 
 \hypertarget{part-c-waterflow}{%
@@ -646,10 +583,7 @@ was important to have a frequency of 24, which made numbering by day of
 year and grooming the time series to start on the 7081 hour aligning
 with October 23 01:00 AM.
 
-\hypertarget{timeseries-plots-1}{%
-\subsection{Timeseries Plots}\label{timeseries-plots-1}}
-
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-15-1.pdf}
 
 \hypertarget{evaluation-2}{%
 \section{Evaluation}\label{evaluation-2}}
@@ -661,7 +595,7 @@ It is clear from the combined plot that there is a pretty notable change
 in the trend when the readings from Pipe One wane. Let's look at the
 decomposed seriesand see if it gives us some insight into a good model.
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-18-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-16-1.pdf}
 From the decomposition, the appears to be a seasonal component in
 agreement with the assessment that there might be a daily flowrate
 periodicity. Also, as expected, around day 306 where Pipe One flow rates
@@ -695,7 +629,7 @@ ARIMA}\label{estimating-orders-for-arima}}
 \subsubsection{Interpreting the ACF and
 PACF}\label{interpreting-the-acf-and-pacf}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-18-1.pdf}
 
 The ACF remain wholly above the critical threshold, so will likely
 require differencing as suggested by the \texttt{ndiffs()}, in looking
@@ -707,7 +641,7 @@ a daily period or season we need to account for in our forecast.
 \hypertarget{differenced-acf}{%
 \subsubsection{Differenced ACF}\label{differenced-acf}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-21-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-19-1.pdf}
 
 A final ACF of the differenced data was done to ensure that a seconf
 first-order difference was not needed; thus we assume \(d = 1\), a but
@@ -746,7 +680,7 @@ could tune it to provide more robust predictions
 
 \textbf{AIC \(ARIMA(1,1,3)(0,0,1)[24]\) Residual Plots}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-20-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -760,7 +694,7 @@ FALSE Model df: 5.   Total lags used: 48
 
 \textbf{BIC \(ARIMA(2,1,1)\) Residual Plots}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-23-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-21-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -804,7 +738,7 @@ FALSE sigma^2 estimated as 187:  log likelihood=-4033.28
 FALSE AIC=8078.56   AICc=8078.64   BIC=8108
 \end{verbatim}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-24-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-22-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -822,7 +756,7 @@ FALSE Model df: 5.   Total lags used: 36
 \hypertarget{arima11300124}{%
 \subsection{\texorpdfstring{\(ARIMA(1,1,3)(0,0,1)[24]\)}{ARIMA(1,1,3)(0,0,1){[}24{]}}}\label{arima11300124}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-25-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-23-1.pdf}
 
 \hypertarget{arima21300124}{%
 \subsection{\texorpdfstring{\(ARIMA(2,1,3)(0,0,1)[24]\)}{ARIMA(2,1,3)(0,0,1){[}24{]}}}\label{arima21300124}}
@@ -841,7 +775,7 @@ FALSE sigma^2 estimated as 187.5:  log likelihood=-4034.02
 FALSE AIC=8082.05   AICc=8082.16   BIC=8116.4
 \end{verbatim}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-26-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-24-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -871,7 +805,7 @@ FALSE sigma^2 estimated as 187.1:  log likelihood=-4034.08
 FALSE AIC=8078.16   AICc=8078.22   BIC=8102.7
 \end{verbatim}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-27-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-25-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -901,7 +835,7 @@ FALSE sigma^2 estimated as 188.1:  log likelihood=-4036.63
 FALSE AIC=8083.27   AICc=8083.33   BIC=8107.81
 \end{verbatim}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-28-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-26-1.pdf}
 
 \begin{verbatim}
 FALSE 
@@ -925,7 +859,7 @@ Given that the other models show unexplained variance in the residuals,
 the final predictions will be made using the AICc recommended model of
 \(ARIMA (1,1,3)(0,0,1)[24]\).
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-27-1.pdf}
 
 \hypertarget{forecast-accuracy}{%
 \subsection{Forecast Accuracy}\label{forecast-accuracy}}
@@ -1015,73 +949,73 @@ FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-33}ATM Mean Point Forecast}
+\caption{\label{tab:unnamed-chunk-31}ATM Mean Point Forecast}
 \centering
 \begin{tabu} to \linewidth {>{\raggedright}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
 \hline
 \textbf{Date} & \textbf{ATM1} & \textbf{ATM2} & \textbf{ATM3} & \textbf{ATM4}\\
 \hline
-\rowcolor{gray!6}  2010-05-01 & 86.68 & 65.91 & 87.67 & 86.71\\
+\rowcolor{gray!6}  2010-05-01 & 87 & 66 & 88 & 87\\
 \hline
-2010-05-02 & 100.57 & 71.27 & 87.67 & 100.58\\
+2010-05-02 & 101 & 71 & 88 & 101\\
 \hline
-\rowcolor{gray!6}  2010-05-03 & 73.71 & 11.47 & 87.67 & 73.65\\
+\rowcolor{gray!6}  2010-05-03 & 74 & 11 & 88 & 74\\
 \hline
-2010-05-04 & 4.23 & 2.46 & 87.67 & 4.22\\
+2010-05-04 & 4 & 2 & 88 & 4\\
 \hline
-\rowcolor{gray!6}  2010-05-05 & 100.16 & 98.34 & 87.67 & 100.16\\
+\rowcolor{gray!6}  2010-05-05 & 100 & 98 & 88 & 100\\
 \hline
-2010-05-06 & 79.35 & 89.06 & 87.67 & 79.34\\
+2010-05-06 & 79 & 89 & 88 & 79\\
 \hline
-\rowcolor{gray!6}  2010-05-07 & 85.74 & 66.07 & 87.67 & 85.78\\
+\rowcolor{gray!6}  2010-05-07 & 86 & 66 & 88 & 86\\
 \hline
-2010-05-08 & 87.18 & 65.91 & 87.67 & 87.22\\
+2010-05-08 & 87 & 66 & 88 & 87\\
 \hline
-\rowcolor{gray!6}  2010-05-09 & 100.39 & 71.30 & 87.67 & 100.40\\
+\rowcolor{gray!6}  2010-05-09 & 100 & 71 & 88 & 100\\
 \hline
-2010-05-10 & 73.71 & 11.47 & 87.67 & 73.65\\
+2010-05-10 & 74 & 11 & 88 & 74\\
 \hline
-\rowcolor{gray!6}  2010-05-11 & 4.23 & 2.46 & 87.67 & 4.22\\
+\rowcolor{gray!6}  2010-05-11 & 4 & 2 & 88 & 4\\
 \hline
-2010-05-12 & 100.16 & 98.36 & 87.67 & 100.16\\
+2010-05-12 & 100 & 98 & 88 & 100\\
 \hline
-\rowcolor{gray!6}  2010-05-13 & 79.35 & 89.08 & 87.67 & 79.34\\
+\rowcolor{gray!6}  2010-05-13 & 79 & 89 & 88 & 79\\
 \hline
-2010-05-14 & 85.74 & 66.05 & 87.67 & 85.78\\
+2010-05-14 & 86 & 66 & 88 & 86\\
 \hline
-\rowcolor{gray!6}  2010-05-15 & 87.18 & 65.90 & 87.67 & 87.22\\
+\rowcolor{gray!6}  2010-05-15 & 87 & 66 & 88 & 87\\
 \hline
-2010-05-16 & 100.39 & 71.32 & 87.67 & 100.40\\
+2010-05-16 & 100 & 71 & 88 & 100\\
 \hline
-\rowcolor{gray!6}  2010-05-17 & 73.71 & 11.46 & 87.67 & 73.65\\
+\rowcolor{gray!6}  2010-05-17 & 74 & 11 & 88 & 74\\
 \hline
-2010-05-18 & 4.23 & 2.45 & 87.67 & 4.22\\
+2010-05-18 & 4 & 2 & 88 & 4\\
 \hline
-\rowcolor{gray!6}  2010-05-19 & 100.16 & 98.37 & 87.67 & 100.16\\
+\rowcolor{gray!6}  2010-05-19 & 100 & 98 & 88 & 100\\
 \hline
-2010-05-20 & 79.35 & 89.09 & 87.67 & 79.34\\
+2010-05-20 & 79 & 89 & 88 & 79\\
 \hline
-\rowcolor{gray!6}  2010-05-21 & 85.74 & 66.03 & 87.67 & 85.78\\
+\rowcolor{gray!6}  2010-05-21 & 86 & 66 & 88 & 86\\
 \hline
-2010-05-22 & 87.18 & 65.90 & 87.67 & 87.22\\
+2010-05-22 & 87 & 66 & 88 & 87\\
 \hline
-\rowcolor{gray!6}  2010-05-23 & 100.39 & 71.34 & 87.67 & 100.40\\
+\rowcolor{gray!6}  2010-05-23 & 100 & 71 & 88 & 100\\
 \hline
-2010-05-24 & 73.71 & 11.46 & 87.67 & 73.65\\
+2010-05-24 & 74 & 11 & 88 & 74\\
 \hline
-\rowcolor{gray!6}  2010-05-25 & 4.23 & 2.45 & 87.67 & 4.22\\
+\rowcolor{gray!6}  2010-05-25 & 4 & 2 & 88 & 4\\
 \hline
-2010-05-26 & 100.16 & 98.38 & 87.67 & 100.16\\
+2010-05-26 & 100 & 98 & 88 & 100\\
 \hline
-\rowcolor{gray!6}  2010-05-27 & 79.35 & 89.10 & 87.67 & 79.34\\
+\rowcolor{gray!6}  2010-05-27 & 79 & 89 & 88 & 79\\
 \hline
-2010-05-28 & 85.74 & 66.02 & 87.67 & 85.78\\
+2010-05-28 & 86 & 66 & 88 & 86\\
 \hline
-\rowcolor{gray!6}  2010-05-29 & 87.18 & 65.90 & 87.67 & 87.22\\
+\rowcolor{gray!6}  2010-05-29 & 87 & 66 & 88 & 87\\
 \hline
-2010-05-30 & 100.39 & 71.35 & 87.67 & 100.40\\
+2010-05-30 & 100 & 71 & 88 & 100\\
 \hline
-\rowcolor{gray!6}  2010-05-31 & 73.71 & 11.46 & 87.67 & 73.65\\
+\rowcolor{gray!6}  2010-05-31 & 74 & 11 & 88 & 74\\
 \hline
 \end{tabu}
 \end{table}
@@ -1140,7 +1074,10 @@ FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
 \CommentTok{#Revert results back into original form}
 \NormalTok{date <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\KeywordTok{as.Date}\NormalTok{(}\StringTok{'2010-05-01'}\NormalTok{), }\DataTypeTok{length.out=}\DecValTok{31}\NormalTok{, }\DataTypeTok{by=}\DecValTok{1}\NormalTok{))}
 \NormalTok{ATM_FC <-}\StringTok{  }\KeywordTok{cbind}\NormalTok{(}\StringTok{"Date"}\NormalTok{=date, }\StringTok{"ATM1"}\NormalTok{=ATM1_fc}\OperatorTok{$}\NormalTok{mean, }\StringTok{"ATM2"}\NormalTok{=ATM2_fc}\OperatorTok{$}\NormalTok{mean,}
-                 \StringTok{"ATM3"}\NormalTok{=ATM3_fc}\OperatorTok{$}\NormalTok{mean,}\StringTok{"ATM4"}\NormalTok{=ATM4_fc}\OperatorTok{$}\NormalTok{mean) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{()}
+                 \StringTok{"ATM3"}\NormalTok{=ATM3_fc}\OperatorTok{$}\NormalTok{mean, }\StringTok{"ATM4"}\NormalTok{=ATM4_fc}\OperatorTok{$}\NormalTok{mean) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(}\StringTok{"ATM"}\NormalTok{, }\StringTok{"cash"}\NormalTok{, }\OperatorTok{-}\NormalTok{Date) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Date =} \KeywordTok{as.Date}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(Date)), }\DataTypeTok{Cash =} \KeywordTok{round}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(cash))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{cash)}
 
 \KeywordTok{write_csv}\NormalTok{(ATM_FC, }\DataTypeTok{path =} \StringTok{"forecasts/ATM_all_forecast.csv"}\NormalTok{)}
 \end{Highlighting}
@@ -1383,7 +1320,7 @@ FALSE Dec 2014        8020901 6920610  9121192 6338151  9703651
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-40}First few predictions in the set}
+\caption{\label{tab:unnamed-chunk-38}First few predictions in the set}
 \centering
 \begin{tabular}{l|r|r|r|r|r}
 \hline

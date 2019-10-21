@@ -69,11 +69,12 @@ ATM3_plotdata <- ATM3_ts %>%
 
 #Revert results back into original form
 date <- as.character(seq(as.Date('2010-05-01'), length.out=31, by=1))
-ATM_FC <-  cbind("Date"=date, 
-                 "ATM1"=ATM1_fc$mean, 
-                 "ATM2"=ATM2_fc$mean,
-                 "ATM3"=ATM3_fc$mean,
-                 "ATM4"=ATM4_fc$mean) %>% as.data.frame()
+ATM_FC <-  cbind("Date"=date, "ATM1"=ATM1_fc$mean, "ATM2"=ATM2_fc$mean,
+                 "ATM3"=ATM3_fc$mean, "ATM4"=ATM4_fc$mean) %>% 
+  as.data.frame() %>% gather("ATM", "cash", -Date) %>%
+  mutate(Date = as.Date(as.character(Date)),
+         Cash = round(as.numeric(cash))) %>% select(-cash)
+
 
 # Combine the forecasts for the different ATMS
 #atm_all_fc <- bind_cols(as.data.frame(seq(from = 366,
