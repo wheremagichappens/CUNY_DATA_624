@@ -107,27 +107,9 @@ default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
 
 The data covers a period of Friday May 1, 2010 through Saturday April 30, 2010. While reviewing the data, we identified that the original data file contained `NA` values in our `ATM` and `Cash` columns for 14 observations between May 1 and 14, 2010. As these contain no information, we removed these missing values and transformed the dataset into a wide format. 
 
-```{r, include=F}
-#SILENCED CODE CHUNK FOR DISCUSSION
-# Box plot hard to view and interpret with large outlier. Suggest either removing outlier or
-# deleting plot.
-
-# Examine distribution of values to identify outliers
-atm_data %>% 
-  group_by(ATM) %>% 
-  ggplot(aes(x = ATM, y = Cash,fill=ATM)) +
-  geom_boxplot() +
-  labs(title="ATM Boxplot",x="", y="Cash (in hundreds)") +
-  theme_bw() +
-  theme(legend.position = 'none', 
-        axis.text.x = element_text(angle = 45, 
-                                   hjust = 1)) +
-  scale_fill_brewer(palette = 'RdPu')
-```
-
 Our initial review also revealed that ATM2 contained one missing value on 2009-10-25 and that ATM4 contained a potential outlier of \$1,123 on 2010-02-09. We replaced both values with the corresponding mean value of each machine. 
 
-We examined summary statistics for each ATM time series:  
+We examined summary statistics for each ATM time series (a table can be found in the appendix).
 
 +  ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash dispensed is \$84, and ATM2's is \$62. 
 +  ATM3 only dispensed cash on the last three days of the time series - as this provides few data points on which to forecast, we'll need to treat it specially. 
@@ -208,14 +190,17 @@ The residual ACF plots contain no pattern and the lags fall within the critical 
 p1<-ggAcf(ATM1_AA$residuals, lag=21, color = 'darkorange4')+ labs(title="ATM1", x="Lag", y="") +theme_bw()+theme()
 p2<- ggpubr::gghistogram(ATM1_AA$residuals, fill="peachpuff1")+
   labs(title="ATM1", subtitle="ARIMA(0,0,2)(0,1,1)[7]",x="")+
+  ylim(0,125)+
   theme_bw()+theme()
 p3<-ggAcf(ATM2_AA$residuals, lag=21,color = 'darkorange4')+ labs(title="ATM2",x="Lag", y="") +theme_bw()+theme()
 p4<-ggpubr::gghistogram(ATM2_AA$residuals,  fill="lightpink")+
   labs(title="ATM2", subtitle="ARIMA(2,0,2)(0,1,1)[7]",x="")+
+  ylim(0,125)+
   theme_bw()+theme()
 p5<-ggAcf(ATM4_AA$residuals, lag=21,color = 'darkorange4')+ labs(title="ATM4",x="Lag", y="") +theme_bw()+theme()
-p6<-ggpubr::gghistogram(ATM4_AA$residuals,fill="deeppink4")+
+p6<-ggpubr::gghistogram(ATM4_AA$residuals,fill="darkorchid4")+
   labs(title="ATM4", subtitle="ARIMA(0,0,2)(0,1,1)[7]", x="")+
+  ylim(0,125)+
   theme_bw()+theme()
 
 grid.arrange(grob=p1, p3, p5, ncol=3, top=textGrob(label="ACF Plots of Residuals"))
@@ -225,17 +210,19 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Histograms of Residuals"))
 
 ## Forecast
 
-A forecast for the month of May will be 31 days in length. We applied a forecast to each series, which spanned across 5 weeks. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.   
+A forecast for the month of May will be 31 days in length. We applied a forecast to each series, which spanned across 5 weeks. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.  
 
 ```{r, fig.height=10}
 
 p1<-autoplot(ATM1_AA$fitted)+autolayer(ATM1_fc, color="peachpuff1")+
   labs(title = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
-  scale_x_continuous(breaks=seq(1,60,by=3))
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
 
-p2<-autoplot(ATM2_AA$fitted)+autolayer(ATM1_fc,  color="lightpink")+
+p2<-autoplot(ATM2_AA$fitted)+autolayer(ATM2_fc,  color="lightpink")+
   labs(title = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
-  scale_x_continuous(breaks=seq(1,60,by=3))
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
 
 p3<-ATM3_plotdata %>% 
   ggplot()+
@@ -244,18 +231,20 @@ p3<-ATM3_plotdata %>%
   geom_ribbon(aes(x = Date/7, ymin = `Lo 95`, ymax = `Hi 95`), linetype = 'blank', fill = 'deeppink4', alpha = .4)+
   geom_ribbon(aes(x = Date/7, ymin = `Lo 80`, ymax = `Hi 80`), linetype = 'blank', fill = 'deeppink4', alpha = .2)+
   labs(title = "ATM3 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
-  scale_x_continuous(breaks=seq(1,60,by=3))
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
 
-p4<-autoplot(ATM4_AA$fitted)+autolayer(ATM1_fc, color="darkorchid4")+
+p4<-autoplot(ATM4_AA$fitted)+autolayer(ATM4_fc, color="darkorchid4")+
   labs(title = "ATM4 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
-  scale_x_continuous(breaks=seq(1,60,by=3))
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
 
 grid.arrange(p1, p2, p3, p4, ncol=1, top=textGrob(label="ATM Forecasts"))
 ```
 
 ## Summary
 
-Jeremy & Juliann - synthesize findings
+Forecasts for ATM1, ATM2, and ATM4 reprise the clear, persistent weekly pattern found in the historic data, with mid-week troughs and a largely flat trend on a five-week time horizon.  ATM1 and ATM4 experience sharper troughs on Wednesdays; ATM2 drops on Tuesdays and bottoms out on Wednesdays.  Additionally, ATM2 has a slightly tighter confidence interval than ATM1 and ATM4.  The mean forecast for ATM3 based on three data points is a useful estimate insofar as the assumptions it rests on are sound: that the zero observations aren't measurement or data errors, and that the three non-zero observations aren't outliers and in fact convey information about a future pattern.
 
 
 # Part B: Forecasting Power
@@ -574,6 +563,24 @@ Ultimately this model is marginally useful as seen by the Mean Absolute Percenta
 In looking at the original decomposition, there very little trend, a lot of seasonality, is a pretty substatial amount of random noise, which is not considered in the model, and is responsible for the majority of the error in this model, as white noise is never predictable.
 
 # Appendix A {-#appendix-a}
+
+### Summary Statistics {-#summary-a}
+
+```{r}
+
+psych::describeBy(atm_data$Cash,  # look at distribution of cash distributed
+                  group = atm_data$ATM,  # group by which ATM
+                  mat = TRUE) %>%  # output matrix rather than lists
+  dplyr::select(-item, - vars) %>%
+  rename(ATM = group1) %>% 
+  knitr::kable(caption = 'Summary Statistics of ATM time series', 
+               digits = 2,
+               format = 'markdown',
+               padding = 0, 
+               row.names = FALSE) %>% 
+  kable_styling(c('striped', 'hover', 'condensed'))
+
+```
 
 ### ARIMA Model Summary {-#arima-a}
 
