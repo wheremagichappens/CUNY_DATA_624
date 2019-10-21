@@ -161,6 +161,7 @@ These plots also remind us that ATM3 only dispensed cash on 3 days at the end of
 
 ```{r, fig.height=5}
 autoplot(atm_ts, facets = T)+
+  geom_line(color="#4B0082")+
   labs(title = "Daily ATM Transactions", 
        subtitle = "Series: ATM1", y="Cash (in hundreds)", x="Weeks")+
   theme_bw()+ theme()
@@ -226,7 +227,7 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Histograms of Residuals"))
 
 ## Forecast
 
-A forecast for the month of May will be 31 days in length. We applied a forecast to each series for 31 days, which span across 5 weeks, in May 2010. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.   
+A forecast for the month of May will be 31 days in length. We applied a forecast to each series, which spanned across 5 weeks. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.   
 
 ```{r, fig.height=10}
 
