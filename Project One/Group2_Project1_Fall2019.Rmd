@@ -37,9 +37,7 @@ library(easypackages)
 libraries('knitr', 'kableExtra', 'default')
 
 # Processing
-libraries('readxl', 'tidyverse', 'janitor', 'imputeTS', 'tsoutliers', 'lubridate')
-
-### UNABLE TO GET JAVA TO CONFIGURE FOR >>> 'xlsx'
+libraries('readxl', 'tidyverse', 'janitor', 'imputeTS', 'tsoutliers', 'lubridate', 'xlsx')
 
 # Timeseries 
 libraries('psych', 'urca', 'forecast', 'timetk', 'fpp2')
@@ -144,6 +142,7 @@ autoplot(atm_ts, facets = T)+
   geom_line(color="darkorange4")+
   labs(title = "Daily ATM Transactions", 
        subtitle = "Series: ATM1", y="Cash (in hundreds)", x="Weeks")+
+  ylim(0,175)+
   theme_bw()+ theme()
 ```
 
@@ -212,7 +211,7 @@ grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Histograms of Residuals"))
 
 A forecast for the month of May will be 31 days in length. We applied a forecast to each series, which spanned across 5 weeks. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.  
 
-```{r, fig.height=10}
+```{r, fig.height=8}
 
 p1<-autoplot(ATM1_AA$fitted)+autolayer(ATM1_fc, color="peachpuff1")+
   labs(title = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
@@ -253,7 +252,7 @@ Forecasts for ATM1, ATM2, and ATM4 reprise the clear, persistent weekly pattern 
 
 ## Exploration
 
-We observed there was a missing value in September 2008. We used imputation method called na.interpolation which performs a technique in numerical analysis which estimates a value from known data points. For our case, linear method using first order Taylor polynomial is used.
+We observed a missing value in September 2008 and imputed it using `na.interpolation`, which performs a technique in numerical analysis to estimate a value from known data points (in our case, a linear method using first order Taylor polynomials).
 
 ```{r}
 # time series plot
@@ -262,13 +261,13 @@ labs(title = "Monthly Residential Power Usage", subtitle = "Time Series: 01/98 -
 theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
 ```
 
-Our initial time series plot reveal annual seasonality within this time series. The box plot/seasonality plot actually reveals where power consumption fluctuations occur within each of the cycle positions. We can speculate that this could be due to there being no major Holidays that require power draining decor plus we assume minimal AC usage during the cold months. 
+Our time series plot reveals annual seasonality; box plots and seasonality demonstrate where power consumption fluctuations occur within each of the cycles. We speculate that this pattern could be due to no major holidays that require power draining decor plus and minimal air conditioning usage during cold months. 
 
 ## Evaluation 
 
-We see power consumption increase between the months of June and August. This must be tied to AC usage during the warmer months of a year and finally power usage dips from September to Novemeber with a small spike in December. We speculate that thisis due to transitioning out of summer. The spike in December could be connected to the usage or Holiday lights being kept on. 
+Power consumption increases between the months of June and August, likely in relation to air conditioning usage.  It dips from September to Novemeber, followed by a small spike in December, which might be due the holidays (perhaps even holiday lights).
 
-Within the overall TS plot, we see a dip in July 2010. This could be due to a power outtage during a hot summer month. This can certainly be considered to be an outlier within this TS. Using TSOutliers, we can actually identify the index where our outliers may be. TSoutliers also replaces the outlier using Box-Cox. If set lambda=auto, then TSoutliers will automatically perform Box-Cox transformation.
+Within the overall TS plot a dip in July 2010 is visible; this outlier which may be the result of a power outtage during a hot summer month. Using `TSOutliers`, we identify the outlier and replace it using a Box-Cox transformation (by setting the lambda argument to automatic). 
 
 The ACF plot shows that autocorrelations are well outside the significant space indicating the series is not white noise, non-stationary. 
 
@@ -297,9 +296,9 @@ grid.arrange(grob=p1, p2, p3, p4, ncol=2,
 
 ## Modeling
 
-We built four different models on the power data. Methods included ARIMA, STL (with and without dampening), and ETS. We can make some preliminary observations on the reliability of these models from checking the residuals.
+We built four different models using ARIMA, STL (with and without dampening), and ETS methods. By checking residuals we can make some preliminary observations on these models' reliability.
 
-The residual ACF plots show residual autocorrelations for each of our models. Model #1: ARIMA has less autocorrelation than the other three models. Model 1 is well within the 95% limits indicated by the dotted blue lines. 
+The residual ACF plots show residual autocorrelations for each of our models. Model 1 (ARIMA) has less autocorrelation than the other three; it is also well within the 95% limits (indicated by dotted blue lines). 
 
 ```{r}
 p1<-ggAcf(arima_fc$residuals, lag=24, color = 'darkorange4')+ labs(title= "ARIMA(3,0,2)(2,1,0)[12]", x="Lag", y="") +theme_bw()+theme()
@@ -325,13 +324,13 @@ p8<-ggpubr::gghistogram(ets_model$residuals,fill="darkorchid4")+
 grid.arrange(grob=p1, p3, p5, p7, ncol=4, top=textGrob(label="ACF Plots of Residuals"))
 ```
 
-The residuals for each of our models does not have a major deviance from normality, however residuals of Model #1: ARIMA do not have an extended number of bins distorting the normality proximity but we can say it is still fairly normally distributed. 
+The residuals for each of our models do not deviate substantially from normality. While the residuals of Model 1 (ARIMA) do not have an extended number of bins and this distorts the normality proximity, we can regard the distribution as normal. 
 
 ```{r}
 grid.arrange(grob=p2, p4, p6, p8, ncol=4, top=textGrob(label="Histograms of Residuals"))
 ```
 
-Our last residual check, the Ljung-Box test, showed that only model had a p-value > 0.05: Model #1: ARIMA. This implies that the residuals from other models are not independent, hence not white noise. As a result, we will continue with this model for forcasting. We have included the full model summary for ARIMA and our other attempts in the appendix.
+A Ljung-Box test yields a p-value > 0.05 for Model 1 (ARIMA), implying that the residuals from other models are not independent, hence not white noise. We will continue with this model for forecasting; a full summary for this and other models attempted is included in the appendix.
 
 ## Forecast
 
@@ -348,13 +347,13 @@ autoplot(arima_fc)+
 #  theme_classic()+theme(legend.position = 'bottom')+
 #  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
 ```
-The `auto.arima()` function performs cross validation on hyperparameter tuning to find the best model with parameters  of `order` and `seasonal` that minimize `AIC`. This gave us **arima_model**: ARIMA$(3,0,2)(2,1,0)12$ with drift resulting `AIC` = 5332.24. Since ARIMA is the only reliable model, as other models failed Ljung test, we will plot forecasts of ARIMA only. The forecasted values can be viewed in the appendix. 
+The `auto.arima()` function performs cross validation on hyperparameter tuning to find the best model with parameters  of `order` and `seasonal` that minimize `AIC`. This approach yielded **arima_model**: ARIMA$(3,0,2)(2,1,0)12$ with drift resulting in an of `AIC` = 5332.24. As other models failed the Ljung-Box test, we develop forecasts based only on the reliable ARIMA model; forecasted values are included in the appendix. 
 
 ## Summary 
 
-We implemented a cross validation method of testing for `h=12`. The process randomly chooses 12 points to measure and take the average of RMSEs. By definition, a lower RMSE on test set is attributed with a better forecast on unseen data. 
+We implemented a cross-validation method of testing for `h=12`, randomly choosing 12 points over the fitted model to measure and take the average of RMSEs. By definition, a lower RMSE on test set indicates a better forecast of the test data. 
 
-Using Time series cross-validation, we compute RMSE on testset (`h=12`). We would have to pick the model with the lowest RMSE on test set as our final model if we had more than 1 model to compare. In our case, since we only have 1 model left after Ljung test, we  have no choice but to pick seasonal ARIMA model as our final choice. Cross-validation test shows that RMSE on test is around 720k when RMSE on training is around 589k. We can conclude the model is not necessarily overfitted. Given that MAPE on training is less than 7, it is not a suprising result.
+Using time series cross-validation, we compute RMSE on the test set (`h=12`). If other models had not failed the Ljung-Box test, we use the lowest RMSE as a criterion of selection. Cross-validation test of the seasonal ARIMA model produces an RMSE on test set of around 720k, and on training set of around 589k. We conclude the model is not necessarily overfitted. This finding is consistent with the MAPE on the training set that is less than 7.
 
 ```{r}
 paste("RMSE - Train:",rmse_train_arima, "; RMSE - Test:",rmse_test_arima)
@@ -382,20 +381,20 @@ Because of the disparities in the data some grooming was necessary:
 * Single reading on the hour 
 * 41-days of data  
  
-For Pipe One, representing 9-days of water flow rate measurements multiple samples per hour, a mean of all rates in the hour was taken and labeled with the whole-hour at the beggining of the period (floor hour) to align with the hourly readings from Pipe Two. After aggregating, there were only 236 observations (spanning 9-days) of pipe one and still 1000 observations (spanning 41-days) from Pipe Two.    
+Pipe One represents 9 days of water flow rate measurements with multiple samples per hour.  In order to align with hourly readings from Pipe Two, a mean of all Pipe One rates in a given hour was taken and labeled by its 'floor' (i.e. 9 for 9:41, 2 for 2:07, etc.). After aggregating, this yielded 236 observations (spanning nine days) for Pipe One compared with 1000 observations (spanning  41days) from Pipe Two.
 
-Both data sets posed an interesting conundrum. With two possible ways of handling it:
+The two data sets posed an interesting conundrum.  We considered two possible approaches:
 
-1. Merge the files, and use only 236 observations. 
+1. Merge the files and use only 236 observations. 
   + All forecasts would be based on the combined data. 
   + This would mean making 168 forecasts with only 236 data-points prior. 
-  + All forecasts would be starting November 1, instead of from the end of data: December 3.   
+  + All forecasts would start November 1 rather than December 3 (the end of the time series).   
 2. Merge the files and use the whole set to make predictions.  
   + We would have 100 observations to model prior to forecasts. 
   + 236 of the observations would be be different from the remaining 764, which could both alter the model type and forecast. 
-  + We would be forecasting from the natural ending of the Pipe Two readings  
+  + We would forecast from the natural ending of the Pipe Two readings.
 
-Because it was concievable that there might be a daily periodicity, it was important to have a frequency of 24, which made numbering by day of year and grooming the time series to start on the 7081 hour aligning with October 23 01:00 AM.
+Because daily periodicity is conceivable for this data, it was important to use a frequency of 24. This entailed numbering by day of year and grooming the time series to start on the 7081 hour (which aligns with October 23 01:00 AM).
 
 
 ```{r}
@@ -416,12 +415,12 @@ grid.arrange(grob=w1plot, w2plot, wsplot, ncol=3)
 
 ### Decomposition  
 
-It is clear from the combined plot that there is a pretty notable change in the trend when the readings from Pipe One wane. Let's look at the decomposed seriesand see if it gives us some insight into a good model.
+It is clear from the combined plot that there is a pretty notable change in the trend when the readings from Pipe One wane. We examined the decomposed series for insight into a good model.
 
 ```{r, fig.height=6}
 ws_decomp
 ```
-From the decomposition, the appears to be a seasonal component in agreement with the assessment that there might be a daily flowrate periodicity. Also, as expected, around day 306 where Pipe One flow rates go silent there is a trend down and then relatively flat trend thereafter. 
+From the decomposition, there appears to be a seasonal component in agreement with the assessment that there might be a daily flowrate periodicity. Also, as expected, around day 306 - where Pipe One flow rates go silent - there is a downward trend followed by a plateau thereafter. 
 
 ### Estimating Stationarity
 
@@ -431,7 +430,7 @@ Number of Estimated Differences: `r ws_diffs`
 tseries::adf.test(ws) 
 ```
 
-Here we have contradictory esitmates, `ndiffs()` suggests a difference of 1, and the augmented dicky fuller test suggests that we are stationary as-is. An `auto.arima()` may give us a reasonable starting place.
+Here we encounter contradictory estimates: `ndiffs()` suggests a difference of 1, and the augmented dicky fuller test suggests that we are stationary as-is. An `auto.arima()` may provide a reasonable starting place.
 
 ### Estimating  Orders for ARIMA
 
@@ -441,7 +440,7 @@ Here we have contradictory esitmates, `ndiffs()` suggests a difference of 1, and
 grid.arrange(ws_acf, ws_pacf, nrow=1)
 ```  
 
-The ACF remain wholly above the critical threshold, so will likely require differencing as suggested by the `ndiffs()`, in looking at the PACF, there is some abiguity caused by the needed differencing, but after the intial trend down below the critical threshold, there is definitely a slight spike at 24, which would suggest there may indeed by a daily period or season we need to account for in our forecast.
+As the ACF remain wholly above the critical threshold the series will likely require differencing as suggested by the `ndiffs()`. On the other hand, the PACF introduces some ambiguity on the need for differencing.  Following the intial downward trend below the critical threshold, there is a slight spike at 24 suggesting a daily period or season that needs to be accounted for in our forecast.
 
 #### Differenced ACF
 
@@ -449,11 +448,11 @@ The ACF remain wholly above the critical threshold, so will likely require diffe
 grid.arrange(ws_acf_diff, ws_pacf_diff, nrow=1)
 ```   
 
-A final ACF of the differenced data was done to ensure that a seconf first-order difference was not needed; thus we assume $d = 1$, a but it was not so clear about the appropriate value of $q4 should it be 5? , so `auto.arima()` is in order to help iterate up on the likely best starting place
+We examined a final ACF of the differenced data to ensure that a second first-order difference was not needed; while we assume $d = 1$, the appropriate value of $q$ is not so clear so we use `auto.arima()` to help iterate up on the best starting place.
 
 ## Modeling 
 
-The `auto.arima()` function was used in model selection. Using a Box-Cox lambda value to normalize the data may make $\lambda= .931552$. Because models can vary a lot based on the selection criterion, both BIC and AIC models were run, using lambda, to estimate a good starting place. We included the transformations in the model (instead of doing it outside the model), because we are using the ARIMA function to difference the data automatically allow more constiency and flexibility in testing other model orders.
+The `auto.arima()` function was used in model selection. Using a Box-Cox lambda value to normalize the data yields a $\lambda= .931552$. Because models can vary a lot based on the selection criterion, both BIC and AIC models were run using lambda to estimate a good starting place. We included the transformations in the model (as opposed to outside the model) because we are using the ARIMA function to difference the data automatically for more consistency and flexibility in testing other model orders.
 
 The *AICc* chose a seasonal ARIMA of the following order:
 
@@ -465,9 +464,9 @@ The *BIC* chose a non-seasonal ARIMA model as follows:
 $ARIMA(2,1,1)$ 
 *AIC=8082.22   AICc=8082.26   BIC=8101.85*
 
-In both cases, the arima estimated that there needed to be differencing which was supported by `ndiffs()` and our ACF & PACF plots. 
+In both cases, the `auto.arima()` estimated that there needed to be differencingm, which was supported by `ndiffs()` and our ACF and PACF plots. 
 
-In comparing the two forecasts, for these automated models, they both degrade toward the series mean pretty quickly, however, the AICc model makes forecasts which consider the variation of the model a bit better before it levels out. So we decided to explore this model and see if we could tune it to provide more robust predictions
+While both models' forecasts degrade pretty quickly towards the series mean, the AICc model generates forecast that consider the variation better before it levels out.  Accordingly, we decided to explore and attempt to tune this model to provide more robust predictions.
 
 **AIC $ARIMA(1,1,3)(0,0,1)[24]$ Residual Plots**   
 
@@ -491,7 +490,7 @@ bic  %>% checkresiduals()
 
 ### Interpreting `auto.arima()`
 
-In looking at the AICc and BIC ARIMA models, the both appear to be relatively white-noisy with no autocorrelation on the first or 24th observations, with relatively normal residuals. However, in looking at the Ljung-Box test for independence, it is clear that the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$ is independent, where the $ARIMA(2,1,1)$ is not, thus reaffirming the lingering suspicion that thee is unaccounted for seasonal variation in the model requiring a seasona MA(1) to rectify. To be sure that the best model has been found, p & q as well as Q will be varied to see if a slight modification improves the performance of the model.
+Both the AICc and BIC ARIMA models appear relatively 'white-noisy', with no autocorrelation on the first and 24th observations as well as relatively normal residuals. However, examining the Ljung-Box test for independence made clear that the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$ is independent while the $ARIMA(2,1,1)$ is not. This confirmed our suspicion of unaccounted for seasonal variation in the model, which required a seasonal MA(1) to rectify. To ensure that the best model had been found, we varied p, q, and Q to determine if slight modifications could improve the performance of the model.
 
 ### Manual ARIMA testing
 
@@ -522,7 +521,7 @@ Arima(ws, order=c(1,1,3), seasonal=c(0,0,1),lambda=lambda)%>%
 checkresiduals(fit, lag=36)
 ```    
 
-This Ljung-Box  shows  unexplained variances in the residuals indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$.
+This Ljung-Box test shows unexplained variances in the residuals, indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$.
 
 ```{r, echo = FALSE}
 (fit <- Arima(ws, order=c(1,1,2), seasonal=c(0,0,1),
@@ -530,7 +529,7 @@ This Ljung-Box  shows  unexplained variances in the residuals indicating that th
 checkresiduals(fit, lag=36)
 ```    
 
-This Ljung-Box also shows unexplained variances in the residuals indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,2)(0,0,1)[24]$.
+This Ljung-Box also shows unexplained variances in the residuals, indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,2)(0,0,1)[24]$.
 
 ```{r, echo = FALSE}
 (fit <- Arima(ws, order=c(1,1,3), lambda=lambda))
@@ -538,11 +537,11 @@ checkresiduals(fit, lag=36)
 
 ```      
 
-This Ljung-Box also shows unexplained variances in the residuals indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)$.
+This Ljung-Box also shows unexplained variances in the residuals, indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)$.
 
 ### Accepting the `auto.arima()`
 
-Given that the other models show unexplained variance in the residuals, the final predictions will be made using the AICc recommended model of $ARIMA (1,1,3)(0,0,1)[24]$.
+Given that the other models show unexplained variance in the residuals, we made our final predictions using the AICc recommended model of $ARIMA (1,1,3)(0,0,1)[24]$.
 
 ```{r, echo = FALSE}
 
@@ -558,9 +557,9 @@ autoplot(subset(ws, start=950))+
 
 ## Summary
 
-Ultimately this model is marginally useful as seen by the Mean Absolute Percentage of Error which reveals that the average percentage each forecast is off by is around 50%. In looking at the graph of the forecast above, which is the last 150 points in the time series and the forecasted points, you can see this as the predictions lightly modulate around the mean and deteriorate to it pretty quickly.
+Ultimately, we assess that the Seasonal $ARIMA (1,1,3)$ model is marginally useful given its Mean Absolute Percentage of Error. This measure indicates that on average each forecast differs from the actual value on percentage basis by around 50%.  As is visible in the above graph - which depicts the last 150 points in the time series as well as our forecasts - predictions modulate around the mean and deteriorate to it pretty quickly.
 
-In looking at the original decomposition, there very little trend, a lot of seasonality, is a pretty substatial amount of random noise, which is not considered in the model, and is responsible for the majority of the error in this model, as white noise is never predictable.
+The original decomposition revelaed very little trend, a lot of seasonality, and a substatial amount of random noise.  This is not considered in the model, and is responsible for the majority of the error in it as white noise is never predictable.
 
 # Appendix A {-#appendix-a}
 
