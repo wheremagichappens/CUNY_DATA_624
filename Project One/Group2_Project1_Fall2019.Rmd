@@ -37,7 +37,8 @@ library(easypackages)
 libraries('knitr', 'kableExtra', 'default')
 
 # Processing
-libraries('readxl', 'tidyverse', 'janitor', 'imputeTS', 'tsoutliers', 'lubridate', 'xlsx')
+libraries('readxl', 'tidyverse', 'janitor', 'imputeTS', 'tsoutliers', 'lubridate')
+# 'xlsx'
 
 # Timeseries 
 libraries('psych', 'urca', 'forecast', 'timetk', 'fpp2')
@@ -135,7 +136,7 @@ Last, we used a scatterplot to examine the correlation between cash withdrawals 
 
 Our cleaned dataframe was then converted into a timeseries format. The time series plots show high weekly variance, for ATM1, ATM2, and ATM4 - consistent with our takeaway from the scatterplots. 
 
-These plots also remind us that ATM3 only dispensed cash on 3 days at the end of the timespan, with a daily range between \$82 and \$96.  Given the paucity of observations in the training data, the simplest possible approach to forecasting ATM3, averaging, is likely best.  Given that ATM3 distributed no cash until April 28, 2010, we'll assume that it was not operating until then and only include the three day window of non-zero observations in the forecast.
+These plots also remind us that ATM3 only dispensed cash on 3 days at the end of the timespan, with a daily range between \$82 and \$96.  Given the paucity of observations in the training data, the simplest possible approach to forecasting ATM3, averaging, is likely best.  Given that ATM3 distributed no cash until April 28, 2010, we'll assume that it was not operating until then and only include the three day window of non-zero observations in the forecast. \newline
 
 ```{r, fig.height=5}
 autoplot(atm_ts, facets = T)+
@@ -149,7 +150,6 @@ autoplot(atm_ts, facets = T)+
 ## Evaluation 
 
 We constructed our initial timeseries for ATM1, ATM2, and ATM4 using a weekly frequency. Our ACF plots for each ATM showcases large, decreasing lags starting at 7. This pattern continues in a multiple of seven, which confirms our assumption about seasonality within the observed data. These lags are indicative of a weekly pattern. 
-\newline
 
 ```{r fig.height=4}
 p1<-ggAcf(ATM1_ts, color = 'darkorange4')+ labs(title="ACF: ATM1")+ theme_bw()+theme()
@@ -162,6 +162,7 @@ p6<-ggPacf(ATM4_ts,color = 'darkorange4')+ labs(title="PACF: ATM4")+ theme_bw()+
 grid.arrange(grob=p1, p3, p5, p2, p4, p6, ncol=3)
 ```
 
+\newpage
 Our plots further suggest that the ATM data is non-stationary. We performed a unit root test using the `ur.kpss()` function to confirm this observation. The test results below show that differencing is required on all ATM2 and ATM4 series. ATM1 falls just below the cut-off critical value, but could still benefit from differencing due to the observed seasonal pattern.   
 
 ```{r}
@@ -367,36 +368,48 @@ paste("RMSE - Train:",rmse_train_arima, "; RMSE - Test:",rmse_test_arima)
 
 ## Exploration
 
-Because of the disparities in the data some grooming was necessary:  
+Because of the disparities in the data some grooming was necessary: 
 
-**Pipe one:**  
-* 1000 observations
-* No missing values 
-* Multiple reading within each hour  
-* 9-days of data  
- 
-**Pipe Two**  
-* 1000 Observations  
-* No missing values 
-* Single reading on the hour 
-* 41-days of data  
- 
+\begin{multicols}{2}
+
+\textbf{Pipe one}
+\begin{enumerate}
+  \item 1000 Observations
+  \item No missing values
+  \item Multiple reading within each hour
+  \item 9-days of data
+\end{enumerate}
+
+\textbf{Pipe Two}
+\begin{enumerate}
+  \item 1000 Observations
+  \item No missing values
+  \item Single reading on the hour
+  \item 41-days of data  
+\end{enumerate}
+
+\end{multicols}
+
 Pipe One represents 9 days of water flow rate measurements with multiple samples per hour.  In order to align with hourly readings from Pipe Two, a mean of all Pipe One rates in a given hour was taken and labeled by its 'floor' (i.e. 9 for mean of all times between 9:00 and 9:59 -inclusive of both bounds). After aggregating, this yielded 236 observations (spanning nine days) for Pipe One and 1000 observations (spanning  41days) for Pipe Two.
 
 The two data sets posed an interesting conundrum.  We considered two possible approaches:
 
-1. Merge the files and use only 236 observations. 
-  + All forecasts would be based on the combined data. 
-  + This would mean making 168 forecasts ($7days x 24hours$) with only 236 data-points prior. 
-  + All forecasts would start November 1 rather than December 3 (the end of the most recent time series).   
-2. Merge the files and use the whole set to make predictions.  
-  + We would have 1000 observations to model prior to forecasts. 
-  + 236 of the observations would be be different from the remaining 764, which could both alter the model type and forecast. 
-  + We would forecast from the natural ending of the Pipe Two readings.
-In the end, it made the most sense to model the combined sets in their entireties, so method two was adopted.  
+(1) Merge the files and use only 236 observations.
+\begin{itemize}
+  \item All forecasts would be based on the combined data. 
+  \item This would mean making 168 forecasts ($7days x 24hours$) with only 236 data-points prior.
+  \item All forecasts would start November 1 rather than December 3 (the end of the most recent time series).
+\end{itemize}
+(2) Merge the files and use the whole set to make predictions. 
+\begin{itemize}
+  \item We would have 1000 observations to model prior to forecasts. 
+  \item 236 of the observations would be be different from the remaining 764, which could both alter the model type and forecast. 
+  \item We would forecast from the natural ending of the Pipe Two readings.
+\end{itemize}
 
-Because daily periodicity is conceivable for this data, it was important to use a frequency of 24 in converting this data. This entailed numbering by day of year and grooming the time series to start on the 7081 hour (which aligns with October 23 01:00 AM our first merged observation).
+In the end, it made the most sense to model the combined sets in their entireties, so method two was adopted. Because daily periodicity is conceivable for this data, it was important to use a frequency of 24 in converting this data. This entailed numbering by day of year and grooming the time series to start on the 7081 hour (which aligns with October 23 01:00 AM our first merged observation).
 
+## Evaluation
 
 ```{r}
 w1plot<-autoplot(w1,colour ='peachpuff')+
@@ -411,8 +424,6 @@ wsplot<-autoplot(ws, colour ='deeppink4')+labs(title = "Combined Pipe Flow Rates
 
 grid.arrange(grob=w1plot, w2plot, wsplot, ncol=3)
 ```  
-
-## Evaluation
 
 ### Decomposition  
 

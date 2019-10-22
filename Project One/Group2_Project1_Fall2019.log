@@ -1,14 +1,14 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.5.8)  22 OCT 2019 12:09
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  22 OCT 2019 15:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **Group2_Project1_Fall2019.tex
 (./Group2_Project1_Fall2019.tex
-LaTeX2e <2018-12-01>
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/book.cls
-Document Class: book 2018/09/03 v1.4i Standard LaTeX document class
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/bk10.clo
-File: bk10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+LaTeX2e <2019-10-01> patch level 1
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2019/08/27 v1.4j Standard LaTeX document class
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/bk10.clo
+File: bk10.clo 2019/08/27 v1.4j Standard LaTeX file (size option)
 )
 \c@part=\count80
 \c@chapter=\count81
@@ -22,7 +22,7 @@ File: bk10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/lmodern.sty
+) (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/lmodern.sty
 Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
@@ -56,46 +56,58 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amssymb.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.s
+ty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.
+sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks14
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2018/12/01 v2.17b AMS math features
+))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.st
+y
+Package: amsmath 2019/04/01 v2.17c AMS math features
 \@mathmargin=\skip43
 For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amstext.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.st
+y
 Package: amstext 2000/06/29 v2.01 AMS text
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsgen.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks15
 \ex@=\dimen103
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsbsy.sty
+))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen104
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsopn.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
 \inf@bad=\count89
-LaTeX Info: Redefining \frac on input line 223.
+LaTeX Info: Redefining \frac on input line 227.
 \uproot@=\count90
 \leftroot@=\count91
-LaTeX Info: Redefining \overline on input line 385.
+LaTeX Info: Redefining \overline on input line 389.
 \classnum@=\count92
 \DOTSCASE@=\count93
-LaTeX Info: Redefining \ldots on input line 482.
-LaTeX Info: Redefining \dots on input line 485.
-LaTeX Info: Redefining \cdots on input line 606.
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
 \Mathstrutbox@=\box27
 \strutbox@=\box28
 \big@size=\dimen105
-LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 \macc@depth=\count94
 \c@MaxMatrixCols=\count95
 \dotsspace@=\muskip10
@@ -116,14 +128,19 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \multlinegap=\skip44
 \multlinetaggap=\skip45
 \mathdisplay@stack=\toks19
-LaTeX Info: Redefining \[ on input line 2844.
-LaTeX Info: Redefining \] on input line 2845.
-) (/usr/local/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+LaTeX Info: Redefining \[ on input line 2855.
+LaTeX Info: Redefining \] on input line 2856.
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ifxetex/ifxetex.
+sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-) (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/ifluate
+x.sty
 Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/base/fixltx2e.sty
+) (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fixltx2e.st
+y
 Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
 Applying: [2015/01/01] Old fixltx2e package on input line 46.
 
@@ -132,30 +149,41 @@ Package fixltx2e Warning: fixltx2e is not required with releases after 2015
 (fixltx2e)                See the latexrelease package for details.
 
 Already applied: [0000/00/00] Old fixltx2e package on input line 53.
-) (/usr/local/texlive/2019/texmf-dist/tex/xelatex/mathspec/mathspec.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/xelatex/mathspec/mathspe
+c.sty
 Package: mathspec 2016/12/22 v0.2b LaTeX Package (Mathematics font selection fo
 r XeLaTeX)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2018/08/19 v2.5f e-TeX tools for LaTeX (JAW)
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.
+sty
+Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count101
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/fontspec/fontspec.sty (/usr/loc
-al/texlive/2019/texmf-dist/tex/latex/l3packages/xparse/xparse.sty (/usr/local/t
-exlive/2019/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2019-05-07 L3 programming layer (loader) 
-(/usr/local/texlive/2019/texmf-dist/tex/latex/l3kernel/expl3-code.tex
-Package: expl3 2019-05-07 L3 programming layer (code)
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.
+sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/
+xparse.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2019-10-11 L3 programming layer (loader) 
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3-cod
+e.tex
+Package: expl3 2019-10-11 L3 programming layer (code)
 \c_max_int=\count102
 \l_tmpa_int=\count103
 \l_tmpb_int=\count104
 \g_tmpa_int=\count105
 \g_tmpb_int=\count106
-\g__kernel_prg_map_int=\count107
-\c__ior_term_ior=\count108
-\c_log_iow=\count109
-\l_iow_line_count_int=\count110
-\l__iow_line_target_int=\count111
-\l__iow_one_indent_int=\count112
-\l__iow_indent_int=\count113
+\l__seq_internal_a_int=\count107
+\l__seq_internal_b_int=\count108
+\g__kernel_prg_map_int=\count109
+\c__ior_term_noprompt_ior=\count110
+\c_log_iow=\count111
+\l_iow_line_count_int=\count112
+\l__iow_line_target_int=\count113
+\l__iow_one_indent_int=\count114
+\l__iow_indent_int=\count115
 \c_zero_dim=\dimen112
 \c_max_dim=\dimen113
 \l_tmpa_dim=\dimen114
@@ -174,75 +202,76 @@ Package: expl3 2019-05-07 L3 programming layer (code)
 \l_tmpb_muskip=\muskip14
 \g_tmpa_muskip=\muskip15
 \g_tmpb_muskip=\muskip16
-\l_keys_choice_int=\count114
-\l__intarray_loop_int=\count115
+\l_keys_choice_int=\count116
+\l__intarray_loop_int=\count117
 \c__intarray_sp_dim=\dimen118
-\g__intarray_font_int=\count116
-\c__fp_leading_shift_int=\count117
-\c__fp_middle_shift_int=\count118
-\c__fp_trailing_shift_int=\count119
-\c__fp_big_leading_shift_int=\count120
-\c__fp_big_middle_shift_int=\count121
-\c__fp_big_trailing_shift_int=\count122
-\c__fp_Bigg_leading_shift_int=\count123
-\c__fp_Bigg_middle_shift_int=\count124
-\c__fp_Bigg_trailing_shift_int=\count125
-\g__fp_array_int=\count126
-\l__fp_array_loop_int=\count127
-\l__sort_length_int=\count128
-\l__sort_min_int=\count129
-\l__sort_top_int=\count130
-\l__sort_max_int=\count131
-\l__sort_true_max_int=\count132
-\l__sort_block_int=\count133
-\l__sort_begin_int=\count134
-\l__sort_end_int=\count135
-\l__sort_A_int=\count136
-\l__sort_B_int=\count137
-\l__sort_C_int=\count138
-\l__tl_analysis_normal_int=\count139
-\l__tl_analysis_index_int=\count140
-\l__tl_analysis_nesting_int=\count141
-\l__tl_analysis_type_int=\count142
-\l__regex_internal_a_int=\count143
-\l__regex_internal_b_int=\count144
-\l__regex_internal_c_int=\count145
-\l__regex_balance_int=\count146
-\l__regex_group_level_int=\count147
-\l__regex_mode_int=\count148
-\c__regex_cs_in_class_mode_int=\count149
-\c__regex_cs_mode_int=\count150
-\l__regex_catcodes_int=\count151
-\l__regex_default_catcodes_int=\count152
-\c__regex_catcode_L_int=\count153
-\c__regex_catcode_O_int=\count154
-\c__regex_catcode_A_int=\count155
-\c__regex_all_catcodes_int=\count156
-\l__regex_show_lines_int=\count157
-\l__regex_min_state_int=\count158
-\l__regex_max_state_int=\count159
-\l__regex_left_state_int=\count160
-\l__regex_right_state_int=\count161
-\l__regex_capturing_group_int=\count162
-\l__regex_min_pos_int=\count163
-\l__regex_max_pos_int=\count164
-\l__regex_curr_pos_int=\count165
-\l__regex_start_pos_int=\count166
-\l__regex_success_pos_int=\count167
-\l__regex_curr_char_int=\count168
-\l__regex_curr_catcode_int=\count169
-\l__regex_last_char_int=\count170
-\l__regex_case_changed_char_int=\count171
-\l__regex_curr_state_int=\count172
-\l__regex_step_int=\count173
-\l__regex_min_active_int=\count174
-\l__regex_max_active_int=\count175
-\l__regex_replacement_csnames_int=\count176
-\l__regex_match_count_int=\count177
-\l__regex_min_submatch_int=\count178
-\l__regex_submatch_int=\count179
-\l__regex_zeroth_submatch_int=\count180
-\g__regex_trace_regex_int=\count181
+\g__intarray_font_int=\count118
+\c__fp_leading_shift_int=\count119
+\c__fp_middle_shift_int=\count120
+\c__fp_trailing_shift_int=\count121
+\c__fp_big_leading_shift_int=\count122
+\c__fp_big_middle_shift_int=\count123
+\c__fp_big_trailing_shift_int=\count124
+\c__fp_Bigg_leading_shift_int=\count125
+\c__fp_Bigg_middle_shift_int=\count126
+\c__fp_Bigg_trailing_shift_int=\count127
+\g__fp_array_int=\count128
+\l__fp_array_loop_int=\count129
+\l__sort_length_int=\count130
+\l__sort_min_int=\count131
+\l__sort_top_int=\count132
+\l__sort_max_int=\count133
+\l__sort_true_max_int=\count134
+\l__sort_block_int=\count135
+\l__sort_begin_int=\count136
+\l__sort_end_int=\count137
+\l__sort_A_int=\count138
+\l__sort_B_int=\count139
+\l__sort_C_int=\count140
+\l__str_internal_int=\count141
+\l__tl_analysis_normal_int=\count142
+\l__tl_analysis_index_int=\count143
+\l__tl_analysis_nesting_int=\count144
+\l__tl_analysis_type_int=\count145
+\l__regex_internal_a_int=\count146
+\l__regex_internal_b_int=\count147
+\l__regex_internal_c_int=\count148
+\l__regex_balance_int=\count149
+\l__regex_group_level_int=\count150
+\l__regex_mode_int=\count151
+\c__regex_cs_in_class_mode_int=\count152
+\c__regex_cs_mode_int=\count153
+\l__regex_catcodes_int=\count154
+\l__regex_default_catcodes_int=\count155
+\c__regex_catcode_L_int=\count156
+\c__regex_catcode_O_int=\count157
+\c__regex_catcode_A_int=\count158
+\c__regex_all_catcodes_int=\count159
+\l__regex_show_lines_int=\count160
+\l__regex_min_state_int=\count161
+\l__regex_max_state_int=\count162
+\l__regex_left_state_int=\count163
+\l__regex_right_state_int=\count164
+\l__regex_capturing_group_int=\count165
+\l__regex_min_pos_int=\count166
+\l__regex_max_pos_int=\count167
+\l__regex_curr_pos_int=\count168
+\l__regex_start_pos_int=\count169
+\l__regex_success_pos_int=\count170
+\l__regex_curr_char_int=\count171
+\l__regex_curr_catcode_int=\count172
+\l__regex_last_char_int=\count173
+\l__regex_case_changed_char_int=\count174
+\l__regex_curr_state_int=\count175
+\l__regex_step_int=\count176
+\l__regex_min_active_int=\count177
+\l__regex_max_active_int=\count178
+\l__regex_replacement_csnames_int=\count179
+\l__regex_match_count_int=\count180
+\l__regex_min_submatch_int=\count181
+\l__regex_submatch_int=\count182
+\l__regex_zeroth_submatch_int=\count183
+\g__regex_trace_regex_int=\count184
 \c_empty_box=\box29
 \l_tmpa_box=\box30
 \l_tmpb_box=\box31
@@ -286,25 +315,30 @@ Package: expl3 2019-05-07 L3 programming layer (code)
 \l__coffin_display_offset_dim=\dimen141
 \l__coffin_display_x_dim=\dimen142
 \l__coffin_display_y_dim=\dimen143
-\g__file_internal_ior=\read1
-\l__seq_internal_a_int=\count182
-\l__seq_internal_b_int=\count183
-\c__deprecation_minus_one=\count184
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/l3kernel/l3xdvipdfmx.def
-File: l3xdvipdfmx.def 2019-04-06 v L3 Experimental driver: xdvipdfmx
-\g__driver_image_int=\count185
-\l__driver_pdf_tmp_box=\box47
-\g__driver_pdf_object_int=\count186
-\g__driver_pdf_annotation_int=\count187
+\g__char_data_ior=\read1
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/l3depreca
+tion.def
+File: l3deprecation.def 2019-04-06 v L3 Deprecated functions
 ))
-Package: xparse 2019-05-03 L3 Experimental document command parser
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
+d-xdvipdfmx.def
+File: l3backend-xdvipdfmx.def 2019-04-06 L3 backend support: xdvipdfmx
+\g__graphics_track_int=\count185
+\l__pdf_internal_box=\box47
+\g__pdf_backend_object_int=\count186
+\g__pdf_backend_annotation_int=\count187
+))
+Package: xparse 2019-10-11 L3 Experimental document command parser
 \l__xparse_current_arg_int=\count188
 \g__xparse_grabber_int=\count189
 \l__xparse_m_args_int=\count190
 \l__xparse_v_nesting_int=\count191
 )
 Package: fontspec 2019/03/15 v2.7c Font selection for XeLaTeX and LuaLaTeX
-(/usr/local/texlive/2019/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec-
+xetex.sty
 Package: fontspec-xetex 2019/03/15 v2.7c Font selection for XeLaTeX and LuaLaTe
 X
 \l__fontspec_script_int=\count192
@@ -321,35 +355,46 @@ X
 \l__fontspec_tmpa_dim=\dimen144
 \l__fontspec_tmpb_dim=\dimen145
 \l__fontspec_tmpc_dim=\dimen146
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/fontenc.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/tuenc.def
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/tuenc.def
 File: tuenc.def 2018/08/11 v2.0j Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding TU on input line 82.
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/fontspec/fontspec.cfg)
+))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.
+cfg)
 LaTeX Info: Redefining \itshape on input line 4051.
 LaTeX Info: Redefining \slshape on input line 4056.
 LaTeX Info: Redefining \scshape on input line 4061.
 LaTeX Info: Redefining \upshape on input line 4066.
 LaTeX Info: Redefining \em on input line 4096.
 LaTeX Info: Redefining \emph on input line 4121.
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.st
+y
 Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/usr/local
-/texlive/2019/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.
+tex
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils
+.tex
 \XKV@toks=\toks20
 \XKV@tempa@toks=\toks21
-(/usr/local/texlive/2019/texmf-dist/tex/generic/xkeyval/keyval.tex))
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.t
+ex))
 \XKV@depth=\count269
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 \c@eu@=\count270
 \c@eu@i=\count271
 \c@mkern=\count272
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/upquote/upquote.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upquote.st
+y
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/textcomp.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2018/08/11 v2.0j Standard LaTeX package
 Package textcomp Info: Sub-encoding information:
 (textcomp)               5 = only ISO-Adobe without \textcurrency
@@ -363,7 +408,7 @@ Package textcomp Info: Sub-encoding information:
 (textcomp)             Family '?' is the default used for unknown fonts.
 (textcomp)             See the documentation for details.
 Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1enc.def
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1enc.def
 File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
 )
 LaTeX Info: Redefining \oldstylenums on input line 334.
@@ -429,40 +474,56 @@ Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
 Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
 Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
 Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/microtype.sty
-Package: microtype 2019/02/28 v2.7b Micro-typographical refinements (RS)
-\MT@toks=\toks22
-\MT@count=\count273
-LaTeX Info: Redefining \textls on input line 790.
-\MT@outer@kern=\dimen147
-LaTeX Info: Redefining \textmicrotypecontext on input line 1336.
-\MT@listname@count=\count274
-(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/microtype-xetex.def
-File: microtype-xetex.def 2019/02/28 v2.7b Definitions specific to xetex (RS)
-LaTeX Info: Redefining \lsstyle on input line 258.
+))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry.
+sty
+Package: geometry 2018/04/16 v5.8 Page Geometry
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/ifpdf.s
+ty
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
 )
-Package microtype Info: Loading configuration file microtype.cfg.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/microtype.cfg
-File: microtype.cfg 2019/02/28 v2.7b microtype main configuration file (RS)
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/ifvtex.
+sty
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+\Gm@cnth=\count273
+\Gm@cntv=\count274
+\c@Gm@tempcnt=\count275
+\Gm@bindingoffset=\dimen147
+\Gm@wd@mp=\dimen148
+\Gm@odd@mp=\dimen149
+\Gm@even@mp=\dimen150
+\Gm@layoutwidth=\dimen151
+\Gm@layoutheight=\dimen152
+\Gm@layouthoffset=\dimen153
+\Gm@layoutvoffset=\dimen154
+\Gm@dimlist=\toks22
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.
+sty
+Package: hyperref 2019/09/28 v7.00a Hypertext links for LaTeX
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/hobsub-
+hyperref.sty
 Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
 
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/hobsub-
+generic.sty
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
 Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 Package hobsub Info: Skipping package `ifluatex' (already loaded).
-Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
+Package hobsub Info: Skipping package `ifvtex' (already loaded).
 Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
-Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+Package hobsub Info: Skipping package `ifpdf' (already loaded).
 Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
 Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
 Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
+Package: pdftexcmds 2019/07/25 v0.30 Utility functions of pdfTeX for LuaTeX (HO
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: pdfTeX >= 1.30 not detected.
@@ -483,183 +544,225 @@ Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
 Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/auxhook.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/auxhook.s
+ty
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/kvoptions
+.sty
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
-\@linkdim=\dimen148
-\Hy@linkcounter=\count275
-\Hy@pagecounter=\count276
-(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
+\@linkdim=\dimen155
+\Hy@linkcounter=\count276
+\Hy@pagecounter=\count277
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.de
+f
+File: pd1enc.def 2019/09/28 v7.00a Hyperref: PDFDocEncoding definition (HO)
 )
-\Hy@SavedSpaceFactor=\count277
-(/usr/local/texlive/2019/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+\Hy@SavedSpaceFactor=\count278
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/hyperr
+ef.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Hyper figures OFF on input line 4519.
-Package hyperref Info: Link nesting OFF on input line 4524.
-Package hyperref Info: Hyper index ON on input line 4527.
-Package hyperref Info: Plain pages OFF on input line 4534.
-Package hyperref Info: Backreferencing OFF on input line 4539.
+Package hyperref Info: Hyper figures OFF on input line 4540.
+Package hyperref Info: Link nesting OFF on input line 4545.
+Package hyperref Info: Hyper index ON on input line 4548.
+Package hyperref Info: Plain pages OFF on input line 4555.
+Package hyperref Info: Backreferencing OFF on input line 4560.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4772.
-\c@Hy@tempcnt=\count278
-(/usr/local/texlive/2019/texmf-dist/tex/latex/url/url.sty
+Package hyperref Info: Bookmarks ON on input line 4793.
+\c@Hy@tempcnt=\count279
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 5125.
-\XeTeXLinkMargin=\dimen149
-\Fld@menulength=\count279
-\Field@Width=\dimen150
-\Fld@charsize=\dimen151
-Package hyperref Info: Hyper figures OFF on input line 6380.
-Package hyperref Info: Link nesting OFF on input line 6385.
-Package hyperref Info: Hyper index ON on input line 6388.
-Package hyperref Info: backreferencing OFF on input line 6395.
-Package hyperref Info: Link coloring OFF on input line 6400.
-Package hyperref Info: Link coloring with OCG OFF on input line 6405.
-Package hyperref Info: PDF/A mode OFF on input line 6410.
-LaTeX Info: Redefining \ref on input line 6450.
-LaTeX Info: Redefining \pageref on input line 6454.
-\Hy@abspage=\count280
-\c@Item=\count281
-\c@Hfootnote=\count282
+LaTeX Info: Redefining \url on input line 5152.
+\XeTeXLinkMargin=\dimen156
+\Fld@menulength=\count280
+\Field@Width=\dimen157
+\Fld@charsize=\dimen158
+Package hyperref Info: Hyper figures OFF on input line 6423.
+Package hyperref Info: Link nesting OFF on input line 6428.
+Package hyperref Info: Hyper index ON on input line 6431.
+Package hyperref Info: backreferencing OFF on input line 6438.
+Package hyperref Info: Link coloring OFF on input line 6443.
+Package hyperref Info: Link coloring with OCG OFF on input line 6448.
+Package hyperref Info: PDF/A mode OFF on input line 6453.
+LaTeX Info: Redefining \ref on input line 6493.
+LaTeX Info: Redefining \pageref on input line 6497.
+\Hy@abspage=\count281
+\c@Item=\count282
+\c@Hfootnote=\count283
 )
 Package hyperref Info: Driver (autodetected): hxetex.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hxetex.def
-File: hxetex.def 2018/11/30 v6.88e Hyperref driver for XeTeX
-(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2018/11/30 v6.88e Hyperref: PDF Unicode definition (HO)
-) (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/stringenc.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hxetex.de
+f
+File: hxetex.def 2019/09/28 v7.00a Hyperref driver for XeTeX
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2019/09/28 v7.00a Hyperref: PDF Unicode definition (HO)
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/stringe
+nc.sty
 Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
 )
 )
 \pdfm@box=\box48
-\c@Hy@AnnotLevel=\count283
-\HyField@AnnotCount=\count284
-\Fld@listcount=\count285
-\c@bookmark@seq@number=\count286
-(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+\c@Hy@AnnotLevel=\count284
+\HyField@AnnotCount=\count285
+\Fld@listcount=\count286
+\c@bookmark@seq@number=\count287
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/rerunfile
+check.sty
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip52
 )
-Package hyperref Info: Option `unicode' set `true' on input line 29.
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
+Package hyperref Info: Option `unicode' set `true' on input line 30.
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/se-asci
+i-print.def
 File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
 
 )
-Package hyperref Info: Option `breaklinks' set `true' on input line 29.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/natbib/natbib.sty
+Package hyperref Info: Option `breaklinks' set `true' on input line 30.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip53
 \bibsep=\skip54
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count287
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/color.sty
+\c@NAT@ctr=\count288
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
+.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: xetex.def on input line 147.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-def/xetex.def
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/xetex
+.def
 File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb.
+sty
 Package: fancyvrb 2019/01/15
 Style option: `fancyvrb' v3.2a <2019/01/15> (tvz)
-\FV@CodeLineNo=\count288
+\FV@CodeLineNo=\count289
 \FV@InFile=\read2
 \FV@TabBox=\box49
-\c@FancyVerbLine=\count289
-\FV@StepNumber=\count290
+\c@FancyVerbLine=\count290
+\FV@StepNumber=\count291
 \FV@OutFile=\write3
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/framed/framed.sty
+) (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/framed/framed.st
+y
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
 \OuterFrameSep=\skip55
-\fb@frw=\dimen152
-\fb@frh=\dimen153
-\FrameRule=\dimen154
-\FrameSep=\dimen155
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/tools/longtable.sty
-Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
+\fb@frw=\dimen159
+\fb@frh=\dimen160
+\FrameRule=\dimen161
+\FrameSep=\dimen162
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.st
+y
+Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
 \LTleft=\skip56
 \LTright=\skip57
 \LTpre=\skip58
 \LTpost=\skip59
-\LTchunksize=\count291
-\LTcapwidth=\dimen156
+\LTchunksize=\count292
+\LTcapwidth=\dimen163
 \LT@head=\box50
 \LT@firsthead=\box51
 \LT@foot=\box52
 \LT@lastfoot=\box53
-\LT@cols=\count292
-\LT@rows=\count293
-\c@LT@tables=\count294
-\c@LT@chunks=\count295
+\LT@cols=\count293
+\LT@rows=\count294
+\c@LT@tables=\count295
+\c@LT@chunks=\count296
 \LT@p@ftn=\toks23
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/booktabs/booktabs.sty
-Package: booktabs 2016/04/27 v1.618033 publication quality tables
-\heavyrulewidth=\dimen157
-\lightrulewidth=\dimen158
-\cmidrulewidth=\dimen159
-\belowrulesep=\dimen160
-\belowbottomsep=\dimen161
-\aboverulesep=\dimen162
-\abovetopsep=\dimen163
-\cmidrulesep=\dimen164
-\cmidrulekern=\dimen165
-\defaultaddspace=\dimen166
-\@cmidla=\count296
-\@cmidlb=\count297
-\@aboverulesep=\dimen167
-\@belowrulesep=\dimen168
-\@thisruleclass=\count298
-\@lastruleclass=\count299
-\@thisrulewidth=\dimen169
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphicx.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.
+sty
+Package: booktabs 2019/10/08 v1.6180339 publication quality tables
+\heavyrulewidth=\dimen164
+\lightrulewidth=\dimen165
+\cmidrulewidth=\dimen166
+\belowrulesep=\dimen167
+\belowbottomsep=\dimen168
+\aboverulesep=\dimen169
+\abovetopsep=\dimen170
+\cmidrulesep=\dimen171
+\cmidrulekern=\dimen172
+\defaultaddspace=\dimen173
+\@cmidla=\count297
+\@cmidlb=\count298
+\@aboverulesep=\dimen174
+\@belowrulesep=\dimen175
+\@thisruleclass=\count299
+\@lastruleclass=\count300
+\@thisrulewidth=\dimen176
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.
+sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.
+sty
+Package: graphics 2019/10/08 v1.3c Standard LaTeX Graphics (DPC,SPQR)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graph
+ics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: xetex.def on input line 99.
+Package graphics Info: Driver file: xetex.def on input line 105.
 )
-\Gin@req@height=\dimen170
-\Gin@req@width=\dimen171
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/grffile.sty
+\Gin@req@height=\dimen177
+\Gin@req@width=\dimen178
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/grffile.s
+ty
 Package: grffile 2017/06/30 v1.18 Extended file name support for graphics (HO)
 Package grffile Info: Option `multidot' is set to `true'.
 Package grffile Info: Option `extendedchars' is set to `false'.
 Package grffile Info: Option `space' is set to `true'.
 Package grffile Info: \Gin@ii of package `graphicx' fixed on input line 494.
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/parskip/parskip.sty
-Package: parskip 2019-01-16 v2.0c non-zero parskip adjustments
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/titling/titling.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titling/titling.st
+y
 Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmarkwidth=\skip60
 \thanksmargin=\skip61
 \droptitle=\skip62
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/xcolor/xcolor.sty
+) (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.st
+y
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
+.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: xetex.def on input line 225.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/colortbl/colortbl.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.
+sty
 Package: colortbl 2018/12/12 v1.0d Color table columns (DPC)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/tools/array.sty
-Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
-\col@sep=\dimen172
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
+\col@sep=\dimen179
 \ar@mcellbox=\box54
-\extrarowheight=\dimen173
+\extrarowheight=\dimen180
 \NC@list=\toks24
 \extratabsurround=\skip63
 \backup@length=\skip64
@@ -669,7 +772,7 @@ Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
 \minrowclearance=\skip65
 )
 LaTeX Info: Redefining \color on input line 709.
-\rownum=\count300
+\rownum=\count301
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
 Package xcolor Info: Model `RGB' extended on input line 1364.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
@@ -686,10 +789,22 @@ Package fontspec Info: Arial scale = 0.8311558380414313.
 Package fontspec Info: Arial scale = 0.8311558380414313.
 
 
+Package fontspec Info: Arial scale = 0.8311558380414313.
+
+
+Package fontspec Info: Arial/B scale = 0.8311558380414313.
+
+
 Package fontspec Info: Arial/B scale = 0.8311558380414313.
 
 
 Package fontspec Info: Arial/I scale = 0.8311558380414313.
+
+
+Package fontspec Info: Arial/I scale = 0.8311558380414313.
+
+
+Package fontspec Info: Arial/BI scale = 0.8311558380414313.
 
 
 Package fontspec Info: Arial/BI scale = 0.8311558380414313.
@@ -705,440 +820,505 @@ Package fontspec Info: Font family 'Arial(0)' created for font 'Arial' with
 (fontspec)             - 'normal' (m/n) with NFSS spec.:
 (fontspec)             <->s*[0.8311558380414313]"Arial/OT:script=latn;language=
 DFLT;mapping=tex-text;"
-(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.:
+(fontspec)             <->s*[0.8311558380414313]"Arial/OT:script=latn;language=
+DFLT;+smcp;mapping=tex-text;"
 (fontspec)             - 'bold' (bx/n) with NFSS spec.:
 (fontspec)             <->s*[0.8311558380414313]"Arial/B/OT:script=latn;languag
 e=DFLT;mapping=tex-text;"
-(fontspec)             - 'bold small caps'  (bx/sc) with NFSS spec.: 
+(fontspec)             - 'bold small caps'  (bx/sc) with NFSS spec.:
+(fontspec)             <->s*[0.8311558380414313]"Arial/B/OT:script=latn;languag
+e=DFLT;+smcp;mapping=tex-text;"
 (fontspec)             - 'italic' (m/it) with NFSS spec.:
 (fontspec)             <->s*[0.8311558380414313]"Arial/I/OT:script=latn;languag
 e=DFLT;mapping=tex-text;"
-(fontspec)             - 'italic small caps'  (m/itsc) with NFSS spec.: 
+(fontspec)             - 'italic small caps'  (m/itsc) with NFSS spec.:
+(fontspec)             <->s*[0.8311558380414313]"Arial/I/OT:script=latn;languag
+e=DFLT;+smcp;mapping=tex-text;"
 (fontspec)             - 'bold italic' (bx/it) with NFSS spec.:
 (fontspec)             <->s*[0.8311558380414313]"Arial/BI/OT:script=latn;langua
 ge=DFLT;mapping=tex-text;"
-(fontspec)             - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+(fontspec)             - 'bold italic small caps'  (bx/itsc) with NFSS spec.:
+(fontspec)             <->s*[0.8311558380414313]"Arial/BI/OT:script=latn;langua
+ge=DFLT;+smcp;mapping=tex-text;"
 
-LaTeX Info: Redefining \rmfamily on input line 130.
+LaTeX Info: Redefining \rmfamily on input line 131.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 8.31161pt on input line 130.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/titlesec/titlesec.sty
-Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
+(Font)              scaled to size 8.31161pt on input line 131.
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/titlesec.
+sty
+Package: titlesec 2019/09/09 v2.12 Sectioning titles
 \ttl@box=\box56
 \beforetitleunit=\skip66
 \aftertitleunit=\skip67
-\ttl@plus=\dimen174
-\ttl@minus=\dimen175
+\ttl@plus=\dimen181
+\ttl@minus=\dimen182
 \ttl@toksa=\toks26
-\titlewidth=\dimen176
-\titlewidthlast=\dimen177
-\titlewidthfirst=\dimen178
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/tcolorbox/tcolorbox.sty
-Package: tcolorbox 2019/03/02 version 4.20 text color boxes
-(/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (/usr/loca
-l/texlive/2019/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.te
-x
-\pgfutil@everybye=\toks27
-\pgfutil@tempdima=\dimen179
-\pgfutil@tempdimb=\dimen180
+\titlewidth=\dimen183
+\titlewidthlast=\dimen184
+\titlewidthfirst=\dimen185
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tcolorbox/tcolorbo
+x.sty
+Package: tcolorbox 2019/09/19 version 4.21 text color boxes
 
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-li
-sts.tex))
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf
+.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfr
+cs.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
+futil-common.tex
+\pgfutil@everybye=\toks27
+\pgfutil@tempdima=\dimen186
+\pgfutil@tempdimb=\dimen187
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
+futil-common-lists.tex))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
+futil-latex.def
 \pgfutil@abb=\box57
-(/usr/local/texlive/2019/texmf-dist/tex/latex/ms/everyshi.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/ms/everyshi.sty
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
-)) (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.te
-x (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/pgf.revision.tex)
-Package: pgfrcs 2019/04/04 v3.1.2 (3.1.2)
 ))
-Package: pgf 2019/04/04 v3.1.2 (3.1.2)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (/usr/
-local/texlive/2019/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
-Package: pgfsys 2019/04/04 v3.1.2 (3.1.2)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
+frcs.code.tex
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revision
+.tex)
+Package: pgfrcs 2019/08/03 v3.1.4b (3.1.4b)
+))
+Package: pgf 2019/08/03 v3.1.4b (3.1.4b)
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf
+core.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systemlayer/pg
+fsys.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
+pgfsys.code.tex
+Package: pgfsys 2019/08/03 v3.1.4b (3.1.4b)
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
+fkeys.code.tex
 \pgfkeys@pathtoks=\toks28
 \pgfkeys@temptoks=\toks29
 
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.c
-ode.tex
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
+fkeysfiltered.code.tex
 \pgfkeys@tmptoks=\toks30
 ))
-\pgf@x=\dimen181
-\pgf@y=\dimen182
-\pgf@xa=\dimen183
-\pgf@ya=\dimen184
-\pgf@xb=\dimen185
-\pgf@yb=\dimen186
-\pgf@xc=\dimen187
-\pgf@yc=\dimen188
+\pgf@x=\dimen188
+\pgf@y=\dimen189
+\pgf@xa=\dimen190
+\pgf@ya=\dimen191
+\pgf@xb=\dimen192
+\pgf@yb=\dimen193
+\pgf@xc=\dimen194
+\pgf@yc=\dimen195
+\pgf@xd=\dimen196
+\pgf@yd=\dimen197
 \w@pgf@writea=\write4
 \r@pgf@reada=\read3
-\c@pgf@counta=\count301
-\c@pgf@countb=\count302
-\c@pgf@countc=\count303
-\c@pgf@countd=\count304
+\c@pgf@counta=\count302
+\c@pgf@countb=\count303
+\c@pgf@countc=\count304
+\c@pgf@countd=\count305
 \t@pgf@toka=\toks31
 \t@pgf@tokb=\toks32
 \t@pgf@tokc=\toks33
-\pgf@sys@id@count=\count305
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
-File: pgf.cfg 2019/04/04 v3.1.2 (3.1.2)
+\pgf@sys@id@count=\count306
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
+pgf.cfg
+File: pgf.cfg 2019/08/03 v3.1.4b (3.1.4b)
 )
 Driver file for pgf: pgfsys-xetex.def
 
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-xetex.de
-f
-File: pgfsys-xetex.def 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
+pgfsys-xetex.def
+File: pgfsys-xetex.def 2019/08/03 v3.1.4b (3.1.4b)
 
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvipdfmx
-.def
-File: pgfsys-dvipdfmx.def 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
+pgfsys-dvipdfmx.def
+File: pgfsys-dvipdfmx.def 2019/08/03 v3.1.4b (3.1.4b)
 
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-p
-df.def
-File: pgfsys-common-pdf.def 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
+pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2019/08/03 v3.1.4b (3.1.4b)
 )
-\pgfsys@objnum=\count306
+\pgfsys@objnum=\count307
 )))
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.
-code.tex
-File: pgfsyssoftpath.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgfsyssoftpath@smallbuffer@items=\count307
-\pgfsyssoftpath@bigbuffer@items=\count308
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
+pgfsyssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfsyssoftpath@smallbuffer@items=\count308
+\pgfsyssoftpath@bigbuffer@items=\count309
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.
-code.tex
-File: pgfsysprotocol.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
+pgfsysprotocol.code.tex
+File: pgfsysprotocol.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 ))
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
-Package: pgfcore 2019/04/04 v3.1.2 (3.1.2)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (/usr
-/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex (/usr/
-local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
-\pgfmath@dimen=\dimen189
-\pgfmath@count=\count309
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcore.code.tex
+Package: pgfcore 2019/08/03 v3.1.4b (3.1.4b)
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+.code.tex
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+calc.code.tex
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+util.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+parser.code.tex
+\pgfmath@dimen=\dimen198
+\pgfmath@count=\count310
 \pgfmath@box=\box58
 \pgfmath@toks=\toks34
 \pgfmath@stack@operand=\toks35
 \pgfmath@stack@operation=\toks36
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.
-tex
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic
-.code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigo
-nometric.code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.rando
-m.code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.compa
-rison.code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.
-code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round
-.code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.
-code.tex)
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integ
-erarithmetics.code.tex))) (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/m
-ath/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count310
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.code.tex
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.basic.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.trigonometric.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.random.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.comparison.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.base.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.round.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.misc.code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+functions.integerarithmetics.code.tex)))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
+float.code.tex
+\c@pgfmathroundto@lastzeros=\count311
 ))
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.co
-de.tex
-File: pgfcorepoints.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgf@picminx=\dimen190
-\pgf@picmaxx=\dimen191
-\pgf@picminy=\dimen192
-\pgf@picmaxy=\dimen193
-\pgf@pathminx=\dimen194
-\pgf@pathmaxx=\dimen195
-\pgf@pathminy=\dimen196
-\pgf@pathmaxy=\dimen197
-\pgf@xx=\dimen198
-\pgf@xy=\dimen199
-\pgf@yx=\dimen256
-\pgf@yy=\dimen257
-\pgf@zx=\dimen258
-\pgf@zy=\dimen259
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfint.
+code.tex)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorepoints.code.tex
+File: pgfcorepoints.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@picminx=\dimen199
+\pgf@picmaxx=\dimen256
+\pgf@picminy=\dimen257
+\pgf@picmaxy=\dimen258
+\pgf@pathminx=\dimen259
+\pgf@pathmaxx=\dimen260
+\pgf@pathminy=\dimen261
+\pgf@pathmaxy=\dimen262
+\pgf@xx=\dimen263
+\pgf@xy=\dimen264
+\pgf@yx=\dimen265
+\pgf@yy=\dimen266
+\pgf@zx=\dimen267
+\pgf@zy=\dimen268
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconst
-ruct.code.tex
-File: pgfcorepathconstruct.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgf@path@lastx=\dimen260
-\pgf@path@lasty=\dimen261
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorepathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@path@lastx=\dimen269
+\pgf@path@lasty=\dimen270
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage
-.code.tex
-File: pgfcorepathusage.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgf@shorten@end@additional=\dimen262
-\pgf@shorten@start@additional=\dimen263
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorepathusage.code.tex
+File: pgfcorepathusage.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@shorten@end@additional=\dimen271
+\pgf@shorten@start@additional=\dimen272
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.co
-de.tex
-File: pgfcorescopes.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorescopes.code.tex
+File: pgfcorescopes.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 \pgfpic=\box59
 \pgf@hbox=\box60
 \pgf@layerbox@main=\box61
-\pgf@picture@serial@count=\count311
+\pgf@picture@serial@count=\count312
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicst
-ate.code.tex
-File: pgfcoregraphicstate.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgflinewidth=\dimen264
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcoregraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgflinewidth=\dimen273
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransform
-ations.code.tex
-File: pgfcoretransformations.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgf@pt@x=\dimen265
-\pgf@pt@y=\dimen266
-\pgf@pt@temp=\dimen267
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcoretransformations.code.tex
+File: pgfcoretransformations.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@pt@x=\dimen274
+\pgf@pt@y=\dimen275
+\pgf@pt@temp=\dimen276
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.cod
-e.tex
-File: pgfcorequick.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorequick.code.tex
+File: pgfcorequick.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.c
-ode.tex
-File: pgfcoreobjects.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcoreobjects.code.tex
+File: pgfcoreobjects.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathproce
-ssing.code.tex
-File: pgfcorepathprocessing.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorepathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.co
-de.tex
-File: pgfcorearrows.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgfarrowsep=\dimen268
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorearrows.code.tex
+File: pgfcorearrows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfarrowsep=\dimen277
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.cod
-e.tex
-File: pgfcoreshade.code.tex 2019/04/04 v3.1.2 (3.1.2)
-\pgf@max=\dimen269
-\pgf@sys@shading@range@num=\count312
-\pgf@shadingcount=\count313
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@max=\dimen278
+\pgf@sys@shading@range@num=\count313
+\pgf@shadingcount=\count314
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.cod
-e.tex
-File: pgfcoreimage.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.
-code.tex
-File: pgfcoreexternal.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcoreexternal.code.tex
+File: pgfcoreexternal.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 \pgfexternal@startupbox=\box62
 ))
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.co
-de.tex
-File: pgfcorelayers.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorelayers.code.tex
+File: pgfcorelayers.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretranspare
-ncy.code.tex
-File: pgfcoretransparency.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcoretransparency.code.tex
+File: pgfcoretransparency.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.
-code.tex
-File: pgfcorepatterns.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorepatterns.code.tex
+File: pgfcorepatterns.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.
-tex
-File: pgfcorerdf.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
+gfcorerdf.code.tex
+File: pgfcorerdf.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )))
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.cod
-e.tex
-File: pgfmoduleshapes.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfm
+oduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 \pgfnodeparttextbox=\box63
 )
-(/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.
-tex
-File: pgfmoduleplot.code.tex 2019/04/04 v3.1.2 (3.1.2)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfm
+oduleplot.code.tex
+File: pgfmoduleplot.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 )
-(/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version
--0-65.sty
-Package: pgfcomp-version-0-65 2019/04/04 v3.1.2 (3.1.2)
-\pgf@nodesepstart=\dimen270
-\pgf@nodesepend=\dimen271
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/
+pgfcomp-version-0-65.sty
+Package: pgfcomp-version-0-65 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@nodesepstart=\dimen279
+\pgf@nodesepend=\dimen280
 )
-(/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version
--1-18.sty
-Package: pgfcomp-version-1-18 2019/04/04 v3.1.2 (3.1.2)
-)) (/usr/local/texlive/2019/texmf-dist/tex/latex/tools/verbatim.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/
+pgfcomp-version-1-18.sty
+Package: pgfcomp-version-1-18 2019/08/03 v3.1.4b (3.1.4b)
+))
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty
 Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
 \every@verbatim=\toks37
 \verbatim@line=\toks38
 \verbatim@in@stream=\read4
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/environ/environ.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.st
+y
 Package: environ 2014/05/04 v0.3 A new way to define environments
-(/usr/local/texlive/2019/texmf-dist/tex/latex/trimspaces/trimspaces.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspa
+ces.sty
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ))
 \tcb@titlebox=\box64
 \tcb@upperbox=\box65
 \tcb@lowerbox=\box66
 \tcb@phantombox=\box67
-\c@tcbbreakpart=\count314
-\c@tcblayer=\count315
-\tcolorbox@number=\count316
+\c@tcbbreakpart=\count315
+\c@tcblayer=\count316
+\tcolorbox@number=\count317
 \tcb@temp=\box68
 \tcb@temp=\box69
 \tcb@temp=\box70
 \tcb@temp=\box71
 \tcb@out=\write5
 \tcb@record@out=\write6
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2018/04/16 v5.8 Page Geometry
-\Gm@cnth=\count317
-\Gm@cntv=\count318
-\c@Gm@tempcnt=\count319
-\Gm@bindingoffset=\dimen272
-\Gm@wd@mp=\dimen273
-\Gm@odd@mp=\dimen274
-\Gm@even@mp=\dimen275
-\Gm@layoutwidth=\dimen276
-\Gm@layoutheight=\dimen277
-\Gm@layouthoffset=\dimen278
-\Gm@layoutvoffset=\dimen279
-\Gm@dimlist=\toks39
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/tabu/tabu.sty
+) (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tabu/tabu.sty
 Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/varwidth/varwidth.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.
+sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box72
-\sift@deathcycles=\count320
-\@vwid@loff=\dimen280
-\@vwid@roff=\dimen281
+\sift@deathcycles=\count318
+\@vwid@loff=\dimen281
+\@vwid@roff=\dimen282
 )
-\c@taburow=\count321
-\tabu@nbcols=\count322
-\tabu@cnt=\count323
-\tabu@Xcol=\count324
-\tabu@alloc=\count325
-\tabu@nested=\count326
-\tabu@target=\dimen282
-\tabu@spreadtarget=\dimen283
-\tabu@naturalX=\dimen284
-\tabucolX=\dimen285
-\tabu@Xsum=\dimen286
-\extrarowdepth=\dimen287
-\abovetabulinesep=\dimen288
-\belowtabulinesep=\dimen289
-\tabustrutrule=\dimen290
-\tabu@thebody=\toks40
-\tabu@footnotes=\toks41
+\c@taburow=\count319
+\tabu@nbcols=\count320
+\tabu@cnt=\count321
+\tabu@Xcol=\count322
+\tabu@alloc=\count323
+\tabu@nested=\count324
+\tabu@target=\dimen283
+\tabu@spreadtarget=\dimen284
+\tabu@naturalX=\dimen285
+\tabucolX=\dimen286
+\tabu@Xsum=\dimen287
+\extrarowdepth=\dimen288
+\abovetabulinesep=\dimen289
+\belowtabulinesep=\dimen290
+\tabustrutrule=\dimen291
+\tabu@thebody=\toks39
+\tabu@footnotes=\toks40
 \tabu@box=\box73
 \tabu@arstrutbox=\box74
 \tabu@hleads=\box75
 \tabu@vleads=\box76
 \tabu@cellskip=\skip68
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/float/float.sty
+) (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count327
-\float@exts=\toks42
+\c@float@type=\count325
+\float@exts=\toks41
 \float@box=\box77
-\@float@everytoks=\toks43
+\@float@everytoks=\toks42
 \@floatcapt=\box78
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/multirow/multirow.sty
-Package: multirow 2019/01/01 v2.4 Span multiple rows of a table
-\multirow@colwidth=\skip69
-\multirow@cntb=\count328
-\multirow@dima=\skip70
-\bigstrutjot=\dimen291
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/wrapfig/wrapfig.sty
-\wrapoverhang=\dimen292
-\WF@size=\dimen293
-\c@WF@wrappedlines=\count329
-\WF@box=\box79
-\WF@everypar=\toks44
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
+\c@tracingmulticols=\count326
+\mult@box=\box79
+\multicol@leftmargin=\dimen292
+\c@unbalance=\count327
+\c@collectmore=\count328
+\doublecol@number=\count329
+\multicoltolerance=\count330
+\multicolpretolerance=\count331
+\full@width=\dimen293
+\page@free=\dimen294
+\premulticols=\dimen295
+\postmulticols=\dimen296
+\multicolsep=\skip69
+\multicolbaselineskip=\skip70
+\partial@page=\box80
+\last@line=\box81
+\maxbalancingoverflow=\dimen297
+\mult@rightbox=\box82
+\mult@grightbox=\box83
+\mult@gfirstbox=\box84
+\mult@firstbox=\box85
+\@tempa=\box86
+\@tempa=\box87
+\@tempa=\box88
+\@tempa=\box89
+\@tempa=\box90
+\@tempa=\box91
+\@tempa=\box92
+\@tempa=\box93
+\@tempa=\box94
+\@tempa=\box95
+\@tempa=\box96
+\@tempa=\box97
+\@tempa=\box98
+\@tempa=\box99
+\@tempa=\box100
+\@tempa=\box101
+\@tempa=\box102
+\c@minrows=\count332
+\c@columnbadness=\count333
+\c@finalcolumnbadness=\count334
+\last@try=\dimen298
+\multicolovershoot=\dimen299
+\multicolundershoot=\dimen300
+\mult@nat@firstbox=\box103
+\colbreak@box=\box104
+\mc@col@check@num=\count335
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.
+sty
+Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
+\multirow@colwidth=\skip71
+\multirow@cntb=\count336
+\multirow@dima=\skip72
+\bigstrutjot=\dimen301
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.st
+y
+\wrapoverhang=\dimen302
+\WF@size=\dimen303
+\c@WF@wrappedlines=\count337
+\WF@box=\box105
+\WF@everypar=\toks43
 Package: wrapfig 2003/01/31  v 3.6
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/pdflscape.sty
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/pdflscape
+.sty
 Package: pdflscape 2016/05/14 v0.11 Display of landscape pages in PDF (HO)
-(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/lscape.sty
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/lscape.st
+y
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: dvipdfm (xetex) on input line 99.
 
 )
-(/usr/local/texlive/2019/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttable/thr
+eeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
-\@tempboxb=\box80
+\@tempboxb=\box106
 )
-(/usr/local/texlive/2019/texmf-dist/tex/latex/threeparttablex/threeparttablex.s
-ty
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttablex/th
+reeparttablex.sty
 Package: threeparttablex 2013/07/23 v0.3 by daleif
-\TPTL@width=\skip71
-) (/usr/local/texlive/2019/texmf-dist/tex/generic/ulem/ulem.sty
-\UL@box=\box81
-\UL@hyphenbox=\box82
-\UL@skip=\skip72
-\UL@hook=\toks45
-\UL@height=\dimen294
-\UL@pe=\count330
-\UL@pixel=\dimen295
-\ULC@box=\box83
+\TPTL@width=\skip73
+) (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
+\UL@box=\box107
+\UL@hyphenbox=\box108
+\UL@skip=\skip74
+\UL@hook=\toks44
+\UL@height=\dimen304
+\UL@pe=\count338
+\UL@pixel=\dimen305
+\ULC@box=\box109
 Package: ulem 2012/05/18
-\ULdepth=\dimen296
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/makecell/makecell.sty
+\ULdepth=\dimen306
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/makecell/makecell.
+sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
-\rotheadsize=\dimen297
-\c@nlinenum=\count331
-\TeXr@lab=\toks46
+\rotheadsize=\dimen307
+\c@nlinenum=\count339
+\TeXr@lab=\toks45
 ) (./Group2_Project1_Fall2019.aux)
 \openout1 = `Group2_Project1_Fall2019.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 163.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 163.
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1cmr.fd
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 174.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
+74.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Info: Redefining \microtypecontext on input line 163.
-Package microtype Info: Character protrusion enabled (level 2).
-Package microtype Info: Using protrusion set `basicmath'.
-Package microtype Info: No adjustment of tracking.
-Package microtype Info: No adjustment of spacing.
-Package microtype Info: No adjustment of kerning.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `Arial' (encoding: TU).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-\AtBeginShipoutBox=\box84
-Package hyperref Info: Link coloring OFF on input line 163.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
-)
-\c@section@level=\count332
-)
-LaTeX Info: Redefining \ref on input line 163.
-LaTeX Info: Redefining \pageref on input line 163.
-LaTeX Info: Redefining \nameref on input line 163.
-(./Group2_Project1_Fall2019.out) (./Group2_Project1_Fall2019.out)
-\@outlinefile=\write7
-\openout7 = `Group2_Project1_Fall2019.out'.
-
-ABD: EveryShipout initializing macros
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 174.
+LaTeX Font Info:    ... okay on input line 174.
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -1147,15 +1327,15 @@ ABD: EveryShipout initializing macros
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: twoside 
-* h-part:(L,W,R)=(73.71613pt, 430.00462pt, 110.57425pt)
-* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
+* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
-* \textwidth=430.00462pt
-* \textheight=556.47656pt
-* \oddsidemargin=1.44614pt
-* \evensidemargin=38.30426pt
-* \topmargin=-6.94011pt
+* \textwidth=469.75502pt
+* \textheight=650.43001pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-30.06749pt
 * \headheight=12.0pt
 * \headsep=18.06749pt
 * \topskip=10.0pt
@@ -1173,41 +1353,62 @@ ABD: EveryShipout initializing macros
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+\AtBeginShipoutBox=\box110
+Package hyperref Info: Link coloring OFF on input line 174.
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
+ty
+Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/oberdiek/gettitl
+estring.sty
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+)
+\c@section@level=\count340
+)
+LaTeX Info: Redefining \ref on input line 174.
+LaTeX Info: Redefining \pageref on input line 174.
+LaTeX Info: Redefining \nameref on input line 174.
+(./Group2_Project1_Fall2019.out) (./Group2_Project1_Fall2019.out)
+\@outlinefile=\write7
+\openout7 = `Group2_Project1_Fall2019.out'.
+
+ABD: EveryShipout initializing macros
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 17.23828pt on input line 164.
+(Font)              scaled to size 17.23828pt on input line 175.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 9.97394pt on input line 164.
+(Font)              scaled to size 9.97394pt on input line 175.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/it' will be
-(Font)              scaled to size 9.97394pt on input line 164.
+(Font)              scaled to size 9.97394pt on input line 175.
 [1
 
 
 ]
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 14.36246pt on input line 168.
+(Font)              scaled to size 14.36246pt on input line 179.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 14.36246pt on input line 168.
+(Font)              scaled to size 14.36246pt on input line 179.
 (./Group2_Project1_Fall2019.toc
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
 (Font)              scaled to size 8.31161pt on input line 1.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 2.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/ot1lmr.fd
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
+.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-LatinModernRoman.cfg
-File: mt-LatinModernRoman.cfg 2013/03/13 v1.0 microtype config. file: Latin Mod
-ern Roman (RS)
-)
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 2.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omllmm.fd
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
+.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 2.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omslmsy.fd
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
+2.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 2.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omxlmex.fd
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
+2.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -1216,17 +1417,13 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 2.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 2.
-LaTeX Font Info:    Try loading font information for U+msa on input line 2.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
+LaTeX Font Info:    Trying to load font information for U+msa on input line 2.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 2.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
+LaTeX Font Info:    Trying to load font information for U+msb on input line 2.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ))
 \tf@toc=\write8
 \openout8 = `Group2_Project1_Fall2019.toc'.
@@ -1235,299 +1432,244 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 ]
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 11.96872pt on input line 182.
+(Font)              scaled to size 11.96872pt on input line 193.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 11.96872pt on input line 182.
+(Font)              scaled to size 11.96872pt on input line 193.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 183.
+(hyperref)                be the same. Added a new anchor on input line 194.
 
 
-Package xcolor Warning: Incompatible color definition on input line 187.
+Package xcolor Warning: Incompatible color definition on input line 198.
 
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 189.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 200.
 
-Package xcolor Warning: Incompatible color definition on input line 202.
-
-
-Package xcolor Warning: Incompatible color definition on input line 202.
+Package xcolor Warning: Incompatible color definition on input line 214.
 
 
-Package xcolor Warning: Incompatible color definition on input line 217.
+Package xcolor Warning: Incompatible color definition on input line 214.
 
 
-Package xcolor Warning: Incompatible color definition on input line 230.
+Package xcolor Warning: Incompatible color definition on input line 229.
 
 
-Package xcolor Warning: Incompatible color definition on input line 230.
+Package xcolor Warning: Incompatible color definition on input line 242.
+
+
+Package xcolor Warning: Incompatible color definition on input line 242.
 
 [3
 
 ]
 Chapter 1.
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-2-1.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-2-1.pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-2-1".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-2-1".pdf>
+
+Underfull \hbox (badness 10000) in paragraph at lines 311--318
+
+ []
+
 [4
 
 ]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf>
-
-Underfull \hbox (badness 10000) in paragraph at lines 312--317
-
- []
-
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-3-1".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-3-1".pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-4-1".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-4-1".pdf>
 [5]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-1.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-1.pdf>
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-2.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-2.pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-6-1".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-6-1".pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-6-2".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-6-2".pdf>
 [6]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf>
-[7] [8]
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-7-1".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-7-1".pdf>
+[7]
 Chapter 2.
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-8-1.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-8-1.pdf>
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-9-1.pdf Graphic
- file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-9-1.pdf>
-[9
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-8-1".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-8-1".pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-9-1".pdf Gra
+phic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-9-1".pdf>
+[8
 
 ]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-10-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-10-1.pdf>
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-11-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-11-1.pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-10-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-10-1".pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-11-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-11-1".pdf>
+[9]
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-12-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-12-1".pdf>
 [10]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-12-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-12-1.pdf>
-[11]
 Chapter 3.
-
-Underfull \hbox (badness 10000) in paragraph at lines 558--560
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 567--568
-
- []
-
-[12
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-14-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-14-1".pdf>
+[11
 
 ]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-14-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-14-1.pdf>
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 9.97394pt on input line 595.
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-15-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-15-1.pdf>
+(Font)              scaled to size 9.97394pt on input line 602.
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-15-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-15-1".pdf>
+[12]
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-17-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-17-1".pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-18-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-18-1".pdf>
 [13]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-17-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-17-1.pdf>
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-18-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-18-1.pdf>
-[14]
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/it' will be
-(Font)              scaled to size 8.31161pt on input line 665.
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-19-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-19-1.pdf>
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-20-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-20-1.pdf>
-[15]
+(Font)              scaled to size 8.31161pt on input line 672.
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-19-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-19-1".pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-20-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-20-1".pdf>
+[14]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 712.
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-21-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-21-1.pdf>
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 719.
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-21-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-21-1".pdf>
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <12> on input line 764.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 764.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 764.
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-22-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-22-1".pdf>
+[15]
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-23-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-23-1".pdf>
 [16]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 757.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 757.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 757.
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-22-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-22-1.pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-24-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-24-1".pdf>
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-25-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-25-1".pdf>
 [17]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-23-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-23-1.pdf>
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-24-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-24-1.pdf>
-[18]
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-25-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-25-1.pdf>
-File: Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-26-1.pdf Graphi
-c file (type pdf)
-<use Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-26-1.pdf>
-[19] [20] [21
+File: "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-26-1".pdf Gr
+aphic file (type pdf)
+<use "Group2_Project1_Fall2019_files/figure-latex/""unnamed-chunk-26-1".pdf>
+[18] [19] [20
 
-] [22] [23]
+] [21]
 
-Package xcolor Warning: Incompatible color definition on input line 1051.
+Package xcolor Warning: Incompatible color definition on input line 1058.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1106.
+Package xcolor Warning: Incompatible color definition on input line 1113.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1106.
+Package xcolor Warning: Incompatible color definition on input line 1113.
 
 
-Underfull \vbox (badness 10000) detected at line 1106
- []
+Package xcolor Warning: Incompatible color definition on input line 1113.
+
+[22]
+
+Package xcolor Warning: Incompatible color definition on input line 1113.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1106.
+Package xcolor Warning: Incompatible color definition on input line 1113.
 
-[24]
-
-Package xcolor Warning: Incompatible color definition on input line 1106.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1106.
-
-[25]
-Overfull \hbox (21.49538pt too wide) in paragraph at lines 1147--1147
-[] \TU/lmtt/m/n/10 ets(y = x, model = etsmodel, allow.multiplicative.trend = al
-low.multiplicative.trend)[] 
- []
-
-[26
+[23] [24
 
 ]
-Overfull \hbox (100.24538pt too wide) in paragraph at lines 1192--1192
+Overfull \hbox (60.49498pt too wide) in paragraph at lines 1199--1199
 [] \TU/lmtt/m/n/10 ets(y = x, model = etsmodel, damped = TRUE, allow.multiplica
 tive.trend = allow.multiplicative.trend)[] 
  []
 
-[27] [28]
+[25]
 
-Package xcolor Warning: Incompatible color definition on input line 1282.
+Package xcolor Warning: Incompatible color definition on input line 1289.
 
+[26]
 
-Package xcolor Warning: Incompatible color definition on input line 1333.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1333.
+Package xcolor Warning: Incompatible color definition on input line 1340.
 
 
-Overfull \vbox (0.46648pt too high) detected at line 1333
- []
+Package xcolor Warning: Incompatible color definition on input line 1340.
 
-
-Package xcolor Warning: Incompatible color definition on input line 1333.
-
-[29]
-
-Package xcolor Warning: Incompatible color definition on input line 1333.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1333.
-
-[30] [31
+[27] [28
 
 ]
 
-Package xcolor Warning: Incompatible color definition on input line 1420.
+Package xcolor Warning: Incompatible color definition on input line 1427.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1564.
+Package xcolor Warning: Incompatible color definition on input line 1571.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1564.
+Package xcolor Warning: Incompatible color definition on input line 1571.
 
 
-Underfull \vbox (badness 10000) detected at line 1564
+Package xcolor Warning: Incompatible color definition on input line 1571.
+
+[29]
+
+Package xcolor Warning: Incompatible color definition on input line 1571.
+
+
+Package xcolor Warning: Incompatible color definition on input line 1571.
+
+
+Underfull \vbox (badness 10000) detected at line 1571
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-[32]
-
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-
-Underfull \vbox (badness 10000) detected at line 1564
+Underfull \vbox (badness 10000) detected at line 1571
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1564
- []
+Package xcolor Warning: Incompatible color definition on input line 1571.
+
+[30]
+
+Package xcolor Warning: Incompatible color definition on input line 1571.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1564.
+Package xcolor Warning: Incompatible color definition on input line 1571.
 
-[33]
-
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-
-Underfull \vbox (badness 10000) detected at line 1564
- []
-
-
-Overfull \vbox (1.14342pt too high) detected at line 1564
- []
-
-
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-[34]
-
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1564.
-
-[35]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1567.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1567.
+[31]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1574.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1574.
 (./Group2_Project1_Fall2019.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1567.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1567.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1574.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1574.
 
 Package rerunfilecheck Info: File `Group2_Project1_Fall2019.out' has not change
 d.
 (rerunfilecheck)             Checksum: 2217A2890531F99975E6995BA946BCAA.
  ) 
 Here is how much of TeX's memory you used:
- 35559 strings out of 492916
- 687481 string characters out of 6133346
- 816566 words of memory out of 5000000
- 39100 multiletter control sequences out of 15000+600000
+ 35420 strings out of 494468
+ 690186 string characters out of 6172222
+ 793750 words of memory out of 5000000
+ 39276 multiletter control sequences out of 15000+600000
  557311 words of font info for 84 fonts, out of 8000000 for 9000
- 1348 hyphenation exceptions out of 8191
- 54i,15n,116p,1213b,499s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 14 hyphenation exceptions out of 8191
+ 59i,15n,116p,821b,485s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Group2_Project1_Fall2019.pdf (35 pages).
+Output written on Group2_Project1_Fall2019.pdf (31 pages).

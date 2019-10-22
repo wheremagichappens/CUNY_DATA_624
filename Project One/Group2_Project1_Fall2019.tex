@@ -21,6 +21,7 @@
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
+\usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
             pdftitle={DATA 624: Project 1},
@@ -144,7 +145,17 @@
 
 % kable 
 \usepackage{tabu}
-\usepackage{float}
+\usepackage{float} 
+
+% multicolumn
+\usepackage{multicol}
+
+% bullets
+\newenvironment{tight_enumerate}{
+\begin{enumerate}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  }{\end{enumerate}}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -191,7 +202,8 @@ The following R libraries were used to complete this assignment:
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'knitr'}\NormalTok{, }\StringTok{'kableExtra'}\NormalTok{, }\StringTok{'default'}\NormalTok{)}
 
 \CommentTok{# Processing}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'readxl'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'imputeTS'}\NormalTok{, }\StringTok{'tsoutliers'}\NormalTok{, }\StringTok{'lubridate'}\NormalTok{, }\StringTok{'xlsx'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'readxl'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'imputeTS'}\NormalTok{, }\StringTok{'tsoutliers'}\NormalTok{, }\StringTok{'lubridate'}\NormalTok{)}
+\CommentTok{# 'xlsx'}
 
 \CommentTok{# Timeseries }
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'psych'}\NormalTok{, }\StringTok{'urca'}\NormalTok{, }\StringTok{'forecast'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{, }\StringTok{'fpp2'}\NormalTok{)}
@@ -302,7 +314,7 @@ the paucity of observations in the training data, the simplest possible
 approach to forecasting ATM3, averaging, is likely best. Given that ATM3
 distributed no cash until April 28, 2010, we'll assume that it was not
 operating until then and only include the three day window of non-zero
-observations in the forecast.
+observations in the forecast. \newline
 
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf}
 
@@ -313,9 +325,11 @@ We constructed our initial timeseries for ATM1, ATM2, and ATM4 using a
 weekly frequency. Our ACF plots for each ATM showcases large, decreasing
 lags starting at 7. This pattern continues in a multiple of seven, which
 confirms our assumption about seasonality within the observed data.
-These lags are indicative of a weekly pattern. \newline
+These lags are indicative of a weekly pattern.
 
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\newpage
 
 Our plots further suggest that the ATM data is non-stationary. We
 performed a unit root test using the \texttt{ur.kpss()} function to
@@ -520,14 +534,25 @@ labeled.
 
 Because of the disparities in the data some grooming was necessary:
 
-\textbf{Pipe one:}\\
-* 1000 observations * No missing values * Multiple reading within each
-hour\\
-* 9-days of data
+\begin{multicols}{2}
 
-\textbf{Pipe Two}\\
-* 1000 Observations\\
-* No missing values * Single reading on the hour * 41-days of data
+\textbf{Pipe one}
+\begin{enumerate}
+  \item 1000 Observations
+  \item No missing values
+  \item Multiple reading within each hour
+  \item 9-days of data
+\end{enumerate}
+
+\textbf{Pipe Two}
+\begin{enumerate}
+  \item 1000 Observations
+  \item No missing values
+  \item Single reading on the hour
+  \item 41-days of data  
+\end{enumerate}
+
+\end{multicols}
 
 Pipe One represents 9 days of water flow rate measurements with multiple
 samples per hour. In order to align with hourly readings from Pipe Two,
@@ -541,55 +566,37 @@ The two data sets posed an interesting conundrum. We considered two
 possible approaches:
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
+\def\labelenumi{(\arabic{enumi})}
 \tightlist
 \item
   Merge the files and use only 236 observations.
+
+  \begin{itemize}
+    \item All forecasts would be based on the combined data. 
+    \item This would mean making 168 forecasts ($7days x 24hours$) with only 236 data-points prior.
+    \item All forecasts would start November 1 rather than December 3 (the end of the most recent time series).
+  \end{itemize}
+\item
+  Merge the files and use the whole set to make predictions.
+
+  \begin{itemize}
+    \item We would have 1000 observations to model prior to forecasts. 
+    \item 236 of the observations would be be different from the remaining 764, which could both alter the model type and forecast. 
+    \item We would forecast from the natural ending of the Pipe Two readings.
+  \end{itemize}
 \end{enumerate}
 
-\begin{itemize}
-\tightlist
-\item
-  All forecasts would be based on the combined data.
-\item
-  This would mean making 168 forecasts (\(7days x 24hours\)) with only
-  236 data-points prior.
-\item
-  All forecasts would start November 1 rather than December 3 (the end
-  of the most recent time series).\\
-\end{itemize}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  Merge the files and use the whole set to make predictions.\\
-\end{enumerate}
-
-\begin{itemize}
-\tightlist
-\item
-  We would have 1000 observations to model prior to forecasts.
-\item
-  236 of the observations would be be different from the remaining 764,
-  which could both alter the model type and forecast.
-\item
-  We would forecast from the natural ending of the Pipe Two readings. In
-  the end, it made the most sense to model the combined sets in their
-  entireties, so method two was adopted.
-\end{itemize}
-
-Because daily periodicity is conceivable for this data, it was important
-to use a frequency of 24 in converting this data. This entailed
-numbering by day of year and grooming the time series to start on the
-7081 hour (which aligns with October 23 01:00 AM our first merged
-observation).
-
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-14-1.pdf}
+In the end, it made the most sense to model the combined sets in their
+entireties, so method two was adopted. Because daily periodicity is
+conceivable for this data, it was important to use a frequency of 24 in
+converting this data. This entailed numbering by day of year and
+grooming the time series to start on the 7081 hour (which aligns with
+October 23 01:00 AM our first merged observation).
 
 \hypertarget{evaluation-2}{%
 \section{Evaluation}\label{evaluation-2}}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-14-1.pdf}
 
 \hypertarget{decomposition}{%
 \subsection{Decomposition}\label{decomposition}}
@@ -769,7 +776,7 @@ Box Cox transformation: lambda= 0.9531552
 Coefficients:
           ar1     ar2      ma1      ma2     ma3    sma1
       -0.1435  0.1884  -0.8478  -0.2709  0.1621  0.0798
-s.e.      NaN  0.5408      NaN   0.6070  0.5319  0.0318
+s.e.      NaN  0.5408      NaN   0.6069  0.5320  0.0318
 
 sigma^2 estimated as 187.5:  log likelihood=-4034.02
 AIC=8082.05   AICc=8082.16   BIC=8116.4
@@ -798,7 +805,7 @@ Box Cox transformation: lambda= 0.9531552
 
 Coefficients:
           ar1      ma1      ma2    sma1
-      -0.2655  -0.7307  -0.2103  0.0790
+      -0.2655  -0.7307  -0.2104  0.0790
 s.e.   0.9490   0.9533   0.9121  0.0318
 
 sigma^2 estimated as 187.1:  log likelihood=-4034.08
@@ -1122,16 +1129,16 @@ ARIMA(3,0,2)(2,1,0)[12] with drift
 Coefficients:
           ar1      ar2     ar3     ma1     ma2     sar1     sar2     drift
       -0.5606  -0.2216  0.3284  0.8902  0.4827  -0.7249  -0.4152  9018.405
-s.e.   0.3992   0.3382  0.0960  0.4120  0.4551   0.0797   0.0841  3027.692
+s.e.   0.3992   0.3382  0.0960  0.4120  0.4551   0.0797   0.0841  3027.685
 
-sigma^2 estimated as 387762785875:  log likelihood=-2657.12
+sigma^2 estimated as 387762785879:  log likelihood=-2657.12
 AIC=5332.24   AICc=5333.3   BIC=5360.97
 
 Training set error measures:
                     ME     RMSE      MAE        MPE     MAPE      MASE
-Training set -8455.078 589381.7 427752.5 -0.7944782 6.475365 0.6904053
+Training set -8455.077 589381.7 427752.5 -0.7944782 6.475365 0.6904053
                      ACF1
-Training set 0.0006090191
+Training set 0.0006090194
 \end{verbatim}
 
 \textbf{\texttt{STL\ -\ MNN}:}
