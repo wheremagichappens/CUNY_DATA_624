@@ -25,13 +25,13 @@ output:
 
 # Overview {-#overview}
 
-We split the work into three sections for Project 1. Individual team members each took lead on individual problem. Jermey and Julian focused on Part A, Sang Yoon (Andy) and Vinicio worked on Part B, and Bethany took lead on Part C.  Juliann created an overall format for the assignment to be used and all team members collectively worked together on reviewing and merging our finished product. 
+We split the work into three sections for Project 1. Individual team members each took lead on individual problem. Jeremey and Julian focused on Part A, Sang Yoon (Andy) and Vinicio worked on Part B, and Bethany took lead on Part C.  Juliann created an overall format for the assignment to be used and all team members collectively worked together on reviewing and merging our finished product. 
 
 ## Dependencies {-#dependencies}
 
 The following R libraries were used to complete this assignment:
 
-```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=F}
+```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=NA}
 library(easypackages)
 
 libraries('knitr', 'kableExtra', 'default')
@@ -48,7 +48,7 @@ libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr', 'scales')
 
 ## Data {-#data}
 
-Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report. For replication purposes, we also made our R scripts available within our appendix. All forecasts were exported and saved a `.csv` file in our [github repository](https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project%20One/) folder named forecasts.
+Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report. For replication purposes, we also made our R scripts available within our appendix. All forecasts have been exported and saved to a single  `.xlsx` file in our [github repository](https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project%20One/) folder named forecasts.
 
 ```{r, eval=F}
 # Data Aquisition
@@ -76,7 +76,7 @@ suppressWarnings(source("scripts/Part-B.R"))
 suppressWarnings(source("scripts/Part-C.R"))
 
 # Set default augments for code chunks
-knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=NA, fig.width=10, fig.height = 3)
 
 # Set default augments for `kable_styling()` 
 default(kable) <- list(format="latex")
@@ -99,7 +99,7 @@ default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
 
 # Part A: ATMs
 
->  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
+>  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that, it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
 
 ## Exploration
 
@@ -248,7 +248,7 @@ Forecasts for ATM1, ATM2, and ATM4 reprise the clear, persistent weekly pattern 
 
 # Part B: Forecasting Power
 
-> **Instructions:** Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward.    Add these to your existing files above - clearly labeled.  
+> **Instructions:** Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward. Add these to your existing files above - clearly labeled.  
 
 ## Exploration
 
@@ -376,25 +376,26 @@ Because of the disparities in the data some grooming was necessary:
 * 9-days of data  
  
 **Pipe Two**  
-* 100 Observations  
+* 1000 Observations  
 * No missing values 
 * Single reading on the hour 
 * 41-days of data  
  
-Pipe One represents 9 days of water flow rate measurements with multiple samples per hour.  In order to align with hourly readings from Pipe Two, a mean of all Pipe One rates in a given hour was taken and labeled by its 'floor' (i.e. 9 for 9:41, 2 for 2:07, etc.). After aggregating, this yielded 236 observations (spanning nine days) for Pipe One compared with 1000 observations (spanning  41days) from Pipe Two.
+Pipe One represents 9 days of water flow rate measurements with multiple samples per hour.  In order to align with hourly readings from Pipe Two, a mean of all Pipe One rates in a given hour was taken and labeled by its 'floor' (i.e. 9 for mean of all times between 9:00 and 9:59 -inclusive of both bounds). After aggregating, this yielded 236 observations (spanning nine days) for Pipe One and 1000 observations (spanning  41days) for Pipe Two.
 
 The two data sets posed an interesting conundrum.  We considered two possible approaches:
 
 1. Merge the files and use only 236 observations. 
   + All forecasts would be based on the combined data. 
-  + This would mean making 168 forecasts with only 236 data-points prior. 
-  + All forecasts would start November 1 rather than December 3 (the end of the time series).   
+  + This would mean making 168 forecasts ($7days x 24hours$) with only 236 data-points prior. 
+  + All forecasts would start November 1 rather than December 3 (the end of the most recent time series).   
 2. Merge the files and use the whole set to make predictions.  
-  + We would have 100 observations to model prior to forecasts. 
+  + We would have 1000 observations to model prior to forecasts. 
   + 236 of the observations would be be different from the remaining 764, which could both alter the model type and forecast. 
   + We would forecast from the natural ending of the Pipe Two readings.
+In the end, it made the most sense to model the combined sets in their entireties, so method two was adopted.  
 
-Because daily periodicity is conceivable for this data, it was important to use a frequency of 24. This entailed numbering by day of year and grooming the time series to start on the 7081 hour (which aligns with October 23 01:00 AM).
+Because daily periodicity is conceivable for this data, it was important to use a frequency of 24 in converting this data. This entailed numbering by day of year and grooming the time series to start on the 7081 hour (which aligns with October 23 01:00 AM our first merged observation).
 
 
 ```{r}
@@ -420,17 +421,17 @@ It is clear from the combined plot that there is a pretty notable change in the 
 ```{r, fig.height=6}
 ws_decomp
 ```
-From the decomposition, there appears to be a seasonal component in agreement with the assessment that there might be a daily flowrate periodicity. Also, as expected, around day 306 - where Pipe One flow rates go silent - there is a downward trend followed by a plateau thereafter. 
+From the decomposition, there appears to be a seasonal component, which in agreement with the prior assessment that there might be a daily flowrate periodicity. Also, as expected, around day 306, where Pipe One flow rates go silent, there is a downward trend followed by a rolling plateau thereafter. 
 
 ### Estimating Stationarity
 
-Number of Estimated Differences: `r ws_diffs`
+Number of Estimated Differences using `ndiff()`: `r ws_diffs`
 
 ```{r echo=FALSE}
 tseries::adf.test(ws) 
 ```
 
-Here we encounter contradictory estimates: `ndiffs()` suggests a difference of 1, and the augmented dicky fuller test suggests that we are stationary as-is. An `auto.arima()` may provide a reasonable starting place.
+Here we encounter contradictory estimates: `ndiffs()` suggests a difference of 1, and the augmented dicky fuller test suggests that we are stationary as-is. An `auto.arima()` may provide insight into a reasonable starting place.
 
 ### Estimating  Orders for ARIMA
 
@@ -440,7 +441,7 @@ Here we encounter contradictory estimates: `ndiffs()` suggests a difference of 1
 grid.arrange(ws_acf, ws_pacf, nrow=1)
 ```  
 
-As the ACF remain wholly above the critical threshold the series will likely require differencing as suggested by the `ndiffs()`. On the other hand, the PACF introduces some ambiguity on the need for differencing.  Following the intial downward trend below the critical threshold, there is a slight spike at 24 suggesting a daily period or season that needs to be accounted for in our forecast.
+As the ACF remains wholly above the critical threshold the series will likely require differencing as suggested by the `ndiffs()`.  There is a spike at 24 on both PACF and ACF suggesting a daily period or season that needs to be accounted for in our forecast.
 
 #### Differenced ACF
 
@@ -448,7 +449,7 @@ As the ACF remain wholly above the critical threshold the series will likely req
 grid.arrange(ws_acf_diff, ws_pacf_diff, nrow=1)
 ```   
 
-We examined a final ACF of the differenced data to ensure that a second first-order difference was not needed; while we assume $d = 1$, the appropriate value of $q$ is not so clear so we use `auto.arima()` to help iterate up on the best starting place.
+We examined a final ACF of the differenced data to ensure that a second first-order difference was not needed; while we assume $d = 1$, the appropriate value of $q$ is not so clear, and seasonal orders were in question, so we use `auto.arima()` to help iterate up on the best starting place.
 
 ## Modeling 
 
@@ -557,9 +558,9 @@ autoplot(subset(ws, start=950))+
 
 ## Summary
 
-Ultimately, we assess that the Seasonal $ARIMA (1,1,3)$ model is marginally useful given its Mean Absolute Percentage of Error. This measure indicates that on average each forecast differs from the actual value on percentage basis by around 50%.  As is visible in the above graph - which depicts the last 150 points in the time series as well as our forecasts - predictions modulate around the mean and deteriorate to it pretty quickly.
+Ultimately, we assess that the Seasonal $ARIMA (1,1,3)$ model is marginally useful given its Mean Absolute Percentage of Error. This measure indicates that on average each forecast differs from the actual value on percentage basis by around 50%.  As is visible in the above graph, which depicts the last 150 points in the time series as well as our forecasts, predictions modulate around the mean and deteriorate to it pretty quickly.
 
-The original decomposition revelaed very little trend, a lot of seasonality, and a substatial amount of random noise.  This is not considered in the model, and is responsible for the majority of the error in it as white noise is never predictable.
+The original decomposition revelaed very little trend, a lot of seasonality, and a substatial amount of random noise.  The extensive random noise component, is assumed to be responsible for the majority of the error, as white noise is never predictable.
 
 # Appendix A {-#appendix-a}
 
@@ -768,8 +769,10 @@ waterflow_2 <- read_excel("data/Waterflow_Pipe2.xlsx")
 
 # Writing original data to submission file
 #file ='forecasts/water-pipes.xlsx'
-#write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", col.names = TRUE, row.names = TRUE, append = FALSE)
-#write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", col.names = TRUE, row.names = TRUE, append = TRUE)
+#write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", 
+#col.names = TRUE, row.names = TRUE, append = FALSE)
+#write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", 
+#col.names = TRUE, row.names = TRUE, append = TRUE)
 
 # Grooming, aligning dates and aggregating Data
 waterflow_1<-waterflow_1 %>% 
@@ -888,8 +891,10 @@ preds_ws<-preds_ws%>%
     select(DateTime, `Point Forecast`, `Lo 80`,`Hi 80`, `Lo 95`, `Hi 95`)
 
 # Writing forecasts and final data to the 'XLSX' file
-#write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", col.names = TRUE, row.names = FALSE, append = TRUE)
-#write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)
+#write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", 
+#col.names = TRUE, row.names = FALSE, append = TRUE)
+#write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", 
+#col.names = TRUE, row.names = FALSE, append = TRUE)
 
 ```
 

@@ -21,7 +21,6 @@
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
             pdftitle={DATA 624: Project 1},
@@ -71,6 +70,7 @@
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -172,7 +172,7 @@
 \addcontentsline{toc}{chapter}{Overview}
 
 We split the work into three sections for Project 1. Individual team
-members each took lead on individual problem. Jermey and Julian focused
+members each took lead on individual problem. Jeremey and Julian focused
 on Part A, Sang Yoon (Andy) and Vinicio worked on Part B, and Bethany
 took lead on Part C. Juliann created an overall format for the
 assignment to be used and all team members collectively worked together
@@ -191,9 +191,7 @@ The following R libraries were used to complete this assignment:
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'knitr'}\NormalTok{, }\StringTok{'kableExtra'}\NormalTok{, }\StringTok{'default'}\NormalTok{)}
 
 \CommentTok{# Processing}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'readxl'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'imputeTS'}\NormalTok{, }\StringTok{'tsoutliers'}\NormalTok{, }\StringTok{'lubridate'}\NormalTok{)}
-
-\CommentTok{### UNABLE TO GET JAVA TO CONFIGURE FOR >>> 'xlsx'}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'readxl'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{, }\StringTok{'janitor'}\NormalTok{, }\StringTok{'imputeTS'}\NormalTok{, }\StringTok{'tsoutliers'}\NormalTok{, }\StringTok{'lubridate'}\NormalTok{, }\StringTok{'xlsx'}\NormalTok{)}
 
 \CommentTok{# Timeseries }
 \KeywordTok{libraries}\NormalTok{(}\StringTok{'psych'}\NormalTok{, }\StringTok{'urca'}\NormalTok{, }\StringTok{'forecast'}\NormalTok{, }\StringTok{'timetk'}\NormalTok{, }\StringTok{'fpp2'}\NormalTok{)}
@@ -211,7 +209,8 @@ Data was stored within our group repository and imported below using the
 \texttt{readxl} package. Each individual question was solved within an R
 script and the data was sourced into our main report. For replication
 purposes, we also made our R scripts available within our appendix. All
-forecasts were exported and saved a \texttt{.csv} file in our
+forecasts have been exported and saved to a single \texttt{.xlsx} file
+in our
 \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project\%20One/}{github
 repository} folder named forecasts.
 
@@ -237,7 +236,7 @@ repository} folder named forecasts.
 \textbf{Instructions:} In part A, I want you to forecast how much cash
 is taken out of 4 different ATM machines for May 2010. The data is given
 in a single file. The variable \texttt{Cash} is provided in hundreds of
-dollars, other than that it is straight forward. I am being somewhat
+dollars, other than that, it is straight forward. I am being somewhat
 ambiguous on purpose. I am giving you data, please provide your written
 report on your findings, visuals, discussion and your R code all within
 a Word readable document, except the forecast which you will put in an
@@ -263,7 +262,8 @@ on 2009-10-25 and that ATM4 contained a potential outlier of \$1,123 on
 2010-02-09. We replaced both values with the corresponding mean value of
 each machine.
 
-We examined summary statistics for each ATM time series:
+We examined summary statistics for each ATM time series (a table can be
+found in the appendix).
 
 \begin{itemize}
 \tightlist
@@ -281,7 +281,7 @@ We examined summary statistics for each ATM time series:
   relationship to a blizzard which struck on that day.
 \end{itemize}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-2-1.pdf}
 
 Last, we used a scatterplot to examine the correlation between cash
 withdrawals and dates for each machine. We identified similiar patterns
@@ -304,7 +304,7 @@ distributed no cash until April 28, 2010, we'll assume that it was not
 operating until then and only include the three day window of non-zero
 observations in the forecast.
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-3-1.pdf}
 
 \hypertarget{evaluation}{%
 \section{Evaluation}\label{evaluation}}
@@ -315,7 +315,7 @@ lags starting at 7. This pattern continues in a multiple of seven, which
 confirms our assumption about seasonality within the observed data.
 These lags are indicative of a weekly pattern. \newline
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-5-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf}
 
 Our plots further suggest that the ATM data is non-stationary. We
 performed a unit root test using the \texttt{ur.kpss()} function to
@@ -326,7 +326,7 @@ the observed seasonal pattern.
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-6}KPSS unit root test}
+\caption{\label{tab:unnamed-chunk-5}KPSS unit root test}
 \centering
 \begin{tabular}{l|l|l}
 \hline
@@ -369,8 +369,8 @@ Ljung-Box test for ATM1, ATM2, and ATM4 all exceeds 0.05, which futher
 supports that residuals happen by chance and the models adequately fit
 the observed data.
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf}
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-2.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-6-2.pdf}
 
 \hypertarget{forecast}{%
 \section{Forecast}\label{forecast}}
@@ -380,12 +380,21 @@ forecast to each series, which spanned across 5 weeks. The numeric
 forecasts can be viewed in a table output in the appendix section and
 are also located within our data output folder.
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-7-1.pdf}
 
 \hypertarget{summary}{%
 \section{Summary}\label{summary}}
 
-Jeremy \& Juliann - synthesize findings
+Forecasts for ATM1, ATM2, and ATM4 reprise the clear, persistent weekly
+pattern found in the historic data, with mid-week troughs and a largely
+flat trend on a five-week time horizon. ATM1 and ATM4 experience sharper
+troughs on Wednesdays; ATM2 drops on Tuesdays and bottoms out on
+Wednesdays. Additionally, ATM2 has a slightly tighter confidence
+interval than ATM1 and ATM4. The mean forecast for ATM3 based on three
+data points is a useful estimate insofar as the assumptions it rests on
+are sound: that the zero observations aren't measurement or data errors,
+and that the three non-zero observations aren't outliers and in fact
+convey information about a future pattern.
 
 \hypertarget{part-b-forecasting-power}{%
 \chapter{Part B: Forecasting Power}\label{part-b-forecasting-power}}
@@ -402,104 +411,94 @@ existing files above - clearly labeled.
 \hypertarget{exploration-1}{%
 \section{Exploration}\label{exploration-1}}
 
-We observed there was a missing value in September 2008. We used
-imputation method called na.interpolation which performs a technique in
-numerical analysis which estimates a value from known data points. For
-our case, linear method using first order Taylor polynomial is used.
+We observed a missing value in September 2008 and imputed it using
+\texttt{na.interpolation}, which performs a technique in numerical
+analysis to estimate a value from known data points (in our case, a
+linear method using first order Taylor polynomials).
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-9-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-8-1.pdf}
 
-Our initial time series plot reveal annual seasonality within this time
-series. The box plot/seasonality plot actually reveals where power
-consumption fluctuations occur within each of the cycle positions. We
-can speculate that this could be due to there being no major Holidays
-that require power draining decor plus we assume minimal AC usage during
-the cold months.
+Our time series plot reveals annual seasonality; box plots and
+seasonality demonstrate where power consumption fluctuations occur
+within each of the cycles. We speculate that this pattern could be due
+to no major holidays that require power draining decor plus and minimal
+air conditioning usage during cold months.
 
 \hypertarget{evaluation-1}{%
 \section{Evaluation}\label{evaluation-1}}
 
-We see power consumption increase between the months of June and August.
-This must be tied to AC usage during the warmer months of a year and
-finally power usage dips from September to Novemeber with a small spike
-in December. We speculate that thisis due to transitioning out of
-summer. The spike in December could be connected to the usage or Holiday
-lights being kept on.
+Power consumption increases between the months of June and August,
+likely in relation to air conditioning usage. It dips from September to
+Novemeber, followed by a small spike in December, which might be due the
+holidays (perhaps even holiday lights).
 
-Within the overall TS plot, we see a dip in July 2010. This could be due
-to a power outtage during a hot summer month. This can certainly be
-considered to be an outlier within this TS. Using TSOutliers, we can
-actually identify the index where our outliers may be. TSoutliers also
-replaces the outlier using Box-Cox. If set lambda=auto, then TSoutliers
-will automatically perform Box-Cox transformation.
+Within the overall TS plot a dip in July 2010 is visible; this outlier
+which may be the result of a power outtage during a hot summer month.
+Using \texttt{TSOutliers}, we identify the outlier and replace it using
+a Box-Cox transformation (by setting the lambda argument to automatic).
 
 The ACF plot shows that autocorrelations are well outside the
 significant space indicating the series is not white noise,
 non-stationary.
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-10-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 \hypertarget{modeling-1}{%
 \section{Modeling}\label{modeling-1}}
 
-We built four different models on the power data. Methods included
-ARIMA, STL (with and without dampening), and ETS. We can make some
-preliminary observations on the reliability of these models from
-checking the residuals.
+We built four different models using ARIMA, STL (with and without
+dampening), and ETS methods. By checking residuals we can make some
+preliminary observations on these models' reliability.
 
 The residual ACF plots show residual autocorrelations for each of our
-models. Model \#1: ARIMA has less autocorrelation than the other three
-models. Model 1 is well within the 95\% limits indicated by the dotted
-blue lines.
+models. Model 1 (ARIMA) has less autocorrelation than the other three;
+it is also well within the 95\% limits (indicated by dotted blue lines).
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+The residuals for each of our models do not deviate substantially from
+normality. While the residuals of Model 1 (ARIMA) do not have an
+extended number of bins and this distorts the normality proximity, we
+can regard the distribution as normal.
 
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-11-1.pdf}
 
-The residuals for each of our models does not have a major deviance from
-normality, however residuals of Model \#1: ARIMA do not have an extended
-number of bins distorting the normality proximity but we can say it is
-still fairly normally distributed.
-
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-12-1.pdf}
-
-Our last residual check, the Ljung-Box test, showed that only model had
-a p-value \textgreater{} 0.05: Model \#1: ARIMA. This implies that the
-residuals from other models are not independent, hence not white noise.
-As a result, we will continue with this model for forcasting. We have
-included the full model summary for ARIMA and our other attempts in the
-appendix.
+A Ljung-Box test yields a p-value \textgreater{} 0.05 for Model 1
+(ARIMA), implying that the residuals from other models are not
+independent, hence not white noise. We will continue with this model for
+forecasting; a full summary for this and other models attempted is
+included in the appendix.
 
 \hypertarget{forecast-1}{%
 \section{Forecast}\label{forecast-1}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-13-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-12-1.pdf}
 The \texttt{auto.arima()} function performs cross validation on
 hyperparameter tuning to find the best model with parameters of
 \texttt{order} and \texttt{seasonal} that minimize \texttt{AIC}. This
-gave us \textbf{arima\_model}: ARIMA\((3,0,2)(2,1,0)12\) with drift
-resulting \texttt{AIC} = 5332.24. Since ARIMA is the only reliable
-model, as other models failed Ljung test, we will plot forecasts of
-ARIMA only. The forecasted values can be viewed in the appendix.
+approach yielded \textbf{arima\_model}: ARIMA\((3,0,2)(2,1,0)12\) with
+drift resulting in an of \texttt{AIC} = 5332.24. As other models failed
+the Ljung-Box test, we develop forecasts based only on the reliable
+ARIMA model; forecasted values are included in the appendix.
 
 \hypertarget{summary-1}{%
 \section{Summary}\label{summary-1}}
 
-We implemented a cross validation method of testing for \texttt{h=12}.
-The process randomly chooses 12 points to measure and take the average
-of RMSEs. By definition, a lower RMSE on test set is attributed with a
-better forecast on unseen data.
+We implemented a cross-validation method of testing for \texttt{h=12},
+randomly choosing 12 points over the fitted model to measure and take
+the average of RMSEs. By definition, a lower RMSE on test set indicates
+a better forecast of the test data.
 
-Using Time series cross-validation, we compute RMSE on testset
-(\texttt{h=12}). We would have to pick the model with the lowest RMSE on
-test set as our final model if we had more than 1 model to compare. In
-our case, since we only have 1 model left after Ljung test, we have no
-choice but to pick seasonal ARIMA model as our final choice.
-Cross-validation test shows that RMSE on test is around 720k when RMSE
-on training is around 589k. We can conclude the model is not necessarily
-overfitted. Given that MAPE on training is less than 7, it is not a
-suprising result.
+Using time series cross-validation, we compute RMSE on the test set
+(\texttt{h=12}). If other models had not failed the Ljung-Box test, we
+use the lowest RMSE as a criterion of selection. Cross-validation test
+of the seasonal ARIMA model produces an RMSE on test set of around 720k,
+and on training set of around 589k. We conclude the model is not
+necessarily overfitted. This finding is consistent with the MAPE on the
+training set that is less than 7.
 
 \begin{verbatim}
-FALSE [1] "RMSE - Train: 589381.7 ; RMSE - Test: 725175"
+[1] "RMSE - Train: 589381.7 ; RMSE - Test: 725175"
 \end{verbatim}
 
 \hypertarget{part-c-waterflow}{%
@@ -527,24 +526,25 @@ hour\\
 * 9-days of data
 
 \textbf{Pipe Two}\\
-* 100 Observations\\
+* 1000 Observations\\
 * No missing values * Single reading on the hour * 41-days of data
 
-For Pipe One, representing 9-days of water flow rate measurements
-multiple samples per hour, a mean of all rates in the hour was taken and
-labeled with the whole-hour at the beggining of the period (floor hour)
-to align with the hourly readings from Pipe Two. After aggregating,
-there were only 236 observations (spanning 9-days) of pipe one and still
-1000 observations (spanning 41-days) from Pipe Two.
+Pipe One represents 9 days of water flow rate measurements with multiple
+samples per hour. In order to align with hourly readings from Pipe Two,
+a mean of all Pipe One rates in a given hour was taken and labeled by
+its `floor' (i.e.~9 for mean of all times between 9:00 and 9:59
+-inclusive of both bounds). After aggregating, this yielded 236
+observations (spanning nine days) for Pipe One and 1000 observations
+(spanning 41days) for Pipe Two.
 
-Both data sets posed an interesting conundrum. With two possible ways of
-handling it:
+The two data sets posed an interesting conundrum. We considered two
+possible approaches:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Merge the files, and use only 236 observations.
+  Merge the files and use only 236 observations.
 \end{enumerate}
 
 \begin{itemize}
@@ -552,10 +552,11 @@ handling it:
 \item
   All forecasts would be based on the combined data.
 \item
-  This would mean making 168 forecasts with only 236 data-points prior.
+  This would mean making 168 forecasts (\(7days x 24hours\)) with only
+  236 data-points prior.
 \item
-  All forecasts would be starting November 1, instead of from the end of
-  data: December 3.\\
+  All forecasts would start November 1 rather than December 3 (the end
+  of the most recent time series).\\
 \end{itemize}
 
 \begin{enumerate}
@@ -569,21 +570,23 @@ handling it:
 \begin{itemize}
 \tightlist
 \item
-  We would have 100 observations to model prior to forecasts.
+  We would have 1000 observations to model prior to forecasts.
 \item
   236 of the observations would be be different from the remaining 764,
   which could both alter the model type and forecast.
 \item
-  We would be forecasting from the natural ending of the Pipe Two
-  readings
+  We would forecast from the natural ending of the Pipe Two readings. In
+  the end, it made the most sense to model the combined sets in their
+  entireties, so method two was adopted.
 \end{itemize}
 
-Because it was concievable that there might be a daily periodicity, it
-was important to have a frequency of 24, which made numbering by day of
-year and grooming the time series to start on the 7081 hour aligning
-with October 23 01:00 AM.
+Because daily periodicity is conceivable for this data, it was important
+to use a frequency of 24 in converting this data. This entailed
+numbering by day of year and grooming the time series to start on the
+7081 hour (which aligns with October 23 01:00 AM our first merged
+observation).
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-15-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-14-1.pdf}
 
 \hypertarget{evaluation-2}{%
 \section{Evaluation}\label{evaluation-2}}
@@ -592,34 +595,34 @@ with October 23 01:00 AM.
 \subsection{Decomposition}\label{decomposition}}
 
 It is clear from the combined plot that there is a pretty notable change
-in the trend when the readings from Pipe One wane. Let's look at the
-decomposed seriesand see if it gives us some insight into a good model.
+in the trend when the readings from Pipe One wane. We examined the
+decomposed series for insight into a good model.
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-16-1.pdf}
-From the decomposition, the appears to be a seasonal component in
-agreement with the assessment that there might be a daily flowrate
-periodicity. Also, as expected, around day 306 where Pipe One flow rates
-go silent there is a trend down and then relatively flat trend
-thereafter.
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-15-1.pdf}
+From the decomposition, there appears to be a seasonal component, which
+in agreement with the prior assessment that there might be a daily
+flowrate periodicity. Also, as expected, around day 306, where Pipe One
+flow rates go silent, there is a downward trend followed by a rolling
+plateau thereafter.
 
 \hypertarget{estimating-stationarity}{%
 \subsection{Estimating Stationarity}\label{estimating-stationarity}}
 
-Number of Estimated Differences: 1
+Number of Estimated Differences using \texttt{ndiff()}: 1
 
 \begin{verbatim}
-FALSE 
-FALSE   Augmented Dickey-Fuller Test
-FALSE 
-FALSE data:  ws
-FALSE Dickey-Fuller = -6.4409, Lag order = 9, p-value = 0.01
-FALSE alternative hypothesis: stationary
+
+    Augmented Dickey-Fuller Test
+
+data:  ws
+Dickey-Fuller = -6.4409, Lag order = 9, p-value = 0.01
+alternative hypothesis: stationary
 \end{verbatim}
 
-Here we have contradictory esitmates, \texttt{ndiffs()} suggests a
+Here we encounter contradictory estimates: \texttt{ndiffs()} suggests a
 difference of 1, and the augmented dicky fuller test suggests that we
-are stationary as-is. An \texttt{auto.arima()} may give us a reasonable
-starting place.
+are stationary as-is. An \texttt{auto.arima()} may provide insight into
+a reasonable starting place.
 
 \hypertarget{estimating-orders-for-arima}{%
 \subsection{Estimating Orders for
@@ -629,37 +632,35 @@ ARIMA}\label{estimating-orders-for-arima}}
 \subsubsection{Interpreting the ACF and
 PACF}\label{interpreting-the-acf-and-pacf}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-18-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-17-1.pdf}
 
-The ACF remain wholly above the critical threshold, so will likely
-require differencing as suggested by the \texttt{ndiffs()}, in looking
-at the PACF, there is some abiguity caused by the needed differencing,
-but after the intial trend down below the critical threshold, there is
-definitely a slight spike at 24, which would suggest there may indeed by
-a daily period or season we need to account for in our forecast.
+As the ACF remains wholly above the critical threshold the series will
+likely require differencing as suggested by the \texttt{ndiffs()}. There
+is a spike at 24 on both PACF and ACF suggesting a daily period or
+season that needs to be accounted for in our forecast.
 
 \hypertarget{differenced-acf}{%
 \subsubsection{Differenced ACF}\label{differenced-acf}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-18-1.pdf}
 
-A final ACF of the differenced data was done to ensure that a seconf
-first-order difference was not needed; thus we assume \(d = 1\), a but
-it was not so clear about the appropriate value of \$q4 should it be 5?
-, so \texttt{auto.arima()} is in order to help iterate up on the likely
-best starting place
+We examined a final ACF of the differenced data to ensure that a second
+first-order difference was not needed; while we assume \(d = 1\), the
+appropriate value of \(q\) is not so clear, and seasonal orders were in
+question, so we use \texttt{auto.arima()} to help iterate up on the best
+starting place.
 
 \hypertarget{modeling-2}{%
 \section{Modeling}\label{modeling-2}}
 
 The \texttt{auto.arima()} function was used in model selection. Using a
-Box-Cox lambda value to normalize the data may make
+Box-Cox lambda value to normalize the data yields a
 \(\lambda= .931552\). Because models can vary a lot based on the
-selection criterion, both BIC and AIC models were run, using lambda, to
+selection criterion, both BIC and AIC models were run using lambda to
 estimate a good starting place. We included the transformations in the
-model (instead of doing it outside the model), because we are using the
-ARIMA function to difference the data automatically allow more
-constiency and flexibility in testing other model orders.
+model (as opposed to outside the model) because we are using the ARIMA
+function to difference the data automatically for more consistency and
+flexibility in testing other model orders.
 
 The \emph{AICc} chose a seasonal ARIMA of the following order:
 
@@ -669,85 +670,84 @@ The \emph{BIC} chose a non-seasonal ARIMA model as follows:
 
 \(ARIMA(2,1,1)\) \emph{AIC=8082.22 AICc=8082.26 BIC=8101.85}
 
-In both cases, the arima estimated that there needed to be differencing
-which was supported by \texttt{ndiffs()} and our ACF \& PACF plots.
+In both cases, the \texttt{auto.arima()} estimated that there needed to
+be differencingm, which was supported by \texttt{ndiffs()} and our ACF
+and PACF plots.
 
-In comparing the two forecasts, for these automated models, they both
-degrade toward the series mean pretty quickly, however, the AICc model
-makes forecasts which consider the variation of the model a bit better
-before it levels out. So we decided to explore this model and see if we
-could tune it to provide more robust predictions
+While both models' forecasts degrade pretty quickly towards the series
+mean, the AICc model generates forecast that consider the variation
+better before it levels out. Accordingly, we decided to explore and
+attempt to tune this model to provide more robust predictions.
 
 \textbf{AIC \(ARIMA(1,1,3)(0,0,1)[24]\) Residual Plots}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-19-1.pdf}
 
 \begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ARIMA(1,1,3)(0,0,1)[24]
-FALSE Q* = 57.362, df = 43, p-value = 0.07027
-FALSE 
-FALSE Model df: 5.   Total lags used: 48
+
+    Ljung-Box test
+
+data:  Residuals from ARIMA(1,1,3)(0,0,1)[24]
+Q* = 57.362, df = 43, p-value = 0.07027
+
+Model df: 5.   Total lags used: 48
 \end{verbatim}
 
 \textbf{BIC \(ARIMA(2,1,1)\) Residual Plots}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-21-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-20-1.pdf}
 
 \begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ARIMA(2,1,1)
-FALSE Q* = 64.403, df = 45, p-value = 0.03029
-FALSE 
-FALSE Model df: 3.   Total lags used: 48
+
+    Ljung-Box test
+
+data:  Residuals from ARIMA(2,1,1)
+Q* = 64.403, df = 45, p-value = 0.03029
+
+Model df: 3.   Total lags used: 48
 \end{verbatim}
 
 \hypertarget{interpreting-auto.arima}{%
 \subsection{\texorpdfstring{Interpreting
 \texttt{auto.arima()}}{Interpreting auto.arima()}}\label{interpreting-auto.arima}}
 
-In looking at the AICc and BIC ARIMA models, the both appear to be
-relatively white-noisy with no autocorrelation on the first or 24th
-observations, with relatively normal residuals. However, in looking at
-the Ljung-Box test for independence, it is clear that the Seasonal
-\(ARIMA (1,1,3)(0,0,1)[24]\) is independent, where the \(ARIMA(2,1,1)\)
-is not, thus reaffirming the lingering suspicion that thee is
-unaccounted for seasonal variation in the model requiring a seasona
-MA(1) to rectify. To be sure that the best model has been found, p \& q
-as well as Q will be varied to see if a slight modification improves the
-performance of the model.
+Both the AICc and BIC ARIMA models appear relatively `white-noisy', with
+no autocorrelation on the first and 24th observations as well as
+relatively normal residuals. However, examining the Ljung-Box test for
+independence made clear that the Seasonal \(ARIMA (1,1,3)(0,0,1)[24]\)
+is independent while the \(ARIMA(2,1,1)\) is not. This confirmed our
+suspicion of unaccounted for seasonal variation in the model, which
+required a seasonal MA(1) to rectify. To ensure that the best model had
+been found, we varied p, q, and Q to determine if slight modifications
+could improve the performance of the model.
 
 \hypertarget{manual-arima-testing}{%
 \subsection{Manual ARIMA testing}\label{manual-arima-testing}}
 
 \begin{verbatim}
-FALSE Series: ws 
-FALSE ARIMA(1,1,3)(0,0,1)[24] 
-FALSE Box Cox transformation: lambda= 0.9531552 
-FALSE 
-FALSE Coefficients:
-FALSE          ar1      ma1     ma2      ma3    sma1
-FALSE       0.7602  -1.7578  0.8286  -0.0614  0.0833
-FALSE s.e.  0.1857   0.1874  0.1886   0.0324  0.0320
-FALSE 
-FALSE sigma^2 estimated as 187:  log likelihood=-4033.28
-FALSE AIC=8078.56   AICc=8078.64   BIC=8108
+Series: ws 
+ARIMA(1,1,3)(0,0,1)[24] 
+Box Cox transformation: lambda= 0.9531552 
+
+Coefficients:
+         ar1      ma1     ma2      ma3    sma1
+      0.7602  -1.7578  0.8286  -0.0614  0.0833
+s.e.  0.1857   0.1874  0.1886   0.0324  0.0320
+
+sigma^2 estimated as 187:  log likelihood=-4033.28
+AIC=8078.56   AICc=8078.64   BIC=8108
 \end{verbatim}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-21-1.pdf}
 
 \begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ARIMA(1,1,3)(0,0,1)[24]
-FALSE Q* = 47.142, df = 31, p-value = 0.03174
-FALSE 
-FALSE Model df: 5.   Total lags used: 36
+
+    Ljung-Box test
+
+data:  Residuals from ARIMA(1,1,3)(0,0,1)[24]
+Q* = 47.142, df = 31, p-value = 0.03174
+
+Model df: 5.   Total lags used: 36
 \end{verbatim}
 
 \hypertarget{forecast-2}{%
@@ -756,98 +756,98 @@ FALSE Model df: 5.   Total lags used: 36
 \hypertarget{arima11300124}{%
 \subsection{\texorpdfstring{\(ARIMA(1,1,3)(0,0,1)[24]\)}{ARIMA(1,1,3)(0,0,1){[}24{]}}}\label{arima11300124}}
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-23-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-22-1.pdf}
 
 \hypertarget{arima21300124}{%
 \subsection{\texorpdfstring{\(ARIMA(2,1,3)(0,0,1)[24]\)}{ARIMA(2,1,3)(0,0,1){[}24{]}}}\label{arima21300124}}
 
 \begin{verbatim}
-FALSE Series: ws 
-FALSE ARIMA(2,1,3)(0,0,1)[24] 
-FALSE Box Cox transformation: lambda= 0.9531552 
-FALSE 
-FALSE Coefficients:
-FALSE           ar1     ar2      ma1      ma2     ma3    sma1
-FALSE       -0.1435  0.1884  -0.8478  -0.2709  0.1621  0.0798
-FALSE s.e.      NaN  0.5408      NaN   0.6069  0.5320  0.0318
-FALSE 
-FALSE sigma^2 estimated as 187.5:  log likelihood=-4034.02
-FALSE AIC=8082.05   AICc=8082.16   BIC=8116.4
+Series: ws 
+ARIMA(2,1,3)(0,0,1)[24] 
+Box Cox transformation: lambda= 0.9531552 
+
+Coefficients:
+          ar1     ar2      ma1      ma2     ma3    sma1
+      -0.1435  0.1884  -0.8478  -0.2709  0.1621  0.0798
+s.e.      NaN  0.5408      NaN   0.6070  0.5319  0.0318
+
+sigma^2 estimated as 187.5:  log likelihood=-4034.02
+AIC=8082.05   AICc=8082.16   BIC=8116.4
+\end{verbatim}
+
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\begin{verbatim}
+
+    Ljung-Box test
+
+data:  Residuals from ARIMA(2,1,3)(0,0,1)[24]
+Q* = 48.506, df = 30, p-value = 0.01764
+
+Model df: 6.   Total lags used: 36
+\end{verbatim}
+
+This Ljung-Box test shows unexplained variances in the residuals,
+indicating that this model is not yet fully realized and inferior to the
+Seasonal \(ARIMA (1,1,3)(0,0,1)[24]\).
+
+\begin{verbatim}
+Series: ws 
+ARIMA(1,1,2)(0,0,1)[24] 
+Box Cox transformation: lambda= 0.9531552 
+
+Coefficients:
+          ar1      ma1      ma2    sma1
+      -0.2655  -0.7307  -0.2103  0.0790
+s.e.   0.9490   0.9533   0.9121  0.0318
+
+sigma^2 estimated as 187.1:  log likelihood=-4034.08
+AIC=8078.16   AICc=8078.22   BIC=8102.7
 \end{verbatim}
 
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-24-1.pdf}
 
 \begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ARIMA(2,1,3)(0,0,1)[24]
-FALSE Q* = 48.506, df = 30, p-value = 0.01764
-FALSE 
-FALSE Model df: 6.   Total lags used: 36
+
+    Ljung-Box test
+
+data:  Residuals from ARIMA(1,1,2)(0,0,1)[24]
+Q* = 47.963, df = 32, p-value = 0.03467
+
+Model df: 4.   Total lags used: 36
 \end{verbatim}
 
-This Ljung-Box shows unexplained variances in the residuals indicating
-that this model is not yet fully realized and inferior to the Seasonal
-\(ARIMA (1,1,3)(0,0,1)[24]\).
+This Ljung-Box also shows unexplained variances in the residuals,
+indicating that this model is not yet fully realized and inferior to the
+Seasonal \(ARIMA (1,1,2)(0,0,1)[24]\).
 
 \begin{verbatim}
-FALSE Series: ws 
-FALSE ARIMA(1,1,2)(0,0,1)[24] 
-FALSE Box Cox transformation: lambda= 0.9531552 
-FALSE 
-FALSE Coefficients:
-FALSE           ar1      ma1      ma2    sma1
-FALSE       -0.2655  -0.7307  -0.2104  0.0790
-FALSE s.e.   0.9490   0.9533   0.9121  0.0318
-FALSE 
-FALSE sigma^2 estimated as 187.1:  log likelihood=-4034.08
-FALSE AIC=8078.16   AICc=8078.22   BIC=8102.7
+Series: ws 
+ARIMA(1,1,3) 
+Box Cox transformation: lambda= 0.9531552 
+
+Coefficients:
+         ar1      ma1     ma2      ma3
+      0.6792  -1.6742  0.7437  -0.0553
+s.e.  0.2923   0.2930  0.2903   0.0330
+
+sigma^2 estimated as 188.1:  log likelihood=-4036.63
+AIC=8083.27   AICc=8083.33   BIC=8107.81
 \end{verbatim}
 
 \includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-25-1.pdf}
 
 \begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ARIMA(1,1,2)(0,0,1)[24]
-FALSE Q* = 47.963, df = 32, p-value = 0.03467
-FALSE 
-FALSE Model df: 4.   Total lags used: 36
+
+    Ljung-Box test
+
+data:  Residuals from ARIMA(1,1,3)
+Q* = 53.61, df = 32, p-value = 0.009708
+
+Model df: 4.   Total lags used: 36
 \end{verbatim}
 
-This Ljung-Box also shows unexplained variances in the residuals
-indicating that this model is not yet fully realized and inferior to the
-Seasonal \(ARIMA (1,1,2)(0,0,1)[24]\).
-
-\begin{verbatim}
-FALSE Series: ws 
-FALSE ARIMA(1,1,3) 
-FALSE Box Cox transformation: lambda= 0.9531552 
-FALSE 
-FALSE Coefficients:
-FALSE          ar1      ma1     ma2      ma3
-FALSE       0.6792  -1.6742  0.7437  -0.0553
-FALSE s.e.  0.2923   0.2930  0.2903   0.0330
-FALSE 
-FALSE sigma^2 estimated as 188.1:  log likelihood=-4036.63
-FALSE AIC=8083.27   AICc=8083.33   BIC=8107.81
-\end{verbatim}
-
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-26-1.pdf}
-
-\begin{verbatim}
-FALSE 
-FALSE   Ljung-Box test
-FALSE 
-FALSE data:  Residuals from ARIMA(1,1,3)
-FALSE Q* = 53.61, df = 32, p-value = 0.009708
-FALSE 
-FALSE Model df: 4.   Total lags used: 36
-\end{verbatim}
-
-This Ljung-Box also shows unexplained variances in the residuals
+This Ljung-Box also shows unexplained variances in the residuals,
 indicating that this model is not yet fully realized and inferior to the
 Seasonal \(ARIMA (1,1,3)\).
 
@@ -856,10 +856,10 @@ Seasonal \(ARIMA (1,1,3)\).
 \texttt{auto.arima()}}{Accepting the auto.arima()}}\label{accepting-the-auto.arima}}
 
 Given that the other models show unexplained variance in the residuals,
-the final predictions will be made using the AICc recommended model of
+we made our final predictions using the AICc recommended model of
 \(ARIMA (1,1,3)(0,0,1)[24]\).
 
-\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-27-1.pdf}
+\includegraphics{Group2_Project1_Fall2019_files/figure-latex/unnamed-chunk-26-1.pdf}
 
 \hypertarget{forecast-accuracy}{%
 \subsection{Forecast Accuracy}\label{forecast-accuracy}}
@@ -875,21 +875,43 @@ Training set & 0.0015679 & 16.27402 & 13.23093 & -28.76247 & 50.34448 & 0.748930
 \hypertarget{summary-2}{%
 \section{Summary}\label{summary-2}}
 
-Ultimately this model is marginally useful as seen by the Mean Absolute
-Percentage of Error which reveals that the average percentage each
-forecast is off by is around 50\%. In looking at the graph of the
-forecast above, which is the last 150 points in the time series and the
-forecasted points, you can see this as the predictions lightly modulate
-around the mean and deteriorate to it pretty quickly.
+Ultimately, we assess that the Seasonal \(ARIMA (1,1,3)\) model is
+marginally useful given its Mean Absolute Percentage of Error. This
+measure indicates that on average each forecast differs from the actual
+value on percentage basis by around 50\%. As is visible in the above
+graph, which depicts the last 150 points in the time series as well as
+our forecasts, predictions modulate around the mean and deteriorate to
+it pretty quickly.
 
-In looking at the original decomposition, there very little trend, a lot
-of seasonality, is a pretty substatial amount of random noise, which is
-not considered in the model, and is responsible for the majority of the
-error in this model, as white noise is never predictable.
+The original decomposition revelaed very little trend, a lot of
+seasonality, and a substatial amount of random noise. The extensive
+random noise component, is assumed to be responsible for the majority of
+the error, as white noise is never predictable.
 
 \hypertarget{appendix-a}{%
 \chapter*{Appendix A}\label{appendix-a}}
 \addcontentsline{toc}{chapter}{Appendix A}
+
+\hypertarget{summary-a}{%
+\subsection*{Summary Statistics}\label{summary-a}}
+\addcontentsline{toc}{subsection}{Summary Statistics}
+
+\begin{longtable}[]{@{}lrrrrrrrrrrrr@{}}
+\toprule
+ATM & n & mean & sd & median & trimmed & mad & min & max & range & skew
+& kurtosis & se\tabularnewline
+\midrule
+\endhead
+ATM1 & 365 & 84.10 & 36.60 & 91.0 & 86.86 & 25.20 & 1 & 180 & 179 &
+-0.72 & 0.21 & 1.92\tabularnewline
+ATM2 & 364 & 62.46 & 38.90 & 66.5 & 62.09 & 49.67 & 0 & 147 & 147 &
+-0.03 & -1.10 & 2.04\tabularnewline
+ATM3 & 365 & 0.72 & 7.94 & 0.0 & 0.00 & 0.00 & 0 & 96 & 96 & 10.93 &
+118.38 & 0.42\tabularnewline
+ATM4 & 365 & 86.84 & 65.52 & 91.0 & 86.86 & 25.20 & 1 & 1123 & 1122 &
+10.67 & 168.66 & 3.43\tabularnewline
+\bottomrule
+\end{longtable}
 
 \hypertarget{arima-a}{%
 \subsection*{ARIMA Model Summary}\label{arima-a}}
@@ -898,49 +920,49 @@ error in this model, as white noise is never predictable.
 \textbf{\texttt{ATM1}:}
 
 \begin{verbatim}
-FALSE Series: ATM1_ts 
-FALSE ARIMA(0,0,2)(0,1,1)[7] 
-FALSE Box Cox transformation: lambda= 0.2584338 
-FALSE 
-FALSE Coefficients:
-FALSE          ma1      ma2     sma1
-FALSE       0.1085  -0.1089  -0.6425
-FALSE s.e.  0.0524   0.0521   0.0431
-FALSE 
-FALSE sigma^2 estimated as 1.726:  log likelihood=-606.1
-FALSE AIC=1220.2   AICc=1220.32   BIC=1235.72
+Series: ATM1_ts 
+ARIMA(0,0,2)(0,1,1)[7] 
+Box Cox transformation: lambda= 0.2584338 
+
+Coefficients:
+         ma1      ma2     sma1
+      0.1085  -0.1089  -0.6425
+s.e.  0.0524   0.0521   0.0431
+
+sigma^2 estimated as 1.726:  log likelihood=-606.1
+AIC=1220.2   AICc=1220.32   BIC=1235.72
 \end{verbatim}
 
 \textbf{\texttt{ATM2}:}
 
 \begin{verbatim}
-FALSE Series: ATM2_ts 
-FALSE ARIMA(2,0,2)(0,1,1)[7] 
-FALSE Box Cox transformation: lambda= 0.661752 
-FALSE 
-FALSE Coefficients:
-FALSE           ar1      ar2     ma1     ma2     sma1
-FALSE       -0.4238  -0.8978  0.4766  0.7875  -0.7064
-FALSE s.e.   0.0592   0.0473  0.0883  0.0608   0.0417
-FALSE 
-FALSE sigma^2 estimated as 38.94:  log likelihood=-1162.96
-FALSE AIC=2337.93   AICc=2338.17   BIC=2361.21
+Series: ATM2_ts 
+ARIMA(2,0,2)(0,1,1)[7] 
+Box Cox transformation: lambda= 0.661752 
+
+Coefficients:
+          ar1      ar2     ma1     ma2     sma1
+      -0.4238  -0.8978  0.4766  0.7875  -0.7064
+s.e.   0.0592   0.0473  0.0883  0.0608   0.0417
+
+sigma^2 estimated as 38.94:  log likelihood=-1162.96
+AIC=2337.93   AICc=2338.17   BIC=2361.21
 \end{verbatim}
 
 \textbf{\texttt{ATM4}:}
 
 \begin{verbatim}
-FALSE Series: ATM4_ts 
-FALSE ARIMA(0,0,2)(0,1,1)[7] 
-FALSE Box Cox transformation: lambda= 0.2328582 
-FALSE 
-FALSE Coefficients:
-FALSE          ma1      ma2     sma1
-FALSE       0.1095  -0.1088  -0.6474
-FALSE s.e.  0.0524   0.0523   0.0420
-FALSE 
-FALSE sigma^2 estimated as 1.439:  log likelihood=-573.5
-FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
+Series: ATM4_ts 
+ARIMA(0,0,2)(0,1,1)[7] 
+Box Cox transformation: lambda= 0.2328582 
+
+Coefficients:
+         ma1      ma2     sma1
+      0.1095  -0.1088  -0.6474
+s.e.  0.0524   0.0523   0.0420
+
+sigma^2 estimated as 1.439:  log likelihood=-573.5
+AIC=1154.99   AICc=1155.11   BIC=1170.52
 \end{verbatim}
 
 \hypertarget{forecast-a}{%
@@ -1094,163 +1116,163 @@ FALSE AIC=1154.99   AICc=1155.11   BIC=1170.52
 \textbf{\texttt{ARIMA}:}
 
 \begin{verbatim}
-FALSE Series: ts_data_o 
-FALSE ARIMA(3,0,2)(2,1,0)[12] with drift 
-FALSE 
-FALSE Coefficients:
-FALSE           ar1      ar2     ar3     ma1     ma2     sar1     sar2     drift
-FALSE       -0.5606  -0.2216  0.3284  0.8902  0.4827  -0.7249  -0.4152  9018.405
-FALSE s.e.   0.3992   0.3382  0.0960  0.4120  0.4551   0.0797   0.0841  3027.685
-FALSE 
-FALSE sigma^2 estimated as 387762785879:  log likelihood=-2657.12
-FALSE AIC=5332.24   AICc=5333.3   BIC=5360.97
-FALSE 
-FALSE Training set error measures:
-FALSE                     ME     RMSE      MAE        MPE     MAPE      MASE
-FALSE Training set -8455.077 589381.7 427752.5 -0.7944782 6.475365 0.6904053
-FALSE                      ACF1
-FALSE Training set 0.0006090194
+Series: ts_data_o 
+ARIMA(3,0,2)(2,1,0)[12] with drift 
+
+Coefficients:
+          ar1      ar2     ar3     ma1     ma2     sar1     sar2     drift
+      -0.5606  -0.2216  0.3284  0.8902  0.4827  -0.7249  -0.4152  9018.405
+s.e.   0.3992   0.3382  0.0960  0.4120  0.4551   0.0797   0.0841  3027.692
+
+sigma^2 estimated as 387762785875:  log likelihood=-2657.12
+AIC=5332.24   AICc=5333.3   BIC=5360.97
+
+Training set error measures:
+                    ME     RMSE      MAE        MPE     MAPE      MASE
+Training set -8455.078 589381.7 427752.5 -0.7944782 6.475365 0.6904053
+                     ACF1
+Training set 0.0006090191
 \end{verbatim}
 
 \textbf{\texttt{STL\ -\ MNN}:}
 
 \begin{verbatim}
-FALSE 
-FALSE Forecast method: STL +  ETS(M,N,N)
-FALSE 
-FALSE Model Information:
-FALSE ETS(M,N,N) 
-FALSE 
-FALSE Call:
-FALSE  ets(y = x, model = etsmodel, allow.multiplicative.trend = allow.multiplicative.trend) 
-FALSE 
-FALSE   Smoothing parameters:
-FALSE     alpha = 0.1159 
-FALSE 
-FALSE   Initial states:
-FALSE     l = 6317745.8917 
-FALSE 
-FALSE   sigma:  0.097
-FALSE 
-FALSE      AIC     AICc      BIC 
-FALSE 6139.631 6139.758 6149.403 
-FALSE 
-FALSE Error measures:
-FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
-FALSE Training set 56926.03 633571.7 460713.4 -0.03288687 6.945185 0.7436052
-FALSE                   ACF1
-FALSE Training set 0.2570241
-FALSE 
-FALSE Forecasts:
-FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
-FALSE Jan 2014        8992609 8049591  9935628 7550387 10434831
-FALSE Feb 2014        7908116 6958724  8857508 6456146  9360086
-FALSE Mar 2014        7079434 6123709  8035158 5617779  8541088
-FALSE Apr 2014        6435209 5473193  7397225 4963933  7906486
-FALSE May 2014        6161593 5193326  7129860 4680756  7642430
-FALSE Jun 2014        7728705 6754226  8703185 6238368  9219043
-FALSE Jul 2014        8837980 7857327  9818633 7338201 10337759
-FALSE Aug 2014        9376841 8390053 10363630 7867678 10886004
-FALSE Sep 2014        8601001 7608114  9593888 7082511 10119490
-FALSE Oct 2014        6670419 5671470  7669368 5142658  8198180
-FALSE Nov 2014        6035845 5030870  7040821 4498868  7572822
-FALSE Dec 2014        7189087 6178120  8200053 5642947  8735226
+
+Forecast method: STL +  ETS(M,N,N)
+
+Model Information:
+ETS(M,N,N) 
+
+Call:
+ ets(y = x, model = etsmodel, allow.multiplicative.trend = allow.multiplicative.trend) 
+
+  Smoothing parameters:
+    alpha = 0.1159 
+
+  Initial states:
+    l = 6317745.8917 
+
+  sigma:  0.097
+
+     AIC     AICc      BIC 
+6139.631 6139.758 6149.403 
+
+Error measures:
+                   ME     RMSE      MAE         MPE     MAPE      MASE
+Training set 56926.03 633571.7 460713.4 -0.03288687 6.945185 0.7436052
+                  ACF1
+Training set 0.2570241
+
+Forecasts:
+         Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+Jan 2014        8992609 8049591  9935628 7550387 10434831
+Feb 2014        7908116 6958724  8857508 6456146  9360086
+Mar 2014        7079434 6123709  8035158 5617779  8541088
+Apr 2014        6435209 5473193  7397225 4963933  7906486
+May 2014        6161593 5193326  7129860 4680756  7642430
+Jun 2014        7728705 6754226  8703185 6238368  9219043
+Jul 2014        8837980 7857327  9818633 7338201 10337759
+Aug 2014        9376841 8390053 10363630 7867678 10886004
+Sep 2014        8601001 7608114  9593888 7082511 10119490
+Oct 2014        6670419 5671470  7669368 5142658  8198180
+Nov 2014        6035845 5030870  7040821 4498868  7572822
+Dec 2014        7189087 6178120  8200053 5642947  8735226
 \end{verbatim}
 
 \textbf{\texttt{STL\ -\ MAdN}:}
 
 \begin{verbatim}
-FALSE 
-FALSE Forecast method: STL +  ETS(M,Ad,N)
-FALSE 
-FALSE Model Information:
-FALSE ETS(M,Ad,N) 
-FALSE 
-FALSE Call:
-FALSE  ets(y = x, model = etsmodel, damped = TRUE, allow.multiplicative.trend = allow.multiplicative.trend) 
-FALSE 
-FALSE   Smoothing parameters:
-FALSE     alpha = 0.1233 
-FALSE     beta  = 0.0001 
-FALSE     phi   = 0.8 
-FALSE 
-FALSE   Initial states:
-FALSE     l = 5615471.7851 
-FALSE     b = 173606.4508 
-FALSE 
-FALSE   sigma:  0.0972
-FALSE 
-FALSE      AIC     AICc      BIC 
-FALSE 6143.452 6143.906 6162.997 
-FALSE 
-FALSE Error measures:
-FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
-FALSE Training set 54337.68 631081.9 458777.5 -0.07364717 6.937249 0.7404807
-FALSE                   ACF1
-FALSE Training set 0.2528558
-FALSE 
-FALSE Forecasts:
-FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
-FALSE Jan 2014        9007707 8060947  9954467 7559763 10455651
-FALSE Feb 2014        7923348 6969325  8877372 6464295  9382401
-FALSE Mar 2014        7094774 6133536  8056011 5624687  8564860
-FALSE Apr 2014        6450635 5482232  7419038 4969591  7931680
-FALSE May 2014        6177088 5201569  7152607 4685160  7669016
-FALSE Jun 2014        7744256 6761668  8726843 6241518  9246993
-FALSE Jul 2014        8853574 7863967  9843182 7340100 10367048
-FALSE Aug 2014        9392471 8395890 10389052 7868332 10916609
-FALSE Sep 2014        8616658 7613151  9620166 7081926 10151391
-FALSE Oct 2014        6686100 5675711  7696488 5140843  8231356
-FALSE Nov 2014        6051544 5034319  7068769 4495832  7607255
-FALSE Dec 2014        7204799 6180782  8228817 5638700  8770899
+
+Forecast method: STL +  ETS(M,Ad,N)
+
+Model Information:
+ETS(M,Ad,N) 
+
+Call:
+ ets(y = x, model = etsmodel, damped = TRUE, allow.multiplicative.trend = allow.multiplicative.trend) 
+
+  Smoothing parameters:
+    alpha = 0.1233 
+    beta  = 0.0001 
+    phi   = 0.8 
+
+  Initial states:
+    l = 5615471.7851 
+    b = 173606.4508 
+
+  sigma:  0.0972
+
+     AIC     AICc      BIC 
+6143.452 6143.906 6162.997 
+
+Error measures:
+                   ME     RMSE      MAE         MPE     MAPE      MASE
+Training set 54337.68 631081.9 458777.5 -0.07364717 6.937249 0.7404807
+                  ACF1
+Training set 0.2528558
+
+Forecasts:
+         Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+Jan 2014        9007707 8060947  9954467 7559763 10455651
+Feb 2014        7923348 6969325  8877372 6464295  9382401
+Mar 2014        7094774 6133536  8056011 5624687  8564860
+Apr 2014        6450635 5482232  7419038 4969591  7931680
+May 2014        6177088 5201569  7152607 4685160  7669016
+Jun 2014        7744256 6761668  8726843 6241518  9246993
+Jul 2014        8853574 7863967  9843182 7340100 10367048
+Aug 2014        9392471 8395890 10389052 7868332 10916609
+Sep 2014        8616658 7613151  9620166 7081926 10151391
+Oct 2014        6686100 5675711  7696488 5140843  8231356
+Nov 2014        6051544 5034319  7068769 4495832  7607255
+Dec 2014        7204799 6180782  8228817 5638700  8770899
 \end{verbatim}
 
 \textbf{\texttt{ets\ -\ MNM}:}
 
 \begin{verbatim}
-FALSE 
-FALSE Forecast method: ETS(M,N,M)
-FALSE 
-FALSE Model Information:
-FALSE ETS(M,N,M) 
-FALSE 
-FALSE Call:
-FALSE  ets(y = ts_data_o) 
-FALSE 
-FALSE   Smoothing parameters:
-FALSE     alpha = 0.1428 
-FALSE     gamma = 0.2119 
-FALSE 
-FALSE   Initial states:
-FALSE     l = 6189149.8743 
-FALSE     s = 0.8984 0.7596 0.938 1.2229 1.2597 1.2396
-FALSE            1.0059 0.7638 0.8078 0.8864 1.0269 1.191
-FALSE 
-FALSE   sigma:  0.0967
-FALSE 
-FALSE      AIC     AICc      BIC 
-FALSE 6144.033 6146.760 6192.895 
-FALSE 
-FALSE Error measures:
-FALSE                    ME     RMSE      MAE         MPE     MAPE      MASE
-FALSE Training set 45241.77 628252.5 481520.9 -0.04000239 7.277118 0.7771892
-FALSE                   ACF1
-FALSE Training set 0.1927438
-FALSE 
-FALSE Forecasts:
-FALSE          Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
-FALSE Jan 2014        9917654 8689211 11146096 8038913 11796394
-FALSE Feb 2014        8522973 7456477  9589469 6891908 10154038
-FALSE Mar 2014        7012478 6126191  7898765 5657019  8367937
-FALSE Apr 2014        6208601 5416196  7001006 4996722  7420480
-FALSE May 2014        5928833 5164834  6692832 4760398  7097269
-FALSE Jun 2014        7840532 6820624  8860440 6280717  9400347
-FALSE Jul 2014        9115823 7919004 10312642 7285446 10946200
-FALSE Aug 2014        9648549 8370229 10926869 7693527 11603571
-FALSE Sep 2014        8553364 7409986  9696742 6804718 10302010
-FALSE Oct 2014        6266745 5421655  7111835 4974291  7559199
-FALSE Nov 2014        5938289 5130560  6746017 4702975  7173603
-FALSE Dec 2014        8020901 6920610  9121192 6338151  9703651
+
+Forecast method: ETS(M,N,M)
+
+Model Information:
+ETS(M,N,M) 
+
+Call:
+ ets(y = ts_data_o) 
+
+  Smoothing parameters:
+    alpha = 0.1428 
+    gamma = 0.2119 
+
+  Initial states:
+    l = 6189149.8743 
+    s = 0.8984 0.7596 0.938 1.2229 1.2597 1.2396
+           1.0059 0.7638 0.8078 0.8864 1.0269 1.191
+
+  sigma:  0.0967
+
+     AIC     AICc      BIC 
+6144.033 6146.760 6192.895 
+
+Error measures:
+                   ME     RMSE      MAE         MPE     MAPE      MASE
+Training set 45241.77 628252.5 481520.9 -0.04000239 7.277118 0.7771892
+                  ACF1
+Training set 0.1927438
+
+Forecasts:
+         Point Forecast   Lo 80    Hi 80   Lo 95    Hi 95
+Jan 2014        9917654 8689211 11146096 8038913 11796394
+Feb 2014        8522973 7456477  9589469 6891908 10154038
+Mar 2014        7012478 6126191  7898765 5657019  8367937
+Apr 2014        6208601 5416196  7001006 4996722  7420480
+May 2014        5928833 5164834  6692832 4760398  7097269
+Jun 2014        7840532 6820624  8860440 6280717  9400347
+Jul 2014        9115823 7919004 10312642 7285446 10946200
+Aug 2014        9648549 8370229 10926869 7693527 11603571
+Sep 2014        8553364 7409986  9696742 6804718 10302010
+Oct 2014        6266745 5421655  7111835 4974291  7559199
+Nov 2014        5938289 5130560  6746017 4702975  7173603
+Dec 2014        8020901 6920610  9121192 6338151  9703651
 \end{verbatim}
 
 \hypertarget{script-b}{%
@@ -1412,8 +1434,10 @@ DateTime & Point Forecast & Lo 80 & Hi 80 & Lo 95 & Hi 95\\
 
 \CommentTok{# Writing original data to submission file}
 \CommentTok{#file ='forecasts/water-pipes.xlsx'}
-\CommentTok{#write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", col.names = TRUE, row.names = TRUE, append = FALSE)}
-\CommentTok{#write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", col.names = TRUE, row.names = TRUE, append = TRUE)}
+\CommentTok{#write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", }
+\CommentTok{#col.names = TRUE, row.names = TRUE, append = FALSE)}
+\CommentTok{#write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", }
+\CommentTok{#col.names = TRUE, row.names = TRUE, append = TRUE)}
 
 \CommentTok{# Grooming, aligning dates and aggregating Data}
 \NormalTok{waterflow_}\DecValTok{1}\NormalTok{<-waterflow_}\DecValTok{1} \OperatorTok{%>%}\StringTok{ }
@@ -1532,8 +1556,10 @@ DateTime & Point Forecast & Lo 80 & Hi 80 & Lo 95 & Hi 95\\
 \StringTok{    }\KeywordTok{select}\NormalTok{(DateTime, }\StringTok{`}\DataTypeTok{Point Forecast}\StringTok{`}\NormalTok{, }\StringTok{`}\DataTypeTok{Lo 80}\StringTok{`}\NormalTok{,}\StringTok{`}\DataTypeTok{Hi 80}\StringTok{`}\NormalTok{, }\StringTok{`}\DataTypeTok{Lo 95}\StringTok{`}\NormalTok{, }\StringTok{`}\DataTypeTok{Hi 95}\StringTok{`}\NormalTok{)}
 
 \CommentTok{# Writing forecasts and final data to the 'XLSX' file}
-\CommentTok{#write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", col.names = TRUE, row.names = FALSE, append = TRUE)}
-\CommentTok{#write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)}
+\CommentTok{#write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", }
+\CommentTok{#col.names = TRUE, row.names = FALSE, append = TRUE)}
+\CommentTok{#write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", }
+\CommentTok{#col.names = TRUE, row.names = FALSE, append = TRUE)}
 \end{Highlighting}
 \end{Shaded}
 

@@ -102,4 +102,6 @@ ATM_FC <-  cbind("Date"=date, "ATM1"=ATM1_fc$mean, "ATM2"=ATM2_fc$mean,
  #        ATM4_upper80CI = 'upper.80.2',
 #         ATM4_upper95CI = 'upper.95.2')
 
-write_csv(ATM_FC, path = "forecasts/ATM_all_forecast.csv")
+#write_csv(ATM_FC, path = "forecasts/ATM_all_forecast.csv")
+#file ='forecasts/Group2_Project1_Fall2019.xlsx'
+#write.xlsx(ATM_FC, file =  file , sheetName = "ATM Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)

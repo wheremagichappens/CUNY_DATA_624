@@ -12,8 +12,8 @@ waterflow_1 <- read_excel("data/Waterflow_Pipe1.xlsx")
 waterflow_2 <- read_excel("data/Waterflow_Pipe2.xlsx")
 
 # Writing original data to submission file
-#file ='forecasts/water-pipes.xlsx'
-#write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", col.names = TRUE, row.names = TRUE, append = FALSE)
+#file ='forecasts/Group2_Project1_Fall2019.xlsx'
+#write.xlsx(waterflow_1, file = file , sheetName ="Waterflow Pipe 1", col.names = TRUE, row.names = TRUE, append = FALSE)
 #write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", col.names = TRUE, row.names = TRUE, append = TRUE)
 
 # Grooming, aligning dates and aggregating Data
@@ -134,6 +134,6 @@ preds_ws<-preds_ws%>%
 
 # Writing forecasts and final data to the 'XLSX' file
 #write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", col.names = TRUE, row.names = FALSE, append = TRUE)
-#write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)
+#write.xlsx(preds_ws, file =  file , sheetName = "Water Flow_Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)
 
 

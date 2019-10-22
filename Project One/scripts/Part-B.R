@@ -49,4 +49,6 @@ rmse_train_arima <- 589381.7
 rmse_test_arima <- 725175
 
 # Save output
-write.csv(arima_fc, file="forecasts/POWER_ARIMA_FC.csv")
+#write.csv(arima_fc, file="forecasts/POWER_ARIMA_FC.csv")
+#file ='forecasts/Group2_Project1_Fall2019.xlsx'
+#write.xlsx(arima_fc, file =  file , sheetName = "Power Forecasts", col.names = TRUE, row.names = FALSE, append = TRUE)
