@@ -42,6 +42,9 @@ source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
 ```
 
 ```{r libraries, echo=T}
+# Predicitve Modeling
+libraries('AppliedPredictiveModeling')
+
 # Formatting Libraries
 libraries('default', 'knitr', 'kableExtra')
 
