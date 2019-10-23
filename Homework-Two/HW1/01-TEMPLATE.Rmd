@@ -1,0 +1,92 @@
+---
+title: "Homework Part Two"
+subtitle: "Assignment 1: KJ 6.3"
+author: "NAME"
+date: "DATE"
+output: 
+  pdf_document
+---
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+```
+
+```{r libraries, echo=T}
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+```
+
+## (1) Kuhn & Johnson 6.3
+
+> A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1% will boost revenue by approximately one hundred thousand dollars per batch:
+
+>> (a). Start R and use these commands to load the data:
+
+```{r kj-6.3a, eval=F}
+data("ChemicalManufacturingProcess")
+```
+
+The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. 
+
+>> (b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
+
+```{r kj-6.3b}
+#code
+```
+
+>> (c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
+
+```{r kj-6.3c}
+#code
+```
+
+>> (d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
+
+```{r kj-6.3d}
+#code
+```
+
+>> (e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
+
+```{r kj-6.3e}
+#code
+```
+
+>> (f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
+
+```{r kj-6.3f}
+#code
+```
