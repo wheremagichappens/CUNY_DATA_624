@@ -19,7 +19,7 @@
 *  All table outputs should be wrapped using the default knitr and kable_styling settings: `%>% kable() %>% kable_styling() %>% row_spec()`
 *  Add captions to table where appropriate: `kable(caption="CAPTION")`
 ### PLOTS:
-*  fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+*  fig.height` in code chunk options should be adjusted to larger size when needed (default=3)
 *  All plots should be done using ggplots 
 *  Lables should be used to appropriately when not included default graph: `+labs(title="", subtitle="", x="", y="")`
 *  All plots should call `+theme_bw()+theme()` to apply default settings
