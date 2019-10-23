@@ -2,6 +2,7 @@
 library(knitr)
 library(kableExtra)
 library(default)
+library(ggplot2)
 library(easypackages)
 
 # Set default augments for code chunks
@@ -15,9 +16,9 @@ default(row_spec) <- list(row=0, bold=T)
 
 # Set default augments for ggplot2 `theme()`
 default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
-                       plot.title = element_text(color="#4c4c4c", size=12, face="bold"),
-                       plot.subtitle = (element_text(size=8, color="#000000")),
-                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       plot.title = element_text(color="#2f818a", size=12, face="bold"),
+                       plot.subtitle = (element_text(size=10, color="#868b8c")),
+                       legend.title = (element_text(size=10, color="#4aa0b2", face="bold")),
                        strip.background = element_rect(color="#000000", 
-                                                       fill="#cccdd0", size=.75,linetype="solid"),
-                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+                                                       fill="#51a36f", size=.75,linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#FFFFFF", face="bold"))
