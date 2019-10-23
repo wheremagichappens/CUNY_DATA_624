@@ -55,7 +55,7 @@ libraries('ggplot2', 'grid', 'ggfortify')
 
 >> (a). Start R and use these commands to load the data:
 
-```{r kj-6.3a, eval=F}
+```{r kj-6.3a}
 data("ChemicalManufacturingProcess")
 ```
 
