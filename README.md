@@ -8,7 +8,7 @@
 *  Insert all R libraries used in the library code chunk.
 *  Only call plotting and formatting libraries as needed in the RMD to compile assignment 
 
-## FORMATTING
+## FORMATTING:
 *  UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
 *  UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE CAN COMPILE DOCUMENT ON THEIR MACHINE
 *  EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
@@ -18,6 +18,7 @@
 ### TABLES: 
 *  All table outputs should be wrapped using the default knitr and kable_styling settings: `%>% kable() %>% kable_styling() %>% row_spec()`
 *  Add captions to table where appropriate: `kable(caption="CAPTION")`
+
 ### PLOTS:
 *  fig.height` in code chunk options should be adjusted to larger size when needed (default=3)
 *  All plots should be done using ggplots 
