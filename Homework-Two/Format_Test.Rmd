@@ -1,10 +1,24 @@
 ---
-title: "Homework Part Two"
-subtitle: "Assignment 1: KJ 6.3"
-author: "Juliann McEachern"
-date: "10/23/2019"
+title: "Data 624: Homework II"
+subtitle: "Group Two"
+author: 
+- Vinicio Haro
+- Sang Yoon (Andy) Hwang
+- Julian McEachern
+- Jeremy O'Brien
+- Bethany Poulin
+date: "16 December 2019"
 output: 
-  pdf_document
+  pdf_document:
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    keep_tex: yes
+    toc: true
+    toc_depth: 3
+    number_sections: no
+documentclass: report
+subparagraph: yes
 ---
 
 ## Dependencies 
@@ -12,37 +26,40 @@ output:
 ```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
 # SOURCE DEFAULT SETTINGS
 source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
-
-## Overwrite default temporarily
-knitr::opts_chunk$set(echo = F)
 ```
 
 ```{r libraries, echo=T}
-# Predictive Modeling
+# Processing
 libraries('mice', 'AppliedPredictiveModeling', 'tidyverse', 'caret',  'pls', 'recipes', 'corrplot')
 
 # Formatting Libraries
+
 libraries('default', 'knitr', 'kableExtra')
 
 # Plotting Libraries
 libraries('ggplot2', 'grid', 'ggfortify')
 ```
 
-## (1) Kuhn & Johnson 6.3
+# Assignment 1 {-#AS-1}
 
-> A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1% will boost revenue by approximately one hundred thousand dollars per batch:
+\addcontentsline{toc}{section}{Kuhn and Johnson 6.3}
 
->> **(a). Start R and use these commands to load the data:**
+\begin{question}{Kuhn and Johnson 6.3}A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1\% will boost revenue by approximately one hundred thousand dollars per batch:\end{question}
 
-```{r kj-6.3a, echo=T}
+
+\begin{subquestion}{(a).}Start R and use these commands to load the data:
+\end{subquestion}
+
+```{r kj-6.3a}
 data("ChemicalManufacturingProcess")
 ```
 
 The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. 
 
->> **(b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). **
+\begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
+\end{subquestion}
 
-```{r kj-6.3b}
+```{r kj-6.3b, echo=F}
 # Calculate NA Values 
 CMP_NA <- ChemicalManufacturingProcess %>% select(-Yield) %>% summarise_all(funs(sum(is.na(.)))) %>% t() %>% as.data.frame() %>% rownames_to_column("Predictor") %>% filter(V1 > 0)
 
@@ -56,9 +73,11 @@ CMP_Verify <- sum(is.na(CMP_DF))
 
 There are `r nrow(CMP_NA)` predictor variables with `r sum(CMP_NA$V1)` missing values within the `ChemicalManufacturingProcess` (CMP) dataset. The `mice` function from the `mice` package can be used to impute multivariate missing data. The method applies a unique model to each variable to conduct multiple imputations. After running the function, we apply the `complete` function to fill in the missing data. There are now `r CMP_Verify` missing values within the dataset. 
 
->> **(c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? **
+\begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
+\end{subquestion}
 
-```{r kj-6.3c}
+
+```{r kj-6.3c, echo=F}
 # Set random seed 
 set.seed(50)
 
@@ -106,18 +125,16 @@ We found that this approach helped improve model accuracy metrics. The optimal v
 ```{r kj-6.3c-2, echo=F}
 fit_pls_1
 ```
-\newpage
 
 **PLS Model - With Pre-Processing**
 ```{r kj-6.3c-3, echo=F}
 fit_pls_2
 ```
 
+\begin{subquestion}{(d).} Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
+\end{subquestion}
 
-
->> **(d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? **
-
-```{r kj-6.3d}
+```{r kj-6.3d, echo=F}
 # Predict Response
 predict <- predict(fit_pls_2, test)
 
@@ -129,7 +146,7 @@ test_predict_accuracy <- defaultSummary(test_predict_result)
 RMSE_3 <- test_predict_accuracy[[1]]
 
 # plot
-plot <- ggplot(test_predict_result, aes(obs, predict)) + labs(title="Observed vs. Predicted Results for Test Data", subtitle="PSL Model for CMP Data")+ geom_point()+coord_flip()+theme_bw()+theme()
+plot <- ggplot(test_predict_result, aes(obs, predict)) + labs(title="`ChemicalManufacturingProcess` PLS Model", subtitle="Observed vs. Predicted Results for Test Data")+ geom_point()+coord_flip()+theme_bw()+theme()
 
 ```
 
@@ -140,11 +157,10 @@ plot
 ```
 
 
+\begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
+\end{subquestion}
 
-
->> **(e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list?** 
-
-```{r kj-6.3e}
+```{r kj-6.3e, echo=F}
 varimp1 <- varImp(fit_pls_2,scale=F,useModel = T)
 
 varimp2<-varimp1$importance %>% rownames_to_column("Principal Component")
@@ -161,10 +177,10 @@ The `varImp` function allows us to see the importance of our model's principal c
 plot
 ```
 
+\begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
+\end{subquestion}
 
->> **(f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?**
-
-```{r kj-6.3f}
+```{r kj-6.3f, echo=F}
 top<-varimp_pc %>% colnames() 
 cor<-cor(train[, top], train$Yield, method="pearson")
 ```
@@ -176,10 +192,9 @@ cor %>% kable() %>% kable_styling()
 ```
 Both our top manufacturing predictor variables have a negative correlation coefficient which would be beneficial to examine to improve yield predictions in future models. 
 
-## R Code
+## R Code 
 
-
-```{r, eval=F, echo=T}
+```{r, eval=F}
 # (6.3a) 
 # Load data
 data("ChemicalManufacturingProcess")
@@ -209,9 +224,6 @@ test <- CMP_DF[-trainingRows, ]
 # Create model function
 fit_pls_1 <- train(Yield~., data=train, method = "pls", tuneLength=5)
 
-# Score Accuracy
-RMSE_1 <- fit_pls_1$results$RMSE[1]
-
 # Pre-Process Recipe 
 rec <- recipes::recipe(CMP_DF, Yield~.)
 rec <- rec %>% step_nzv( all_predictors(), options = list(freq_cut = 95/5, unique_cut = 10 ) )
@@ -228,7 +240,7 @@ test <- CMP_DF_TF[-trainingRows, ]
 # Create model function
 fit_pls_2 <- train(Yield~., data=train, method = "pls", preProcess="pca", trControl = trainControl(method = "cv", number = 5), tuneLength=5)
 
-# Score Accuracy
+RMSE_1 <- fit_pls_1$results$RMSE[1]
 RMSE_2 <- fit_pls_2$results$RMSE[3]
 
 # (6.3d)
@@ -242,14 +254,15 @@ test_predict_result <- data.frame(obs = test$Yield, pred = predict)
 test_predict_accuracy <- defaultSummary(test_predict_result)
 RMSE_3 <- test_predict_accuracy[[1]]
 
-plot1 <- ggplot(test_predict_result, aes(obs, predict)) + labs(title="Observed vs. Predicted Results for Test Data", subtitle="PSL Model for CMP Data")+ geom_point()+coord_flip()+theme_bw()+theme()
+# plot
+plot <- ggplot(test_predict_result, aes(obs, predict)) + labs(title="`ChemicalManufacturingProcess` PLS Model", subtitle="Observed vs. Predicted Results for Test Data")+ geom_point()+coord_flip()+theme_bw()+theme()
 
 # (6.3e) 
 varimp1 <- varImp(fit_pls_2,scale=F,useModel = T)
 
 varimp2<-varimp1$importance %>% rownames_to_column("Principal Component")
 
-plot2 <- ggplot(varimp2, aes(x=reorder(`Principal Component`, Overall), y=Overall)) + geom_point() + geom_segment(aes(x=`Principal Component`,xend=`Principal Component`,y=0,yend=Overall)) + labs(title="Variable Importance", subtitle="PSL Model for CMP Data", x="Principal Component", y="Importance")+ coord_flip()+theme_bw()+theme()
+plot <- ggplot(varimp2, aes(x=reorder(`Principal Component`, Overall), y=Overall)) + geom_point() + geom_segment(aes(x=`Principal Component`,xend=`Principal Component`,y=0,yend=Overall)) + labs(title="Variable Importance", subtitle="PSL Model for CMP Data", x="Principal Component", y="Importance")+ coord_flip()+theme_bw()+theme()
 
 varimp_pc <- train %>% select(-Yield) %>% select(1,3,2,8,9,11,18,5,6,14)
 bio <- varimp_pc %>%select(starts_with("Bio"))%>%ncol()
@@ -258,8 +271,5 @@ bio <- varimp_pc %>%select(starts_with("Bio"))%>%ncol()
 top<-varimp_pc %>% colnames() 
 cor<-cor(train[, top], train$Yield, method="pearson")
 ```
-
-
-
 
 
