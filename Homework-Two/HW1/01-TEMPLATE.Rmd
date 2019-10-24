@@ -42,6 +42,9 @@ source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
 ```
 
 ```{r libraries, echo=T}
+# Predicitve Modeling
+libraries('AppliedPredictiveModeling')
+
 # Formatting Libraries
 libraries('default', 'knitr', 'kableExtra')
 
@@ -53,7 +56,7 @@ libraries('ggplot2', 'grid', 'ggfortify')
 
 > A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1% will boost revenue by approximately one hundred thousand dollars per batch:
 
->> (a). Start R and use these commands to load the data:
+>> **(a). Start R and use these commands to load the data:**
 
 ```{r kj-6.3a}
 data("ChemicalManufacturingProcess")
@@ -61,31 +64,31 @@ data("ChemicalManufacturingProcess")
 
 The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. 
 
->> (b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
+>> **(b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). **
 
 ```{r kj-6.3b}
 #code
 ```
 
->> (c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
+>> **(c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? **
 
 ```{r kj-6.3c}
 #code
 ```
 
->> (d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
+>> **(d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? **
 
 ```{r kj-6.3d}
 #code
 ```
 
->> (e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
+>> **(e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list?** 
 
 ```{r kj-6.3e}
 #code
 ```
 
->> (f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
+>> **(f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?**
 
 ```{r kj-6.3f}
 #code
