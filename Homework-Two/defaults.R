@@ -6,7 +6,7 @@ library(ggplot2)
 library(easypackages)
 
 # Set default augments for code chunks
-knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=NA,self.contained = F, tidy=T, tidy.opts=list(width.cutoff=50), fig.width=10, fig.height = 3)
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=NA,self.contained = F, tidy=T, tidy.opts=list(width.cutoff=50), fig.width=10, fig.height = 3)
 
 # Set default augments for `kable()` 
 default(kable) <- list(format="latex")

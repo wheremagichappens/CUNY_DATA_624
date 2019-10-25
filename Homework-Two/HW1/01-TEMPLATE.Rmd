@@ -58,7 +58,7 @@ libraries('ggplot2', 'grid', 'ggfortify')
 
 >> **(a). Start R and use these commands to load the data:**
 
-```{r kj-6.3a}
+```{r kj-6.3a, echo=T}
 data("ChemicalManufacturingProcess")
 ```
 
@@ -93,3 +93,21 @@ The matrix processPredictors contains the 57 predictors (12 describing the input
 ```{r kj-6.3f}
 #code
 ```
+
+
+## R Code
+
+```{r, eval=F, echo=T}
+# (6.3a) 
+
+# (6.3b) 
+
+# (6.3c)
+
+# (6.3d)
+
+# (6.3e) 
+
+# (6.3f)
+```
+
