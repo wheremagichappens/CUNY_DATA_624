@@ -41,7 +41,7 @@ output:
 source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
 ```
 
-```{r libraries}
+```{r libraries, echo=T}
 # Forecast libraries
 libraries('mlbench', 'AppliedPredictiveModeling')
 
@@ -60,7 +60,7 @@ libraries('ggplot2', 'grid', 'ggfortify')
 
 > Recreate the simulated data from Exercise 7.2:
 
-```{r kj-8.1}
+```{r kj-8.1, echo=T}
 set.seed(200)
 simulated <- mlbench.friedman1(200, sd = 1) 
 simulated <- cbind(simulated$x, simulated$y)
@@ -149,3 +149,32 @@ cor(simulated$duplicate1, simulated$V1)
 ```{r kj-8.7c}
 #code
 ```
+
+## R Code
+
+```{r 03-code, eval=F, echo=T}
+# insert code here
+
+# (8.1a)
+
+# (8.1b)
+
+# (8.1c)
+
+# (8.1d)
+
+# (8.2)
+
+# (8.3a)
+
+# (8.3b)
+
+# (8.3c)
+
+# (8.7a)
+
+# (8.7b)
+
+# (8.7c)
+```
+

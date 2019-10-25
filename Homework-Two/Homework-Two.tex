@@ -1,4 +1,4 @@
-\documentclass[openany]{report}
+\documentclass[]{report}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -21,10 +21,9 @@
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
-            pdftitle={Data 624: Homework II},
+            pdftitle={Data 624 - Group 2 Homework Part 2},
             pdfauthor={Vinicio Haro; Sang Yoon (Andy) Hwang; Julian McEachern; Jeremy O'Brien; Bethany Poulin},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -36,39 +35,39 @@
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
 % Add ',fontsize=\small' for more characters per line
 \usepackage{framed}
-\definecolor{shadecolor}{RGB}{48,48,48}
+\definecolor{shadecolor}{RGB}{248,248,248}
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.81,0.69}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.50,0.62,0.50}{\textbf{#1}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.80,0.80,0.80}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.86,0.64,0.64}{#1}}
-\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.80,0.80,0.80}{#1}}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.86,0.64,0.64}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.50,0.62,0.50}{#1}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.50,0.62,0.50}{\textbf{#1}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.86,0.64,0.64}{\textbf{#1}}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.94,0.87,0.69}{#1}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.87,0.87,0.75}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.86,0.86,0.80}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.50,0.62,0.50}{#1}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.76,0.75,0.62}{#1}}
-\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.80,0.80,0.80}{#1}}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.75,0.75,0.82}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.94,0.94,0.56}{#1}}
-\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.80,0.80,0.80}{#1}}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.50,0.62,0.50}{\textbf{#1}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.94,0.87,0.69}{#1}}
-\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.80,0.80,0.80}{#1}}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.94,0.94,0.82}{#1}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.94,0.94,0.56}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{1.00,0.81,0.69}{\textbf{#1}}}
-\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.80,0.80,0.80}{#1}}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.86,0.64,0.64}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.80,0.58,0.58}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.80,0.58,0.58}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.80,0.80,0.80}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.80,0.58,0.58}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.50,0.62,0.50}{\textbf{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -105,11 +104,11 @@
 
 \setlength{\droptitle}{-2em}
 
-  \title{Data 624: Homework II}
+  \title{Data 624 - Group 2\\
+Homework Part 2}
     \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-  \subtitle{Group Two}
-  \author{Vinicio Haro \\ Sang Yoon (Andy) Hwang \\ Julian McEachern \\ Jeremy O'Brien \\ Bethany Poulin}
+    \author{Vinicio Haro \\ Sang Yoon (Andy) Hwang \\ Julian McEachern \\ Jeremy O'Brien \\ Bethany Poulin}
     \preauthor{\centering\large\emph}
   \postauthor{\par}
       \predate{\centering\large\emph}
@@ -133,9 +132,19 @@
 
 % remove "chapter" from chapter title
 \usepackage{titlesec}
+
 \titleformat{\chapter}
   {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
 \titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+\usepackage{titling}
+\pretitle{\begin{flushright}\LARGE}
+\posttitle{\par\end{flushright}\vskip 0.5em}
+\preauthor{\begin{flushright}\large \lineskip 0.5em}
+\postauthor{\par\end{flushright}}
+\predate{\begin{flushright}\large}
+\postdate{\par\end{flushright}}
+
 
 % wrap text
 \usepackage{geometry}[textwidth=6in]
@@ -183,21 +192,24 @@ Include details on our process in creating this document.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Predictive Modeling}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'AppliedPredictiveModeling'}\NormalTok{, }\StringTok{'mlbench'}\NormalTok{, }\StringTok{'caret'}\NormalTok{, }\StringTok{'randomForest'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }
+    \StringTok{"randomForest"}\NormalTok{)}
 
 \CommentTok{# Formatting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'default'}\NormalTok{, }\StringTok{'knitr'}\NormalTok{, }\StringTok{'kableExtra'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{)}
 
 \CommentTok{# Plotting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'ggfortify'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\newpage
 
 \hypertarget{AS-1}{%
 \chapter*{Assignment 1}\label{AS-1}}
 \addcontentsline{toc}{chapter}{Assignment 1}
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 6.3}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 6.3}
 
 \begin{question}{Kuhn and Johnson 6.3}A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1\% will boost revenue by approximately one hundred thousand dollars per batch:\end{question}
 
@@ -213,283 +225,90 @@ Include details on our process in creating this document.
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 \end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{subquestion}{(d).} Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
 \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 \end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
 
 \hypertarget{AS-2}{%
 \chapter*{Assignment 2}\label{AS-2}}
 \addcontentsline{toc}{chapter}{Assignment 2}
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 7.2}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 7.2}
 
 \begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# The package `mlbench` contains a function called `mlbench.friedman1` }
-\CommentTok{# that simulates these data:}
-
-\KeywordTok{set.seed}\NormalTok{(}\DecValTok{200}\NormalTok{) }
-\NormalTok{trainingData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
-
-\CommentTok{## We convert the 'x' data from a matrix to a data frame }
-\CommentTok{## One reason is that this will give the columns names.}
-
-\NormalTok{trainingData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x) }
-
-\CommentTok{## Look at the data using }
-\KeywordTok{featurePlot}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x, trainingData}\OperatorTok{$}\NormalTok{y) }
-\end{Highlighting}
-\end{Shaded}
-
 \includegraphics{Homework-Two_files/figure-latex/kj-7.2-ex1-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{## or other methods. }
-
-\CommentTok{## This creates a list with a vector 'y' and a matrix }
-\CommentTok{## of predictors 'x'. Also simulate a large test set to }
-\CommentTok{## estimate the true error rate with good precision: }
-
-\NormalTok{testData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{5000}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
-\NormalTok{testData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(testData}\OperatorTok{$}\NormalTok{x) }
-\end{Highlighting}
-\end{Shaded}
 
 \begin{subquestion}{(a).} Tune several models on these data. For example: 
 \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x,}
-                  \DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }
-                  \DataTypeTok{method =} \StringTok{"knn"}\NormalTok{,}
-                  \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{), }
-                  \DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{) }
-\NormalTok{knnModel }
-
-\NormalTok{knnPred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(knnModel, }\DataTypeTok{newdata =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{x) }
-
-\CommentTok{## The function 'postResample' can be used to get the test set performance values}
-\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ knnPred, }\DataTypeTok{obs =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{y)}
-\end{Highlighting}
-\end{Shaded}
-
 Model 1:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
 
 Model 2:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 Model 3:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{subquestion}{(b).}
 Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
 \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
-\addcontentsline{toc}{section}{Kuhn and Johnson 7.5}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 7.5}
 
 \begin{question}{Kuhn and Johnson 7.5}
 Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
 \end{question}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# Call code from 6.3}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(a).}
 Which nonlinear regression model gives the optimal resampling and test set performance? 
 \end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# code}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{subquestion}{(b).}
 Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
 \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(c).}
 Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
 \end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# code}
-\end{Highlighting}
-\end{Shaded}
 
 \hypertarget{AS-3}{%
 \chapter*{Assignment 3}\label{AS-3}}
 \addcontentsline{toc}{chapter}{Assignment 3}
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.1}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.1}
 
 \begin{question}{Kuhn and Johnson 8.1} Recreate the simulated data from Exercise 7.2: \end{question}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{set.seed}\NormalTok{(}\DecValTok{200}\NormalTok{)}
-\NormalTok{simulated <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{) }
-\NormalTok{simulated <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(simulated}\OperatorTok{$}\NormalTok{x, simulated}\OperatorTok{$}\NormalTok{y)}
-\NormalTok{simulated <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(simulated) }
-\KeywordTok{colnames}\NormalTok{(simulated)[}\KeywordTok{ncol}\NormalTok{(simulated)] <-}\StringTok{ "y"}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(a).} Fit a random forest model to all of the predictors, then estimate the variable importance scores. Did the random forest model significantly use the uninformative predictors (V6-V10)?\end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{model1 <-}\StringTok{ }\KeywordTok{randomForest}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ simulated, }
-                       \DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{, }
-                       \DataTypeTok{ntree =} \DecValTok{1000}\NormalTok{)}
-\NormalTok{rfImp1 <-}\StringTok{ }\KeywordTok{varImp}\NormalTok{(model1, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{subquestion}{(b).} Now add an additional predictor that is highly correlated with one of the informative predictors. Fit another random forest model to these data. Did the importance score for V1 change? What happens when you add another predictor that is also highly correlated with V1? For example:\end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{simulated}\OperatorTok{$}\NormalTok{duplicate1 <-}\StringTok{ }\NormalTok{simulated}\OperatorTok{$}\NormalTok{V1 }\OperatorTok{+}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{200}\NormalTok{) }\OperatorTok{*}\StringTok{ }\FloatTok{.1} 
-\KeywordTok{cor}\NormalTok{(simulated}\OperatorTok{$}\NormalTok{duplicate1, simulated}\OperatorTok{$}\NormalTok{V1)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(c).} Use the `cforest` function in the party package to fit a random forest model using conditional inference trees. The party package function `varimp` can calculate predictor importance. The `conditional` argument of that function toggles between the traditional importance measure and the modified version described in Strobl et al. (2007). Do these importances show the same pattern as the traditional random forest model?\end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{subquestion}{(d).} Repeat this process with different tree models, such as boosted trees and Cubist. Does the same pattern occur?\end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.2}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.2}
 
 \begin{question}{Kuhn and Johnson 8.2}Use a simulation to show tree bias with different granularities.\end{question}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.3}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.3}
 
 \begin{question}{Kuhn and Johnson 8.3} In stochastic gradient boosting the bagging fraction and learning rate will govern the construction of the trees as they are guided by the gradient. Although the optimal values of these parameters should be obtained through the tuning process, it is helpful to understand how the magnitudes of these parameters affect magnitudes of variable importance. Figure 8.24 provides the variable importance plots for boosting using two extreme values for the bagging fraction (0.1 and 0.9) and the learning rate (0.1 and 0.9) for the solubility data. The left-hand plot has both parameters set to 0.1, and the right-hand plot has both set to 0.9: \end{question}
 
 \begin{subquestion}{(a).} Why does the model on the right focus its importance on just the first few of predictors, whereas the model on the left spreads importance across more predictors? \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(b).} Which model do you think would be more predictive of other samples?\end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{subquestion}{(c).} How would increasing interaction depth affect the slope of predictor importance for either model in Fig.8.24?\end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.7}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.7}
 
 \begin{question}{Kuhn and Johnson 8.7}
 Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several tree-based models:
@@ -497,27 +316,9 @@ Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. 
 
 \begin{subquestion}{(a).} Which tree-based regression model gives the optimal resampling and test set performance? \end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(b).} Which predictors are most important in the optimal tree-based regression model? Do either the biological or process variables dominate the list? How do the top 10 important predictors compare to the top 10 predictors from the optimal linear and nonlinear models?\end{subquestion}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{subquestion}{(c).} Plot the optimal single tree with the distribution of yield in the terminal nodes. Does this view of the data provide additional knowledge about the biological or process predictors and their relationship with yield?\end{subquestion}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#code}
-\end{Highlighting}
-\end{Shaded}
 
 \hypertarget{AS-4}{%
 \chapter*{Assignment 4}\label{AS-4}}
@@ -529,12 +330,6 @@ Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. 
 \hypertarget{R-Script}{%
 \chapter*{R Script}\label{R-Script}}
 \addcontentsline{toc}{chapter}{R Script}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#Compile R Script Here for Professors Review}
-\end{Highlighting}
-\end{Shaded}
 
 
 \end{document}
