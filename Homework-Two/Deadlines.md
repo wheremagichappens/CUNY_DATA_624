@@ -1,5 +1,14 @@
 # HW Part-2 Deadlines
 
+## Status
+
+| Assignment    | Andy (Sang Yoon) | Bethany    | Jeremey       | Juliann       | Vinicio |
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| HW2-1  | Not Complete  | Not Complete  | Not Complete  | Completed: 10/23 | Not Complete  |
+| HW2-2  | Not Complete  | Not Complete  | Not Complete  | Not Complete  | Not Complete  |
+| HW2-3  | Not Complete  | Not Complete  | Not Complete  | Not Complete | Not Complete  |
+| HW2-4  | Not Complete  | Not Complete  | Not Complete  | Not Complete  | Not Complete  |
+
 ## Assignment 1 
 - KJ: 6.3
 - Due: Oct 21
