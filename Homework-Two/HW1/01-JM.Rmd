@@ -178,7 +178,6 @@ Both our top manufacturing predictor variables have a negative correlation coeff
 
 ## R Code
 
-
 ```{r, eval=F, echo=T}
 # (6.3a) 
 # Load data
