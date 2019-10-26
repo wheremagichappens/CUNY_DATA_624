@@ -81,7 +81,7 @@ testData$x <- data.frame(testData$x)
 
 >> (a) Tune several models on these data. For example: 
 
-```{r kj-7.2-ex2, echo=T}
+```{r kj-7.2-ex2, eval=F, echo=T}
 knnModel <- train(x = trainingData$x,
                   y = trainingData$y, 
                   method = "knn",
