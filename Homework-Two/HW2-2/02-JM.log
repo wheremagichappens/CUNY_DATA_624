@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.10.14)  25 OCT 2019 19:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.10.14)  25 OCT 2019 20:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**02-TEMPLATE.tex
-(./02-TEMPLATE.tex
+**02-JM.tex
+(./02-JM.tex
 LaTeX2e <2019-10-01> patch level 1
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2019/08/27 v1.4j Standard LaTeX document class
@@ -717,8 +717,8 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-) (./02-TEMPLATE.aux)
-\openout1 = `02-TEMPLATE.aux'.
+) (./02-JM.aux)
+\openout1 = `02-JM.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 143.
 LaTeX Font Info:    ... okay on input line 143.
@@ -798,9 +798,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 143.
 LaTeX Info: Redefining \pageref on input line 143.
 LaTeX Info: Redefining \nameref on input line 143.
-(./02-TEMPLATE.out) (./02-TEMPLATE.out)
+(./02-JM.out) (./02-JM.out)
 \@outlinefile=\write4
-\openout4 = `02-TEMPLATE.out'.
+\openout4 = `02-JM.out'.
 
 
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/epstopdf-
@@ -875,87 +875,70 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 169
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+<"02-JM_files/figure-latex/""kj-7.2-ex1-1".pdf, id=28, 722.7pt x 216.81pt>
+File: "02-JM_files/figure-latex/""kj-7.2-ex1-1".pdf Graphic file (type pdf)
+<use "02-JM_files/figure-latex/""kj-7.2-ex1-1".pdf>
+Package pdftex.def Info: "02-JM_files/figure-latex/""kj-7.2-ex1-1".pdf  used on
+ input line 178.
+(pdftex.def)             Requested size: 469.76045pt x 140.92813pt.
 
-Package xcolor Warning: Incompatible color definition on input line 178.
+Package xcolor Warning: Incompatible color definition on input line 191.
 
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-183.
+200.
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 
-Package xcolor Warning: Incompatible color definition on input line 192.
+Package xcolor Warning: Incompatible color definition on input line 204.
 
 
-Package xcolor Warning: Incompatible color definition on input line 192.
+Package xcolor Warning: Incompatible color definition on input line 204.
 
-<"02-TEMPLATE_files/figure-latex/""kj-7.2-ex1-1".pdf, id=20, 722.7pt x 216.81pt
->
-File: "02-TEMPLATE_files/figure-latex/""kj-7.2-ex1-1".pdf Graphic file (type pd
-f)
-<use "02-TEMPLATE_files/figure-latex/""kj-7.2-ex1-1".pdf>
-Package pdftex.def Info: "02-TEMPLATE_files/figure-latex/""kj-7.2-ex1-1".pdf  u
-sed on input line 194.
-(pdftex.def)             Requested size: 469.76045pt x 140.92813pt.
 
-Package xcolor Warning: Incompatible color definition on input line 196.
+Package xcolor Warning: Incompatible color definition on input line 204.
 
 [1
 
 {c:/Users/15082/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
-x.map} <./02-TEMPLATE_files/figure-latex/kj-7.2-ex1-1.pdf>]
+x.map} <./02-JM_files/figure-latex/kj-7.2-ex1-1.pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 208.
-
-
-Package xcolor Warning: Incompatible color definition on input line 208.
+Package xcolor Warning: Incompatible color definition on input line 204.
 
 
-Package xcolor Warning: Incompatible color definition on input line 221.
+Package xcolor Warning: Incompatible color definition on input line 204.
 
+[2] [3pdfTeX warning (ext4): destination with the same identifier (name{table.1
+}) has been already used, duplicate ignored
 
-Package xcolor Warning: Incompatible color definition on input line 228.
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.356 \end{quote}
+                 pdfTeX warning (ext4): destination with the same identifier (n
+ame{table.2}) has been already used, duplicate ignored
 
-
-Package xcolor Warning: Incompatible color definition on input line 228.
-
-
-Package xcolor Warning: Incompatible color definition on input line 257.
-
-
-Package xcolor Warning: Incompatible color definition on input line 265.
-
-
-Package xcolor Warning: Incompatible color definition on input line 265.
-
-[2]
-
-Package xcolor Warning: Incompatible color definition on input line 345.
-
-
-Package xcolor Warning: Incompatible color definition on input line 349.
-
-
-Package xcolor Warning: Incompatible color definition on input line 349.
-
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 352.
-[3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 352.
-(./02-TEMPLATE.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 352.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 352.
-Package rerunfilecheck Info: File `02-TEMPLATE.out' has not changed.
-(rerunfilecheck)             Checksum: BFEA2227EFE7E62E19FEA25C31D007BF;531.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 352.
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.356 \end{quote}
+                 ]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 401.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 401.
+(./02-JM.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 401.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 401.
+Package rerunfilecheck Info: File `02-JM.out' has not changed.
+(rerunfilecheck)             Checksum: D6D4C97B707002710B970A6AA11DC3C9;745.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 401.
  ) 
 Here is how much of TeX's memory you used:
- 12905 strings out of 494111
- 182967 string characters out of 6172311
- 263367 words of memory out of 5000000
- 16791 multiletter control sequences out of 15000+600000
- 43259 words of font info for 44 fonts, out of 8000000 for 9000
+ 12924 strings out of 494111
+ 183047 string characters out of 6172311
+ 264595 words of memory out of 5000000
+ 16802 multiletter control sequences out of 15000+600000
+ 43564 words of font info for 45 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,5n,37p,246b,372s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,9n,37p,240b,443s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.
 enc}{c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec
 .enc}{c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-m
@@ -974,10 +957,10 @@ ing/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/15082/AppData
 /Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb><c:/Users/15082/Ap
 pData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/150
 82/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on 02-TEMPLATE.pdf (3 pages, 359476 bytes).
+Output written on 02-JM.pdf (4 pages, 368107 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
- 93 compressed objects within 1 object stream
- 17 named destinations out of 1000 (max. 500000)
- 38 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 133 PDF objects out of 1000 (max. 8388607)
+ 111 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
+ 54 words of extra memory for PDF output out of 10000 (max. 10000000)
 

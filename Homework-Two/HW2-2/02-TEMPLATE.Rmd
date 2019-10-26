@@ -58,7 +58,7 @@ libraries('ggplot2', 'grid', 'ggfortify')
 
 **The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:** 
 
-```{r kj-7.2-ex1}
+```{r kj-7.2-ex1, echo=T}
 set.seed(200) 
 trainingData <- mlbench.friedman1(200, sd = 1)
 
@@ -81,7 +81,7 @@ testData$x <- data.frame(testData$x)
 
 >> (a) Tune several models on these data. For example: 
 
-```{r kj-7.2-ex2}
+```{r kj-7.2-ex2, eval=F, echo=T}
 knnModel <- train(x = trainingData$x,
                   y = trainingData$y, 
                   method = "knn",
@@ -96,6 +96,7 @@ postResample(pred = knnPred, obs = testData$y)
 ```
 
 Model 1: 
+
 ```{r kj-7.2-1}
 #code
 ```
@@ -142,3 +143,20 @@ Model 3:
 ```{r kj-7.5c}
 # code
 ```
+
+## R Code 
+
+```{r 02-code, eval=F,echo=T}
+#insert all code here
+
+# (7.2a)
+
+# (7.2b)
+
+# (7.5a)
+
+# (7.5b)
+
+# (7.5c)
+```
+

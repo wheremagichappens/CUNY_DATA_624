@@ -15,9 +15,19 @@
 
 % remove "chapter" from chapter title
 \usepackage{titlesec}
+
 \titleformat{\chapter}
   {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
 \titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+\usepackage{titling}
+\pretitle{\begin{flushright}\LARGE}
+\posttitle{\par\end{flushright}\vskip 0.5em}
+\preauthor{\begin{flushright}\large \lineskip 0.5em}
+\postauthor{\par\end{flushright}}
+\predate{\begin{flushright}\large}
+\postdate{\par\end{flushright}}
+
 
 % wrap text
 \usepackage{geometry}[textwidth=6in]

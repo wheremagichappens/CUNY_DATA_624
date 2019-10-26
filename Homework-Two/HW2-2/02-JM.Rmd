@@ -16,7 +16,7 @@ source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
 
 ```{r libraries, echo=T}
 # predictive modeling
-libraries('mlbench', 'caret','pls', 'naivebayes')
+libraries('mlbench', 'caret','mice','AppliedPredictiveModeling')
 
 # Formatting Libraries
 libraries('default', 'knitr', 'kableExtra')
@@ -54,7 +54,7 @@ testData$x <- data.frame(testData$x)
 
 >> (a) Tune several models on these data. For example: 
 
-```{r kj-7.2-ex2}
+```{r kj-7.2-ex2, echo=T, eval=F}
 knnModel <- train(x = trainingData$x,
                   y = trainingData$y, 
                   method = "knn",
@@ -68,57 +68,83 @@ knnPred <- predict(knnModel, newdata = testData$x)
 postResample(pred = knnPred, obs = testData$y)
 ```
 
-Model 1: 
-```{r kj-7.2-1}
-set.seed(5)
+```{r kj-7.2-models}
+set.seed(100)
+
+# Model 2
 lmModel <- train(x = trainingData$x,
-                  y = trainingData$y, 
-                  method = "lm",
-                  preProc = c("knnImpute"), 
-                  tuneLength = 5) 
-lmModel 
-
-lmPred <- predict(lmModel, newdata = testData$x) 
-
-## The function 'postResample' can be used to get the test set performance values
-postResample(pred = lmPred, obs = testData$y)
-```
-
-Model 2: 
-```{r kj-7.2-1}
-plsModel <- train(x = trainingData$x,
-                  y = trainingData$y, 
-                  method = "pls",
-                  preProc = c("center", "scale"), 
-                  tuneLength = 5) 
-plsModel 
-
-plsPred <- predict(plsModel, newdata = testData$x) 
-
-## The function 'postResample' can be used to get the test set performance values
-postResample(pred = plsPred, obs = testData$y)
-```
-
-Model 3: 
-```{r kj-7.2-3}
-naive_bayesModel <- train(x = trainingData$x,
                   y = trainingData$y, 
                   method = 'lm',
                   preProc = 'pca', 
                   tuneLength = 5)
+lmPred <- predict(lmModel, newdata = testData$x) 
+lmPerf <- postResample(pred = lmPred, obs = testData$y)
 
-naive_bayesModel 
+# Model 1
+plsModel <- train(x = trainingData$x,
+                  y = trainingData$y, 
+                  method = 'pls',
+                  preProc = 'pca', 
+                  tuneLength = 5) 
+plsPred <- predict(plsModel, newdata = testData$x) 
+plsPerf <- postResample(pred = plsPred, obs = testData$y)
 
-naive_bayesPred <- predict(naive_bayesModel, newdata = testData$x) 
+# Model 3
+marsModel <- train(x = trainingData$x,
+                 y = trainingData$y, 
+                 method = 'earth',
+                 tuneGrid = expand.grid(degree=1, nprune=10))
+marsPred <- predict(marsModel, newdata = testData$x) 
+marsPerf <- postResample(pred = marsPred, obs = testData$y)
+```
 
-## The function 'postResample' can be used to get the test set performance values
-postResample(pred = naive_bayesPred, obs = testData$y)
+### Model 1: 
+
+**Train set model & performance:**
+
+```{r kj-7.2-1a}
+lmModel 
+```
+**Test set performance values:**
+
+```{r kj-7.2-1b}
+lmPerf 
+```
+
+### Model 2: 
+
+**Train set model & performance:**
+```{r kj-7.2-2a}
+plsModel 
+```
+**Test set performance values:**
+```{r kj-7.2-2b}
+plsPerf 
+```
+
+### Model 3: 
+
+**Train set model & performance:**
+```{r kj-7.2-3-a}
+marsModel 
+```
+
+**Test set performance values:**
+```{r kj-7.2-3b}
+marsPerf 
 ```
 
 >> (b) Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
 
-```{r kj-7.2-4}
-#code
+
+```{r kj-7.2-4a}
+rbind("lmModel"=c("RMSE"=lmModel$results$RMSE,"RSquared"=lmModel$results$Rsquared,"MAE"=lmModel$results$MAE),
+      "plsModel"=c(plsModel$results$RMSE[2],plsModel$results$Rsquared[2],plsModel$results$MAE[2]),
+      "marsModel"=c(marsModel$results$RMSE,marsModel$results$Rsquared,marsModel$results$MAE)) %>% kable(caption="Train Set Performance") %>% kable_styling() %>% row_spec()
+```
+
+```{r kj-7.2-4b}
+rbind(lmPerf, plsPerf, marsPerf) %>% kable(caption="Test Set Performance") %>% kable_styling() %>% row_spec()
 ```
 
 ## (2) Kuhn & Johnson 7.5
@@ -126,7 +152,9 @@ postResample(pred = naive_bayesPred, obs = testData$y)
 >  Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
 
 ```{r kj-7.5}
-# Call code from 6.3
+data(ChemicalManufacturingProcess)
+CMP_Impute <- mice(ChemicalManufacturingProcess, m=5, printFlag=F)
+CMP_DF <- mice::complete(CMP_Impute, 2)
 ```
 
 

@@ -97,7 +97,7 @@ The matrix processPredictors contains the 57 predictors (12 describing the input
 
 ## R Code
 
-```{r, eval=F, echo=T}
+```{r 01-code, eval=F, echo=T}
 # (6.3a) 
 
 # (6.3b) 

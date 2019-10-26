@@ -1,6 +1,5 @@
 ---
-title: "Data 624: Homework II"
-subtitle: "Group Two"
+title: "Data 624 - Group 2  \nHomework Part 2"
 author: 
 - Vinicio Haro
 - Sang Yoon (Andy) Hwang
@@ -10,7 +9,6 @@ author:
 date: "16 December 2019"
 output: 
   pdf_document:
-    highlight: zenburn
     includes:
       in_header: preamble.tex
     latex_engine: xelatex
@@ -20,7 +18,6 @@ output:
     number_sections: no
 documentclass: report
 subparagraph: yes
-classoption: openany
 ---
 
 # Getting Started {-#Overview}
@@ -47,9 +44,11 @@ libraries('default', 'knitr', 'kableExtra')
 libraries('ggplot2', 'grid', 'ggfortify')
 ```
 
+\newpage
+
 # Assignment 1 {-#AS-1}
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 6.3}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 6.3}
 
 \begin{question}{Kuhn and Johnson 6.3}A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1\% will boost revenue by approximately one hundred thousand dollars per batch:\end{question}
 
@@ -57,7 +56,7 @@ libraries('ggplot2', 'grid', 'ggfortify')
 \begin{subquestion}{(a).}Start R and use these commands to load the data:
 \end{subquestion}
 
-```{r kj-6.3a}
+```{r kj-6.3a, echo=T}
 data("ChemicalManufacturingProcess")
 ```
 
@@ -98,7 +97,7 @@ data("ChemicalManufacturingProcess")
 
 # Assignment 2 {-#AS-2}
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 7.2}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 7.2}
 
 \begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
 
@@ -167,7 +166,7 @@ Which models appear to give the best performance? Does MARS select the informati
 #code
 ```
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 7.5}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 7.5}
 
 \begin{question}{Kuhn and Johnson 7.5}
 Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
@@ -202,7 +201,7 @@ Explore the relationships between the top predictors and the response for the pr
 
 # Assignment 3 {-#AS-3}
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.1}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.1}
 
 \begin{question}{Kuhn and Johnson 8.1} Recreate the simulated data from Exercise 7.2: \end{question}
 
@@ -246,7 +245,7 @@ cor(simulated$duplicate1, simulated$V1)
 #code
 ```
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.2}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.2}
 
 \begin{question}{Kuhn and Johnson 8.2}Use a simulation to show tree bias with different granularities.\end{question}
 
@@ -254,7 +253,7 @@ cor(simulated$duplicate1, simulated$V1)
 #code
 ```
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.3}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.3}
 
 \begin{question}{Kuhn and Johnson 8.3} In stochastic gradient boosting the bagging fraction and learning rate will govern the construction of the trees as they are guided by the gradient. Although the optimal values of these parameters should be obtained through the tuning process, it is helpful to understand how the magnitudes of these parameters affect magnitudes of variable importance. Figure 8.24 provides the variable importance plots for boosting using two extreme values for the bagging fraction (0.1 and 0.9) and the learning rate (0.1 and 0.9) for the solubility data. The left-hand plot has both parameters set to 0.1, and the right-hand plot has both set to 0.9: \end{question}
  
@@ -276,7 +275,7 @@ cor(simulated$duplicate1, simulated$V1)
 #code
 ```
 
-\addcontentsline{toc}{section}{Kuhn and Johnson 8.7}
+\addcontentsline{toc}{subsection}{Kuhn and Johnson 8.7}
 
 \begin{question}{Kuhn and Johnson 8.7}
 Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several tree-based models:
