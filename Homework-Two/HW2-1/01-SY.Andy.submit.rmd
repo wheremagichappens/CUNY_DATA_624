@@ -96,10 +96,10 @@ df_final <- df_mice[,-zero_cols] # drop these zero variance columns
 
 We created 4 models (PLS, Elastic net and LM after center and scale and RLM after PCA). After tuning the models, we have following optimal values.
 
-PLS - number of component = 1 
-Elastic net - alpha = 1, lambda = 0.2307
-LM - intecerpt = TRUE
-RLM - intercept = TRUE, psi = psi.hampel
+*  **PLS**: number of component = 1
+*  **Elastic net**: alpha = 1, lambda = 0.2307
+*  **LM**: intecerpt = TRUE
+*  **RLM**: intercept = TRUE, psi = psi.hampel
 
 In fact, Elastic Net produces a regression model that is penalized with both the Ridge and Lasso. As a mixed model, it shrinks coefficients (like in ridge regression) and set some coefficients to zero (as in LASSO). `glmnet` finds the best combination of alpha and lambda to find the best model. If alpha is between 0 and 1, mixed regularization is used as optimal model. If alpha = 0, RIDGE is chosen as the optimal model. If alpha = 1, LASSO regression is chosen as the optimal model having the lowest RMSE on validation set. In our case, alpha = 1 is chosen for model 2.
 
@@ -131,7 +131,7 @@ model4 <- train( Yield~., data = df_train, method="rlm",
 
 It looks like the best model (lowest RMSE on test set and highest R^2) changes from time to time whenever we re-run the model given that each iteration in cross-validation process may give us different result. 
 
-However, when we do resampling 5 times, almost always model2 has the lowest RMSE on test set with highest R^2 in terms of mean which means that model 2 is the best model on average. As we expected, LM models is the worst performer.
+However, when we do resampling 5 times, almost always model2 has the lowest RMSE on test set with highest R^2 in terms of mean which means that model 2 is the best model on average. As we expected, LM model is the worst performer.
 
 We will thus choose model 2 as our final model. 
 
