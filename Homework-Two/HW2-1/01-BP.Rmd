@@ -1,0 +1,311 @@
+---
+title: "Team 2 - Homework Two"
+author: "Bethany Poulin"
+date: "10/23/19"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+subtitle: Assignment Two Kuhn and Johnson 3.6
+---
+```{r global_options, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.pos = '!h')
+```  
+
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+#source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+
+source('/Users/bpoulin/Documents/my-stuff/Fall 2019 CUNY/hw2/kuhn6.3.R')
+
+knitr::opts_chunk$set(echo = F, comment = NA)  
+
+```
+
+```{r libraries, echo=T, eval =FALSE}
+# Predicitve Modeling
+libraries('AppliedPredictiveModeling', 'tidyverse', 'impute', 'caTools', 'pls')
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+```
+
+## (1) Kuhn & Johnson 6.3
+
+> A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1% will boost revenue by approximately one hundred thousand dollars per batch:
+
+>> **(a). Start R and use these commands to load the data:**
+
+```{r kj-6.3a}
+data("ChemicalManufacturingProcess")
+```
+
+The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. Yield contains the percent yield for each run. 
+
+```{r kj-6.3a-2,  echo=FALSE, eval=TRUE, , fig.height=3}
+hist_yield
+```  
+
+The outcome variable seems to be relatively normally distributed and a viable traget for a partial least squares regression.  
+
+>> **(b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). **
+
+```{r kj-6.3b-1, echo=FALSE}
+#code
+#total_na%>%knitr::kable()
+#knitr::kable(list(total_na[1:29,], total_na[30:57,]))
+
+
+total_na%>%
+  knitr::kable("latex", align = 'clc') %>%
+    kable_styling(full_width = F, position = "center")
+```  
+
+No column had more than 15 missing values, so imputation seemed reasonable in all 28 columns with missing values. Using the `imputeknn()` method from the impute package, values were estimated for the `r sum(is.na(ChemicalManufacturingProcess[2:57]))` missing values. With these values imputed, there are now 56 complete cases of 176 observations.
+
+Out of curiosity, we looked at the summary statistics before and after imputing (ignoring missing values before imputation) to see if it seriously impacts the quantiles in a few of the imputed variables.
+
+
+
+```{r kj-6.3b-2, results='asis', message=FALSE, comment=NA, warning=FALSE, echo=FALSE}
+stargazer(ChemicalManufacturingProcess[14:35],type = 'latex', title = 'Summary Statistics on Variables Pre-Imputation', header = FALSE, float = FALSE)
+
+```
+
+
+
+```{r kj-6.3b-3, results='asis', message=FALSE, comment=NA, warning=FALSE, echo=FALSE}
+stargazer(imputed_data[14:35], type = 'latex', title = 'Summary Statistics on Variables after Imputation', header = FALSE, float = FALSE)
+
+```
+
+
+Looking at variables ManufacturingProcess11, with 10 missing values & ManufacturingProcess03 with 15 missing values in the original set and comparing them with the imputed sets, the quartiles are very nearly the same, so it seems that using `impute.knn( )` is a reasonable method.
+
+
+
+
+>> **(c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? **
+
+After separating the data in training (80%) and testing sets (20%), using `sample.split( )` from the `caTools` package, we chose to create a partial least squares model using `kernelpls` from the `plsr` package, after centering and scaling. The intent with Partial Least Squares was to maximize covariance between the variables and the outcome variable.
+
+```{r kj-6.3c, fig.height=4, echo=FALSE}
+plot(fit)
+abline(0, 1, col="red")
+
+
+validationplot(fit, val.type="RMSEP")
+```
+
+\newpage  
+
+
+The following are the root mean squared areas for models built with increasing numbers of principal components. Based on these errors, the 55 components seems to be the best possible model, however, at 41 components, the model's improvement becomes infinitesimal. So that is what we will build the final model upon.
+
+
+```{r kj-6.3c-1, fig.height=4}
+RMSEP(fit)
+```
+
+The final model is Partial Least Squares with 41 centered and scaled, principal components using the `kernelpls`
+
+** Evaluating the Training Set**  
+
+```{r jk6.3c-2, echo = FALSE}
+caret::defaultSummary(train_eval)
+```  
+ 
+Clearly this is not a fabulous model, as the r-squared suggests that only 45% of variation in out outcome variable, Yield, is explained by this model, and this is just the training set.
+
+>> **(d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? **
+
+Having made predictions on the `test` data with an RMSE of 1.29 which compared the to the training RMSE of 1.37, unexpectedly, this test set outperforms the training set. However a closer looc at the
+
+```{r kj-6.3d, echo=FALSE, fig.height=4}
+caret::defaultSummary(test_eval_41)
+
+eval_plot
+```
+
+
+>> **(e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list?** 
+
+```{r kj-6.3e, fig.height=4}
+imp_plot
+
+```
+
+Based on the top seven predictors are all ManufacturingProcesses 32, 13, 17, 09, 36 & 33. Four out of the next six variables are Biological Materials variables.   
+
+\newpage   
+
+>> **(f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?**
+
+```{r kj-6.3f , fig.height=4}
+#code
+
+grid.arrange(p1, p2, p3, nrow = 1)
+```
+
+In looking at the plots of the top three variables, ManufacturingProcesses 32 is somewhat positively associated with Yield, while ManufacturingProcesses 13 & ManufacturingProcesses 17 are slightly negatively associated with Yield.  Given that these are th three most associated variables and they are only slightly correlated with Yield, is makes sense that the model is only modestly predictive and requires the majority of variables even with
+
+## Appendix
+
+```{r appendix, echo=TRUE, eval=FALSE}
+require(AppliedPredictiveModeling)
+require(tidyverse)
+require(impute)
+require(caTools)
+require(pls)
+require(kableExtra)
+require(ggplot2)
+require(stargazer)
+require(caret)
+require(tidyverse)
+require(gridExtra)
+options(scipen = 999)
+# a.
+data("ChemicalManufacturingProcess")
+
+# Total NA Values
+#na_table<- table(is.na(ChemicalManufacturingProcess))
+total_na<-sapply(ChemicalManufacturingProcess[2:57], function(x) sum(is.na(x)))
+na_table<-sapply(ChemicalManufacturingProcess, function(x) table(is.na(x)))
+
+total_na<- data.frame(sort(total_na, decreasing = TRUE))
+total_na<- cbind(Variable = rownames(total_na), total_na)
+rownames(total_na) <- 1:nrow(total_na)
+colnames(total_na)<-  c("Variable", "Count")
+total_na<-cbind(total_na[1:28,],total_na[29:56,])
+
+ggplot(ChemicalManufacturingProcess, aes(x = Yield))+
+  geom_histogram(colour ='black', fill = 'violetred4')
+
+# b. Imputing Values
+summary(ChemicalManufacturingProcess)
+imputed_data = data.frame(impute.knn(as.matrix(ChemicalManufacturingProcess),
+       k =10,
+       rowmax =.30,
+       colmax =.85,
+       rng.seed =1942)$data)
+
+
+
+imp_proc_34 <- summary(imputed_data$ManufacturingProcess34)
+proc_34 <- summary(ChemicalManufacturingProcess$ManufacturingProcess34)
+imp_proc_03 <- summary(imputed_data$ManufacturingProcess03)
+proc_03 <- summary(ChemicalManufacturingProcess$ManufacturingProcess03)
+
+# c. tts, train and evaluate
+set.seed(1492)   #  set seed to ensure you always have same random numbers generated
+sample = sample.split(imputed_data, SplitRatio = 0.80) # splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE
+train =subset(imputed_data,sample ==TRUE) # creates a training dataset named train1 with rows which are marked as TRUE
+test=subset(imputed_data, sample==FALSE)
+
+
+# 
+fit <- plsr(Yield~., data=train,
+            method = 'kernelpls',
+            scale = TRUE,
+            center = TRUE)
+
+
+
+# 57 is the best lowest number of components
+
+# Best Train
+
+fit_41 <- plsr(Yield~., data=train,
+            method = 'kernelpls',
+            scale = TRUE,
+            center = TRUE,
+            ncomp =41)
+
+#  Train Metrics
+train_eval=data.frame('obs' = train$Yield, 'pred' =fit$fitted.values)
+colnames(train_eval) <- c('obs', 'pred')
+caret::defaultSummary(train_eval)
+#     RMSE  Rsquared       MAE
+# 1.3757981 0.4598005 1.1110483
+# 
+# # d.
+# 
+# #Test Predictions & Metrics
+test_pred_41 <- predict(fit_41, test, ncomp=41)
+test_eval_41=data.frame('obs' = test$Yield, 'pred' =test_pred_41)
+colnames(test_eval_41) <- c('obs', 'pred')
+caret::defaultSummary(test_eval_41)
+
+
+eval_plot <- ggplot(test_eval_41, aes(obs, pred)) + 
+  labs(title="Observed vs. Predicted Results for Test Data",
+       subtitle="Partial Least Squares Model")+ 
+  geom_point()+
+  coord_flip()+
+  theme_bw()+
+  theme()
+# e Importance
+
+importance <- caret::varImp(fit_41, scale=FALSE)
+
+importance<-importance%>%
+    mutate(Variable = row.names(importance))%>%
+    remove_rownames()%>%
+    select(Variable, Overall)%>%
+    arrange(desc(Overall))
+    
+imp_plot <- ggplot(head(importance, 15), aes(x=reorder(Variable, Overall), y=Overall)) + 
+    geom_point(colour = 'violetred4') + 
+    geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall),colour = 'violetred4') + 
+    labs(title="Variable Importance", 
+         subtitle="PSL Model for Chemical Manufacturing Process Data Set", x="Variable", y="Importance")+ 
+    coord_flip()+
+    theme_bw()+
+    theme()
+
+
+# F Comparison
+
+p1 <-qplot(ManufacturingProcess32,Yield,  data =ChemicalManufacturingProcess)+ 
+  geom_smooth(method = "loess", se =FALSE)
+p2 <-qplot(ManufacturingProcess13,Yield,   data =ChemicalManufacturingProcess)+ 
+  geom_smooth(method = "loess", se =FALSE)
+p3 <-qplot( ManufacturingProcess17, Yield, data =ChemicalManufacturingProcess)+ 
+  geom_smooth(method = "loess", se =FALSE)
+
+
+```  
