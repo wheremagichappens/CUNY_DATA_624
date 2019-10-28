@@ -1,0 +1,157 @@
+---
+title: "Homework Part Two"
+author: "Vinicio Haro"
+date: "DATE:2019-10-25"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+subtitle: 'Assignment 1: KJ 6.3'
+---
+
+```{r instructions, echo=F, fig.height = 12, fig.width=12}
+# README: GROUP TWO GUIDELINES
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+#source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+#setwd(dirname(getwd()))
+#source('C:/Users/traveler/Desktop/Additional_Models/github/defaults.R')
+source('C:/Users/traveler/Documents/defaults.R')
+```
+
+```{r libraries, echo=T}
+#Package to use knn imputing 
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+#BiocManager::install("impute")
+
+options(tinytex.verbose = TRUE)
+# Predicitve Modeling
+libraries('AppliedPredictiveModeling', 'caret', 'mice', 'glmnet','impute')
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra', 'tidyverse')
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify', 'DataExplorer')
+```
+
+## (1) Kuhn & Johnson 6.3
+
+> A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1% will boost revenue by approximately one hundred thousand dollars per batch:
+>> **(a). Start R and use these commands to load the data:**
+The data contains 176 observations with 58 variables.BiologicalMaterial07 might be a zero variance predictor and we will investigate further.
+```{r kj-6.3a}
+data("ChemicalManufacturingProcess")
+cd<-ChemicalManufacturingProcess
+str(ChemicalManufacturingProcess)
+```
+
+The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. 
+
+>> **(b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). **
+Our missing data plot shows that the target variable is complete. Manufactuing process 03 is missing 8.52 percent of entires. There are more predictors missing less than 3 percent of their entries. This is an ideal situation to impute variables. 
+The impute package is not available in CRAN. We need to install it directly from BiocManager. We utilize knn method to impute missing values across all variables with missing data. We essentially use k nearest neighbors toimpute the missing values. For each variable with missing data, we use Euclidean distance to identify the k nearest neighbors. If we are missing a coordinate to compute the distance, the package uses the average distance from the closest non missing coordinates. This package assumes that not all variables are missing data. 
+Some other methods of imputation include using the mean or median of each variable to fill in the NA's however the impute package allows KNN to be done in a single line. 
+```{r kj-6.3b}
+
+library(impute)
+
+cd2 <- impute.knn(as.matrix(cd))
+
+cd2 <- as.data.frame(cd2$data)
+
+
+```
+>> **(c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? **
+We can see several predictors that ar quite correlated with each other. We can use a function to apply a correlation threshold and remove pairwise correlations. We removed any pairwise correlation greater than .7 (arbitrary choice). We are essentially being proactive when it comes to avoiding multicolinearity. We will be fitting a partial least squares model using the train function. We specify method to pls and request the 20 best fits based on RMSE. We build the model on the features that were selected from dropping variables that had pairwise correlation. We also use 10 fold cross validation. On a high level, this means that we will parition the training data into k equally sized sets and retain one of those ki sets to validate our model.
+The plot parameter revealed the the optimal value of components. In terms of r squared , ncomp 13 is the ideal parameter. 
+
+```{r kj-6.3c}
+
+#prevent multicolinearity          
+cd3 = cor(cd2)
+hc = findCorrelation(cd3, cutoff=0.7) # putt any value as a "cutoff" 
+hc = sort(hc)
+reduced_Data = cd2[,-c(hc)]
+
+#partition data into test and train 
+set.seed(20)
+
+train_row_partition <- createDataPartition(reduced_Data$Yield, p=0.8, list=FALSE)
+
+X_train <- reduced_Data[train_row_partition, -1]
+
+y_train <- reduced_Data[train_row_partition, 1]
+
+X_test <- reduced_Data[-train_row_partition, -1]
+
+y_test <- reduced_Data[-train_row_partition, 1]
+
+#fit model and show optimal number of parameters 
+pls_tunned <- train(X_train, y_train, method = "pls",tuneLength = 20, trControl=trainControl(method='cv'), preProc = c("center", "scale"))
+
+pls_tunned;
+plot(pls_tunned)
+ 
+```
+
+>> **(d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? **
+The test data produces a RMSE of 1.5444438, r squared of 0.4223426 and MAE 1.2908355.Recall the metrics from nComp13. With training data we got RMSE of 2.392602, R squared of 0.4211762 and MAE of  1.325125. There is a decrease in rMSE, however we still get roughly 40 percent of the data variability explained when using the training data vs test data. 
+The problem did NOT specifiy to pick the best model but rather a model of our choice, however we can speculate on how to potentially imporve our results. I think given the type of data, we would benefit from applying method of smoothing splines. Splines balance the overall goodness of fit by applying the derivative of functions generated on noisy data. I would also recommed additive regression methods. 
+
+```{r kj-6.3d}
+pred_pls <- predict(pls_tunned, newdata=X_test)
+
+predResult <- postResample(pred=pred_pls, obs=y_test)
+
+print(predResult)
+
+```
+>> **(e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list?** 
+Manufacturing Process 36 is the most important predictor followed by BiologicalMaterial03.Overall, the process is doinated by manufacturing process predictors. 
+
+
+```{r kj-6.3e, fig.height=4, echo=F}
+pls_tunned$finalModel$coefficients
+
+key_features <- varImp(pls_tunned)
+
+plot(key_features, top=20)
+```
+
+>> **(f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?**
+
+We are unable to change biological process but make alterations to the raw input materials that go into the biological process. Based on the importance of bio process 3, we could perhaps explore making changes into the raw materials. Manufacturing process 36 is the most important. I suggest using experimental design to compare that particular process with the other manufacturing processes. We want to see why a process such as 19 is not as important as 36. 
+
+If we examine our correlations, we see that ManufacturingProcess36 has strong negative correlation with Yield. That variable would be one that merits furthur analysis into why it has such a negative correlation with yield.  
+
+
+```{r kj-6.3f}
+imp_train <- cd2 %>%select(Yield, ManufacturingProcess36,BiologicalMaterial03,ManufacturingProcess17, ManufacturingProcess11, ManufacturingProcess06)
+cor(imp_train)
+```
