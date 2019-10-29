@@ -22,4 +22,4 @@ default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
                        legend.title = (element_text(size=10, color="#2d8659", face="bold")),
                        strip.background = element_rect(color="#000000", 
                                                        fill="#d9f2e6", size=.75,linetype="solid"),
-                       strip.text.x = element_text(size = 8, color = "#FFFFFF", face="bold"))
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
