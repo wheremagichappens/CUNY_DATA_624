@@ -1,8 +1,8 @@
 ---
 title: "Team 2 - Homework Two"
 subtitle: "Assignment 2: KJ 7.2; KJ 7.5"
-author: "NAME"
-date: "DATE"
+author: "Sang Yoon (Andy) Hwang"
+date: "DATE:2019-11-01"
 output: 
   pdf_document
 ---
@@ -266,7 +266,7 @@ df_final <- df_mice[,-zero_cols] # drop these zero variance columns
 
 >> (a) Which nonlinear regression model gives the optimal resampling and test set performance? 
 
-```{r kj-7.5a, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+```{r kj-7.5a}
 # code
 # split data train/test
 training <- df_final$Yield %>%
@@ -360,7 +360,7 @@ mars_model2 <- train(Yield~., data = df_train,
                     trControl = trainControl(method="cv"))
 
 #mars_model
-summary(mars_model2)
+mars_model2
 
 mars_Pred2 <- predict(mars_model2, newdata = df_test)
 
