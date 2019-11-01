@@ -1,0 +1,193 @@
+---
+title: "Homework Part Two"
+subtitle: "Assignment 1: KJ 6.3"
+author: "Sang Yoon (Andy) Hwang"
+date: "DATE:2019-10-25"
+output: 
+  pdf_document
+---
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+#source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+source('C:/Users/ahwang/Desktop/Cuny/DATA624/hw2/defaults.R')
+```
+
+```{r libraries, echo=T}
+# Predicitve Modeling
+libraries('AppliedPredictiveModeling', 'caret', 'mice', 'glmnet')
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+```
+
+## (1) Kuhn & Johnson 6.3
+
+> A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1% will boost revenue by approximately one hundred thousand dollars per batch:
+
+>> **(a). Start R and use these commands to load the data:**
+
+The data contains 176 observations with 58 variables.BiologicalMaterial07 might be a zero variance predictor and we will investigate further.
+```{r kj-6.3a}
+data("ChemicalManufacturingProcess")
+str(ChemicalManufacturingProcess)
+```
+
+The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. 
+
+>> **(b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). **
+
+After reviewing a few methods of multiple imputation, Multiple Imputation Chained Equations (MICE) was selected for its strength in handling imputation for observations with more than one predictor missing. The method applies one of built-in univariate imputation methods by default `defaultMethod = c("pmm", "logreg", "polyreg", "polr")`.
+
+We will also remove zero variance Predictors using `nearZeroVar`.
+It diagnoses predictors that have one unique value (i.e. are zero variance predictors) or predictors that are have both of the following characteristics: they have very few unique values relative to the number of samples and the ratio of the frequency of the most common value to the frequency of the second most common value is large. Indeed, `BiologicalMaterial07` was removed during the process.
+
+```{r kj-6.3b}
+# save df
+df <- ChemicalManufacturingProcess
+
+# set seed for split to allow for reproducibility
+set.seed(20190227L)
+
+# use mice w/ default settings to impute missing data
+miceImput <- mice(df, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice <- complete(miceImput)
+
+# Look for any features with no variance:
+zero_cols <- nearZeroVar( df_mice )
+df_final <- df_mice[,-zero_cols] # drop these zero variance columns 
+```
+
+>> **(c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? **
+
+We created 4 models (PLS, Elastic net and LM after center and scale and RLM after PCA). After tuning the models, we have following optimal values.
+
+*  **PLS**: number of component = 1
+*  **Elastic net**: alpha = 1, lambda = 0.2307
+*  **LM**: intecerpt = TRUE
+*  **RLM**: intercept = TRUE, psi = psi.hampel
+
+In fact, Elastic Net produces a regression model that is penalized with both the Ridge and Lasso. As a mixed model, it shrinks coefficients (like in ridge regression) and set some coefficients to zero (as in LASSO). `glmnet` finds the best combination of alpha and lambda to find the best model. If alpha is between 0 and 1, mixed regularization is used as optimal model. If alpha = 0, RIDGE is chosen as the optimal model. If alpha = 1, LASSO regression is chosen as the optimal model having the lowest RMSE on validation set. In our case, alpha = 1 is chosen for model 2.
+
+```{r kj-6.3c}
+# split data train/test
+training <- df_final$Yield %>%
+  createDataPartition(p = 0.8, list = FALSE)
+df_train  <- df_final[training, ]
+df_test <- df_final[-training, ]
+
+# model1 - PLS
+model1 <- train( Yield~., data = df_train, method="pls",
+                   tuneLength=10, 
+                   preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# model2 - Elastic net regression
+model2 <- train( Yield~., data = df_train, method="glmnet",
+                    preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# model3 - LM
+model3 <- train( Yield~., data = df_train, method="lm", preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) ) 
+
+# model4 - RLM with PCA
+model4 <- train( Yield~., data = df_train, method="rlm", 
+                 preProcess=c("pca"), trControl=trainControl(method="cv",number=5) ) 
+```
+
+>> **(d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? **
+
+It looks like the best model (lowest RMSE on test set and highest R^2) changes from time to time whenever we re-run the model given that each iteration in cross-validation process may give us different result. 
+
+However, when we do resampling 5 times, almost always model2 has the lowest RMSE on test set with highest R^2 in terms of mean which means that model 2 is the best model on average. As we expected, LM model is the worst performer.
+
+We will thus choose model 2 as our final model. 
+
+```{r kj-6.3d}
+# Make predictions
+p1 <- model1 %>% predict(df_test)
+p2 <- model2 %>% predict(df_test)
+p3 <- model3 %>% predict(df_test)
+p4 <- model4 %>% predict(df_test)
+
+# Model performance metrics
+sum_t <- data.frame(
+  RMSE1 = caret::RMSE(p1, df_test$Yield),
+  RMSE2 = caret::RMSE(p2, df_test$Yield),
+  RMSE3 = caret::RMSE(p3, df_test$Yield),
+  RMSE4 = caret::RMSE(p4, df_test$Yield),
+  Rsquare1 = caret::R2(p1, df_test$Yield),
+  Rsquare2 = caret::R2(p2, df_test$Yield),
+  Rsquare3 = caret::R2(p3, df_test$Yield),
+  Rsquare4 = caret::R2(p4, df_test$Yield)
+)
+print(sum_t)
+
+# resampling 5 times and then get perfomance metrics again
+resamp <- resamples( list(pls=model1,enet=model2,lm=model3,rlm=model4) )  # examples of using this are on EPage 82 
+print( summary(resamp) )
+```
+
+>> **(e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list?** 
+
+We see that `ManufacturingProcess32` is the most important in model 2 overall. Among Biological, we know that `BiologicalMaterial06` is the most important which is 4th most important overall.
+
+```{r kj-6.3e, fig.height=4, echo=F}
+varimp <- varImp(model2,scale=F,useModel = T)
+
+plot(varimp, top=15, scales = list(y = list(cex = 0.8)))
+```
+
+>> **(f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?**
+
+From Bivariate plot and correlation matrix, we know that `ManufacturingProcess32` has fairly positive relationship with `Yield` where as other 2 variables have fairly negative relationship. This information can help researchers to focus more on `ManufacturingProcess32` than any other variables if their goal is to increase `Yield`.
+
+```{r kj-6.3f}
+viporder <- order(abs(varimp$importance),decreasing=TRUE)
+topVIP <- rownames(varimp$importance)[viporder[c(1:3)]]
+
+# bivariate relationship
+featurePlot(df_train[, topVIP],
+            df_train$Yield,
+            plot = "scatter",
+            between = list(x = 1, y = 1),
+            type = c("g", "p", "smooth"),
+            layout = c(3,1),
+            labels = rep("", 2))
+
+# corr_matrix
+corr_top3 <- cor(df_train[, topVIP], df_train$Yield, method = 'pearson', use = 'pairwise.complete.obs')
+corr_top3
+```

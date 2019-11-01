@@ -1,0 +1,544 @@
+---
+title: "DATA 624: Project 1"
+author: "Jeremy O'Brien"
+date: "October 16, 2019"
+documentclass: book
+subparagraph: yes
+classoption: openany
+output: 
+  pdf_document:
+    highlight: tango
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    citation_package: natbib
+    keep_tex: yes
+    number_sections: true
+    toc: yes
+    toc_depth: 2
+---
+
+# Overview {-#overview}
+
+> Add information on process, approach, etc.
+
+## Dependencies {-#dependencies}
+
+The following R libraries were used to complete Project 1:
+
+```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=F}
+
+# General
+library('easypackages')
+
+libraries('knitr', 'kableExtra', 'default')
+
+# Processing
+libraries('readxl', 'tidyverse', 'janitor', 'lubridate')
+
+# Graphing
+libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr')
+
+# Timeseries 
+libraries('fpp2', 'zoo', 'urca', 'tseries', 'timetk')
+
+# Math
+libraries('forecast', 'psych')
+
+# Set working directory to folder RMD file opened from
+# set_wd <- function() {
+  # if (!require('rstudioapi')) (install.packages('rstudioapi'))
+  # current_path <- getActiveDocumentContext()$path
+  # setwd(dirname(current_path ))
+  # print( getwd() )
+# }
+
+# set_wd()
+
+```
+
+## Data {-#data}
+
+Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report for discussion purposes. The R scripts are available within our appendix for replication purposes. 
+
+For grading purposes, we exported and saved all forecasts as a csv in our data folder.
+
+```{r, eval=F}
+
+# Data Aquisition
+atm_data <- read_excel("data/ATM624Data.xlsx") 
+power_data <- read_excel("data/ResidentialCustomerForecastLoad-624.xlsx") 
+pipe1_data <- read_excel("data/Waterflow_Pipe1.xlsx")
+pipe2_data <- read_excel("data/Waterflow_Pipe2.xlsx")
+
+# Source Code
+source("scripts/Part-A-JO.R")
+
+```
+
+```{r settings-A-JM, echo=F, message=F, warning=F, error=F, comment=F}
+### UNIVERSAL DATA SOURCING & DEFAULT SETTINGS FOR PROJECT
+
+# Load All Sourced Code
+suppressWarnings(source("scripts/Part-A-JO.R"))
+
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default augments for `kable_styling()` 
+default(kable) <- list(format="latex")
+default(kable_styling)  <- list(latex_options = c("HOLD_position", "striped"))
+default(row_spec) <- list(row=0, bold=T)
+
+# Set default for ggplot theme
+default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
+                       plot.title = element_text(color="#4c4c4c", size=12, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#cccdd0", size=.75, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# GGplot Palette
+default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
+```
+
+# Part A 
+
+>  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
+
+## Data exploration and cleaning
+
+```{r}
+
+# Examine distribution of values to identify outliers
+atm_data %>% 
+  group_by(ATM) %>% 
+  ggplot(aes(x = ATM, y = Cash)) +
+  geom_boxplot()
+           
+# Examine summary statistics
+psych::describeBy(atm_data$Cash,  # look at distribution of cash distributed
+                  group = atm_data$ATM,  # group by which ATM
+                  mat = TRUE) %>%  # output matrix rather than lists
+  dplyr::select(-item, - vars) %>% 
+  kable(row.names = FALSE)
+
+# Examine ATM3 observations
+atm_data %>%
+  dplyr::filter(ATM == 'ATM3' & Cash > 0) %>% 
+  select(DATE, Cash)
+  
+```
+
+The data covers a period of Friday May 1, 2010 through Saturday April 30, 2010.  A forecast for the month of May will be 31 days in length.
+
+There are observations missing values with missing values for `ATM` and `Cash` between May 1 and May 14, 2010.  As these contain no information, we remove them.
+
+In terms of summary statistics, 
+* ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash dispensed is \$84, and ATM2's is \$62. 
+* ATM3 only dispensed cash on the last three days of the time series - as this provides few data points on which to forecast, we'll need to treat it specially.
+* ATM4 has a similar mean to ATM1, but skew and kurtosis suggest the impact of an outlier Wednesday, February 10, 2010.  If this ATM is located in teh Northeastern United States, this may have a relationship to a blizzard which struck on that day.
+
+Given the very different patterns between the ATMs, we'll produce a separate forecast for each.
+
+## Analyses & Forecasts
+**`ATM 1`**
+
+```{r}
+
+# Plot ATM1 full time series
+ATM1_full_plot <- autoplot(ATM1) +
+  ylim(0, 200) +
+  geom_hline(yintercept = mean(ATM1), lwd = 1, linetype = 2, color = 'red')
+
+# Plot a portion of ATM1 time series to zoom in to finer grain, weekly pattern
+ATM1_fine_plot <- window(ATM1, end = 50) %>% 
+  autoplot() +
+  ylim(0, 200) +
+  geom_hline(yintercept = mean(ATM1), lwd = 1, linetype = 2, color = 'red')
+
+grid.arrange(grob = ATM1_full_plot, ATM1_fine_plot, ncol = 2)
+```
+
+ATM 1 has a distinct weekly pattern.  Zooming in to a 50-day period reveals that day 7. 14. 21, etc - Wednesdays - see dramatic drops in withdrawals to approximately one-third to one-half of the mean. 
+
+As there don't appear to be major changes in variance, we won't perform a Box-Cox transformation.
+
+```{R}
+  
+# Generate ATM1 ACF and PACF plots
+ATM1 %>% 
+  ggtsdisplay(main = '', lag.max = 140)
+ATM1 %>% 
+  diff() %>% 
+  ggtsdisplay(main = '', lag.max = 140)
+
+# Review ATM1 differencing recommendation
+ndiffs(ATM1)
+
+```
+
+While the `ndiffs` function suggest no differencing for ATM 1, ACF and PACF plots indicate otherwise.  The gradually decrease in weekly lacgs of the ACF indicates non-stationarity.  We'll plan to single-difference the series for an ARIMA model.  Along with the ARIMA model, we'll explore an ETS model in parallel and evaluate AICc to inform selection of forecast.
+
+```{r}
+
+# Plot ATM1 ETS model
+ATM1_ets_plot <- ATM1_ets_fc %>% 
+  autoplot()
+
+# Plot ATM1 ARIMA model
+ATM1_arima_plot <- ATM1_arima_fc %>% 
+  autoplot()
+
+grid.arrange(grob = ATM1_ets_plot, 
+             ATM1_arima_plot, 
+             ncol = 2)
+
+# Output summaries of the ATM1 ETS and ARIMA models
+summary(ATM1_ets_fc)
+summary(ATM1_arima_fc)
+
+```
+
+For ATM 1,
+* The `ets` function selected simple exponential smoothing with multiplicative errors, yielding an RMSE of 36.7 and AICc of 4785.
+* The `auto.arima` function selected a 5,0,0 model, yielding an RMSE of 34.7 and AICc of 3640.
+
+Based on these metrics, we select the ARIMA model for ATM 1.
+
+<br>
+
+**`ATM 2`**
+
+```{r}
+
+# Plot ATM2 time series
+ATM2_full_plot <- ATM2 %>% 
+  autoplot()
+
+# Generate ATM2 ACF and PACF plots
+ATM2 %>% 
+  ggtsdisplay(main = '', lag.max = 140)
+ATM2 %>% 
+  diff() %>% 
+  ggtsdisplay(main = '', lag.max = 140)
+
+# Review ATM2 differencing recommendation
+ndiffs(ATM2)
+
+```
+
+The same weekly pattern is evident for ATM2 - Wednesdays see deep troughs.  There are some suggestions that variance is narrowing over the time series.  [MAY RETURN AND APPLY BOX-COX]
+
+For ATM 2, the `ndiffs` function suggests single-differencing, consistent with what we observe in the ACF and PACF polots.  We'll single-difference the series for an ARIMA model and compare that with an ETS model, again evaluating AICc to inform selection of forecast.
+
+```{R}
+
+# Plot ATM2 ETS model  
+ATM2_ets_plot <- ATM2_ets_fc %>% 
+  autoplot()
+
+# Plot ATM2 ARIMA model
+ATM2_arima_plot <- ATM2_arima_fc %>% 
+  autoplot()
+
+grid.arrange(grob = ATM2_ets_plot, 
+             ATM2_arima_plot, 
+             ncol = 2)
+
+# Output summaries of the ATM2 ETS and ARIMA models
+summary(ATM2_ets_fc)
+summary(ATM2_arima_fc)
+
+```
+
+For ATM 2,
+* The `ets` function selected simple exponential smoothing with additive errors, yielding an RMSE of 36.6 and AICc of 2331.
+* The `auto.arima` function selected a 2,1,3 model, yielding an RMSE of 30.8 and AICc of 3537.
+
+While these metrics suggest the ETS model, the ARIMA model does a better job of accounting for the weekly pattern so we select that for ATM 2.
+
+<br>
+
+**`ATM 3`**
+
+```{r}
+
+# Plot ATM3 time series
+ATM3_full_plot <- ATM3 %>% 
+  autoplot() +
+  ylim(0, 150)
+
+# Plot ATM3 mean model
+ATM3_mean_plot <- ATM3_mean_fc %>% 
+  autoplot() +
+  ylim(0, 150)
+
+grid.arrange(grob = ATM3_full_plot, 
+             ATM3_mean_plot, 
+             ncol = 2)
+
+# Output summary of the ATM3 mean model
+summary(ATM3_mean_fc)
+
+```
+
+ATM 3 only dispensed cash on 3 days at the end of the timespan, with a daily range between \$82 and \$96.  Given the paucity of observations in the training data, the simplest possible approach to forecasting - averaging - is likely best.  Given that ATM3 distributed no cash until April 28, 2010, we'll assume that it was not operating until then and only include the three day window of non-zero observations in the forecast.
+
+For ATM 3,
+* The `meanf` forecast yields an RMSE of 6.
+
+We proceed with the mean forecast for ATM 3.
+
+<br>
+
+**`ATM 4`**
+
+```{r}
+
+# Plot ATM4 time series
+ATM4_full_plot <- ATM4 %>% 
+  autoplot()
+
+ATM4_full_plot
+
+# Generate ATM4 ACF and PACF plots
+ATM4 %>% 
+  ggtsdisplay(main = '', lag.max = 140)
+ATM4 %>% 
+  diff() %>% 
+  ggtsdisplay(main = '', lag.max = 140)
+
+# Review ATM4 differencing recommendation
+ndiffs(ATM4)
+
+```
+
+Again, the same weekly pattern is evident for ATM4 - Wednesdays see deep troughs.  The extent to which the 'run-on-the-ATM' of February 10, 2010 is an outlier is plainly evident.
+
+For ATM 4, the `ndiffs` function suggests no differencing, but as with ATM 1 the ACF and PACF plot indicate non-staionarity. We'll single-difference the series for an ARIMA model and compare that with an ETS model, again evaluating AICc to inform selection of forecast.
+
+```{r}
+
+# Plot ATM4 ETS model  
+ATM4_full_plot <- ATM4_ets_fc %>% 
+  autoplot() +
+  ylim(-400, 1200)
+
+# Plot ATM4 ARIMA model
+ATM4_arima_plot <- ATM4_arima_fc %>% 
+  autoplot() +
+  ylim(-400, 1200)
+
+grid.arrange(grob = ATM4_full_plot, 
+             ATM4_arima_plot, 
+             ncol = 2)
+
+# Output summaries of the ATM4 ETS and ARIMA models
+summary(ATM4_ets_fc)
+summary(ATM4_arima_fc)
+
+```
+
+For ATM 4,
+* The `ets` function selected Holt's linear method with multiplicative errors and additive damped trend, yielding an RMSE of 69.5 and AICc of 5207.
+* The `auto.arima` function selected a 2,0,2 model, yielding an RMSE of 63.7 and AICc of 4081.
+
+Based on these metrics, we select the ARIMA model for ATM 4.
+
+<br>
+
+## Comprehensive Forecast
+
+We output the mean point forecast, low / high point forecast at .8 confidence interval, and low / high point forecast at .95 confidence interval.
+
+```{r}
+
+# Output forecasts at different CIs for the different ATMS
+atm_all_fc %>% 
+  kable()
+
+```
+
+
+# Appendix {-#Appendix}
+
+## Part A {-#Part-A}
+
+### Model Summary {-#Part-A-model}
+
+**`ATM1`:**
+```{r}
+ATM1_arima
+```
+
+**`ATM2`:**
+```{r}
+ATM2_arima
+```
+
+**`ATM3`:**
+```{r}
+ATM3_mean
+```
+
+**`ATM4`:**
+```{r}
+ATM4_arima
+```
+
+
+### Point Forecasts {-#Part-A-FC}
+
+```{r}
+atm_all_fc %>% 
+  kable()
+```
+
+\newpage
+### R Script {-#Part-A-RScript}
+
+```{r, echo=T, eval=F}
+
+# Load data
+atm_data <- read_excel("data/ATM624Data.xlsx") 
+
+# Purge observations for which ATM and cash are NA
+atm_data <- atm_data %>% 
+  na.omit()
+
+# Transform data frame to time series
+atm_ts <- atm_data %>% 
+  spread(key = ATM, value = Cash) %>% 
+  read.zoo(FUN = as.POSIXct) %>% 
+  ts()
+
+# Split the time series by ATM [COULD GENERATE MORE SUCCINCT CODE TO FUNCTIONALIZE THIS]
+
+ATM1 <- atm_data %>%
+  dplyr::filter(ATM == 'ATM1') %>% 
+  select(DATE, Cash) %>% 
+  read.zoo(FUN = as.POSIXct) %>% 
+  ts()
+
+ATM2 <- atm_data %>%
+  dplyr::filter(ATM == 'ATM2') %>% 
+  select(DATE, Cash) %>% 
+  read.zoo(FUN = as.POSIXct) %>% 
+  ts()
+
+ATM3 <- atm_data %>%
+  dplyr::filter(ATM == 'ATM3') %>% 
+  select(DATE, Cash) %>% 
+  read.zoo(FUN = as.POSIXct) %>% 
+  ts()
+
+ATM4 <- atm_data %>%
+  dplyr::filter(ATM == 'ATM4') %>% 
+  select(DATE, Cash) %>% 
+  read.zoo(FUN = as.POSIXct) %>% 
+  ts()
+
+# Generate ATM1 ETS model with autoselection
+ATM1_ets <- ATM1 %>% 
+  ets()
+
+# Calculate ATM1 ETS model forecast
+ATM1_ets_fc <- ATM1_ets %>% 
+  forecast(h = 31)
+
+# Generate ATM1 ARIMA model with autoselection, single-differenced with no shortcuts to consider all possible models
+ATM1_arima <- ATM1 %>% 
+  auto.arima(D = 1,
+             stepwise = FALSE, 
+             approximation = FALSE)
+
+# Calculate ATM1 ARIMA model forecast
+ATM1_arima_fc <- ATM1_arima %>% 
+  forecast(h = 31)
+
+# Generate ATM2 ETS model with autoselection
+ATM2_ets <- ATM2 %>% 
+  ets()
+
+# Calculate ATM2 ETS model forecast
+ATM2_ets_fc <- ATM2_ets %>% 
+  forecast(h = 31)
+
+# Generate ATM2 ARIMA model with autoselection, single-differenced with no shortcuts to consider all possible models
+ATM2_arima <- ATM2 %>% 
+  auto.arima(D = 1,
+             stepwise = FALSE, 
+             approximation = FALSE)
+
+# Calculate ATM2 ARIMA model forecast
+ATM2_arima_fc <- ATM2_arima %>% 
+  forecast(h = 31)
+
+# Generate ATM3 mean model
+ATM3_mean <- ATM3 %>% 
+  window(start = 363)
+
+# Calculate ATM3 mean model forecast
+ATM3_mean_fc <- ATM3_mean %>%
+  meanf(ATM3, h = 31) 
+
+# Generate ATM4 ETS model with autoselection
+ATM4_ets <- ATM4 %>% 
+  ets()
+
+# Generate ATM4 ETS model forecast
+ATM4_ets_fc <- ATM4_ets %>% 
+  forecast(h = 31)
+  
+# Generate ATM4 ARIMA model with autoselection, single-differenced with no shortcuts to consider all possible models
+ATM4_arima <- ATM4 %>% 
+  auto.arima(D = 1,
+             stepwise = FALSE, 
+             approximation = FALSE)
+
+# Generate ATM4 ARIMA model forecast
+ATM4_arima_fc <- ATM4_arima %>% 
+  forecast(h = 31)
+
+
+# Combine the forecasts for the different ATMS
+atm_all_fc <- bind_cols(as.data.frame(seq(from = 366,
+                                          to = 396, 
+                                          by = 1)),
+                        as.data.frame(ATM1_arima_fc[4:6]),
+                        as.data.frame(ATM2_arima_fc[4:6]),
+                        as.data.frame(ATM3_mean_fc[5]),
+                        as.data.frame(ATM4_arima_fc[4:6]),) %>% 
+  
+  rename(Day = 'seq(from = 366, to = 396, by = 1)',
+         ATM1_mean = 'mean',
+         ATM1_low80CI = 'lower.80.',
+         ATM1_low95CI = 'lower.95.',
+         ATM1_upper80CI = 'upper.80.',
+         ATM1_upper95CI = 'upper.95.',
+         ATM2_mean = 'mean1',
+         ATM2_low80CI = 'lower.80.1',
+         ATM2_low95CI = 'lower.95.1',
+         ATM2_upper80CI = 'upper.80.1',
+         ATM2_upper95CI = 'upper.95.1',
+         ATM3_mean = 'mean2',
+         ATM4_mean = 'mean3',
+         ATM4_low80CI = 'lower.80.2',
+         ATM4_low95CI = 'lower.95.2',
+         ATM4_upper80CI = 'upper.80.2',
+         ATM4_upper95CI = 'upper.95.2'
+         )
+
+write_csv(atm_all_fc, path = "forecasts/ATM_all_forecast.csv")
+
+```
+
+***
+
+```{r, echo = FALSE}
+
+sessionInfo()
+
+```

@@ -1,0 +1,344 @@
+---
+title: 'DATA 624: Project 1'
+author: 'Bethany Poulin'
+date: 'October 22, 2019'
+documentclass: book
+subparagraph: yes
+classoption: openany
+output: 
+  pdf_document:
+    highlight: tango
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    citation_package: natbib
+    keep_tex: yes
+    number_sections: true
+    toc: yes
+    toc_depth: 2
+---
+
+# Overview {-#overview}
+
+> I am leaving the project overview page here for us to compile our final report in one singular document. We will add additional information here regarding project one to include explanation of process, etc.
+
+## Dependencies {-#dependencies}
+
+> Please add all libraries used here.
+
+The following R libraries were used to complete Project 1:
+
+```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=F}
+# General
+library('easypackages')
+
+libraries('knitr', 'kableExtra', 'default')
+
+# Processing
+libraries('readxl', 'tidyverse', 'janitor', 'lubridate')
+
+# Graphing
+libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr')
+
+# Timeseries 
+libraries('zoo', 'urca', 'tseries', 'timetk')
+
+# Math
+libraries('forecast')
+```
+\newpage  
+
+## Data {-#data}
+
+Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report for discussion purposes. The R scripts are available within our appendix for replication purposes. 
+
+For grading purposes, we exported and saved all forecasts as a csv in our data folder.
+
+```{r, eval=F}
+# Data Aquisition
+waterflow_1 <- read_excel("data/Waterflow_Pipe1.xlsx")
+waterflow_2 <- read_excel("data/Waterflow_Pipe2.xlsx")
+
+# Source Code
+source("scripts/Part-C-BP.R")
+```
+
+```{r settings-C-BP, echo=F, message=F, warning=F, error=F, comment=F}
+### UNIVERSAL DATA SOURCING & DEFAULT SETTINGS FOR PROJECT
+#source("scripts/Part-C-BP.R")
+# Load All Sourced Code
+suppressWarnings(source("scripts/Part-C.R"))
+
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default augments for `kable_styling()` 
+default(kable) <- list(format="latex")
+default(kable_styling)  <- list(latex_options = c("HOLD_position", "striped"))
+default(row_spec) <- list(row=0, bold=T)
+
+# Set default for ggplot theme
+default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
+                       plot.title = element_text(color="#4c4c4c", size=12, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#cccdd0", size=.75, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# GGplot Palette
+default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
+```
+
+# Part C
+
+> Part C.consists of two data sets.  These are simple 2 columns sets, however they have different time stamps.  Your assignment is to time-base sequence the data and aggregate based on hour (example of what this looks like, follows).  Note for multiple recordings within an hour, take the mean.  Then to test appropriate assumptions and forecast a week forward with confidence bands (80 and 95%). Add these to your existing files above – clearly labeled.    
+
+## Exploration
+
+**Pipe one:**   
+ * 1000 observations  
+ * No missing values  
+ * Multiple reading within each hour  
+ * 9-days of data  
+ 
+**Pipe Two**  
+ * 100 Observations  
+ * No missing values  
+ * Single reading on the hour  
+ * 41-days of data  
+ 
+Because of the disparities in the data some grooming was necessary.  
+For Pipe One, representing 9-days of water flow rate measurements multiple samples per hour, a mean of all rates in the hour was taken and labeled with the whole-hour at the beggining of the period (floor hour) to align with the hourly readings from Pipe Two.   
+
+After aggregating, there were only 236 observations (spanning 9-days) of pipe one and still 1000 observations (spanning 41-days) from Pipe Two.    
+
+These data posed an interesting conundrum. With two possible ways of handling it.  
+ -  Merge the files, and use only 236 observations  
+    - all forecasts would be based on the combined data  
+    - this would mean making 168 forecasts with only 236 data-points prior  
+    - all forecasts would be starting November 1, instead of from the end of data December 3   
+ - Merge the files and use the whole set to make predictions  
+    - we would have 100 observations to model prior to forecasts  
+    - 236 of the observations would be be different from the remaining 764, which could both alter the model type and forecast  
+    - we would be forecasting from the natural ending of tPipe Two readings  
+
+Because it was concievable that there might be a daily periodicity, it was important to have a frequency of 24, which made numbering by day of year and grooming the time series to start on the 7081 hour aligning with October 23 01:00 AM.
+
+
+### Time Series Plots 
+
+```{r }
+
+#suppressWarnings(source("scripts/Part-C-BP.R"))
+waterflow_1<-waterflow_1 
+
+waterflow_2<-waterflow_2 
+
+waterflow_all <- waterflow_all
+
+
+# w1<-ts(waterflow_1$WaterFlow,start=c(1,7081),frequency=24)
+# w2<-ts(waterflow_2$WaterFlow, start=c(1,7081),frequency=24)
+# ws <- ts(waterflow_all$waterflow ,start=c(1,7081),frequency=24)
+
+w1plot<-autoplot(w1, 
+                 facets = T,
+                 color='blue4')+
+  labs(title = "Pipe One Flow Rates", 
+       subtitle = 'October 23, 2015 - November 1, 2015',
+       y="Flowrate", x="Days")+
+  theme_bw()+ theme()
+
+w2plot<-autoplot(w2, 
+                 facets = T,
+                 color ='deepskyblue4')+
+  labs(title = "Pipe Two Flow Rates", 
+       subtitle = 'October 23, 2015 - December 23, 2015',
+       y="Flowrate", x="Days")+
+  theme_bw()+ theme()
+
+wsplot<-autoplot(ws, 
+                 facets = T,
+                 color ='darkslateblue')+
+  labs(title = "Combined Pipe Flow Rates", 
+       subtitle = 'October 23, 2015 - December 23, 2015',
+       y="Flowrate", x="Days")+
+  theme_bw()+ theme()
+
+grid.arrange(grob=w1plot, w2plot, wsplot, ncol=3)
+```  
+
+### Decomposition  
+
+It is clear from the combined plot that there is a pretty notable change in the trend when the readings from Pipe One wane. Let's look at the decomposed seriesand see if it gives us some insight into a good model.
+
+```{r }
+
+ws_decomp
+```
+
+
+From the decomposition, the appears to be a seasonal component in agreement with the assessment that there might be a daily flowrate periodicity. Also, as expected, around day 306 where Pipe One flow rates go silent there is a trend down and then relatively flat trend thereafter. 
+
+## Estimating Stationarity
+
+Number of Estimated Differences: `r ws_diffs`
+
+
+```{r echo=FALSE}
+
+tseries::adf.test(ws)
+
+```
+
+Here we have contradictory esitmates, `ndiffs()` suggests a difference of 1, and the augmented dicky fuller test suggests that we are stationary as-is. An `auto.arima()` may give us a reasonable starting place.
+
+## Estimating  Orders for ARIMA
+
+```{r echo=FALSE}
+ws_acf 
+
+ws_pacf 
+
+
+```  
+
+
+**Interpreting the ACF and PACF**
+
+The ACF remain wholly above the critical threshold, so will likely require differencing as suggested by the `ndiffs()`, in looking at the PACF, there is some abiguity caused by the needed differencing, but after the intial trend down below the critical threshold, there is definitely a slight spike at 24, which would suggest there may indeed by a daily period or season we need to account for in our forecast.
+
+
+
+\newpage  
+
+**Differenced ACF**
+
+
+```{r echo=FALSE}
+ws_acf_diff
+ws_pacf_diff
+```   
+
+
+
+A final ACF of the differenced data was done to ensure that a seconf first-order difference was not needed; thus we assume $d = 1$, a but it was not so clear about the appropriate value of $q4 should it be 5? , so `auto.arima()` is in order to help iterate up on the likely best starting place
+
+## `auto.arima()`
+
+Using a Box-Cox lambda value to normalize the data may make $\lambda= .931552$. Because models can vary a lot based on the selection criterion, both BIC and AIC models were run, using lambda, to estimate a good starting place. We included the transformations in the model (instead of doing it outside the model), because we are using the ARIMA function to difference the data automatically allow more constiency and flexibility in testing other model orders.
+
+The *AICc* chose a seasonal ARIMA of the following order:
+
+$ARIMA(1,1,3)(0,0,1)[24]$ 
+*AIC=7359.84   AICc=7359.9   BIC=7384.38*
+
+The *BIC* chose a non-seasonal ARIMA model as follows:   
+
+$ARIMA(2,1,1)$ 
+*AIC=8082.22   AICc=8082.26   BIC=8101.85*
+
+In both cases, the arima estimated that there needed to be differencing which was supported by `ndiffs()` and our ACF & PACF plots. 
+
+In comparing the two forecasts, for these automated models, they both degrade toward the series mean pretty quickly, however, the AICc model makes forecasts which consider the variation of the model a bit better before it levels out. So we decided to explore this model and see if we could tune it to provide more robust predictions
+
+**AIC $ARIMA(1,1,3)(0,0,1)[24]$ Residual Plots**   
+
+```{r, echo = FALSE}
+# aic_plot <- aic_plot
+
+aic %>%
+    checkresiduals()
+
+```
+
+**BIC $ARIMA(2,1,1)$ Residual Plots**   
+
+
+```{r, echo = FALSE}
+# bic_plot <-bic_plot
+
+bic  %>%
+    checkresiduals()
+    
+# 
+# grid.arrange(grob= aic_plot,  bic_plot,  ncol=2)
+```
+
+
+### Interpreting `auto.arima()`
+
+In looking at the AICc and BIC ARIMA models, the both appear to be relatively white-noisy with no autocorrelation on the first or 24th observations, with relatively normal residuals. However, in looking at the Ljung-Box test for independence, it is clear that the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$ is independent, where the $ARIMA(2,1,1)$ is not, thus reaffirming the lingering suspicion that thee is unaccounted for seasonal variation in the model requiring a seasona MA(1) to rectify. To be sure that the best model has been found, p & q as well as Q will be varied to see if a slight modification improves the performance of the model.
+
+### Manual ARIMA testing
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(1,1,3), seasonal=c(0,0,1),
+  lambda=lambda))
+checkresiduals(fit, lag=36)
+```  
+
+
+#### Forecasting From the ARIMA  
+
+```{r, echo = FALSE}
+Arima(ws, order=c(1,1,3), seasonal=c(0,0,1),lambda=lambda)%>%
+  forecast() %>%
+  autoplot() +
+    ylab("Water Flow Rate") + xlab("Year")
+```   
+
+#### $ARIMA(2,1,3)(0,0,1)[24]$
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(2,1,3), seasonal=c(0,0,1),
+  lambda=lambda))
+checkresiduals(fit, lag=36)
+```    
+
+This Ljung-Box  shows  unexplained variances in the residuals indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$.
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(1,1,2), seasonal=c(0,0,1),
+  lambda=lambda))
+checkresiduals(fit, lag=36)
+```    
+
+This Ljung-Box also shows unexplained variances in the residuals indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,2)(0,0,1)[24]$.
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(1,1,3), lambda=lambda))
+checkresiduals(fit, lag=36)
+
+```      
+
+This Ljung-Box also shows unexplained variances in the residuals indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)$.
+
+### Accepting the `auto.arima()`
+
+Given that the other models show unexplained variance in the residuals, the final predictions will be made using the AICc recommended model of $ARIMA (1,1,3)(0,0,1)[24]$.
+
+```{r, echo = FALSE}
+
+autoplot(subset(ws, start=950))+
+    autolayer(forecast(final_ws))
+
+```
+
+**Sample Forecasts**
+```{r, echo = FALSE}
+head(preds_ws)%>%
+    knitr::kable(caption = 'First few predictions in the set')
+```  
+
+#### Forecast Accuracy  
+
+`r accuracy(forecast(fit))%>%knitr::kable()`  
+
+
+## Summary
+
+Ultimately this model is marginally useful as seen by the Mean Absolute Percentage of Error which reveals that the average percentage each forecast is off by is around 50%. In looking at the graph of the forecast above, which is the last 150 points in the time series and the forecasted points, you can see this as the predictions lightly modulate around the mean and deteriorate to it pretty quickly.
+
+In looking at the original decomposition, there very little trend, a lot of seasonality, is a pretty substatial amount of random noise, which is not considered in the model, and is responsible for the majority of the error in this model, as white noise is never predictable.

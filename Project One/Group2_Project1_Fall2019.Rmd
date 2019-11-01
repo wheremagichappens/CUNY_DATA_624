@@ -25,23 +25,31 @@ output:
 
 # Overview {-#overview}
 
-> Insert Project Overview and explain work process. 
+We split the work into three sections for Project 1. Individual team members each took lead on individual problem. Jeremey and Julian focused on Part A, Sang Yoon (Andy) and Vinicio worked on Part B, and Bethany took lead on Part C.  Juliann created an overall format for the assignment to be used and all team members collectively worked together on reviewing and merging our finished product. 
 
 ## Dependencies {-#dependencies}
 
-> Please add all libraries used here.
+The following R libraries were used to complete this assignment:
 
-The following R libraries were used to complete Project 1:
+```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=NA}
+library(easypackages)
 
-```{r getting-started, echo=T, eval=T, message=F, warning=F, error=F, comment=F}
-# Insert All Used Dependencies Here 
+libraries('knitr', 'kableExtra', 'default')
+
+# Processing
+libraries('readxl', 'tidyverse', 'janitor', 'imputeTS', 'tsoutliers', 'lubridate')
+# 'xlsx'
+
+# Timeseries 
+libraries('psych', 'urca', 'forecast', 'timetk', 'fpp2')
+
+# Graphing
+libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify','ggpubr', 'scales')
 ```
 
 ## Data {-#data}
 
-Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report for discussion purposes. The R scripts are available within our appendix for replication purposes. 
-
-For grading purposes, we exported and saved all forecasts as a csv in our data folder.
+Data was stored within our group repository and imported below using the `readxl` package. Each individual question was solved within an R script and the data was sourced into our main report. For replication purposes, we also made our R scripts available within our appendix. All forecasts have been exported and saved to a single  `.xlsx` file in our [github repository](https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project%20One/) folder named forecasts.
 
 ```{r, eval=F}
 # Data Aquisition
@@ -51,7 +59,9 @@ pipe1_data <- read_excel("data/Waterflow_Pipe1.xlsx")
 pipe2_data <- read_excel("data/Waterflow_Pipe2.xlsx")
 
 # Source Code
-source("scripts/Part-A-JM.R") ## Example
+source('~/GitHub/CUNY_DATA_624/Project One/scripts/Part-A.R')
+source('~/GitHub/CUNY_DATA_624/Project One/scripts/Part-B.R')
+source('~/GitHub/CUNY_DATA_624/Project One/scripts/Part-C.R')
 ```
 
 ```{r settings-A-JM, echo=F, message=F, warning=F, error=F, comment=F}
@@ -62,12 +72,12 @@ library(kableExtra)
 library(default)
 
 # Load All Sourced Code Here >>> 
-
-### EXAMPLE:
-suppressWarnings(source("scripts/Part-A-JM.R"))
+suppressWarnings(source("scripts/Part-A.R"))
+suppressWarnings(source("scripts/Part-B.R"))
+suppressWarnings(source("scripts/Part-C.R"))
 
 # Set default augments for code chunks
-knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=NA, fig.width=10, fig.height = 3)
 
 # Set default augments for `kable_styling()` 
 default(kable) <- list(format="latex")
@@ -76,13 +86,11 @@ default(row_spec) <- list(row=0, bold=T)
 
 # Set default for ggplot theme
 default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
-                       axis.title.x = element_blank(),
-                       axis.title.y = element_blank(),
                        plot.title = element_text(color="#4c4c4c", size=12, face="bold"),
                        plot.subtitle = (element_text(size=8, color="#000000")),
                        legend.title = (element_text(size=10, color="#000000", face="bold")),
                        strip.background = element_rect(color="#000000", 
-                                                       fill="#cccdd0", size=.75, linetype="solid"),
+                                                       fill="#cccdd0", size=.75,linetype="solid"),
                        strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
 
 # GGplot Palette
@@ -92,82 +100,812 @@ default(scale_color_brewer) <- list(palette = 'RdPu', direction=1)
 
 # Part A: ATMs
 
->  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
+>  **Instructions:** In part A, I want you to forecast how much cash is taken out of 4 different ATM machines for May 2010.  The data is given in a single file.  The variable `Cash` is provided in hundreds of dollars, other than that, it is straight forward.  I am being somewhat ambiguous on purpose.  I am giving you data, please provide your written report on your findings, visuals, discussion and your R code all within a Word readable document, except the forecast which you will put in an Excel readable file.  I must be able to cut and paste your R code and run it in R studio.  Your report must be professional - most of all - readable, EASY to follow.  Let me know what you are thinking, assumptions you are making!  Your forecast is a simple CSV or Excel file that MATCHES the format of the data I provide.
 
-# Part B: Power
+## Exploration
 
->  **Instructions:** Forecasting Power: Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward.    Add these to your existing files above - clearly labeled.  
+The data covers a period of Friday May 1, 2010 through Saturday April 30, 2010. While reviewing the data, we identified that the original data file contained `NA` values in our `ATM` and `Cash` columns for 14 observations between May 1 and 14, 2010. As these contain no information, we removed these missing values and transformed the dataset into a wide format. 
+
+Our initial review also revealed that ATM2 contained one missing value on 2009-10-25 and that ATM4 contained a potential outlier of \$1,123 on 2010-02-09. We replaced both values with the corresponding mean value of each machine. 
+
+We examined summary statistics for each ATM time series (a table can be found in the appendix).
+
++  ATM1 and ATM2 have pretty normal distributions; ATM1's daily mean cash dispensed is \$84, and ATM2's is \$62. 
++  ATM3 only dispensed cash on the last three days of the time series - as this provides few data points on which to forecast, we'll need to treat it specially. 
++  ATM4 has a similar mean to ATM1, but skew and kurtosis suggest the impact of an outlier Wednesday, February 10, 2010.  If this ATM is located in the Northeastern United States, this may have a relationship to a blizzard which struck on that day.  
+
+```{r}
+# plot atms as scatterplot
+atm %>% 
+  # re-gather observations for facet plot
+  gather(key=ATM, value=Cash, ATM1,ATM2, ATM3,ATM4) %>% 
+  # remove NA value from ATM2
+  filter(complete.cases(.)) %>% 
+  # plot 
+  ggplot(aes(DATE, Cash, color=ATM)) +
+  geom_point() +
+  geom_smooth(method="loess") +
+  facet_wrap(~ATM, scales='free_x', nrow=1) +
+  labs(title="ATM Scatterplot",x="", y="Cash (in hundreds)")+
+  theme_bw()+
+  theme(legend.position = 'none', axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_brewer()
+```
+
+Last, we used a scatterplot to examine the correlation between cash withdrawals and dates for each machine.  We identified similiar patterns between ATM1 and ATM4, which show non-linear fluctuations that suggest a potential trend component in these timeseries. ATM2 follows a relatively linear path and decreases overtime. This changes in the last few observations, where withdrawals begin to increase. As mentioned, there are only 3 observed transactions for ATM3 that appear at the end of the captured time period. 
+
+Our cleaned dataframe was then converted into a timeseries format. The time series plots show high weekly variance, for ATM1, ATM2, and ATM4 - consistent with our takeaway from the scatterplots. 
+
+These plots also remind us that ATM3 only dispensed cash on 3 days at the end of the timespan, with a daily range between \$82 and \$96.  Given the paucity of observations in the training data, the simplest possible approach to forecasting ATM3, averaging, is likely best.  Given that ATM3 distributed no cash until April 28, 2010, we'll assume that it was not operating until then and only include the three day window of non-zero observations in the forecast. \newline
+
+```{r, fig.height=5}
+autoplot(atm_ts, facets = T)+
+  geom_line(color="darkorange4")+
+  labs(title = "Daily ATM Transactions", 
+       subtitle = "Series: ATM1", y="Cash (in hundreds)", x="Weeks")+
+  ylim(0,175)+
+  theme_bw()+ theme()
+```
+
+## Evaluation 
+
+We constructed our initial timeseries for ATM1, ATM2, and ATM4 using a weekly frequency. Our ACF plots for each ATM showcases large, decreasing lags starting at 7. This pattern continues in a multiple of seven, which confirms our assumption about seasonality within the observed data. These lags are indicative of a weekly pattern. 
+
+```{r fig.height=4}
+p1<-ggAcf(ATM1_ts, color = 'darkorange4')+ labs(title="ACF: ATM1")+ theme_bw()+theme()
+p2<-ggPacf(ATM1_ts,color = 'darkorange4')+ labs(title="PACF: ATM1")+ theme_bw()+ theme()
+p3<-ggAcf(ATM2_ts,color = 'darkorange4')+ labs(title="ACF: ATM2")+ theme_bw()+theme()
+p4<-ggPacf(ATM2_ts,color = 'darkorange4')+ labs(title="PACF: ATM2")+ theme_bw()+ theme()
+p5<-ggAcf(ATM4_ts,color = 'darkorange4')+ labs(title="ACF: ATM4")+ theme_bw()+theme()
+p6<-ggPacf(ATM4_ts,color = 'darkorange4')+ labs(title="PACF: ATM4")+ theme_bw()+ theme()
+
+grid.arrange(grob=p1, p3, p5, p2, p4, p6, ncol=3)
+```
+
+\newpage
+Our plots further suggest that the ATM data is non-stationary. We performed a unit root test using the `ur.kpss()` function to confirm this observation. The test results below show that differencing is required on all ATM2 and ATM4 series. ATM1 falls just below the cut-off critical value, but could still benefit from differencing due to the observed seasonal pattern.   
+
+```{r}
+urATM1<-cbind("ATM"="ATM1", "No-Diff"=round(ATM1_ur@teststat,4),"Diff-1" =round(ATM1d_ur@teststat,4))
+
+urATM2<-cbind("ATM"="ATM2", "No-Diff"=round(ATM2_ur@teststat,4),"Diff-1" =round(ATM2d_ur@teststat,4))
+
+urATM4<-cbind("ATM"="ATM4", "No-Diff"=round(ATM4_ur@teststat,4),"Diff-1" =round(ATM4d_ur@teststat,4))
+
+rbind(urATM1, urATM2,urATM4) %>% kable(caption="KPSS unit root test") %>% kable_styling() %>% row_spec()
+```
+
+## Modeling 
+
+We used `auto.arima()` and set `D=1` to account for seasonal differencing of our data to select the best ARIMA models for ATM1, ATM2, and ATM4. The full models and accuracy statistics for each series can be viewed in the appendix.
+
+*  **ATM1**: ARIMA$(0,0,2)(0,1,1)_7$ 
+*  **ATM2**: ARIMA$(2,0,2)(0,1,1)_7$
+*  **ATM3**: MEAN
+*  **ATM4**: ARIMA$(0,0,2)(0,1,1)_7$ 
+
+The residual ACF plots contain no pattern and the lags fall within the critical value, which suggest they are white noise and not autocorrelated. The residual histograms follow a relatively normal distribution that is centered around zero. The p-value from the Ljung-Box test for ATM1, ATM2, and ATM4 all exceeds 0.05, which futher supports that residuals happen by chance and the models adequately fit the observed data. 
+
+```{r}
+p1<-ggAcf(ATM1_AA$residuals, lag=21, color = 'darkorange4')+ labs(title="ATM1", x="Lag", y="") +theme_bw()+theme()
+p2<- ggpubr::gghistogram(ATM1_AA$residuals, fill="peachpuff1")+
+  labs(title="ATM1", subtitle="ARIMA(0,0,2)(0,1,1)[7]",x="")+
+  ylim(0,125)+
+  theme_bw()+theme()
+p3<-ggAcf(ATM2_AA$residuals, lag=21,color = 'darkorange4')+ labs(title="ATM2",x="Lag", y="") +theme_bw()+theme()
+p4<-ggpubr::gghistogram(ATM2_AA$residuals,  fill="lightpink")+
+  labs(title="ATM2", subtitle="ARIMA(2,0,2)(0,1,1)[7]",x="")+
+  ylim(0,125)+
+  theme_bw()+theme()
+p5<-ggAcf(ATM4_AA$residuals, lag=21,color = 'darkorange4')+ labs(title="ATM4",x="Lag", y="") +theme_bw()+theme()
+p6<-ggpubr::gghistogram(ATM4_AA$residuals,fill="darkorchid4")+
+  labs(title="ATM4", subtitle="ARIMA(0,0,2)(0,1,1)[7]", x="")+
+  ylim(0,125)+
+  theme_bw()+theme()
+
+grid.arrange(grob=p1, p3, p5, ncol=3, top=textGrob(label="ACF Plots of Residuals"))
+             
+grid.arrange(p2, p4, p6, ncol=3, top=textGrob(label="Histograms of Residuals"))
+```
+
+## Forecast
+
+A forecast for the month of May will be 31 days in length. We applied a forecast to each series, which spanned across 5 weeks. The numeric forecasts can be viewed in a table output in the appendix section and are also located within our data output folder.  
+
+```{r, fig.height=8}
+
+p1<-autoplot(ATM1_AA$fitted)+autolayer(ATM1_fc, color="peachpuff1")+
+  labs(title = "ATM1 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
+
+p2<-autoplot(ATM2_AA$fitted)+autolayer(ATM2_fc,  color="lightpink")+
+  labs(title = "ATM2 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
+
+p3<-ATM3_plotdata %>% 
+  ggplot()+
+  geom_line(aes(x = Date/7, y = Cash))+
+  geom_line(aes(x = Date/7, y=`Point Forecast`))+
+  geom_ribbon(aes(x = Date/7, ymin = `Lo 95`, ymax = `Hi 95`), linetype = 'blank', fill = 'deeppink4', alpha = .4)+
+  geom_ribbon(aes(x = Date/7, ymin = `Lo 80`, ymax = `Hi 80`), linetype = 'blank', fill = 'deeppink4', alpha = .2)+
+  labs(title = "ATM3 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
+
+p4<-autoplot(ATM4_AA$fitted)+autolayer(ATM4_fc, color="darkorchid4")+
+  labs(title = "ATM4 Series", x="Weeks", y="Cash")+theme_bw()+theme()+
+  scale_x_continuous(breaks=seq(1,60,by=3))+
+  ylim(0,250)
+
+grid.arrange(p1, p2, p3, p4, ncol=1, top=textGrob(label="ATM Forecasts"))
+```
+
+## Summary
+
+Forecasts for ATM1, ATM2, and ATM4 reprise the clear, persistent weekly pattern found in the historic data, with mid-week troughs and a largely flat trend on a five-week time horizon.  ATM1 and ATM4 experience sharper troughs on Wednesdays; ATM2 drops on Tuesdays and bottoms out on Wednesdays.  Additionally, ATM2 has a slightly tighter confidence interval than ATM1 and ATM4.  The mean forecast for ATM3 based on three data points is a useful estimate insofar as the assumptions it rests on are sound: that the zero observations aren't measurement or data errors, and that the three non-zero observations aren't outliers and in fact convey information about a future pattern.
+
+
+# Part B: Forecasting Power
+
+> **Instructions:** Part B consists of a simple dataset of residential power usage for January 1998 until December 2013.  Your assignment is to model these data and a monthly forecast for 2014.  The data is given in a single file.  The variable 'KWH' is power consumption in Kilowatt hours, the rest is straight forward. Add these to your existing files above - clearly labeled.  
+
+## Exploration
+
+We observed a missing value in September 2008 and imputed it using `na.interpolation`, which performs a technique in numerical analysis to estimate a value from known data points (in our case, a linear method using first order Taylor polynomials).
+
+```{r}
+# time series plot
+autoplot(ts_data, colour='darkorange4') +
+labs(title = "Monthly Residential Power Usage", subtitle = "Time Series: 01/98 - 12/13", y = "KWH (in Millions)")+
+theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+```
+
+Our time series plot reveals annual seasonality; box plots and seasonality demonstrate where power consumption fluctuations occur within each of the cycles. We speculate that this pattern could be due to no major holidays that require power draining decor plus and minimal air conditioning usage during cold months. 
+
+## Evaluation 
+
+Power consumption increases between the months of June and August, likely in relation to air conditioning usage.  It dips from September to Novemeber, followed by a small spike in December, which might be due the holidays (perhaps even holiday lights).
+
+Within the overall TS plot a dip in July 2010 is visible; this outlier which may be the result of a power outtage during a hot summer month. Using `TSOutliers`, we identify the outlier and replace it using a Box-Cox transformation (by setting the lambda argument to automatic). 
+
+The ACF plot shows that autocorrelations are well outside the significant space indicating the series is not white noise, non-stationary. 
+
+```{r, fig.height=6}
+# season plot
+p1 <- ggseasonplot(ts_data)+
+  labs(title="Seasonal Plot")+theme_bw()+theme(legend.position = 'none')+
+  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+
+# sub-season plot
+p2 <- ggsubseriesplot(ts_data)+labs(title="Subseries Plot", y="")+theme_bw()+theme()+
+  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+
+# ggAcf
+p3 <- ggAcf(ts_data,color = 'darkorange4')+labs(title="ACF Plot", y="")+theme_bw()+theme()
+
+# STL decomposition
+p4 <- autoplot(stl1, colour = 'darkorange4')+theme_bw()+theme()+scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+
+grid.arrange(grob=p1, p2, p3, p4, ncol=2,   
+             layout_matrix = rbind(c(1, 4),
+                                   c(2, 4),
+                                   c(3, 4)),
+             top=textGrob(label="Diagnostic Plots"))
+```
+
+## Modeling
+
+We built four different models using ARIMA, STL (with and without dampening), and ETS methods. By checking residuals we can make some preliminary observations on these models' reliability.
+
+The residual ACF plots show residual autocorrelations for each of our models. Model 1 (ARIMA) has less autocorrelation than the other three; it is also well within the 95% limits (indicated by dotted blue lines). 
+
+```{r}
+p1<-ggAcf(arima_fc$residuals, lag=24, color = 'darkorange4')+ labs(title= "ARIMA(3,0,2)(2,1,0)[12]", x="Lag", y="") +theme_bw()+theme()
+p2<- ggpubr::gghistogram(arima_fc$residuals, fill="peachpuff1")+
+  labs(title="ARIMA(3,0,2)(2,1,0)[12]",x="", y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p3<-ggAcf(stl_ndemp$residuals, lag=24,color = 'darkorange4')+ labs(title="STL +  ETS(M,N,N)",x="Lag", y="") +theme_bw()+theme()
+p4<-ggpubr::gghistogram(stl_ndemp$residuals,  fill="lightpink")+
+  labs(title="STL +  ETS(M,N,N)",x="",y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p5<-ggAcf(stl_demp$residuals, lag=24,color = 'darkorange4')+ labs(title="STL +  ETS(M,Ad,N)",x="Lag", y="") +theme_bw()+theme()
+p6<-ggpubr::gghistogram(stl_demp$residuals,fill="deeppink4")+
+  labs(title="STL +  ETS(M,Ad,N)", x="", y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p7<-ggAcf(ets_model$residuals, lag=24,color = 'darkorange4')+ labs(title="ETS(M,N,M)",x="Lag", y="") +theme_bw()+theme()
+p8<-ggpubr::gghistogram(ets_model$residuals,fill="darkorchid4")+
+  labs(title="ETS(M,N,M)", x="",y="")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+grid.arrange(grob=p1, p3, p5, p7, ncol=4, top=textGrob(label="ACF Plots of Residuals"))
+```
+
+The residuals for each of our models do not deviate substantially from normality. While the residuals of Model 1 (ARIMA) do not have an extended number of bins and this distorts the normality proximity, we can regard the distribution as normal. 
+
+```{r}
+grid.arrange(grob=p2, p4, p6, p8, ncol=4, top=textGrob(label="Histograms of Residuals"))
+```
+
+A Ljung-Box test yields a p-value > 0.05 for Model 1 (ARIMA), implying that the residuals from other models are not independent, hence not white noise. We will continue with this model for forecasting; a full summary for this and other models attempted is included in the appendix.
+
+## Forecast
+
+```{r}
+autoplot(arima_fc)+
+  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))+ 
+  labs(title="Forecast: Residential Power - Model 1", subtitle="ARIMA(3,0,2)(2,1,0)[12] with drift", y = "KWH (in Millions)")+theme_bw()+theme()
+
+## unable to get autoplot autolayer working :(
+## Error: Invalid input: date_trans works with objects of class Date only
+
+#forecast::autoplot(arima_fc)+forecast::autolayer(arima_auto$fitted, series="Fitted")
+#  labs(y = "KWH (in Millions)")+
+#  theme_classic()+theme(legend.position = 'bottom')+
+#  scale_y_continuous(label = unit_format(unit = "m", scale = 1e-6))
+```
+The `auto.arima()` function performs cross validation on hyperparameter tuning to find the best model with parameters  of `order` and `seasonal` that minimize `AIC`. This approach yielded **arima_model**: ARIMA$(3,0,2)(2,1,0)12$ with drift resulting in an of `AIC` = 5332.24. As other models failed the Ljung-Box test, we develop forecasts based only on the reliable ARIMA model; forecasted values are included in the appendix. 
+
+## Summary 
+
+We implemented a cross-validation method of testing for `h=12`, randomly choosing 12 points over the fitted model to measure and take the average of RMSEs. By definition, a lower RMSE on test set indicates a better forecast of the test data. 
+
+Using time series cross-validation, we compute RMSE on the test set (`h=12`). If other models had not failed the Ljung-Box test, we use the lowest RMSE as a criterion of selection. Cross-validation test of the seasonal ARIMA model produces an RMSE on test set of around 720k, and on training set of around 589k. We conclude the model is not necessarily overfitted. This finding is consistent with the MAPE on the training set that is less than 7.
+
+```{r}
+paste("RMSE - Train:",rmse_train_arima, "; RMSE - Test:",rmse_test_arima)
+```
+
+
 
 # Part C: Waterflow
 
 >  **Instructions:** Part C consists of two data sets.  These are simple 2 columns sets, however they have different time stamps.  Your optional assignment is to time-base sequence the data and aggregate based on hour (example of what this looks like, follows).  Note for multiple recordings within an hour, take the mean.  Then to test appropriate assumptions and forecast a week forward with confidence bands (80 and 95%). Add these to your existing files above - clearly labeled.  
 
-# Appendix {-#Appendix}
+## Exploration
 
-## Part A {-#Part-A}
+Because of the disparities in the data some grooming was necessary: 
 
-### ATM1 Forecast {-#Part-A-FC1}
+\begin{multicols}{2}
 
-```{r}
-#Insert Forecast Here 
-```
+\textbf{Pipe one}
+\begin{enumerate}
+  \item 1000 Observations
+  \item No missing values
+  \item Multiple reading within each hour
+  \item 9-days of data
+\end{enumerate}
 
-### ATM2 Forecast {-#Part-A-FC2}
+\textbf{Pipe Two}
+\begin{enumerate}
+  \item 1000 Observations
+  \item No missing values
+  \item Single reading on the hour
+  \item 41-days of data  
+\end{enumerate}
 
-```{r}
-#Insert Forecast Here 
-```
+\end{multicols}
 
-### ATM3 Forecast {-#Part-A-FC3}
+Pipe One represents 9 days of water flow rate measurements with multiple samples per hour.  In order to align with hourly readings from Pipe Two, a mean of all Pipe One rates in a given hour was taken and labeled by its 'floor' (i.e. 9 for mean of all times between 9:00 and 9:59 -inclusive of both bounds). After aggregating, this yielded 236 observations (spanning nine days) for Pipe One and 1000 observations (spanning  41days) for Pipe Two.
 
-```{r}
-#Insert Forecast Here 
-```
+The two data sets posed an interesting conundrum.  We considered two possible approaches:
 
-### ATM4 Forecast {-#Part-A-FC4}
+(1) Merge the files and use only 236 observations.
+\begin{itemize}
+  \item All forecasts would be based on the combined data. 
+  \item This would mean making 168 forecasts ($7days x 24hours$) with only 236 data-points prior.
+  \item All forecasts would start November 1 rather than December 3 (the end of the most recent time series).
+\end{itemize}
+(2) Merge the files and use the whole set to make predictions. 
+\begin{itemize}
+  \item We would have 1000 observations to model prior to forecasts. 
+  \item 236 of the observations would be be different from the remaining 764, which could both alter the model type and forecast. 
+  \item We would forecast from the natural ending of the Pipe Two readings.
+\end{itemize}
 
-```{r}
-#Insert Forecast Here 
-```
+In the end, it made the most sense to model the combined sets in their entireties, so method two was adopted. Because daily periodicity is conceivable for this data, it was important to use a frequency of 24 in converting this data. This entailed numbering by day of year and grooming the time series to start on the 7081 hour (which aligns with October 23 01:00 AM our first merged observation).
 
-### R Script {-#Part-A-RScript}
-
-```{r, echo=T}
-#Insert Script Here 
-```
-
-## Part B {-#Part-B}
-
-### Power Forecast {-#Part-B-FC1}
-
-```{r}
-#Insert Forecast Here 
-```
-
-### R Script {-#Part-B-RScript}
-
-```{r, echo=T}
-#Insert Script Here 
-```
-
-## Part C {-#Part-C}
-
-### Pipes1 Forecast {-#Part-C-FC1}
+## Evaluation
 
 ```{r}
-#Insert Forecast Here 
+w1plot<-autoplot(w1,colour ='peachpuff')+
+  labs(title = "Pipe One Flow Rates", subtitle = 'October 23, 2015 - November 1, 2015', y="Flowrate", x="Days")+
+  theme_bw()+ theme()
+
+w2plot<-autoplot(w2,colour ='lightpink')+
+  labs(title = "Pipe Two Flow Rates", subtitle = 'October 23, 2015 - December 23, 2015',
+       y="Flowrate", x="Days")+ theme_bw()+ theme()
+
+wsplot<-autoplot(ws, colour ='deeppink4')+labs(title = "Combined Pipe Flow Rates", subtitle = 'October 23, 2015 - December 23, 2015', y="Flowrate", x="Days")+ theme_bw()+ theme()
+
+grid.arrange(grob=w1plot, w2plot, wsplot, ncol=3)
+```  
+
+### Decomposition  
+
+It is clear from the combined plot that there is a pretty notable change in the trend when the readings from Pipe One wane. We examined the decomposed series for insight into a good model.
+
+```{r, fig.height=6}
+ws_decomp
+```
+From the decomposition, there appears to be a seasonal component, which in agreement with the prior assessment that there might be a daily flowrate periodicity. Also, as expected, around day 306, where Pipe One flow rates go silent, there is a downward trend followed by a rolling plateau thereafter. 
+
+### Estimating Stationarity
+
+Number of Estimated Differences using `ndiff()`: `r ws_diffs`
+
+```{r echo=FALSE}
+tseries::adf.test(ws) 
 ```
 
-### Pipes2 Forecast {-#Part-C-FC2}
+Here we encounter contradictory estimates: `ndiffs()` suggests a difference of 1, and the augmented dicky fuller test suggests that we are stationary as-is. An `auto.arima()` may provide insight into a reasonable starting place.
+
+### Estimating  Orders for ARIMA
+
+#### Interpreting the ACF and PACF
 
 ```{r}
-#Insert Forecast Here 
+grid.arrange(ws_acf, ws_pacf, nrow=1)
+```  
+
+As the ACF remains wholly above the critical threshold the series will likely require differencing as suggested by the `ndiffs()`.  There is a spike at 24 on both PACF and ACF suggesting a daily period or season that needs to be accounted for in our forecast.
+
+#### Differenced ACF
+
+```{r}
+grid.arrange(ws_acf_diff, ws_pacf_diff, nrow=1)
+```   
+
+We examined a final ACF of the differenced data to ensure that a second first-order difference was not needed; while we assume $d = 1$, the appropriate value of $q$ is not so clear, and seasonal orders were in question, so we use `auto.arima()` to help iterate up on the best starting place.
+
+## Modeling 
+
+The `auto.arima()` function was used in model selection. Using a Box-Cox lambda value to normalize the data yields a $\lambda= .931552$. Because models can vary a lot based on the selection criterion, both BIC and AIC models were run using lambda to estimate a good starting place. We included the transformations in the model (as opposed to outside the model) because we are using the ARIMA function to difference the data automatically for more consistency and flexibility in testing other model orders.
+
+The *AICc* chose a seasonal ARIMA of the following order:
+
+$ARIMA(1,1,3)(0,0,1)[24]$ 
+*AIC=7359.84   AICc=7359.9   BIC=7384.38*
+
+The *BIC* chose a non-seasonal ARIMA model as follows:   
+
+$ARIMA(2,1,1)$ 
+*AIC=8082.22   AICc=8082.26   BIC=8101.85*
+
+In both cases, the `auto.arima()` estimated that there needed to be differencingm, which was supported by `ndiffs()` and our ACF and PACF plots. 
+
+While both models' forecasts degrade pretty quickly towards the series mean, the AICc model generates forecast that consider the variation better before it levels out.  Accordingly, we decided to explore and attempt to tune this model to provide more robust predictions.
+
+**AIC $ARIMA(1,1,3)(0,0,1)[24]$ Residual Plots**   
+
+```{r}
+# aic_plot <- aic_plot
+aic %>% checkresiduals()
 ```
 
-### R Script {-#Part-C-RScript}
+**BIC $ARIMA(2,1,1)$ Residual Plots**   
 
-```{r, echo=T}
-#Insert Script Here 
+
+```{r, echo = FALSE}
+# bic_plot <-bic_plot
+
+bic  %>% checkresiduals()
+    
+# 
+# grid.arrange(grob= aic_plot,  bic_plot,  ncol=2)
 ```
 
+
+### Interpreting `auto.arima()`
+
+Both the AICc and BIC ARIMA models appear relatively 'white-noisy', with no autocorrelation on the first and 24th observations as well as relatively normal residuals. However, examining the Ljung-Box test for independence made clear that the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$ is independent while the $ARIMA(2,1,1)$ is not. This confirmed our suspicion of unaccounted for seasonal variation in the model, which required a seasonal MA(1) to rectify. To ensure that the best model had been found, we varied p, q, and Q to determine if slight modifications could improve the performance of the model.
+
+### Manual ARIMA testing
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(1,1,3), seasonal=c(0,0,1),
+  lambda=lambda))
+checkresiduals(fit, lag=36)
+```  
+
+
+## Forecast 
+
+
+### $ARIMA(1,1,3)(0,0,1)[24]$
+
+```{r, echo = FALSE}
+Arima(ws, order=c(1,1,3), seasonal=c(0,0,1),lambda=lambda)%>%
+  forecast() %>%
+  autoplot() +
+    ylab("Water Flow Rate") + xlab("Year")
+```   
+
+### $ARIMA(2,1,3)(0,0,1)[24]$
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(2,1,3), seasonal=c(0,0,1),
+  lambda=lambda))
+checkresiduals(fit, lag=36)
+```    
+
+This Ljung-Box test shows unexplained variances in the residuals, indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)(0,0,1)[24]$.
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(1,1,2), seasonal=c(0,0,1),
+  lambda=lambda))
+checkresiduals(fit, lag=36)
+```    
+
+This Ljung-Box also shows unexplained variances in the residuals, indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,2)(0,0,1)[24]$.
+
+```{r, echo = FALSE}
+(fit <- Arima(ws, order=c(1,1,3), lambda=lambda))
+checkresiduals(fit, lag=36)
+
+```      
+
+This Ljung-Box also shows unexplained variances in the residuals, indicating that this model is not yet fully realized and inferior to the Seasonal $ARIMA (1,1,3)$.
+
+### Accepting the `auto.arima()`
+
+Given that the other models show unexplained variance in the residuals, we made our final predictions using the AICc recommended model of $ARIMA (1,1,3)(0,0,1)[24]$.
+
+```{r, echo = FALSE}
+
+autoplot(subset(ws, start=950))+
+    autolayer(forecast(final_ws), color="darkorchid")
+
+```
+
+### Forecast Accuracy  
+
+`r accuracy(forecast(fit))%>%knitr::kable()`  
+
+
+## Summary
+
+Ultimately, we assess that the Seasonal $ARIMA (1,1,3)$ model is marginally useful given its Mean Absolute Percentage of Error. This measure indicates that on average each forecast differs from the actual value on percentage basis by around 50%.  As is visible in the above graph, which depicts the last 150 points in the time series as well as our forecasts, predictions modulate around the mean and deteriorate to it pretty quickly.
+
+The original decomposition revelaed very little trend, a lot of seasonality, and a substatial amount of random noise.  The extensive random noise component, is assumed to be responsible for the majority of the error, as white noise is never predictable.
+
+# Appendix A {-#appendix-a}
+
+### Summary Statistics {-#summary-a}
+
+```{r}
+
+psych::describeBy(atm_data$Cash,  # look at distribution of cash distributed
+                  group = atm_data$ATM,  # group by which ATM
+                  mat = TRUE) %>%  # output matrix rather than lists
+  dplyr::select(-item, - vars) %>%
+  rename(ATM = group1) %>% 
+  knitr::kable(caption = 'Summary Statistics of ATM time series', 
+               digits = 2,
+               format = 'markdown',
+               padding = 0, 
+               row.names = FALSE) %>% 
+  kable_styling(c('striped', 'hover', 'condensed'))
+
+```
+
+### ARIMA Model Summary {-#arima-a}
+
+**`ATM1`:**
+```{r}
+ATM1_AA
+```
+
+**`ATM2`:**
+```{r}
+ATM2_AA
+```
+
+**`ATM4`:**
+```{r}
+ATM4_AA
+```
+
+### Point Forecasts {-#forecast-a}
+
+```{r}
+ATM_FC %>% spread(ATM, Cash)%>%
+  kable(caption="ATM Mean Point Forecast",digits=2) %>% kable_styling(full_width = T) %>% row_spec()
+```
+
+\newpage
+### R Script {-#script-a}
+
+```{r, echo=T, eval=F}
+# Load data
+atm_data <- read_excel("data/ATM624Data.xlsx") 
+
+# clean dataframe
+atm <- atm_data %>% 
+  # create wide dataframe
+  spread(ATM, Cash) %>% 
+  # remove NA column using function from janitor package
+  remove_empty(which = "cols") %>%
+  # filter unobserved values from May 2010 
+  filter(DATE < as.Date("2010-05-01")) %>% arrange(DATE) 
+
+atm$ATM2[is.na(atm$ATM2)] <- mean(atm$ATM2, na.rm = TRUE) ## remove NA
+atm$ATM4[which.max(atm$ATM4)] <- mean(atm$ATM4, na.rm = TRUE) ## remove outlier
+
+# create TS with weekly frequency & subset data
+atm_ts <- atm %>% select(-DATE) %>% ts(start=1,  frequency = 7)
+ATM1_ts <- atm_ts[,1]; ATM2_ts <- atm_ts[,2]; ATM3_ts <- atm_ts[,3]; ATM4_ts <- atm_ts[,4]
+
+#unit root test: 
+ATM1_ur <-ur.kpss(ATM1_ts); ATM2_ur <-ur.kpss(ATM2_ts); ATM4_ur <-ur.kpss(ATM4_ts)
+ATM1d_ur <-ur.kpss(diff(ATM1_ts, lag=7)); ATM2d_ur <-ur.kpss(diff(ATM2_ts, lag=7))
+ATM4d_ur <-ur.kpss(diff(ATM4_ts, lag=7))
+
+# AUTO.ARIMA function; set D=1 for seasonal differencing
+ATM1_AA <-auto.arima(ATM1_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+ATM2_AA <-auto.arima(ATM2_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+ATM4_AA <-auto.arima(ATM4_ts, D = 1, lambda = "auto", approximation = F, stepwise = T)
+
+# Forecast Results
+ATM1_fc <- forecast(ATM1_AA,h=31); ATM2_fc <- forecast(ATM2_AA,h=31)
+ATM3_fc <- meanf(ATM3_ts[ATM3_ts > 0], h=31); ATM4_fc <- forecast(ATM4_AA,h=31)
+
+# Prepare dataframe for ATM3 mean forcast plotting 
+ATM3_plotdata_fc <- cbind(seq(from = 366, to = 396), ATM3_fc[[5]], ATM3_fc[[6]], 
+                          ATM3_fc[[7]]) %>% as.data.frame()
+
+colnames(ATM3_plotdata_fc) <- c('Date', 'Point Forecast', 
+                                'Lo 80', 'Lo 95', 'Hi 80', 'Hi 95')
+ATM3_plotdata <- ATM3_ts %>% fortify() %>% select(-Index) %>% rename(Cash = Data) %>% 
+  mutate(Date = as.numeric(row.names(.))) %>% select(Date, Cash) %>% 
+  full_join(ATM3_plotdata_fc, by = 'Date')
+
+#Revert results back into original form
+date <- as.character(seq(as.Date('2010-05-01'), length.out=31, by=1))
+ATM_FC <-  cbind("Date"=date, "ATM1"=ATM1_fc$mean, "ATM2"=ATM2_fc$mean,
+                 "ATM3"=ATM3_fc$mean, "ATM4"=ATM4_fc$mean) %>% 
+  as.data.frame() %>% gather("ATM", "cash", -Date) %>%
+  mutate(Date = as.Date(as.character(Date)), Cash = round(as.numeric(cash))) %>% 
+  select(-cash)
+
+write_csv(ATM_FC, path = "forecasts/ATM_all_forecast.csv")
+```
+
+# Appendix B {-#appendix-b}
+
+### Model Summary {-#model-b}
+
+**`ARIMA`:**
+```{r}
+summary(arima_auto)
+```
+
+**`STL - MNN`:**
+```{r}
+summary(stl_ndemp)
+```
+
+**`STL - MAdN`:**
+```{r}
+summary(stl_demp)
+```
+
+**`ets - MNM`:**
+```{r}
+summary(ets_model)
+```
+
+### R Script {-#script-b}
+```{r, echo=T, eval=F}
+library(readxl)
+library(tidyverse)
+library(forecast)
+library(imputeTS)
+library(tsoutliers)
+
+# load data
+power_data <- read_excel("data/ResidentialCustomerForecastLoad-624.xlsx")
+# Time Series
+ts_data <- ts(power_data$KWH, frequency = 12, start = c(1998,1))
+# Missing value imputation
+ts_data <- na_interpolation(ts_data)
+# STL decomposition
+stl1 <- stl(ts_data, s.window = 'periodic')
+# Handling outlier
+outlier_func <- tsoutliers(ts_data, iterate = 2, lambda = "auto")
+
+# Time Series - After outlier and imputation handeled
+ts_data_o <- ts_data  # Let's treate outlier handled data seperatly for Modelling part.
+ts_data_o[outlier_func$index] <- outlier_func$replacements
+
+# Model#1: ARIMA
+arima_auto <- auto.arima(ts_data_o)
+arima_fc <- forecast(arima_auto, h=12)
+
+# Model #2: STL (no-demped) - MNN
+stl_ndemp <- stlf(ts_data_o, s.window = "periodic", robust=TRUE, h = 12)
+
+# Model #2-2: STL (demped) - MAdN
+stl_demp <- stlf(ts_data_o, damped=TRUE, s.window = "periodic", robust=TRUE, h = 12)
+
+# Model #3: ets - MNM
+ets_auto <- ets(ts_data_o)
+ets_model <- forecast(ets_auto, h=12)
+
+# tsCv - ARIMA -> it takes so much time. I got the results and saved them
+##arima_cv <- function(x, h){forecast(Arima(x, order = c(3, 0, 2), 
+## seasonal = c(2, 1, 0), include.drift = TRUE), h=h)}
+##e <- tsCV(ts_data_o, arima_cv, h=12)
+
+# RMSEs -> tsCV takes lot of time to process so just saved the output
+#rmse_train_arima <- arima_auto[2]
+#rmse_test_arima <- sqrt(mean(e^2, na.rm=TRUE))
+rmse_train_arima <- 589381.7
+rmse_test_arima <- 725175
+
+# Save output
+write.csv(arima_fc, file="forecasts/POWER_ARIMA_FC.csv")
+```
+
+# Appendix C {-#appendix-c}
+
+### Sample Forecasts {-#sample-forecast-c}
+```{r, echo = FALSE}
+head(preds_ws, 30)%>%
+  knitr::kable(caption = 'First few predictions in the set')%>%
+  kable_styling()
+```  
+
+\newpage
+
+### R-Script {-#script-c}
+
+```{r echo=T, eval=F}
+library(tidyverse)
+library(readxl)
+library(fpp2)
+library(forecast)
+library(lubridate)
+library(psych)
+#library(xlsx)
+options(scipen = 999)
+
+# Reading Data
+waterflow_1 <- read_excel("data/Waterflow_Pipe1.xlsx")
+waterflow_2 <- read_excel("data/Waterflow_Pipe2.xlsx")
+
+# Writing original data to submission file
+#file ='forecasts/water-pipes.xlsx'
+#write.xlsx(waterflow_1, file =  file , sheetName ="Waterflow Pipe 1", 
+#col.names = TRUE, row.names = TRUE, append = FALSE)
+#write.xlsx(waterflow_2, file=file, sheetName = "Waterflow Pipe 2", 
+#col.names = TRUE, row.names = TRUE, append = TRUE)
+
+# Grooming, aligning dates and aggregating Data
+waterflow_1<-waterflow_1 %>% 
+    mutate(DateTime = as.POSIXct(DateTime))%>%
+    group_by(hour=floor_date(DateTime, "hour")) %>%
+    summarize(WaterFlow=mean(WaterFlow))
+
+
+waterflow_2<-waterflow_2 %>% 
+    mutate(DateTime = as.POSIXct(DateTime))%>%
+    group_by(hour=floor_date(DateTime, "hour")) %>%
+    summarize(WaterFlow=mean(WaterFlow))
+
+# Creating a combined data set
+waterflow_all <-merge(waterflow_1, waterflow_2, by = 'hour', all = TRUE)%>%
+    mutate(waterflow = rowSums(.[c("WaterFlow.y", "WaterFlow.x")], na.rm = TRUE))%>%
+    select(hour, waterflow)
+
+# Converting all Three Data Sets to Time Series
+w1<-ts(waterflow_1$WaterFlow ,start=c(1,7081),frequency=24)
+w2<-ts(waterflow_2$WaterFlow ,start=c(1,7081),frequency=24)
+ws <- ts(waterflow_all$waterflow ,start=c(1,7081),frequency=24)
+
+
+#Decomposition of Time Series
+ws_decomp<- ws%>% 
+    decompose()%>%
+    autoplot()+
+    labs(title = "Decomposition of Hourly Waterflow Data",
+         subtitle = 'First Reading October 23, 2015',
+         x = 'Day of Year')+
+    theme_bw()
+
+
+# Checking Differences
+ws_diffs<- ws%>%
+    ndiffs() #1
+
+
+# Testing Stationarity
+dickie<-tseries::adf.test(ws)
+
+# ACF & PACF
+
+ws_acf <- ggAcf(ws, color = 'darkorange4')+
+    labs(title = "ACF Combined Pipe Flow Rates", 
+         subtitle = 'October 23, 2015 - December 23, 2015',
+         y="Auto Correlation", x="Hours")+
+    theme_bw()+ theme()
+
+ws_pacf <- ggPacf(ws, color = 'darkorange4')+
+    labs(title = "PACF Combined Pipe Flow Rates", 
+         subtitle = 'October 23, 2015 - December 23, 2015',
+         y="Partial Auto Correlation", x="Hours")+
+    theme_bw()+ theme()
+
+# Differencesd ACF & PACF
+
+ws_acf_diff <-ggAcf(diff(ws,lag = 1), color = 'darkorange4')+
+    labs(title = "ACF Combined Pipe Flow Rates", 
+         subtitle = 'October 23, 2015 - December 23, 2015',
+         y="Auto Correlation", x="Hours")+
+    theme_bw()+ theme()
+
+ws_pacf_diff <-ggPacf(diff(ws,lag = 1), color = 'darkorange4')+
+    labs(title = "PACF Combined Pipe Flow Rates", 
+         subtitle = 'October 23, 2015 - December 23, 2015',
+         y="Auto Correlation", x="Hours")+
+    theme_bw()+ theme()
+
+#Establishing a lambda value for ARIMA transformations
+lambda <-  BoxCox.lambda(ws)
+#Lambda = 0.9531552
+
+
+# Auto arima's including season components for AICc and BIC
+aic<- auto.arima(ws, seasonal = TRUE, ic = 'aicc', lambda = lambda)
+
+bic<-auto.arima(ws, seasonal = TRUE, ic = 'bic', lambda = lambda )
+
+
+# Plots of auto.arimas
+aic_plot <- auto.arima(ws, seasonal = TRUE, ic = 'aicc', lambda = lambda)%>%
+    forecast(h=24*7)%>%
+    autoplot() +
+    labs(title = "AIC selected ARIMA(1,1,3)(0,0,1)[24] ", 
+                 subtitle = 'October 23, 2015 - December 23, 2015',
+                y="Flowrate", x="Days")+
+    theme_bw()+ theme()
+
+    
+bic_plot<-auto.arima(ws, seasonal = TRUE, ic = 'bic', lambda = lambda )%>%
+    forecast(h=24*7)%>%
+    autoplot()+
+    labs(title = "BIC selected ARIMA(2,1,1)  ", 
+         subtitle = 'October 23, 2015 - December 23, 2015',
+         y="Flowrate", x="Days")+
+    theme_bw()+ theme()
+
+
+# Final AIC from AICc and predictions
+final_ws <- Arima(ws, order=c(1,1,3), seasonal=c(0,0,1),lambda=lambda)
+
+preds_ws <-as.data.frame(forecast(final_ws, h = 168))
+
+
+#Renaming fields for output data
+waterflow_all <-waterflow_all%>%
+    rename( DateTime = hour,
+            WaterFlow = waterflow)
+# Formatting forecasts for output data    
+preds_ws<-preds_ws%>%
+    mutate(DateTime = seq(from=as.POSIXct("2015-12-3 17:00", tz="UTC"),
+                          to=as.POSIXct("2015-12-10 16:00", tz="UTC"), 
+                          by="hour") )%>%
+    select(DateTime, `Point Forecast`, `Lo 80`,`Hi 80`, `Lo 95`, `Hi 95`)
+
+# Writing forecasts and final data to the 'XLSX' file
+#write.xlsx(waterflow_all, file = file, sheetName = "Combined Waterflow", 
+#col.names = TRUE, row.names = FALSE, append = TRUE)
+#write.xlsx(preds_ws, file =  file , sheetName = "Forecasts", 
+#col.names = TRUE, row.names = FALSE, append = TRUE)
+
+```
 

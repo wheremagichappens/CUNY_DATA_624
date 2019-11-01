@@ -1,0 +1,162 @@
+---
+title: "Team 2 - Homework Two"
+subtitle: "Assignment 2: KJ 7.2; KJ 7.5"
+author: "NAME"
+date: "DATE"
+output: 
+  pdf_document
+---
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+```
+
+```{r libraries, echo=T}
+# predictive modeling
+libraries('mlbench', 'caret')
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+```
+
+## (1) Kuhn & Johnson 7.2
+
+>  Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+
+**The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:** 
+
+```{r kj-7.2-ex1, echo=T}
+set.seed(200) 
+trainingData <- mlbench.friedman1(200, sd = 1)
+
+## We convert the 'x' data from a matrix to a data frame 
+## One reason is that this will give the columns names.
+
+trainingData$x <- data.frame(trainingData$x) 
+
+## Look at the data using 
+featurePlot(trainingData$x, trainingData$y) 
+## or other methods. 
+
+## This creates a list with a vector 'y' and a matrix 
+## of predictors 'x'. Also simulate a large test set to 
+## estimate the true error rate with good precision: 
+
+testData <- mlbench.friedman1(5000, sd = 1)
+testData$x <- data.frame(testData$x) 
+```
+
+>> (a) Tune several models on these data. For example: 
+
+```{r kj-7.2-ex2, eval=F, echo=T}
+knnModel <- train(x = trainingData$x,
+                  y = trainingData$y, 
+                  method = "knn",
+                  preProc = c("center", "scale"), 
+                  tuneLength = 10) 
+knnModel 
+
+knnPred <- predict(knnModel, newdata = testData$x) 
+
+## The function 'postResample' can be used to get the test set performance values
+postResample(pred = knnPred, obs = testData$y)
+```
+
+Model 1: 
+
+```{r kj-7.2-1}
+#code
+```
+
+Model 2: 
+```{r kj-7.2-2}
+#code
+```
+
+Model 3: 
+```{r kj-7.2-3}
+#code
+```
+
+>> (b) Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
+
+```{r kj-7.2-4}
+#code
+```
+
+## (2) Kuhn & Johnson 7.5
+
+>  Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
+
+```{r kj-7.5}
+# Call code from 6.3
+```
+
+
+>> (a) Which nonlinear regression model gives the optimal resampling and test set performance? 
+
+```{r kj-7.5a}
+# code
+```
+
+>> (b) Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
+
+```{r kj-7.5b}
+# code
+```
+
+>> (c) Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
+
+```{r kj-7.5c}
+# code
+```
+
+## R Code 
+
+```{r 02-code, eval=F,echo=T}
+#insert all code here
+
+# (7.2a)
+
+# (7.2b)
+
+# (7.5a)
+
+# (7.5b)
+
+# (7.5c)
+```
+
