@@ -2,7 +2,7 @@
 
 ## Expectations
 
-All members are expected to fully complete each assignment. Answers for final submission will be selected through a voting process. When voting, members are expected to pick the best answer and provide an adequate response that justifies the selection and includes possible additions to the selected answer. The feedback from the voting form will be used to merge responses into one final document for submission. All members are expected to take participate in the merging and editing process. 
+All members are expected to fully complete each assignment. Answers for final submission will be selected through a voting process. When voting, members are expected to pick the best answer and provide an adequate response that justifies the selection and includes possible additions to the selected answer. The feedback from the voting form will be used to merge responses into one final document for submission. All members are expected to take part in the merging and editing process for final submission. 
 
 ## Deadlines Targets
 *  **HW2-1**: Oct 21
