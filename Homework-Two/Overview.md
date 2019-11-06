@@ -20,6 +20,10 @@ All members are expected to fully complete each assignment. Answers for final su
 | **HW2-3**  | Not Complete  | Not Complete  | Not Complete  | Not Complete | Not Complete  |
 | **HW2-4**  | Not Complete  | Not Complete  | Not Complete  | Not Complete  | Not Complete  |
 
+## Meet-Ups
+* **11/05**: Discuss HW2-1 and HW2-2, voting, roles, responsibilities, and expectations. 
+* **TBD**: On or around Nov 15th. Discuss the voting and merging process, HW2-3, and Project 2. 
+
 ## Voting
 
 **HW2-1**: https://docs.google.com/forms/d/e/1FAIpQLSf0BFCeAxFkj1qsPDc5SDv4pMklG__Lfoqg-miubMzs79hreQ/viewform
