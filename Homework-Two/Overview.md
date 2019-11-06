@@ -27,7 +27,7 @@ All members are expected to fully complete each assignment. Answers for final su
 **HW2-3**: TBD  
 **HW2-4**: TBD
 
-## Additional Responsibilities:
+## Extra Contributions
 *  **Andy**: Final Proof
 *  **Juliann**: Layout Format & Templates
 *  **Bethany**: Voting Forms & Submission
