@@ -31,6 +31,8 @@ Include details on our process in creating this document.
 ```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
 # SOURCE DEFAULT SETTINGS
 source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+# SOURCE HW ANSWERS
+source('~/GitHub/CUNY_DATA_624/Homework-Two/answers.R')
 ```
 
 ```{r libraries, echo=T}
@@ -99,7 +101,7 @@ data("ChemicalManufacturingProcess")
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 7.2}
 
-\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
+\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
 
 ```{r kj-7.2-ex1}
 # The package `mlbench` contains a function called `mlbench.friedman1` 
