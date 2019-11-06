@@ -32,8 +32,8 @@ All members are expected to fully complete each assignment. Answers for final su
 **HW2-4**: TBD
 
 ## Extra Contributions
-*  **Andy**: Final Proof
-*  **Juliann**: Layout Format & Templates
-*  **Bethany**: Voting Forms & Submission
-*  **Jeremy**: Final Proof
+*  **Andy**: Final Proof  
+*  **Bethany**: Voting Forms & Submission  
+*  **Jeremy**: Final Proof 
+*  **Juliann**: Layout Format & Templates  
 *  **Vinicio**: Merging Answers from Voting
