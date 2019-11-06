@@ -26,10 +26,10 @@ All members are expected to fully complete each assignment. Answers for final su
 
 ## Voting
 
-**HW2-1**: https://docs.google.com/forms/d/e/1FAIpQLSf0BFCeAxFkj1qsPDc5SDv4pMklG__Lfoqg-miubMzs79hreQ/viewform
-**HW2-2**: https://docs.google.com/forms/d/e/1FAIpQLSf0BFCeAxFkj1qsPDc5SDv4pMklG__Lfoqg-miubMzs79hreQ/viewform
-**HW2-3**: https://docs.google.com/forms/d/e/1FAIpQLSdPaey0gbsOKLtbofKpAnmQ5K8GlL12wOgZID8-jKaDtffrqg/viewform  
-**HW2-4**: TBD
+*  **HW2-1**: [Voting Form](https://docs.google.com/forms/d/e/1FAIpQLSf0BFCeAxFkj1qsPDc5SDv4pMklG__Lfoqg-miubMzs79hreQ/viewform)
+*  **HW2-2**: [Voting Form](https://docs.google.com/forms/d/e/1FAIpQLSf0BFCeAxFkj1qsPDc5SDv4pMklG__Lfoqg-miubMzs79hreQ/viewform)
+*  **HW2-3**: [Voting Form](https://docs.google.com/forms/d/e/1FAIpQLSdPaey0gbsOKLtbofKpAnmQ5K8GlL12wOgZID8-jKaDtffrqg/viewform)  
+*  **HW2-4**: TBD
 
 ## Extra Contributions
 *  **Andy**: Final Proof  
