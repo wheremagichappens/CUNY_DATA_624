@@ -46,14 +46,17 @@ testData$x <- data.frame(testData$x)
 >> (a) Tune several models on these data. For example: 
 
 ```{r kj-7.2-ex2, echo=F}
-set.seed(200) 
 knnModel <- train(x = trainingData$x,
                   y = trainingData$y, 
                   method = "knn",
                   preProc = c("center", "scale"), 
                   tuneLength = 10) 
+knnModel 
 
 knnPred <- predict(knnModel, newdata = testData$x) 
+
+## The function 'postResample' can be used to get the test set performance values
+postResample(pred = knnPred, obs = testData$y)
 ```
 
 **Model 1: KNN model with hyperparameter tuning**
@@ -79,12 +82,13 @@ knn_Pred <- predict(knn_model, newdata = testData$x)
 knn_pv <- postResample(pred = knn_Pred, obs = testData$y)
 knn_pv
 ```
-Unlike above approach where `tuneLength` = 10 to find 10 odd numbered Ks starting from 5, we will set `tuneGrid` running from k = 1 to 50 after CV process. RMSE on validation set was used to select the optimal model using the smallest value. The final value used for the model was k = 11 with RMSE on test set of `r knn_pv[1]`.
+Unlike given KNN example by author where `tuneLength` = 10 to find 10 odd numbered Ks starting from 5, we will set a new KNN model with `tuneGrid` running from k = 1 to 50 after CV process. RMSE on validation set was used to select the optimal model using the smallest value. The final value used for the model was k = 11 with RMSE on test set of `r knn_pv[1]`.
 
 
 **Model 2: Neural Networks**
 ```{r kj-7.2-2, cache = TRUE, echo=F}
-findCorrelation(cor(trainingData$x), cutoff = .75)
+# we could not find 
+#findCorrelation(cor(trainingData$x), cutoff = .75)
 
 # hyperparameter tuning for nnet
 nnetGrid <- expand.grid(.size = c(1:10), .decay = c(0, 0.01, .1))
@@ -114,7 +118,7 @@ nnet_Pred <- predict(nnet_model, newdata = testData$x)
 nnet_pv <- postResample(pred = nnet_Pred, obs = testData$y)
 nnet_pv
 ```
-We removed highly correlated predictors to ensure that the maximum absolute pariwise correlation between the predictors is less than 0.75. we did not have any highly correlated predictors so let's keep the features as they are.
+We executed `findCorrelation(cor(trainingData$x), cutoff = .75)` to ensure that the maximum absolute pariwise correlation between the predictors is less than 0.75. After the process, we confirmed there were no highly correlated predictors so let's keep the features as they are.
 
 We found nnet with `size` = 3 (number of units in the hidden layer) and `decay` = 0 (parameter for weight decay) is the optimal model based on RMSE on validating set. RMSE on test set was `r nnet_pv[1]`.
 
