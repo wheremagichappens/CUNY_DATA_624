@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r instructions, echo=F, fig.height=3}
-# README: GROUP TWO GUIDELINES
+# README: GROUP TWO GUIDELINESa
 
 # MEAT&POTATOES:
     # Submissions should be completed in a timely manner, within group internal deadlines. 
