@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.10.14)  25 OCT 2019 19:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.10.14)  8 NOV 2019 15:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -848,61 +848,71 @@ Package xcolor Warning: Incompatible color definition on input line 180.
 
 Package xcolor Warning: Incompatible color definition on input line 180.
 
+
+Package xcolor Warning: Incompatible color definition on input line 190.
+
+
+Package xcolor Warning: Incompatible color definition on input line 196.
+
+
+Package xcolor Warning: Incompatible color definition on input line 196.
+
+
+Package xcolor Warning: Incompatible color definition on input line 208.
+
+
+Package xcolor Warning: Incompatible color definition on input line 214.
+
+
+Package xcolor Warning: Incompatible color definition on input line 214.
+
 [1
 
 {c:/Users/15082/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
 x.map}]
 
-Package xcolor Warning: Incompatible color definition on input line 299.
-
-
-Package xcolor Warning: Incompatible color definition on input line 325.
-
-
-Package xcolor Warning: Incompatible color definition on input line 325.
-
-
-Package xcolor Warning: Incompatible color definition on input line 325.
+Package xcolor Warning: Incompatible color definition on input line 323.
 
 [2]
 
-Package xcolor Warning: Incompatible color definition on input line 325.
+Package xcolor Warning: Incompatible color definition on input line 359.
 
 
-Package xcolor Warning: Incompatible color definition on input line 325.
+Package xcolor Warning: Incompatible color definition on input line 359.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 328.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 362.
 [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 328.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 362.
 (./03-TEMPLATE.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 328.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 328.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 362.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 362.
 Package rerunfilecheck Info: File `03-TEMPLATE.out' has not changed.
 (rerunfilecheck)             Checksum: F5F0B2E8F1804071E1A6950E1B671199;881.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 328.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 362.
  ) 
 Here is how much of TeX's memory you used:
- 12761 strings out of 494111
- 179679 string characters out of 6172311
+ 12763 strings out of 494111
+ 179702 string characters out of 6172311
  264461 words of memory out of 5000000
- 16689 multiletter control sequences out of 15000+600000
- 21729 words of font info for 24 fonts, out of 8000000 for 9000
+ 16690 multiletter control sequences out of 15000+600000
+ 24724 words of font info for 25 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,5n,37p,236b,381s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,5n,37p,276b,441s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.e
 nc}<c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmb
-x12.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
-m/lmr10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
-ic/lm/lmr12.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/
-public/lm/lmr17.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/ty
-pe1/public/lm/lmri12.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fon
-ts/type1/public/lm/lmtk10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dis
-t/fonts/type1/public/lm/lmtt10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texm
-f-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on 03-TEMPLATE.pdf (3 pages, 181874 bytes).
+x10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
+m/lmbx12.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/pub
+lic/lm/lmr10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1
+/public/lm/lmr12.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/t
+ype1/public/lm/lmr17.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fon
+ts/type1/public/lm/lmri12.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dis
+t/fonts/type1/public/lm/lmtk10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texm
+f-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX
+/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
+Output written on 03-TEMPLATE.pdf (3 pages, 213080 bytes).
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
- 74 compressed objects within 1 object stream
+ 92 PDF objects out of 1000 (max. 8388607)
+ 77 compressed objects within 1 object stream
  16 named destinations out of 1000 (max. 500000)
  49 words of extra memory for PDF output out of 10000 (max. 10000000)
 
