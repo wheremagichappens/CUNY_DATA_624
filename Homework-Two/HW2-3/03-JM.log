@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.10.14)  8 NOV 2019 15:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.10.14)  8 NOV 2019 15:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**03-TEMPLATE.tex
-(./03-TEMPLATE.tex
+**03-JM.tex
+(./03-JM.tex
 LaTeX2e <2019-10-01> patch level 1
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2019/08/27 v1.4j Standard LaTeX document class
@@ -717,8 +717,8 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-) (./03-TEMPLATE.aux)
-\openout1 = `03-TEMPLATE.aux'.
+) (./03-JM.aux)
+\openout1 = `03-JM.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 143.
 LaTeX Font Info:    ... okay on input line 143.
@@ -798,9 +798,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 143.
 LaTeX Info: Redefining \pageref on input line 143.
 LaTeX Info: Redefining \nameref on input line 143.
-(./03-TEMPLATE.out) (./03-TEMPLATE.out)
+(./03-JM.out) (./03-JM.out)
 \@outlinefile=\write4
-\openout4 = `03-TEMPLATE.out'.
+\openout4 = `03-JM.out'.
 
 
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/epstopdf-
@@ -857,47 +857,88 @@ Package xcolor Warning: Incompatible color definition on input line 196.
 
 Package xcolor Warning: Incompatible color definition on input line 196.
 
-
-Package xcolor Warning: Incompatible color definition on input line 208.
-
-
-Package xcolor Warning: Incompatible color definition on input line 214.
-
-
-Package xcolor Warning: Incompatible color definition on input line 214.
-
-[1
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
+06.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
+File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
+06.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
+206.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
+File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
+206.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
+File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 206.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 206.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 206.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 206
+.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 206
+.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [1
 
 {c:/Users/15082/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
-x.map}]
+x.map}pdfTeX warning (ext4): destination with the same identifier (name{table.1
+}) has been already used, duplicate ignored
 
-Package xcolor Warning: Incompatible color definition on input line 323.
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.223 \end{quote}
+                 ]
+
+Package xcolor Warning: Incompatible color definition on input line 225.
+
+
+Package xcolor Warning: Incompatible color definition on input line 231.
+
+
+Package xcolor Warning: Incompatible color definition on input line 231.
 
 [2]
 
-Package xcolor Warning: Incompatible color definition on input line 359.
+Package xcolor Warning: Incompatible color definition on input line 340.
 
 
-Package xcolor Warning: Incompatible color definition on input line 359.
+Package xcolor Warning: Incompatible color definition on input line 376.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 362.
+
+Package xcolor Warning: Incompatible color definition on input line 376.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 379.
 [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 362.
-(./03-TEMPLATE.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 362.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 362.
-Package rerunfilecheck Info: File `03-TEMPLATE.out' has not changed.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 379.
+(./03-JM.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 379.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 379.
+Package rerunfilecheck Info: File `03-JM.out' has not changed.
 (rerunfilecheck)             Checksum: F5F0B2E8F1804071E1A6950E1B671199;881.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 362.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 379.
  ) 
 Here is how much of TeX's memory you used:
- 12763 strings out of 494111
- 179702 string characters out of 6172311
- 264461 words of memory out of 5000000
- 16690 multiletter control sequences out of 15000+600000
- 24724 words of font info for 25 fonts, out of 8000000 for 9000
+ 12867 strings out of 494111
+ 182016 string characters out of 6172311
+ 264601 words of memory out of 5000000
+ 16759 multiletter control sequences out of 15000+600000
+ 36979 words of font info for 41 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,5n,37p,276b,441s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,9n,37p,270b,442s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.e
 nc}<c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmb
 x10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
@@ -909,10 +950,10 @@ ts/type1/public/lm/lmri12.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dis
 t/fonts/type1/public/lm/lmtk10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX/texm
 f-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/15082/AppData/Roaming/TinyTeX
 /texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on 03-TEMPLATE.pdf (3 pages, 213080 bytes).
+Output written on 03-JM.pdf (3 pages, 221239 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 77 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 500000)
+ 93 PDF objects out of 1000 (max. 8388607)
+ 78 compressed objects within 1 object stream
+ 17 named destinations out of 1000 (max. 500000)
  49 words of extra memory for PDF output out of 10000 (max. 10000000)
 
