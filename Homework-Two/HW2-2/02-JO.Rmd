@@ -1,0 +1,338 @@
+---
+title: "Team 2 - Homework Two"
+subtitle: "Assignment 2: KJ 7.2; KJ 7.5"
+author: "NAME"
+date: "DATE"
+output: 
+  pdf_document
+---
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Homework-Two/defaults.R')
+```
+
+```{r libraries, echo=T}
+# predictive modeling
+libraries('tidyverse', 'mlbench', 'caret', 'kernlab')  # added kernlab for SVM model
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')  
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify', 'earth', 'ggcorrplot')  # added earth for plotmo used with MARS
+```
+
+## (1) Kuhn & Johnson 7.2
+
+>  Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+
+**The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:** 
+
+```{r kj-7.2-ex1, echo=T}
+
+set.seed(1234) 
+
+## Create a list with a vector y and a matrix of predictors x
+train_data <- mlbench.friedman1(200, sd = 1)
+train_data$x <- data.frame(train_data$x)
+
+# Create a test set against which to predict
+test_data <- mlbench.friedman1(5000, sd = 1)
+test_data$x <- data.frame(test_data$x)
+
+# Review the data distribution 
+featurePlot(train_data$x, train_data$y)
+
+```
+
+
+>> (a) Tune several models on these data. For example: 
+
+Model 1 (example): KNN model
+
+```{r kj-7.2-ex2, eval=F, echo=T}
+
+# Tuned KNN model fit
+fit_knn
+
+# Plot of optimal KNN fit by k minimizing RMSE
+plot_knn
+
+```
+
+We scale and center features before cross-validating a KNN model based on the number of neighbors (k).  The lowest RMSE is achieved for 11 neighbors.
+
+<br>
+
+Model 2: Neural Network
+
+```{r kj-7.2-1}
+
+# Neural network implementation using model averaging and limiting features to those that see pairwise correlation < .75 %>% 
+train_data$x %>% 
+  cor() %>%  # calculate correlation matrix
+  round(digits = 2) %>%  # round r to two digits
+  ggcorrplot(hc.order = TRUE,
+             type = "upper",
+             outline.color = "white")
+    
+# Tuned NN model fit
+fit_avgnnet
+
+# Plot of optimal NN fit minimizing RMSE
+plot_avgnnet
+
+```
+
+Before fitting a neural network model using an averaging approach, we examine pairwise correlation between features - as it is minimal, there is no need to pre-filter predictors.  A grid search reveals that weight decay (lambda) and hidden units yield the lowerst RMSE for values of .1 and 3, respectively.
+
+<br>
+
+Model 3: Multivariate Adaptive Regression Splines
+```{r kj-7.2-2}
+
+# Tuned MARS model fit
+fit_mars$bestTune
+fit_mars$finalModel
+
+# Plot of optimal MARS fit minimizing RMSE
+plot_mars
+
+```
+
+The MARS model prunes features - and terms combining features - that do no contribute to predictive accuracy based on the GCV statistic.  We allow for interactions between two features in terms, and constrain the number of terms to retain between 2 and 38.  The MARS model minimizes RMSE when selecting 13 of 20 terms using 5 (X4, X1, X2, X5, and X3) of the 10 predictors.
+
+<br>
+
+Model 4: Support Vector Machines
+
+```{r kj-7.2-3}
+
+fit_svm$finalModel
+fit_svm
+
+# Plot of optimal NN fit minimizing RMSE
+plot_svm
+
+```
+
+An SVM model using a radial-basis kernel function yields the lowest RMSE when the cost (C) is 16, for a hyperplane margin that is neither on the large nor small side.
+
+<br>
+
+>> (b) Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
+
+```{r kj-7.2-4}
+
+# Compare model performance on RMSE
+model_compare
+
+# Confirm which predictors the MARS model prunes
+fit_mars$finalModel
+
+#code
+```
+
+MARS has the best performance, and it does select the most informative five predictors (phew).
+
+<br>
+
+## (2) Kuhn & Johnson 7.5
+
+>  Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
+
+```{r kj-7.5}
+# Call code from 6.3
+```
+
+As I couldn't get these working last week I don't have data prep on which to base this.  Double jeopardy - damn.
+
+>> (a) Which nonlinear regression model gives the optimal resampling and test set performance? 
+
+```{r kj-7.5a}
+# code
+```
+
+>> (b) Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
+
+```{r kj-7.5b}
+# code
+```
+
+
+>> (c) Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
+
+```{r kj-7.5c}
+# code
+```
+
+## R Code 
+
+```{r 02-code, eval=F,echo=T}
+
+# (7.2a)
+
+## K Nearest Neighbors model
+
+# Fit and tune KNN model
+fit_knn  <- train(x = train_data$x,
+                  y = train_data$y, 
+                  method = "knn",
+                  preProc = c("center", "scale"),  # standardize features prior to modeling to avoid introducing bias in distance measures
+                  tuneLength = 10)  # investigate this hyperparameter more
+
+# Predict test data targets based on tuned KNN model
+pred_knn <- predict(fit_knn, newdata = test_data$x)
+
+# Assess KNN model's predictive performance against test set
+perf_knn <- postResample(pred = pred_knn, obs = test_data$y)
+
+# Plot KNN model performance
+plot_knn <- ggplot(fit_knn)
+
+
+## Neural Network model
+
+# Given minimal correlation, no need to filter out features based on correlation threshold
+# findCorrelation(cor(train_x), cutoff = .75)
+
+# Create grid for averaged neural net model approach
+grid_avgnnet <- expand.grid(.decay = c(0, .01, .1),  # evaluate three different weight decay values (lamdba)
+                        .size = c(1:10),  # evaluate 1 through 10 hidden units
+                        .bag = FALSE)  # prevent bootstrap aggregation
+
+# Fit and tune NN model
+fit_avgnnet <- train(x = train_data$x,
+                     y = train_data$y,
+                     method = 'avNNet',  # employ averaging 
+                     tuneGrid = grid_avgnnet,  # grid search for optimal hyper-parameters
+                     preProc = c('center', 'scale'),  # standardize features prior to modeling
+                     linout = TRUE,  # linear output units
+                     trace = FALSE,  # reduce printed output
+                     MaxNWts = 10 * (ncol(train_data$x) + 1) + 10 + 1,  # 
+                     maxit = 500)  # allow 
+
+# Predict test data targets based on tuned NN model
+pred_avgnnet <- predict(fit_avgnnet, new_data = test_data$x)
+
+# Assess NN model's predictive performance against test set
+perf_avgnnet <- postResample(pred = pred_avgnnet, obs = test_data$y)
+
+# Plot NN model performance 
+plot_avgnnet <- ggplot(fit_avgnnet) +
+  scale_x_continuous(breaks = seq(from = 1,    # ensure hidden units on x-axis display as integrer breaks 
+                                  to = 10, 
+                                  by = 1))
+
+
+
+## Multivariate Adaptive Regression Splines model
+
+# Create grid for MARs model approach
+grid_mars <- expand.grid(.degree = 1:2,  # allow no or one interaction between features
+                      .nprune = 2:38)  # set number of terms to retain
+
+# Fit and tune MARS model
+fit_mars <- train(x = train_data$x, 
+                  y = train_data$y, 
+                  method = 'earth',
+                  tuneGrid = grid_mars,  # grid search for optimal hyper-parameters
+                  trControl = trainControl(method = 'cv')  # employ cross-validation
+                  )
+
+# Predict test data targets based on tuned MARS model
+pred_mars <- predict(fit_mars, newdata = test_data$x)
+
+# Assess MARS model's predictive performance against test set
+perf_mars <- postResample(pre = pred_mars, obs = test_data$y)
+
+# Plot MARS model performance 
+plot_mars <- ggplot(fit_mars)
+
+
+## Support Vector Machines model
+
+# Fit and tune SVM model
+fit_svm <- train(x = train_data$x,
+                 y = train_data$y,
+                 method = 'svmRadial',  # use radial kernel (default)
+                 preProcess = c('center', 'scale'),  # standardize features prior to modeling
+                 tuneLength = 14,  # investigate this hyperparameter more
+                 trControl = trainControl(method = 'cv')  # employ cross-validation
+                 )
+
+# Predict test data targets based on tuned SVM model
+pred_svm <- predict(fit_svm, newdata = test_data$x)
+
+# Assess SVM model's predictive performance against test set
+perf_svm <- postResample(pre = pred_svm, obs = test_data$y)
+
+# Plot SVM model performance
+plot_svm <- ggplot(fit_svm)
+
+
+# (7.2b)
+
+model_labels <- 
+  as.data.frame(c('K Nearest Neighbors',
+                 'Neural Network',
+                 'Multivariate Adaptive Regression Splines',
+                 'Support Vector Machine')
+                ) %>% 
+  setNames(c('Model'))
+
+model_RMSE <-
+  matrix(c
+         (min(fit_knn$results$RMSE), 
+           min(fit_avgnnet$results$RMSE),
+           min(fit_mars$results$RMSE),
+           min(fit_svm$results$RMSE)
+           ), 
+         nrow = 4, ncol = 1, byrow = TRUE) %>% 
+  as.data.frame() %>% 
+  setNames(c('RMSE'))
+    
+model_compare <- 
+  bind_cols(model_labels, 
+            model_RMSE) %>% 
+  arrange(RMSE) %>% 
+  kable()
+
+
+# (7.5a)
+
+# (7.5b)
+
+# (7.5c)
+```
+
