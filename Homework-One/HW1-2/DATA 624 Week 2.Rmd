@@ -1,0 +1,124 @@
+---
+title: "DATA 624 Week 2"
+author: "Vinicio Haro"
+date: "September 12, 2019"
+output: html_document
+---
+
+# Week 2 HW Problems 
+## H.A 6.2
+
+The plastics data set consists of the monthly sales (in thousands) of product A for a plastics manufacturer for five years.
+
+* a) Plot the time series of sales of product A. Can you identify seasonal fluctuations and/or a trend-cycle?
+
+We are looking at the sales of product A for a plastic manufacturer. 
+
+```{r warning=FALSE, message=FALSE}
+library(fpp2)
+
+autoplot(plastics) +
+  ggtitle("Product A") +
+  xlab("Time~Monthly") +
+  ylab("Sales")
+```
+
+
+The autoplot reveals a mostly increasing trend in addition to seasonal fluctuations.It looks like there is a decrease in sales at the start of each year for product A. 
+
+* b) Use a classical multiplicative decomposition to calculate the trend-cycle and seasonal indices.
+
+We will be using code and method from the book found here: 
+https://otexts.com/fpp2/classical-decomposition.html
+
+```{r warning=FALSE, message=FALSE}
+
+plastics %>% decompose(type="multiplicative") %>% 
+  autoplot() + xlab("Year") +
+  ggtitle("Classical multiplicative decomposition 
+    of plastics")
+
+```
+
+* c) Do the results support the graphical interpretation from part a?
+
+The trend clearly confirms what we saw in the initial plot. We also confirm the extent of seasonal fluctuation from the first plot. The reminaider plot indicates where leakage occured but over smoothed by the trend. In short, this method confirms our hypothesis from part a. 
+
+We can furthur drill down by isolating the seasonality plot.
+```{r warning=FALSE, message=FALSE}
+
+seasonplot(plastics, ylab="Sales", xlab="Month", year.labels.left=TRUE, main="Prodct A Seasonal Plot", col=1:20, pch=19)
+```
+
+We can observe the fluctuation in sales. There is a decline as time approaches the end of the year but an increase as th year starts. This is furthur confirmation of what we saw in the previous part. 
+
+
+* d) Compute and plot the seasonally adjusted data.
+
+```{r warning=FALSE, message=FALSE}
+plastic_decomposed<-decompose(plastics, type="multiplicative")
+
+plastic_adjusted<-plastic_decomposed$x/plastic_decomposed$seasonal
+
+
+plot(plastic_adjusted);
+
+plot(plastics, col="grey", ylab="Sales", xlab="Month", main="Seasonally Adjusted (Product A)")
+lines(seasadj(stl(plastics, s.window="periodic")), col="blue", ylab="Seasonally Adjusted")
+```
+
+We can actually use r's capabilities to plot the seasonal adjusted data vs our originaltime series. The Seasonally adjusted plot is the most revealing. If we focus on the blue line, we still see trend-cycle with the remainder components causing the observed spikes. 
+
+
+
+* e) Change one observation to be an outlier (e.g., add 500 to one observation), and recompute the seasonally adjusted data. What is the effect of the outlier?
+
+```{r warning=FALSE, message=FALSE}
+plastics2<-plastics
+
+plastics2[3]<-plastics[3]+500
+
+#plastics2
+
+plastic_decomposition2 <- decompose(plastics2, type="multiplicative")
+
+plastic_adjust2 <-plastic_decomposition2$x/plastic_decomposition2$seasonal
+
+plot(plastic_adjust2)
+```
+
+The outlier causes a massive spike. The trend is still mostly increasing with the same dip at the tail end.  
+
+* f) Does it make any difference if the outlier is near the end rather than in the middle of the time series?
+
+```{r warning=FALSE, message=FALSE}
+
+plastics3<-plastics
+
+plastics3[30]<-plastics[30]+500
+
+plastic_decomposition3 <- decompose(plastics3, type="multiplicative")
+
+plastic_adjust3 <-plastic_decomposition3$x/plastic_decomposition3$seasonal
+
+plot(plastic_adjust3)
+
+```
+
+As expected, the plot looks almost identical to the one from part e. Lets try at the tail end of the series. 
+
+```{r warning=FALSE, message=FALSE}
+plastics3<-plastics
+
+plastics3[59]<-plastics[59]+500
+
+plastic_decomposition3 <- decompose(plastics3, type="multiplicative")
+
+plastic_adjust3 <-plastic_decomposition3$x/plastic_decomposition3$seasonal
+
+plot(plastic_adjust3)
+```
+
+
+Part e shows what happens when the outlier is at the start of the series. There does not seem to be any change in terms of trend or seasonal fluctuation. We see a decrease in seasonality if the outlier gets places in the middle or end of the time series. 
+

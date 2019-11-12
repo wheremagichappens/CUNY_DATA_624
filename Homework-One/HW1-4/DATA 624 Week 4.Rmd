@@ -1,0 +1,125 @@
+---
+title: "DATA 624 Week 4"
+author: "Vinicio Haro"
+date: "September 25, 2019"
+output: html_document
+---
+
+#Chapter 4, Forecasting Principles and Practice, HA
+## problems 7.1 & 7.3
+
+
+## 7.1 Consider the pigs series — the number of pigs slaughtered in Victoria each month
+
+* a) Use the ses() function in R to find the optimal values of  alpha and l0 , and generate forecasts for the next four months.
+
+```{r warning=FALSE, message=FALSE}
+library(fpp2)
+library(ggplot2)
+
+#summary(pigs)
+
+summary(ses(pigs,h=4))
+```
+
+From the output, we observe the alpha to be 0.2971 and l to be 10308.58
+
+* b) Compute a 95% prediction interval for the first forecast using y±1.96 s where s is the standard deviation of the residuals. Compare your interval with the interval produced by R.
+
+```{r warning=FALSE, message=FALSE}
+
+s<-sd((ses(pigs, h=4))$residuals)
+
+print(paste0("lower Confidence Interval: ", ses(pigs,h=4)$mean[1]-1.96*s))
+print(paste0("Upper Confidence Interval: ", ses(pigs,h=4)$mean[1]+1.96*s))
+
+
+```
+
+Our confidence intervals are slightly different than the ones produced by r's output. They seem to be more narrow. We present a comparison of forecasting methods.  
+
+```{r warning=FALSE, message=FALSE}
+s2<-ses(pigs, h = 4)
+
+autoplot(s2) + autolayer(s2$fitted)
+```
+
+
+## 7.3
+Modify your function from the previous exercise to return the sum of squared errors rather than the forecast of the next observation. Then use the optim() function to find the optimal values of  
+alpha and lo. Do you get the same values as the ses() function?
+
+We clearly can't do this problem without doing 7.2 first which is...
+Write your own function to implement simple exponential smoothing. The function should take arguments y (the time series), alpha (the smoothing parameter and level. It should return the forecast of the next observation in the series. Does it give the same forecast as ses()?
+
+```{r warning=FALSE, message=FALSE}
+my_ses <- function(y, alpha, l0)
+  {
+  y_hat <- l0
+  for(index in 1:length(y))
+    {
+   y_hat <- alpha*y[index] + (1 - alpha)*y_hat 
+    }
+  print(paste0("Forecast result by My function: ",
+      as.character(y_hat)
+      ))
+  }
+
+```
+
+Test the Function 
+```{r warning=FALSE, message=FALSE}
+alpha <- s2$model$par[1]
+
+l0 <- s2$model$par[2]
+
+my_ses(pigs, alpha = alpha, l0 = l0)
+
+print(paste0("Using R's Function: ", s2$mean[1]))
+```
+
+We have indeed verified that our custom built function for exponential smoothing is the same as r's built in function. Now we want to Modify your function from the previous exercise to return the sum of squared errors rather than the forecast of the next observation. 
+
+```{r warning=FALSE, message=FALSE}
+my_ses2 <- function(pars = c(alpha, l0), y) #modification to return the sum of squares 
+  {
+  error <- 0
+  SSE <- 0
+  alpha <- pars[1]
+  l0 <- pars[2]
+  y_hat <- l0
+  
+  for(index in 1:length(y)) #Code from 7.2
+    {
+    error <- y[index] - y_hat
+    SSE <- SSE + error^2
+    
+    y_hat <- alpha*y[index] + (1 - alpha)*y_hat 
+    }
+  
+  return(SSE)
+}
+```
+
+Test The Function. 
+```{r warning=FALSE, message=FALSE}
+test<-optim(par = c(0.5, pigs[1]), y = pigs, fn = my_ses2)
+```
+
+Display Results of the Test 
+```{r warning=FALSE, message=FALSE}
+print(paste0("My Function: ", test$par[1]))
+print(paste0(test$par[2]))
+
+print(paste0("R's Function: ", s2$model$par[1]))
+print(paste0(s2$model$par[2]))
+
+```
+
+The estimation we get with our custom built modified function is similar to that produced by r's pre built function. 
+
+
+
+
+
+

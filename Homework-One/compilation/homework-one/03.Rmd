@@ -1,0 +1,328 @@
+# Assignment Three 
+
+*  Kuhn & Johnson 3.1   
+*  Kuhn & Johnson 3.2
+
+
+```{r library-03, echo=F, warning=F, message=F, comment=F, error=F}
+require(mlbench)
+require(psych)
+require(tidyverse)
+require(e1071)
+require(kableExtra)
+require(caret)
+require(corrplot)
+require(knitr)
+require(default)
+```
+
+```{r settings-03, echo=F}
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default for ggplot theme
+default(theme) <- list(axis.title.x = element_blank(),
+                       axis.title.y = element_blank(),
+                       plot.title = element_text(color="#3d248a", size=10, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#D3D3D3", size=1, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# wrap text
+if(!knitr:::is_latex_output())
+{
+  options("width"=65)
+  knitr::opts_chunk$set(tidy.opts=list(width.cutoff=65, indent = 2), tidy = TRUE)
+  knitr::opts_chunk$set(fig.pos = 'H')
+}
+
+```
+
+## Kuhn & Johnson  3.1    
+
+> The UC Irvine Machine Learning Repository contains a data set related to glass identification. The data consist of 214 glass samples labeled as one of seven class categories. There are nine predictors, including the refractive index and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.
+
+### a. Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors.
+
+#### Descriptive Statistics
+
+The output of the `describe( )` function suggests some variables to take closer looks at.  RI, Mg, K, Ca, Ba and Fe appear skewed; and RI, Na, Si, K , Ca, Ba, and (to a lesser extent) Fe exhibit some challenging tails (kurtosis != 3.0).
+
+```{r glass-basics, message=FALSE, warning=FALSE, fig.width=9, echo=FALSE}
+data(Glass)
+describe(Glass)%>%
+  kable(caption="Summary Statistics of Glass data", "latex",
+                     digits = 2) %>%
+  kable_styling(latex_options = c("hold_position", "striped"))
+```  
+
+#### Skewness
+
+We can also look at the skew of our numeric variables using the `e1071` package:
+
+```{r 3.1c.2-5, tidy=F}
+skewer<-function(df){
+  new_skew = setNames(data.frame(matrix(ncol = 2, nrow = 0)), c("Element", "Skew"))
+    for(name in colnames(df)){
+    skew <-skewness(df[,name])
+    temp = data.frame(cbind('Element' =name, 'Skew' =skew))
+    new_skew <-rbind(new_skew, temp)}
+  return(new_skew)
+}
+
+skewer(Glass[, 1:9])%>%
+  kable("latex") %>%
+  kable_styling(latex_options = c("hold_position", "striped"))
+```  
+
+#### Distribution 
+
+Histograms visually illustrate the challenges with these distributions. 
+
+```{r glass, fig.height=7}
+Glass%>%
+  keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(value)) +
+    facet_wrap(~ key, scales = "free") +
+    geom_histogram(fill ='darkorchid', color ='black')+
+    theme_bw()
+```
+
+#### Correlation
+
+We used a corrplot to look at the correleations between numeric glass variables.
+
+There is some significant positive correlation between `Ca` and `RI`; slightly less between `Ba` and `Al`, `Ba` and `Na`, and `K` and `Al`.
+
+There are some obvious negative correlations between Si and RI, as well as `Al` and `RI`, `Al` and `Mg`, `Ca` and `Mg`, and `Ba` and `Mg`.
+
+```{r glass.2}
+glassCor <- cor(Glass[-10])
+corrplot(glassCor, method = "square", type = "lower")
+```
+
+### b. Do there appear to be any outliers in the data? Are any predictors skewed?
+
+#### Boxplot
+
+The long tails of some of the predictors visible in histograms are indicative of outliers. The plot below shows a boxplot and violin plot for each variable. Many of the variables appear to have outliers; `Ba`, `Fe` and  `K` appear to have the most potential outliers. Handling these outliers will depend on a mix of reference data and statistical techniques.
+
+Skewness is also visible in the histograms, `Mg` is bimodal. `Ba`, `K` and `Fe` are right skewed. The remaining variables don't appear to be normally distributed - though they exhibit central tendency, there are signs that they are leptokurtic or platykurtic.  This suggests exploring skew and possibly transformations might be of use down the line.
+
+```{r facetBox, fig.align='center',  fig.height=6}
+# boxplot with violin plot overlaid for all variables
+Glass %>% 
+  keep(is.numeric)  %>% 
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(x = '', y = value)) + 
+  geom_boxplot() + 
+  geom_boxplot(outlier.colour = "orange", fill="grey") +
+  geom_violin(alpha = 0.3, color = NA, fill = 'lightblue') + 
+  labs(x = NULL, y = NULL) +
+  theme_bw()+ 
+  theme(axis.ticks.y=element_blank()) + 
+  facet_wrap(~key, scales = 'free', ncol = 3) + 
+  coord_flip()
+```
+
+### c. Are there any relevant transformations of one or more predictors that might improve the classification model?
+
+Below we conduct a simple exploration of histograms for skewed distributions using `BoxCoxTrans( )`:
+
+```{r 3.1c.3, message=FALSE, warning=FALSE}
+skews <- c('Mg', 'Fe', 'Ba', 'Ca', 'K')
+
+#MASS::boxcox(Glass)
+for (skw in skews){
+    print(skw)
+    print(BoxCoxTrans(Glass[,skw]))
+}
+```
+
+A simple log transformation shows improvements in the distribution of the iron variable `Fe`. However it does introduce outliers on the left; additionally, all the zero values of `Fe` go to -Inf and are not reflected at all in this distribution.
+
+```{r 3.1c.1, message=FALSE, warning=FALSE}
+par(mfrow=c(1,2))
+hist(log(Glass$Fe),
+     breaks = 30,
+     col ='lightblue',
+     main ='Distribution Fe With Log Transformation',
+     xlab ='Log-transformed Fe')
+hist(Glass$Fe, 
+     breaks =30,
+     col = 'gray',
+     main = "Fe Without Log Transformation",
+     xlab = 'Fe')
+```
+
+
+
+We then examined the first few rows of the data before and after transformations to see what changes the Box-Cox method suggests.
+
+```{r before-trans, message=FALSE, warning=FALSE}
+head(Glass) %>% kable(caption="Glass (without transformations)", digits = 2, "latex") %>% kable_styling(latex_options = c("hold_position", "striped"))
+```  
+
+```{r after-trans, message=FALSE, warning=FALSE}
+trans <- preProcess(Glass, method = c('center', 'scale', 'BoxCox'))
+trans_glass <- predict(trans, Glass)
+
+head(trans_glass) %>% kable(caption="Glass (with transformations)", digits = 2, "latex") %>% kable_styling(latex_options = c("hold_position", "striped"))
+```  
+
+Finally, we looked at the histograms of our variables after automated application of the Box-Cox transformations.
+
+```{r 3.1c.3-6, message=FALSE, warning=FALSE, fig.height= 7}
+trans_glass%>%
+  keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(value)) +
+    facet_wrap(~ key, scales = "free") +
+    geom_histogram(fill ='darkorchid', color ='black')+
+    theme_bw()
+```  
+
+While the transformation produces marginal improvement in most of the variables the only one with noteworthy changes is `Ca`. Given the number of outliers and skew in this data, it might be useful to attempt a `spatialSign()` transformation.  
+
+```{r ss, fig.height=7}
+trans <- preProcess(Glass, method = c('center', 'scale', 'spatialSign'))
+
+trans_glass <- predict(trans, Glass)
+
+trans_glass%>%
+  keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(value)) +
+    facet_wrap(~ key, scales = "free") +
+    geom_histogram(fill ='darkorchid', color ='black')+
+    theme_bw()
+```
+**Without Spatial Sign:**
+
+```{r}
+head(Glass) %>% kable("latex", digits=3) %>% kable_styling(latex_options = "hold_position")
+```
+
+**With Spatial Sign:**
+
+```{r}
+head(trans_glass) %>% kable("latex", digits=3) %>% kable_styling(latex_options = "hold_position")
+```
+
+The spatial sign-transformed distributions are the most normal and best for modeling. While custom transformations of each variable might prove even better robust, the simple spatial sign grooming and pre-processing method seems practical and useful for this data set.
+
+## Kuhn & Johnson 3.2 
+
+> The soybean data can also be found at the UC Irvine Machine Learning Repository.  Data were collected to predict disease in 683 soybeans.  The 35 predictors are mostly categorical and include information on the environmental conditions (e.g. temperature, precipitation) and plant conditions (e.g. left spots, mold growth).  The outcome labels consist of 19 distinct classes.
+
+```{r kj3.2}
+
+data(Soybean)
+# str(Soybean)
+
+```
+
+### a. Investigate the frequency distributions for the categorical predictors.  Are any of the distributions degenerate in the ways discussed earlier in this chapter?
+
+```{r kj3.2a, fig.height=6}
+
+# Tidy dataset, removing non-numeric variables
+Soybean %>% 
+  select(-Class) %>% 
+  gather() %>% 
+  
+  # Depict distribution of each class within categories
+  ggplot(aes(value, fill = value)) +
+  geom_bar() +
+  
+  # Code all 0 factor values as red for easier visual detection of degenerate distribution
+  scale_fill_manual(values = c('red', rep('grey40', 7))) +
+  
+  # Facet plots by predictor and attenuate chart look
+  facet_wrap(~ key) +
+  theme_minimal()+
+  labs(title = 'Soybean: Distributions by Predictor')
+
+```  
+
+Distributions are regarded as degenerate when they have a unique values with extremely low frequencies, i.e. 'predictors with a single value for the vast majority of samples'.  `mycelium` and `sclerotica` both fall into this category, and arguably `leaf.mild`, `lodging`, `seed.discolor`, `seed.size`, and `shriveling` could also be considered. 
+
+### b. Roughly 18% of the data are missing.  Are there particular predictors that are more likely to be missing?  Is the pattern of missing data related to the classes?**
+
+```{r kj3.2b1, fig.height=4}
+# Tidy dataset, removing non-numeric variables
+Soybean%>%
+  select(-Class, -date) %>%
+  summarise_all(funs(perc_missing = sum(is.na((.)) / nrow(Soybean)))) %>% 
+  rename_all(funs(str_replace(., '_perc_missing', ''))) %>%
+  gather() %>% 
+  ggplot(aes(x = reorder(key, value), y = value)) +
+  geom_bar(stat = 'identity', fill = 'grey40') +
+  # Annotate bar chart with percentage missing
+  geom_text(aes(label = scales::percent(value), y = -.01), size = 3,position = position_dodge(width = 0.9)) +
+  coord_flip() +
+  labs(title = 'Soybean: Missing Data by Predictor',
+         x = '', 
+         y = '') +
+  theme_bw() +
+  theme(axis.text.x = element_blank())
+```
+
+Of the 18% of incomplete cases, the predictors `sever`, `seed.tmt`, and `lodging`, and `hail` are missing in almost all of them.  
+
+Apart from `Class` and `date`, `leaves` is the only other predictor that's present for all cases. 
+
+```{r}
+kable(table(Soybean$Class, complete.cases(Soybean)), caption="NA Values", "latex") %>% kable_styling(latex_options = c("hold_position", "striped")) 
+```
+
+We should check to see if this is the result of chance, or if there are systematic issues (i.e. the data generating process, measurement challenges, recording errors, data loss, etc.) that could explain this.
+
+```{r completeness}
+
+# Calculate total cases in Soybean set
+total_cases <- nrow(Soybean)
+
+# Tidy dataset, calculating complete cases by predictor and predictor cases overall
+Soybean %>%
+  mutate(complete_cases = complete.cases(Soybean)) %>% 
+  group_by(Class) %>% 
+  summarize(cases = n(), 
+            complete_cases = sum(complete_cases), 
+            completeness = complete_cases / cases, 
+            proportion_allcases = cases / total_cases) %>% 
+  
+  # Display only predictors with missing data
+  filter(completeness != 1) %>% 
+  arrange(desc(proportion_allcases)) %>% 
+  
+  # Attenuate table look
+  mutate(completeness = scales::percent(completeness), 
+         proportion_allcases = scales::percent(proportion_allcases)) %>% 
+  select(Class, 
+         cases, 
+         complete_cases,
+         completeness, 
+         proportion_allcases) %>% 
+  rename(class = Class)%>%
+  kable(caption="Complete Cases", label=NULL, "latex")%>%
+  kable_styling(latex_options = c("hold_position", "striped"))
+
+```
+
+When completeness is examined from the viewpoint of `Class`, it becomes apparent that five classes are responsible for all missing data: `phytophthora-rot`, `2-4-d-injury`, `diaporthe-pod-&-stem-blight`, `cyst-nematode`, and `herbicide-injury`.  Diagnosis of the cause of missing data should focus on these classes.
+
+### c. Develop a strategy for handling missing data, either by eliminating predictors or imputation.**
+
+There is no simple method for handling missing data AND preserving the global utility of it. Because the classes with missing data have many incomplete cases in the observations, imputation that could be useful for the less empty classes would introduce a lot of error for the more empty ones.
+
+If performing imputation, it would be important to create a new, separate flag variable so that models with high sensitivity can use native values differently than imputed ones (attributing bias to the 'flag') - an approach we have used in logistic regression with some success. It may also be useful to reduce dimensionality by extracting the most variance through PCA or LDA.
+
+Additionally, purging the most empty four or five classes and impute the remainder could be a beneficial approach. Alternatively, we might remove the four emptiest classes, establish which variables are most important using PCA, and then see how those variables are represented by the four fragile classes with high NA counts; if those classes are less impacted, it might be possible to impute across the remaining variables for all classes using flags for the imputed values and preserving a good amount of predictive power.
+
+
+

@@ -1,0 +1,186 @@
+# Assignment Four 
+
+*  Hyndman 7.1     
+*  Hyndman 7.3   
+
+
+```{r library-04, echo=F, warning=F, message=F, comment=F, error=F}
+#Textbook Packages
+library(fpp2)
+library(AppliedPredictiveModeling)
+library(mlbench)
+
+#Processing
+library(tidyverse)
+
+#Graphing
+library(ggplot2)
+library(gridExtra)
+
+#Math
+library(caret)
+library(randomForest)
+library(seasonal)
+library(psych)
+
+
+#Formatting
+library(knitr)
+require(kableExtra)
+require(default)
+```
+
+
+```{r settings-04, echo=F}
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default augments for `kable_styling()` 
+#default(kable) <- list(format = "latex", label=NULL)
+#default(kable_styling)  <- list(full_width = T,
+                                #position="center",
+                               # font_size = 10, 
+                                #latex_options = c("HOLD_position", "striped"))
+
+# Set default for ggplot theme
+default(theme) <- list(axis.text.x = element_text(angle = 90, hjust = 1),
+                       axis.title.x = element_blank(),
+                       axis.title.y = element_blank(),
+                       plot.title = element_text(color="#3d248a", size=10, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#D3D3D3", size=1, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# wrap text
+if(!knitr:::is_latex_output())
+{
+  options("width"=56)
+  knitr::opts_chunk$set(tidy.opts=list(width.cutoff=56, indent = 2), tidy = TRUE)
+  knitr::opts_chunk$set(fig.pos = 'H')
+}
+```
+
+
+
+## Hyndman 7.1   
+
+> Consider the `pigs` series -- the number of pigs slaughtered in Victoria each month. 
+
+### a. Use the `ses()` function in R to find the optimal values of $\alpha$ and $\ell_0$, and generate forecasts for the next four months.
+
+#### Forecast Summary
+
+The forecast summary below shows us the optimal values of $\alpha$ and $\ell_0$, as estimated by the `ses` function in R. 
+
+```{r ha-7.1a1, tidy=F}
+pigsdata <- window(pigs, start=1980)
+fc <- ses(pigsdata, h=4)
+summary(fc) 
+```
+
+#### Visualization
+
+```{r ha-7.1a2}
+autoplot(fc) +
+  autolayer(fitted(fc), series="Fitted") +
+  ylab("Pigs") + xlab("Year")+theme_bw()+theme()
+```
+
+### b. Compute a 95% prediction interval for the first forecast using $\hat{y}\pm1.96s$ where $s$ is the standard deviation of the residuals. Compare your interval with the interval produced by R.
+
+Formula calculations of the confidence interval were obtained using $\bar{x} \pm 1.96s$ and compared to the calculations from the `ses` function in R. 
+
+```{r ha-7.1b1}
+# Formula Calculatioin
+lower <- fc$mean[1]- 1.96*sd(fc$residuals)
+upper <- fc$mean[1]+ 1.96*sd(fc$residuals)
+
+# R Calculation
+lowerR <- as.numeric(fc$lower[1, "95%"])
+upperR <- as.numeric(fc$upper[1, "95%"])
+
+# Table Output
+lower <- cbind("95_perct"="Lower","Computed" = lower, "R" = lowerR)
+upper <- cbind("95_perct"="Upper","Computed" = upper, "R" = upperR)
+as.data.frame(rbind(lower, upper)) %>% 
+  kable("latex") %>% 
+  kable_styling(latex_options = "hold_position")
+``` 
+
+
+## Hyndman 7.3   
+
+> Modify your function from the previous exercise to return the sum of squared errors rather than the forecast of the next observation. Then use the `optim()` function to find the optimal values of $\alpha$ and  $\ell_0$. Do you get the same values as the `ses()` function? 
+
+#### Function
+
+The prior question asks us to write a function to implement simple exponential smoothing. As this was a challenge, we made reference to  [stackexchange](https://stats.stackexchange.com/questions/379727/how-to-use-optim-function-in-r-on-my-custom-residual-sum-of-squares-function) while crafting what follows.  
+
+```{r ha-7.3a}
+# Custom SES Function
+custom_ses = function(ts, alpha, l0){
+  N = length(ts)
+  y_hat = c(l0, 0 * (2:N))
+  for (j in 1:(N-1))
+    {
+    new = alpha * ts[j] + (1-alpha) * y_hat[j]
+    y_hat[j+1] = new
+  }
+  return(y_hat)
+}
+
+# SSE function
+custom_sse = function(fn, ts){
+  alpha <- fn[1]
+  l0 <- fn[2]
+  N = length(ts)
+  fit = custom_ses(ts, alpha, l0)
+  res = ts - fit
+  out = sum(res^2)/(N-1)
+  return(out)
+}
+```
+
+#### Optimization
+
+The `optim` function optimizes the parameters $\alpha$ and $\ell_0$ by using the initial values in the `par` argument to maximize output from the vector defined in our custom functions. 
+
+```{r ha-7.3b1}
+# `optim` Function 
+optimize <- optim(par = c(0.1, 10000), fn = custom_sse, ts = pigsdata)
+
+# Optimized Parameters
+alpha = optimize$par[1]
+l0 = optimize$par[2]
+
+# SES Model Parameters 
+ses_alpha <-fc$model$fit$par[1]
+ses_l0 <-fc$model$fit$par[2]
+```
+
+The calculated differences between the R estimated paremeters and optimized parameters from the custom function were minimal, as is visible in the comparison below below: 
+
+```{r table2}
+# Table Output
+lower <- cbind("SES Function"="Custom Optimized","alpha" = alpha, "l0" = l0)
+upper <- cbind("SES"="R Estimated","alpha" = ses_alpha, "l0" = ses_l0)
+as.data.frame(rbind(lower, upper)) %>% 
+  kable("latex") %>% 
+  kable_styling(latex_options = c("hold_position", "striped")) 
+```
+
+#### Visualization
+
+A timeseries plot of our fitted (estimated) and custom (optimized) values are very similar, such that the difference between the two is difficult to discern in the plot. 
+
+```{r  ha-7.3b3, fig.width=10}
+fit = custom_ses(pigsdata, alpha = alpha, l0 = l0)
+ts_fit <- ts(fit, start=1980, frequency = 12)
+
+autoplot(fc) +
+  autolayer(fitted(fc), series="Fitted", size=1.5) +
+  autolayer(ts_fit, series="Optimized", linetype = "dashed", size=1.5) +
+  ylab("Pigs") + xlab("Year")+theme_bw()+theme()
+```

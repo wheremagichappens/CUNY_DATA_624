@@ -1,0 +1,476 @@
+---
+title: 'DATA 624: Group 2 Homework'
+author: 'Juliann McEachern'
+output: 
+  html_document:
+    theme: readable
+    highlight: pygments
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    df_print: paged
+    code_folding: hide
+---
+
+# Assignment 5 
+
+Assignment 5 includes problem 7.5, 7.6, and 7.10 from the HA text. The following R packages have been used for completion of all homework assignments to date:
+
+```{r dependencies, echo=T, warning=F, message=F, comment=F}
+#Textbook Packages
+library(fpp2)
+library(AppliedPredictiveModeling)
+library(mlbench)
+
+#Processing
+library(tidyverse)
+
+#Graphing
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(lemon)
+
+#Math
+library(caret)
+library(forecast)
+library(randomForest)
+library(seasonal)
+library(psych)
+library(corrplot)
+
+#Formatting
+library(knitr)
+library(kableExtra)
+```
+
+# 7.5: Data set books contains the daily sales of paperback and hardcover books at the same store. The task is to forecast the next four days' sales for paperback and hardcover books. 
+
+## (a). Plot the series and discuss the main features of the data. {.tabset}
+
+### Timeseries Plot
+
+The `books` data shows an overall positive trend over the 30-day period for paperback and hardcover books. There is heavy fluctuation between days, suggesting seasonality within the time series. 
+
+```{r ha-7.5a1, fig.width=8, fig.height=4}
+autoplot(books, facet=TRUE) + 
+  labs(title="Daily Sales of Paperback and Hardcover Books", 
+       x="Days", 
+       y="Sales")
+``` 
+
+### Decomposed Plot
+
+We can look at the decomposed timeseries to better understand the trend and seasonality on a weekly basis. Sales tend to peak three times per week and increase throughout the entire month. The paperback books trend increases more drastically between weeks two and four, while hardcover books appear to have smoother incline. Hardcover books also show more fluctuation in the seasonal component. 
+
+```{r ha-7.5a2, fig.width=10, fig.height=4}
+paperback <- books[,1]
+hardcover <- books[,2] 
+
+pb_plot <- ts(paperback, frequency=7) %>% 
+  decompose(type="multiplicative") %>% 
+  autoplot() +
+  labs(title = "Paperback Books",
+       x = "Weeks")
+
+hc_plot <- ts(hardcover, frequency = 7) %>% 
+  decompose(type="multiplicative") %>% 
+  autoplot() +
+  labs(title = "Hardcover Books",
+       x = "Weeks")
+
+grid.arrange(pb_plot, 
+             hc_plot, 
+             ncol = 2, 
+             top=textGrob("Decomposition of Multiplicative Time Series",
+                          gp = gpar(fontface = "bold", cex = 1.5)))
+``` 
+
+## (b). Use the `ses()` function to forecast each series, and plot the forecasts.{.tabset}
+
+### Paperback SES
+
+```{r ha-7.5b1}
+pb_ses <- ses(paperback, h=4)
+summary(pb_ses)
+``` 
+
+### Hardcover SES
+
+```{r ha-7.5b2}
+hc_ses <- ses(hardcover, h=4)
+summary(hc_ses)
+``` 
+
+### Plot
+
+```{r ha-7.5b3, fig.height=3, fig.width=8}
+pb_ses_plot <- autoplot(pb_ses, size=1, fcol="#0044cc") +
+  autolayer(fitted(pb_ses), series="Fitted", alpha=.75, size=1.5, color="#99b3ff") +
+  labs(title="Paperback Books", y="Sales", x="Days")
+
+hc_ses_plot <- autoplot(hc_ses, size=1, fcol="#0044cc") +
+  autolayer(fitted(hc_ses), series="Fitted", alpha=.75, size=1.5, color="#99b3ff") +
+  labs(title="Hardcover Books", y="Sales", x="Days")
+
+grid.arrange(pb_ses_plot, hc_ses_plot, ncol = 2, 
+             top=textGrob("4-Day Forecast (Simple Exponential Smoothing)",
+                          gp = gpar(fontface = "bold", cex = 1.5)))
+``` 
+
+## (c). Compute the RMSE values for the training data in each case. 
+
+The root mean squared error (RMSE) is calculated below and tells us the spread between the residual errors from our predicted and observed using the SES method. The RMSE for paperback books is slightly higher than hardcover, suggesting better accuracy in the later's predictions.
+
+```{r ha-7.5c1, eval=F}
+#manual calculation
+sqrt(mean(pb_ses$residuals^2))
+sqrt(mean(hc_ses$residuals^2))
+
+#caret package
+RMSE(fitted(pb_ses), paperback)
+RMSE(fitted(hc_ses), hardcover)
+``` 
+
+```{r ha-7.5c2, echo=F}
+pb_rmse_ses <- RMSE(fitted(pb_ses), paperback)
+hc_rmse_ses <- RMSE(fitted(hc_ses), hardcover)
+
+as.data.frame(cbind("paperback" = pb_rmse_ses, "hardcover" = hc_rmse_ses)) %>% 
+  kable(caption="RMSE Values for Book Sales Forecast") %>% 
+  kable_styling(c("striped", "hover"))
+``` 
+
+# 7.6: Continuation of exercise 7.5.
+
+## (a). Now apply Holt's linear method to the `paperback` and `hardback` series and compute four-day forecasts in each case. {.tabset}
+
+### Paperback
+
+```{r ha-7.6a1}
+pb_holt <- holt(paperback, h=4)
+summary(pb_holt)
+``` 
+
+### Hardcover
+
+```{r ha-7.6a2}
+hc_holt <- holt(hardcover, h=4)
+summary(hc_holt)
+``` 
+
+### Plot
+
+```{r ha-7.6a3, fig.height=3, fig.width=8}
+pb_holt_plot <- autoplot(pb_holt, size=1, fcol="#7733ff") +
+  autolayer(fitted(pb_holt), series="Fitted", alpha=.75, size=1.5, color="#e0b3ff") +
+  labs(title="Paperback Books", y="Sales", x="Days")
+
+hc_holt_plot <- autoplot(hc_holt, size=1, fcol="#7733ff") +
+  autolayer(fitted(hc_holt), series="Fitted", alpha=.75, size=1.5, color="#e0b3ff") +
+  labs(title="Hardcover Books", y="Sales", x="Days")
+
+grid.arrange(pb_holt_plot, hc_holt_plot, ncol = 2, 
+             top=textGrob("4-Day Forecast (Holt's Linear Method)",
+                          gp = gpar(fontface = "bold", cex = 1.5)))
+``` 
+
+
+
+## (b). Compare the RMSE measures of Holt's method for the two series to those of simple exponential smoothing in the previous question. (Remember that Holt's method is using one more parameter than SES.) Discuss the merits of the two forecasting methods for these data sets.
+
+The RMSE from our Holt's method are listed in the table below. We can compare the accuracy of this method to that of SES from question 7.5c. We find that the Holt method produced a lower error score for both paperback and hardcover books. 
+
+```{r ha-7.6b1, eval=F}
+#manual calculation
+sqrt(mean(pb_holt$residuals^2))
+sqrt(mean(hc_holt$residuals^2))
+
+#caret package
+RMSE(fitted(pb_holt), paperback)
+RMSE(fitted(hc_holt), hardcover)
+``` 
+
+```{r ha-7.6b2, echo=F}
+pb_rmse_holt <- RMSE(fitted(pb_holt), paperback)
+hc_rmse_holt <- RMSE(fitted(hc_holt), hardcover)
+
+ses <- cbind("paperback" = pb_rmse_ses, "hardcover" = hc_rmse_ses)
+holt <- cbind("paperback" = pb_rmse_holt, "hardcover" = hc_rmse_holt)
+
+RMSEdf <- as.data.frame(rbind(ses, holt)) 
+rownames(RMSEdf)[1] <- ("SES")
+rownames(RMSEdf)[2] <- ("Holt")
+
+RMSEdf %>% 
+  kable(caption="RMSE Values for Book Sales Forecast") %>% 
+  kable_styling(c("striped", "hover"))
+``` 
+
+
+## (c). Compare the forecasts for the two series using both methods. Which do you think is best?
+
+While Holt's method provided better accuracy measures (RMSE), the 4-day point forecast from this method appears less reliable than the SES method. Holt's forecast continues to rise and does not appear to take into account the seasonal fluctuations within our data. This is a known limitation of Holt's linear method (without dampening) as the point forecasts follow an indefinite, constant trend. 
+
+The SES point forecast begins to decrease for both book sets after day 30, which suggests the weighted average method is accounting for some of the fluxuations observed in the data. 
+
+```{r ha-7.6c1, fig.height=4, fig.width=10}
+pb_series <- cbind("Data" = paperback, 
+                   "Fitted (SES)" = fitted(pb_ses),
+                   "Fitted (Holt)"= fitted(pb_holt),
+                   "Forecast (SES)" = pb_ses[["mean"]], 
+                   "Forecast (Holt)" = pb_holt[["mean"]])
+
+hc_series <- cbind("Data" = paperback, 
+                   "Fitted (SES)" = fitted(hc_ses),
+                   "Fitted (Holt)"= fitted(hc_holt),
+                   "Forecast (SES)" = hc_ses[["mean"]], 
+                   "Forecast (Holt)" = hc_holt[["mean"]])
+
+pb_series_plot <- autoplot(pb_series, size=1) + 
+  scale_color_manual(name = "", values=c("#000000", "#99b3ff", "#e0b3ff", "#0044cc", "#a31aff"))+
+  labs(title="Paperback", x="Days", y="Sales") 
+
+hc_series_plot <- autoplot(hc_series, size=1) + 
+  scale_color_manual(name = "", values=c("#000000", "#99b3ff", "#e0b3ff", "#0044cc", "#a31aff"))+
+  labs(title="Hardcover", x="Days", y="Sales") 
+
+grid_arrange_shared_legend(pb_series_plot, 
+                           hc_series_plot, 
+                           ncol = 2, 
+                           top=textGrob("4-Day Forecast Comparision of Book Sales",
+                                        gp = gpar(fontface = "bold", cex = 1.5)),
+                           position='bottom')
+``` 
+
+
+## (d). Calculate a 95% prediction interval for the first forecast for each series, using the RMSE values and assuming normal errors. Compare your intervals with those produced using `ses` and `holt`.
+
+Prediction interverals were calculated and compared to R using the RMSE values of paperback and hardcover books from 7.6b. The intervals were also compared using `ses` and `holt` methods. 
+
+We found that our calculations produced slightly smaller prediction intervals than the one's generated in R. Additionally, Holt's method produced smaller prediction intervals overall for both the computational and R approach. 
+
+```{r ha-7.6d1}
+# Paperback Calculation
+pb_lower_ses <- pb_ses$mean[1]- 1.96*pb_rmse_ses
+pb_upper_ses <- pb_ses$mean[1]+ 1.96*pb_rmse_ses
+
+pb_lower_holt <- pb_holt$mean[1]- 1.96*pb_rmse_holt
+pb_upper_holt <- pb_holt$mean[1]+ 1.96*pb_rmse_holt
+
+# Hardcover Calculation
+hc_lower_ses <- hc_ses$mean[1]- 1.96*hc_rmse_ses
+hc_upper_ses <- hc_ses$mean[1]+ 1.96*hc_rmse_ses
+
+hc_lower_holt <- hc_holt$mean[1]- 1.96*hc_rmse_holt
+hc_upper_holt <- hc_holt$mean[1]+ 1.96*hc_rmse_holt
+
+# R Paperback Intervals
+pb_lower_sesR <- as.numeric(pb_ses$lower[1, "95%"])
+pb_upper_sesR <- as.numeric(pb_ses$upper[1, "95%"])
+
+pb_lower_holtR <- as.numeric(pb_holt$lower[1, "95%"])
+pb_upper_holtR <- as.numeric(pb_holt$upper[1, "95%"])
+
+# R Hardcover Intervals
+hc_lower_sesR <- as.numeric(hc_ses$lower[1, "95%"])
+hc_upper_sesR <- as.numeric(hc_ses$upper[1, "95%"])
+
+hc_lower_holtR <- as.numeric(hc_holt$lower[1, "95%"])
+hc_upper_holtR <- as.numeric(hc_holt$upper[1, "95%"])
+``` 
+
+```{r ha-7.6d2, echo=F}
+ses_ci_lower <- cbind("Computed"=pb_lower_ses, "R"=pb_lower_sesR, " "=" ",
+                      "Computed"=hc_lower_ses, "R"=hc_lower_sesR)
+ses_ci_upper<- cbind("Computed"=pb_upper_ses, "R"=pb_upper_sesR, " "=" ",
+                     "Computed"=hc_upper_ses, "R"=hc_upper_sesR)
+holt_ci_lower <- cbind("Computed"=pb_lower_holt, "R"=pb_lower_holtR, " "=" ",
+                       "Computed"=hc_lower_holt, "R"=hc_lower_holtR)
+holt_ci_upper<- cbind("Computed"=pb_upper_holt, "R"=pb_upper_holtR, " "=" ",
+                      "Computed"=hc_upper_holt,"R"=hc_upper_holtR)
+
+ci_df <- as.data.frame(rbind(ses_ci_lower, ses_ci_upper, holt_ci_lower, holt_ci_upper)) 
+
+rownames(ci_df)[1] <- ("Lower")
+rownames(ci_df)[2] <- ("Upper")
+rownames(ci_df)[3] <- ("Lower ")
+rownames(ci_df)[4] <- ("Upper ")
+
+ci_df %>% 
+  kable(caption="Comparison of 95% Confidence Interval Calculations for Book Sales Forecast", format = "html") %>% 
+  kable_styling(c("striped", "hover")) %>%
+  add_header_above(c(" "=1, "Paperback" = 2, " " = 1, "Hardcover" = 2), 
+                   color = "white", background = "#6699ff", line=F, line_sep = 1) %>%
+  column_spec(1, bold=T, color="grey") %>%
+  row_spec(0, bold = F, italic = T, align = "c") %>%
+  pack_rows("Simple Exponential Smoothing", 1, 2) %>%
+  pack_rows("Holt's Linear Method", 3, 4)
+```
+
+# 7.10: For this exercise use data set `ukcars`, the quarterly UK passenger vehicle production data from 1977Q1-2005Q1. 
+
+## (a). Plot the data and describe the main features of the series. 
+
+There appears to be a general upward trend in production from 1982-Q3 to 2000-Q1. The overall time series shows fluxuations between years suggesting an underlying seasonality component. 
+
+```{r ha-7.10a, fig.height=3, fig.width=8}
+ukcdata <- window(ukcars, start=1977, end=2005)
+autoplot(ukcdata) +
+  labs(title = "Quarterly UK Passenger Vehicle Production Data", y="Production", x="Year")
+``` 
+
+
+## (b). Decompose the series using STL and obtain the seasonally adjusted data. {.tabset}
+
+### STL Decomposition
+
+Through decomposition, we can confirm the overall increasing trend described in part (a). There are consistant seasonal fluxations which can we can futher evaluate using a seasonal plot. 
+
+```{r ha-7.10b1, fig.height=4, fig.width=8}
+ukc_stl <- stl(ukcdata, s.window = "periodic")
+autoplot(ukc_stl)
+``` 
+
+### Seasonal Plots 
+
+With the seasonal plot, we can see that our overal seasonality component increases between Q1-Q2, decreases Q2-Q3, and increases Q3-Q4. The intensity of the fluxuations vary by year. There are a few exceptions to this observation, for example, 2000 shows a two quarter decrease between Q1-Q3. 
+
+The subseries plot further confirms our seasonal pattern and shows that the smallest pattern changes occur between Q1-Q2. The decreases and increases between Q2-Q4 are much more distingushable.
+
+```{r ha-7.10b2, fig.height=4, fig.width=8}
+ukc_s_plot <- ggseasonplot(ukcdata, year.labels=TRUE, year.labels.left=T, col=rainbow(12,s = 0.6, v = 0.75)) +
+  labs(title="Seasonal plot", y="Production") 
+
+ukc_ss_plot <- ggsubseriesplot(ukcdata) +
+  labs(title="Subseries plot", y="Production") 
+
+grid.arrange(ukc_s_plot, 
+             ukc_ss_plot, 
+             ncol = 2,
+             top="Quarterly UK Passenger Vehicle Production Data")
+                           
+```
+
+We can capture the seasonal component observed in the data and control for the changes overtime using a seasonal adjustment. We compared the seasonally adjusted data to the observed data for `ukcars` below: 
+
+```{r ha-7.10b3, fig.height=3, fig.width=8}
+ukc_seas <- seasadj(ukc_stl)
+
+autoplot(ukcdata, series="Data") +
+  autolayer(ukc_seas, series="Seasonally Adjusted") +
+   labs(title = "Quarterly UK Passenger Vehicle Production Data", 
+       subtitle = "Seasonally Adjusted Comparison", 
+       x = "Year", 
+       y = "Production")+
+  scale_colour_manual(values=c("#bfbfbf","#99b3ff"),
+                      breaks=c("Data","Seasonally Adjusted","Trend")) +
+  theme(legend.position="bottom") 
+```
+
+
+## (c). Forecast the next two years of the series using an additive damped trend method applied to the seasonally adjusted data. (This can be done in one step using `stlf()` with arguments `etsmodel="AAN"`, `damped=TRUE`.) {.tabset}
+
+### Summary
+
+```{r ha-7.10c1}
+ukc_stlf1 <- stlf(ukcdata, s.window = "periodic", etsmodel="AAN", damped=TRUE, h=8)
+summary(ukc_stlf1)
+``` 
+
+### Plot 
+
+```{r ha-7.10c2, fig.width=8, fig.height=3}
+autoplot(ukc_stlf1, size=1.25, fcol="#0044cc") +
+  autolayer(fitted(ukc_stlf1), series="Fitted", alpha=.5, size=1.5, color="#99b3ff") +
+  labs(y="Production", x="Years")
+```
+
+
+## (d). Forecast the next two years of the series using Holt's linear method applied to the seasonally adjusted data (as before but with damped=FALSE). {.tabset}
+
+### Summary
+
+```{r ha-7.10d1}
+ukc_stlf2 <- stlf(ukcdata, s.window = "periodic", etsmodel="AAN", damped=FALSE, h=8)
+summary(ukc_stlf2)
+``` 
+
+### Plot
+
+```{r ha-7.10d2, fig.width=8, fig.height=3}
+autoplot(ukc_stlf2, size=1.25, fcol="#0044cc") +
+  autolayer(fitted(ukc_stlf2), series="Fitted", alpha=.5, size=1.5, color="#99b3ff") +
+  labs(y="Production", x="Years")
+```
+
+## (e). Now use ets() to choose a seasonal model for the data. {.tabset}
+
+### Summary 
+```{r ha-7.10e1}
+ukc_ets <- ets(ukcdata)
+ukc_ets_fc <- ukc_ets %>% forecast(h=8)
+
+summary(ukc_ets)
+ukc_ets_fc
+``` 
+
+### Plot
+
+```{r ha-7.10e2, fig.width=8, fig.height=3}
+autoplot(ukc_ets_fc, size=1.25, fcol="#0044cc") +
+  autolayer(fitted(ukc_ets), series="Fitted", alpha=.5, size=1.5, color="#99b3ff") +
+  labs(y="Production", x="Years")
+```
+
+## (f). Compare the RMSE of the ETS model with the RMSE of the models you obtained using STL decompositions. Which gives the better in-sample fits?
+
+Our STL decomponsition, using additive damped trend method with no seasonal components ($A, A_d, N$), produced the best in-sample fit. This model provided us with the lowest RMSE, suggesting the highest degree of accuracy between our predicted and observed data. We should note, however, there is a very small variation in RMSE between all STL and ETS models. 
+
+```{r ha-7.10f, echo=F}
+ukc_stlf1_rmse <- RMSE(fitted(ukc_stlf1), ukcdata)
+ukc_stlf2_rmse <- RMSE(fitted(ukc_stlf2), ukcdata)
+ukc_ets_rmse <- RMSE(fitted(ukc_ets), ukcdata)
+
+ukc_rmse <- as.data.frame(rbind("A, Ad, N" = ukc_stlf1_rmse, 
+                                "A, A, N" = ukc_stlf2_rmse, 
+                                "A, N, A"=ukc_ets_rmse))
+colnames(ukc_rmse) <- "RMSE"
+
+ukc_rmse %>% 
+  kable(caption="RMSE Comparison Between STL and ETS Models") %>% 
+  kable_styling(c("striped", "hover")) %>%
+  pack_rows("STL",1,2)%>%
+  pack_rows("ETS",3,3)
+``` 
+
+## (g). Compare the forecasts from the three approaches? Which seems most reasonable?
+
+The forecasts from the ETS ($A, N, A$) model appears most reasonable and fits our data best. This is not surprising as the `ets` function automatically selects the methodology based on the provided data. The forecasts using STL were both linear, whereas the ETS model was able to predict seasonal pattern changes across our 2-year (8-quarter) prediction.
+
+```{r ha-7.10g, fig.width=8, fig.height=4.5}
+ukc_series <- cbind("Data" = ukcdata, 
+                   "Forecast (STL1)" = ukc_stlf1[["mean"]], 
+                   "Forecast (STL2)" = ukc_stlf2[["mean"]],
+                   "Forecast (ETS)" = ukc_ets_fc[["mean"]])
+
+autoplot(ukc_series, size=1, alpha=.75) + 
+  scale_color_manual(name = "", 
+                     values=c("#000000", "#0044cc", "#99b3ff", "#e0b3ff"))+
+  labs(title = "Quarterly UK Passenger Vehicle Production Data", 
+       subtitle = "2-Year Forecast Comparison using STL and ETS Models", 
+       x="Years", 
+       y="Production") +
+  theme(legend.position="bottom") 
+``` 
+
+## (h). Check the residuals of your preferred model.
+
+The plot below contains our residuals from the preferred ETS model. We observed constant variance and normally distribution of our residuals, suggesting our model has adequately captured the information from the `ukcars` data
+
+```{r ha-7.10h}
+cbind('Residuals' = residuals(ukc_ets),      
+      'Forecast errors' = residuals(ukc_ets, type='innovation')) %>%  
+  autoplot(facet=TRUE) + 
+  labs(title="Residuals from ETS (A,N,A) model of UKcars data", x="Year")
+``` 

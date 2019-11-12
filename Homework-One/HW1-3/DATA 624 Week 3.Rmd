@@ -1,0 +1,391 @@
+---
+title: "DATA 624 Week 3"
+author: "Vinicio Haro"
+date: "September 16, 2019"
+output: html_document
+---
+
+#Chapter 3, Applied Predictive Modeling 
+## problems 3.1 & 3.2
+
+### 3.1) 
+The UC Irvine Machine Learning Repository6 contains a data set related to glass identification. The data consist of 214 glass samples labeled as one of seven class categories. There are nine predictors, including the refractive index and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.
+The data can be accessed via:
+
+```{r warning=FALSE, message=FALSE}
+library(mlbench)
+data(Glass)
+str(Glass)
+```
+
+* a) Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors
+
+First lets examine the overall distribution of the glass type variable. 
+
+```{r warning=FALSE, message=FALSE}
+library(ggplot2)
+
+ggplot(Glass,aes(x=Glass$Type))+geom_histogram(fill="deepskyblue3",colour="black", stat="count")+ggtitle("Distribution by Type of Glass")+
+  xlab("Glass Type") +
+  ylab("Count")+
+  coord_flip()+
+labs(caption="UCI Machine Learning Repository")
+
+```
+
+We can see there are more cases of Glass Types 1 and 2 within the whole data set. How about the distribution of the predictors?
+
+```{r warning=FALSE, message=FALSE}
+library(DataExplorer)
+
+Glass2<-subset(Glass, select=c(-Type))
+
+plot_histogram(Glass2)
+
+```
+
+RI, NA, AI, and SI have a fairly close to normal distribution. We can see a left skew with Mg and possible an outlier. K has right skew along with Ba and Fe. 
+
+Are we missing data?
+```{r warning=FALSE, message=FALSE}
+plot_missing(Glass)
+```
+
+
+How do we see the relationships between predictors? 
+
+
+```{r, warning=FALSE, message=FALSE}
+
+#correlation matrix and visualization 
+correlation_matrix <- round(cor(Glass2),2)
+
+# Get lower triangle of the correlation matrix
+  get_lower_tri<-function(correlation_matrix){
+    correlation_matrix[upper.tri(correlation_matrix)] <- NA
+    return(correlation_matrix)
+  }
+  # Get upper triangle of the correlation matrix
+  get_upper_tri <- function(correlation_matrix){
+    correlation_matrix[lower.tri(correlation_matrix)]<- NA
+    return(correlation_matrix)
+  }
+  
+  upper_tri <- get_upper_tri(correlation_matrix)
+
+
+
+library(reshape2)
+
+# Melt the correlation matrix
+melted_correlation_matrix <- melt(upper_tri, na.rm = TRUE)
+
+# Heatmap
+library(ggplot2)
+
+ggheatmap <- ggplot(data = melted_correlation_matrix, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+  theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 15, hjust = 1))+
+ coord_fixed()
+
+
+#add nice labels 
+ggheatmap + 
+geom_text(aes(Var2, Var1, label = value), color = "black", size = 3) +
+theme(
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  axis.text.x=element_text(size=rel(0.8), angle=90),
+  axis.text.y=element_text(size=rel(0.8)),
+  panel.grid.major = element_blank(),
+  panel.border = element_blank(),
+  panel.background = element_blank(),
+  axis.ticks = element_blank(),
+  legend.justification = c(1, 0),
+  legend.position = c(0.6, 0.7),
+  legend.direction = "horizontal")+
+  guides(fill = guide_colorbar(barwicrash_training2h = 7, barheight = 1,
+                title.position = "top", title.hjust = 0.5))
+
+rm(Glass2)
+```
+
+The correlation heatmap does not indicate that there are many instances where variables are highly correlated with each other. The only exceptions are that Ca is highly correlated with RI with a coefficient of .81 followed by Ba having mild correlation with Ai. The strongest negative relationship are between Si and RI. 
+
+* b) Do there appear to be any outliers in the data? Are any predictors skewed?
+
+Recall the following plot from part a. 
+```{r , warning=FALSE, message=FALSE}
+
+Glass2<-subset(Glass, select=c(-Type))
+
+plot_histogram(Glass2)
+```
+
+We will restate our findings from part a. We can see that the following predictors have a close to normal distribution:
+
+* NA
+
+* AI
+
+* SI
+
+The following predictors have right skews:
+
+* BA
+
+* CA
+
+* K
+
+* RI
+
+* FE
+
+The following predictors have left skews: 
+
+* MG
+   
+The following predictors appear to have outliers:
+
+* BA
+
+* FE
+
+* K 
+
+* MG
+
+We can certainly drill down more into whether outliers are actually present in the data. We can run some simple visual test and see if there are indeed outliers. 
+
+We can use an incredible script to identify outliers. The original code is found here: https://www.r-bloggers.com/identify-describe-plot-and-remove-the-outliers-from-the-dataset/
+
+```{r warning=FALSE, message=FALSE}
+outlierKD <- function(dt, var) {
+     var_name <- eval(substitute(var),eval(dt))
+     na1 <- sum(is.na(var_name))
+     m1 <- mean(var_name, na.rm = T)
+     par(mfrow=c(2, 2), oma=c(0,0,3,0))
+     boxplot(var_name, main="With outliers")
+     hist(var_name, main="With outliers", xlab=NA, ylab=NA)
+     outlier <- boxplot.stats(var_name)$out
+     mo <- mean(outlier)
+     var_name <- ifelse(var_name %in% outlier, NA, var_name)
+     boxplot(var_name, main="Without outliers")
+     hist(var_name, main="Without outliers", xlab=NA, ylab=NA)
+     title("Outlier Check", outer=TRUE)
+     na2 <- sum(is.na(var_name))
+     cat("Outliers identified:", na2 - na1, "n")
+     cat("Propotion (%) of outliers:", round((na2 - na1) / sum(!is.na(var_name))*100, 1), "n")
+     cat("Mean of the outliers:", round(mo, 2), "n")
+     m2 <- mean(var_name, na.rm = T)
+     cat("Mean without removing outliers:", round(m1, 2), "n")
+     cat("Mean if we remove outliers:", round(m2, 2), "n")
+     response <- readline(prompt="Do you want to remove outliers and to replace with NA? [yes/no]: ")
+     if(response == "y" | response == "yes"){
+          dt[as.character(substitute(var))] <- invisible(var_name)
+          assign(as.character(as.list(match.call())$dt), dt, envir = .GlobalEnv)
+          cat("Outliers successfully removed", "n")
+          return(invisible(dt))
+     } else{
+          cat("Nothing changed", "n")
+          return(invisible(var_name))
+     }
+}
+
+outlierKD(Glass, RI);
+outlierKD(Glass, Na);
+outlierKD(Glass, Mg);
+outlierKD(Glass, Al);
+outlierKD(Glass, K);
+outlierKD(Glass, Ca);
+outlierKD(Glass, Ba);
+outlierKD(Glass, Fe)
+```
+
+The incredible function reveals that there are outliers in almost every variable with the exception of MG. 
+
+* c) Are there any relevant transformations of one or more predictors that might improve the classification model?
+
+Since our data consists of numerical variables, we can apply normalization to the data set. This will increase data stability which would be optimal for our classification model. 
+
+```{r}
+glass_norm<-as.data.frame(apply(Glass[,1:9], 2,
+                                function(x)(x-min(x))/(max(x)-min(x))
+                                         ))
+
+glass_norm$Type<-Glass$Type
+
+#head(glass_norm)
+
+plot_histogram(glass_norm)
+```
+
+We can also try a Box-Cox Transformation on variables using the following tutorial:
+https://setscholars.net/2019/05/25/how-to-preprocess-data-in-r-using-box-cox-transformation/
+
+```{r warning=FALSE, message=FALSE}
+# load libraries
+library(mlbench)
+library(caret)
+
+preprocessParams <- preProcess(Glass[,1:9], method=c("BoxCox"))
+
+# summarize transform parameters
+print(preprocessParams)
+
+# transform the dataset using the parameters
+transformed <- predict(preprocessParams, Glass[,1:9])
+
+# summarize the transformed dataset (note pedigree and age)
+#summary(transformed);
+
+plot_histogram(transformed)
+```
+
+Summary Before Box-Cox
+```{r warning=FALSE, messge=FALSE}
+summary(Glass)
+```
+
+Summary After Box-Cox
+```{r warning=FALSE, message=FALSE}
+summary(transformed)
+```
+
+We can see that the transform has made a difference in some of the predictors but not all. Next step would be outlier treatment but that is out of scope for the problem. 
+
+
+### 3.2) 
+The soybean data can also be found at the UC Irvine Machine Learning Repository. Data were collected to predict disease in 683 soybeans. The 35 predictors are mostly categorical and include information on the environmental conditions (e.g., temperature, precipitation) and plant conditions (e.g., left
+spots, mold growth). The outcome labels consist of 19 distinct classes.
+
+```{r warning=FALSE, message=FALSE, fig.height = 10, fig.width=10}
+library(mlbench)
+data(Soybean)
+#str(Soybean)
+plot_missing(Soybean )
+```
+
+We can see that there are several variables that contain missing entries. Perhpas we can deal with this later on in the problem. 
+
+* a) Investigate the frequency distributions for the categorical predictors. Are any of the distributions degenerate in the ways discussed earlier in this chapter?
+
+As we have seen in the literature, a degenerate distribution happens when a predictor variable contains a unique value or values that do not occur often, meaning they have low frequencies. 
+
+Lets examine the class variable before looking at our predictors.
+
+```{r warning=FALSE, message=FALSE}
+ggplot(Soybean,aes(x=Soybean$Class))+geom_histogram(fill="deepskyblue3",colour="black", stat="count")+ggtitle("Distribution by Type of Soybean")+
+  xlab("Soybean Type") +
+  ylab("Count")+
+  coord_flip()+
+labs(caption="UCI Machine Learning Repository")
+```
+
+We can see that there are certain classes that appear much more frequently than others such as phytophthora. 
+
+Lets examine the predictors in a visual context using https://www.r-bloggers.com/smoothscatter-with-ggplot2/
+
+```{r warning=FALSE, message=FALSE, fig.height =8, fig.width=8}
+soy_predictors <- Soybean[,2:36]
+
+par(mfrow = c(3, 6))
+
+for (i in 1:ncol(soy_predictors)) 
+  {
+  plot(soy_predictors[ ,i], ylab = names(soy_predictors[i]))+
+  #smoothScatter(soy_predictors[ ,i], ylab = names(soy_predictors[i]))+
+  theme_classic()
+  #scale_fill_continuous(low = "white", high = "red")
+  }
+```
+
+```{r warning=FALSE, message=FALSE}
+library(caret)
+
+nearZeroVar(soy_predictors, names = TRUE, saveMetrics=T)
+```
+
+Our tests reveal thatthat we do not have variables with a unique value. We do however see several variables that have rare values such as leaf.mild, mycelium, and sclerotia. These are degenerate variables by definition. 
+
+* b) Roughly 18% of the data are missing. Are there particular predictors that are more likely to be missing? Is the pattern of missing data related to the classes?
+
+Lets recall our missing data plot before investigating the relation to classes:
+
+```{r warning=FALSE, message=FALSE, fig.height = 10, fig.width=10}
+plot_missing(Soybean)
+```
+
+As a whole, we can see that we have 4 predictors have the highest amount of missing data by percentage. Overall, we do not exceed 20% in terms of data missing per predictor. 
+
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+
+Soybean %>%
+mutate(Total = n()) %>% 
+filter(!complete.cases(.)) %>%
+group_by(Class) %>%
+mutate(Missing = n(), Proportion=Missing/Total) %>%
+select(Class, Missing, Proportion) %>%
+unique()
+```
+
+If we partition the data by class and drill down into the percent missing per class, we can identify what class is missing the most data. phytophthora-rot is the class that accounts for the most missing data. We could have also done these calcualtions using sqldf package. 
+
+
+* c) Develop a strategy for handling missing data, either by eliminating predictors or imputation.
+
+We can work on this problem and see how things change according to the approach we decide to take. 
+
+* Method of Imputation using Mice package
+
+https://datascienceplus.com/imputing-missing-data-with-r-mice-package/
+
+After reading the method definitions, it makes more sense to use method = PMM
+https://www.analyticsvidhya.com/blog/2016/03/tutorial-powerful-packages-imputing-missing-values/
+
+
+```{r, warning=FALSE, message=FALSE}
+library(rcompanion)
+library(psych)
+library(DescTools)
+library(mice)
+
+the_soy <- mice(Soybean, method="pmm", printFlag=F, seed=112)
+
+the_soy <- complete(the_soy)
+
+the_soy <- as.data.frame(the_soy)
+
+plot_missing(the_soy)
+```
+
+We can see that we no longer have missing data, however it is vital that we check the new distributions of our data.
+
+```{r warning=FALSE, message=FALSE}
+soy_predictors2 <- the_soy[,2:36]
+
+par(mfrow = c(3, 6))
+
+for (i in 1:ncol(soy_predictors2)) 
+  {
+  plot(soy_predictors2[ ,i], ylab = names(soy_predictors2[i]))+
+  #smoothScatter(soy_predictors[ ,i], ylab = names(soy_predictors[i]))+
+  theme_classic()
+  #scale_fill_continuous(low = "white", high = "red")
+  }
+```
+
+
+
+
+
+
+

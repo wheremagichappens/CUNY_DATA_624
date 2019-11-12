@@ -1,0 +1,519 @@
+---
+title: "hw#3.data624"
+author: "Sang Yoon (Andy) Hwang"
+date: "September 16, 2019"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+# Exercises
+
+# 3.1. The UC Irvine Machine Learning Repository6 contains a data set related to glass identification. The data consist of 214 glass samples labeled as one of seven class categories. There are nine predictors, including the refractive index and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.
+```{r, include=FALSE}
+library(mlbench)
+library(mice)           # MICE imputation
+library(purrr)          # function programming tools
+library(car)            # Applied regression functions
+library(dplyr)          # Data manipulation
+library(tidyr)          # Data transformation
+library(ggplot2)        # visualization
+library(ModelMetrics)   # model metrics calculations
+library(e1071)          # Misc stats functions 
+library(pander)         # Pandoc tables 
+library(ggcorrplot)     # Vis corr matrix
+library(caret)
+library(DMwR)
+
+data(Glass)
+str(Glass)
+```
+
+# (a) Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors.
+
+
+## Univariate distributions
+
+The plot below of a density plot overlayed on a histogram for all variables shows that more variables than those identified using the skewness statistics appear to have a skewed distribution. Some like Ca and RI
+may benefit from transformation, however other such as Ba and Fe may not benefit even after transformation as they are too far away from a normal distribution.
+```{r}
+Glass %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  keep(is.numeric) %>% 
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(value)) + 
+  geom_histogram(bins = 30, aes(y = ..density..)) +
+  geom_density(alpha = 0.3, color = NA, fill = 'yellow') + 
+  #scale_x_continuous() +
+  #scale_y_continuous() +
+  # scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL, y = NULL) + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+## Correlation matrix
+
+The scatterplot matrix below shows the relationships, Pearson Correlation Coefficient, between all variables in the data. The first column which represents the relationships between the response variable and each predictor further supports the observations made from the scatterplots. The matrix also shows that there are relationships between the some of the predictors as well. The strongest correlation is between `Ca` and `RI`.
+
+```{r corrPlot, fig.align='center', warning=FALSE, fig.height=6, fig.width=8}
+# Calculate pairwise pearson correlation and display as upper matrix plot
+Glass %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  keep(is.numeric) %>% 
+  cor(method = 'pearson', use = 'pairwise.complete.obs') %>% 
+  ggcorrplot(corr = ., method = 'square', type = 'upper'
+             , lab = TRUE, lab_size = 3, lab_col = 'grey20')
+```
+
+# (b) Do there appear to be any outliers in the data? Are any predictors skewed?
+
+
+## Boxplot
+
+The histogram and density show that some of the predictors have long tails indicative of outliers.  The plot below shows a boxplot and violin plot for each variable.  Many of the variables appear to have outliers with predictors like `Ba`, `Fe` and  `K` appear to have the most potential outliers.  How these outliers will be handled will be dependent on a mix of reference data and statistical techniques.
+```{r facetBox, fig.align='center', warning=FALSE, fig.height=12, fig.width=8}
+# boxplot with violin plot overlaid for all variables
+Glass %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  keep(is.numeric)  %>% 
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(x = '', y = value)) + 
+  geom_boxplot() + 
+  geom_violin(alpha = 0.3, color = NA, fill = 'lightgreen') + 
+  labs(x = NULL, y = NULL) + 
+  theme(axis.ticks.y=element_blank()) + 
+  facet_wrap(~key, scales = 'free', ncol = 2) + 
+  coord_flip()
+```
+
+## Summary statistics
+
+The following tables are the summary statistics for all of the numeric variables in the dataset. They have been broken up into two tables for ease of reading.  While some aspects of the distribution of the variables are easier seen in visualization.  Two notable statistics are that `K` has a strongly positive skew and kurtosis (thus expecting lots of outliers for this variable) which may need to be addressed before developing any type of model; other predictors show skew and kurtosis, but to a lesser degree.
+
+From https://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm, we know Normal Distirubtion would have a skewness near 0 and a kurtosis higher than 3.
+```{r, warning=FALSE}
+statFuns <- 
+  funs(missing = sum(is.na(.))
+       , min = min(., na.rm = TRUE)
+       , Q1 = quantile(., .25, na.rm = TRUE)
+       , mean = mean(., na.rm = TRUE)
+       , median = median(., na.rm = TRUE)
+       , Q3 = quantile(., .75, na.rm = TRUE)
+       , max = max(., na.rm = TRUE)
+       , sd = sd(., na.rm = TRUE)
+       , mad = mad(., na.rm = TRUE)
+       , skewness = skewness(., na.rm = TRUE)
+       , kurtosis = kurtosis(., na.rm = TRUE)
+  )
+
+# Create data frame of basic summary stats
+dfsum <- 
+  Glass %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>% 
+  keep(is.numeric) %>% 
+  summarise_all(statFuns) %>% 
+  gather() %>% 
+  separate(key, c('metric', 'stat'), sep = '(_)(?!.*_)') %>% 
+  spread(stat, value) %>% 
+  dplyr::select(metric, names(statFuns))
+
+# print summary stats as two tables for easier reading
+
+# stats for table 1
+vTbl1Stats <- c('metric', 'min', 'Q1', 'mean', 'median', 'Q3', 'max')
+
+pandoc.table(dfsum[, vTbl1Stats], missing = '-')
+
+pandoc.table(dfsum[
+  , c('metric', setdiff(colnames(dfsum), vTbl1Stats))], missing = '-')
+
+```
+
+### Statistical approach - removing outliers
+
+Unknown outliers will be determined using the Median Absolute Deviation (MAD); as a metric of central tendency, median is less effected by extreme values than mean. Anything that exceeds three MAD of the median will be considered an outlier and dropped. Outlier removed data will be stored in a seperate dataframe. 59% of data are removed after MAD removal and it is a quite huge loss. It is not reasonable to consider adressing 59% of loss through outlier removal - we will keep using original dataframe for the next question.
+
+```{r, warning=FALSE}
+# create function to evaluate whether a value is an outlier
+
+Glass_num <- Glass %>% keep(is.numeric)
+Glass_num$index <- c(1:nrow(Glass_num))
+
+madOutlier <- function(x, cutoff = 3){
+  madrange <- mad(x)*c(-1,1)*cutoff
+  lower <- x < median(x) + madrange[1]
+  upper <- x > median(x) + madrange[2]
+  return(lower | upper)
+}
+
+# store outliers in a dataframe
+dfOutlier <- as.data.frame(apply(Glass_num, 2, madOutlier))
+
+# retain INDEX of outliers to remove
+outlierIndex <- 
+  Glass_num$index[
+    apply(
+      dfOutlier
+      , 1, any)]
+
+# df after outliers are removed
+
+Glass_num_mad <- Glass_num[!(Glass_num$index %in% outlierIndex),]
+#Glass_num_mad
+round( length(outlierIndex) / nrow(Glass_num) * 100, 2)
+
+# potential outliers?
+# length(outlierIndex)
+
+```
+
+
+# (c) Are there any relevant transformations of one or more predictors that might improve the classification model?
+
+
+## Transformations - BoxCox & Yeo-Johnson
+
+The data contains enough observations that some deviation from normal distributions are acceptable. 
+
+It is known that Box-Cox does not allow zero values so that a constant = 1 was added for zero_inflated variables such as `Ba`, `K`, `Mg` and `Fe` before applying the method. It seems like except for `Al`, `Ca` and `Na`, most of variables did not get normalized from `Box-Cox`.
+
+`Yeo-Johnson` works like Box-Cox but the difference is that it allows zero/negative values.
+
+From below stat summary, we know that `Yeo-Johnson` did not perform any transformation for zero-inflated variables such as `Ba`, `Fe` and already fairly normalized variables such as `Si`, `Ri`. 
+
+In general, `Yeo-Johnson` works better in transformation for most variables than `Box-Cox`.
+
+```{r transformnonnormal, warning=FALSE}
+# apply box-cox power transformations to heavily skewed variables
+# TODO revise to use either lapply & function or purrr map commands
+
+# apply yeo-johnson -> it works for negative or zero values
+pre <- preProcess(Glass, method = 'YeoJohnson')
+yj <- predict(pre,Glass)
+
+Glass$Ba_yj <- yj$Ba
+Glass$K_yj <- yj$K
+Glass$Mg_yj <- yj$Mg
+Glass$Fe_yj <- yj$Fe
+Glass$Al_yj <- yj$Al
+Glass$Ca_yj <- yj$Ca
+Glass$Na_yj <- yj$Na
+Glass$RI_yj <- yj$RI
+Glass$Si_yj <- yj$Si
+
+
+# Since these variables have zero value adding 1 to allow box-cox transform
+    
+     Ba = BoxCoxTrans(Glass$Ba + 1) #as.numeric(powerTransform(Glass$Ba + 1)$lambda)
+     K = BoxCoxTrans(Glass$K + 1) #as.numeric(powerTransform(Glass$K + 1)$lambda)
+     Mg = BoxCoxTrans(Glass$Mg + 1) #as.numeric(powerTransform(Glass$Mg + 1)$lambda)
+     Fe = BoxCoxTrans(Glass$Fe + 1) #as.numeric(powerTransform(Glass$Fe + 1)$lambda)
+    
+     Al = BoxCoxTrans(Glass$Al) #as.numeric(powerTransform(Glass$Al)$lambda)
+     Ca = BoxCoxTrans(Glass$Ca) #as.numeric(powerTransform(Glass$Ca)$lambda)
+     Na = BoxCoxTrans(Glass$Na) #as.numeric(powerTransform(Glass$Na)$lambda)
+     RI = BoxCoxTrans(Glass$RI) #as.numeric(powerTransform(Glass$RI)$lambda)
+     Si = BoxCoxTrans(Glass$Si) #as.numeric(powerTransform(Glass$Si)$lambda)
+
+
+Glass$Ba_BC <- 
+  predict(Ba,Glass$Ba+1)
+
+Glass$Ca_BC <- 
+  predict(Ca,Glass$Ca)
+
+Glass$K_BC <- 
+  predict(K,Glass$K+1)
+
+Glass$Mg_BC <- 
+  predict(Mg,Glass$Mg+1)
+
+Glass$Na_BC <- 
+  predict(Na,Glass$Na)
+
+Glass$RI_BC <- 
+  predict(RI,Glass$RI)
+
+Glass$Si_BC <- 
+  predict(Si,Glass$Si)
+
+Glass$Fe_BC <- 
+  predict(Fe,Glass$Fe+1)
+
+Glass$Al_BC <- 
+  predict(Al,Glass$Al)
+
+
+
+# plot histogram to show impact of box-cox & YeoJohnson
+Glass %>% 
+  dplyr::select(matches('Ba|Ca|K|Mg|Na')) %>% 
+  gather() %>% 
+  ggplot(data = ., aes(value)) + 
+  geom_histogram(bins = 30) + 
+  facet_wrap(~key, ncol = 3, scales = 'free')
+
+Glass %>% 
+  dplyr::select(matches('RI|Si|Fe|Al')) %>% 
+  gather() %>% 
+  ggplot(data = ., aes(value)) + 
+  geom_histogram(bins = 30) + 
+  facet_wrap(~key, ncol = 3, scales = 'free')
+
+# Let's re-run stat summary gain
+
+# Create data frame of basic summary stats
+dfsum <- 
+  Glass %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>% 
+  keep(is.numeric) %>% 
+  summarise_all(statFuns) %>% 
+  gather() %>% 
+  separate(key, c('metric', 'stat'), sep = '(_)(?!.*_)') %>% 
+  spread(stat, value) %>% 
+  dplyr::select(metric, names(statFuns))
+
+# print summary stats as two tables for easier reading
+
+statFuns <- 
+  funs(missing = sum(is.na(.))
+       , min = min(., na.rm = TRUE)
+       , Q1 = quantile(., .25, na.rm = TRUE)
+       , mean = mean(., na.rm = TRUE)
+       , median = median(., na.rm = TRUE)
+       , Q3 = quantile(., .75, na.rm = TRUE)
+       , max = max(., na.rm = TRUE)
+       , sd = sd(., na.rm = TRUE)
+       , mad = mad(., na.rm = TRUE)
+       , skewness = skewness(., na.rm = TRUE)
+       , kurtosis = kurtosis(., na.rm = TRUE)
+  )
+
+# Create data frame of basic summary stats
+dfsum <- 
+  Glass %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>% 
+  keep(is.numeric) %>% 
+  summarise_all(statFuns) %>% 
+  gather() %>% 
+  separate(key, c('metric', 'stat'), sep = '(_)(?!.*_)') %>% 
+  spread(stat, value) %>% 
+  dplyr::select(metric, names(statFuns))
+
+# print summary stats as two tables for easier reading
+
+# stats for table 1
+vTbl1Stats <- c('metric', 'min', 'Q1', 'mean', 'median', 'Q3', 'max')
+
+pandoc.table(dfsum[, vTbl1Stats], missing = '-')
+
+pandoc.table(dfsum[
+  , c('metric', setdiff(colnames(dfsum), vTbl1Stats))], missing = '-')
+```
+
+# 3.2. The soybean data can also be found at the UC Irvine Machine Learning Repository. Data were collected to predict disease in 683 soybeans. The 35 predictors are mostly categorical and include information on the environmental conditions (e.g., temperature, precipitation) and plant conditions (e.g., left spots, mold growth). The outcome labels consist of 19 distinct classes.
+```{r, include=FALSE}
+data(Soybean)
+```
+
+# (a) Investigate the frequency distributions for the categorical predictors. Are any of the distributions degenerate in the ways discussed earlier in this chapter?
+
+## Frequency distributions
+
+The variables with degenrate distributions are variables with "zero variance" - in fact, variables that have one unique value with lots of zeroes. 
+
+Characteristics of "zero variance":
+
+1. The fraction of unique values over the sample size is low (say 10%).
+2. The ratio of the frequency of the most prevalent value to the frequency of the second most prevalent value is large (say around 20)
+
+Those variables are leaf.mild, mycelium and sclerotia.
+```{r, warning=FALSE}
+paste("Degenerate variables:", paste(names(Soybean[,nearZeroVar(Soybean)]),collapse = ', '))
+
+Soybean[2:15] %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  #keep(is.numeric) %>% 
+  #select(-Class) %>%
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(value)) + 
+  stat_count() +
+  #geom_density(alpha = 0.3, color = NA, fill = 'yellow') + 
+  #scale_x_continuous() +
+  #scale_y_continuous() +
+  # scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL, y = NULL) + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+
+Soybean[16:length(Soybean)] %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  #keep(is.numeric) %>% 
+  #select(-Class) %>%
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(value)) + 
+  stat_count() +
+  #geom_density(alpha = 0.3, color = NA, fill = 'yellow') + 
+  #scale_x_continuous() +
+  #scale_y_continuous() +
+  # scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL, y = NULL) + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+Soybean[1] %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  #keep(is.numeric) %>% 
+  #select(Class) %>%
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(value)) + 
+  stat_count() +
+  #geom_density(alpha = 0.3, color = NA, fill = 'yellow') + 
+  #scale_x_continuous() +
+  #scale_y_continuous() +
+  # scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL, y = NULL) + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+
+```
+
+# (b) Roughly 18 % of the data are missing. Are there particular predictors that are more likely to be missing? Is the pattern of missing data related to the classes?
+
+
+### Missing data
+
+In review of the missing statistics `sever`, `seed.tmt` , `lodging` and `hail` have approximately 17.7% of the data missing. It is not immediately apparent whether these missing values are not applicable or actually missing. If it is the latter, the proportion of missing data for these four variables is reasonable to consider addressing through substitution or imputation. (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3701793/)
+```{r plotMissing, fig.align='center', warning=FALSE}
+# create lists of desired summary stats for calculation
+statFuns <- 
+  funs(missing = sum(is.na(.))
+  )
+
+
+# Create data frame of basic summary stats
+dfsum <- 
+  Soybean %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>% 
+  #keep(is.numeric) %>% 
+  summarise_all(statFuns) %>% 
+  gather() %>% 
+  separate(key, c('metric', 'stat'), sep = '(_)(?!.*_)') %>% 
+  spread(stat, value) %>% 
+  dplyr::select(metric, names(statFuns))
+
+
+
+# create bar plot of percent of missing data, add counts as text labels
+dfsum %>% 
+  group_by(metric) %>% 
+  mutate(miss_perc = missing / !!nrow(Soybean)) %>% 
+  dplyr::select(metric,missing, miss_perc) %>% 
+  ggplot(data = ., aes(x = reorder(metric, -miss_perc) , y = miss_perc)) + 
+  geom_bar(stat = 'identity') +
+  coord_flip() + 
+  geom_text(aes(label = missing), hjust = -0.1, size = 3) + 
+  labs(x = NULL, y = NULL, Title = '% Missing') + 
+  theme(legend.position = 'none') + 
+  scale_y_continuous(labels = scales::percent)
+
+#dfsum[2][which.max(dfsum$missing),]/nrow(Soybean)
+#dfsum[dfsum$missing == 121,]
+```
+
+# (c) Develop a strategy for handling missing data, either by eliminating predictors or imputation.
+
+## Imputation - by mode & KNN
+
+Mode and KNN imputation for the missing categorical values would be used. As you can see, when Mode is used, since it replaces NAs with the most occuring value, mode category can be highly over-represented, while all others are underrepresented. In other words, the distribution of imputed data can be highly biased. When KNN is used, however, it minimizes the biase as categories are fairly evenly represented. 
+```{r, fig.align='center', warning=FALSE, fig.height=6, fig.width=8}
+# subset columns for imputation
+dfimpute <- subset(Soybean, select = - c(Class, leaves) )
+df <- dfimpute
+
+# perform mode imputation
+df[, sapply(df, function(x) !is.numeric(x))] <- apply(df[, sapply(df, function(x) !is.numeric(x))], 2, function(x) {x[is.na(x)] <- names(sort(table(x), decreasing = TRUE)[1]); x})
+
+
+# create dataframe for plotting imputation impact
+plotlist <- list()
+
+for (i in 1:length(names(df))){
+  
+  t = nrow(unique(df[i]))
+  
+  name <- names(df[i])
+  missingness <- c(rep("Pre Imputation", t), rep("Post Imputation", t)) # Pre/post imputation
+  Category <- as.factor(rep(names(table(dfimpute[i])), 2))                   # Categories
+  Count <- c(as.numeric(table(dfimpute[i])), as.numeric(table(df[i])))     # Count of categories
+  
+  plotlist[[i]] <- data.frame(name, missingness, Category, Count)  }
+
+alldata <- do.call(rbind, plotlist)
+
+plot1 = alldata[alldata$name %in% names(df)[1:15],]
+plot2 = alldata[alldata$name %in% names(df)[16:length(df)],]
+
+
+# let's see Pre vs Post imputation
+ggplot(plot1, aes(Category, Count, fill = missingness)) +   # Create plot
+    geom_bar(stat = "identity", position = "dodge") + 
+    scale_fill_brewer(palette = "Set2") +
+  facet_wrap(~name, scales = 'free') +
+    theme(legend.title = element_blank()) +
+      ggtitle("Mode Imputation")
+
+ggplot(plot2, aes(Category, Count, fill = missingness)) +   # Create plot
+    geom_bar(stat = "identity", position = "dodge") + 
+    scale_fill_brewer(palette = "Set2") +
+  facet_wrap(~name, scales = 'free') +
+    theme(legend.title = element_blank()) +
+      ggtitle("Mode Imputation")
+
+# perform KNN imputation
+knnOutput <- knnImputation(dfimpute)
+df <- knnOutput
+
+# create dataframe for plotting imputation impact
+plotlist <- list()
+
+for (i in 1:length(names(df))){
+  
+  t = nrow(unique(df[i]))
+  
+  name <- names(df[i])
+  missingness <- c(rep("Pre Imputation", t), rep("Post Imputation", t)) # Pre/post imputation
+  Category <- as.factor(rep(names(table(dfimpute[i])), 2))                   # Categories
+  Count <- c(as.numeric(table(dfimpute[i])), as.numeric(table(df[i])))     # Count of categories
+  
+  plotlist[[i]] <- data.frame(name, missingness, Category, Count)  }
+
+alldata <- do.call(rbind, plotlist)
+
+plot1 = alldata[alldata$name %in% names(df)[1:15],]
+plot2 = alldata[alldata$name %in% names(df)[16:length(df)],]
+
+# let's see Pre vs Post imputation
+ggplot(plot1, aes(Category, Count, fill = missingness)) +   # Create plot
+    geom_bar(stat = "identity", position = "dodge") + 
+    scale_fill_brewer(palette = "Set2") +
+  facet_wrap(~name, scales = 'free') +
+    theme(legend.title = element_blank()) +
+      ggtitle("KNN Imputation")
+
+ggplot(plot2, aes(Category, Count, fill = missingness)) +   # Create plot
+    geom_bar(stat = "identity", position = "dodge") + 
+    scale_fill_brewer(palette = "Set2") +
+  facet_wrap(~name, scales = 'free') +
+    theme(legend.title = element_blank()) +
+      ggtitle("KNN Imputation")
+```

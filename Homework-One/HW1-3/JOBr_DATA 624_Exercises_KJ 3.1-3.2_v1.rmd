@@ -1,0 +1,300 @@
+---
+title: "DATA 624_Exercises_KJ 3.1-3.2"
+author: "Jeremy O'Brien"
+date: "September 16, 2019"
+output: html_document
+---
+
+```{r, message = FALSE, warning = FALSE}
+
+if (!require('mlbench')) (install.packages('mlbench'))
+if (!require('psych')) (install.packages('psych'))
+if (!require('mice')) (install.packages('mice'))
+if (!require('caret')) (install.packages('caret'))
+if (!require('forecast')) (install.packages('forecast'))
+if (!require('dplyr')) (install.packages('dplyr'))
+if (!require('stringr')) (install.packages('stringr'))
+if (!require('tidyr')) (install.packages('tidyr'))
+if (!require('magrittr')) (install.packages('magrittr'))
+if (!require('purrr')) (install.packages('purrr'))
+if (!require('kableExtra')) (install.packages('kableExtra'))
+if (!require('scales')) (install.packages('scales'))
+if (!require('ggplot2')) (install.packages('ggplot2'))
+if (!require('ggcorrplot')) (install.packages('ggcorrplot'))
+
+```
+
+
+### Exercise 3.1
+#### The UC IRvine Machine Learning Repository containes a data set related to glass identification.  The data consist of 214 glass samples labeled as one of seven class categories.  There are nine predictors, including the refractive indec and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.
+
+```{r}
+
+data(Glass)
+# str(Glass)
+
+```
+
+<br>
+
+#### (a) Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors.
+
+```{r, warning = FALSE}
+
+# Examine summary statistics
+Glass %>% 
+  psych::describe() %>% 
+  kable()
+
+```
+  
+```{r, message = FALSE}
+
+# Tidy dataset, removing non-numeric variables
+Glass %>% 
+  select(-Type) %>% 
+  gather() %>% 
+  
+  # Depict distribution of each variable with histograms
+  ggplot(aes(x = value)) +
+  geom_histogram(fill = 'grey40') +
+  
+  # Facet plots by variable and attenuate chart look
+  facet_wrap(~ key, scales = 'free') +
+  theme_minimal() +
+  labs(title = 'Glass: Predictor Distributions',
+       y = '', 
+       x = '')
+  
+```
+
+#### `Al`, `Na`, and `Si` are approximately symmetric, with `Al` and `Na` showing some positive skew and `Si` showing negative.  `Ca` and `RI` show pronounced positive skew.  `Ba`, `Fe`, `K`, and `Mg` are all asymmetric; `Mg` is bimodal, with a substantical proportion of 0 values.
+
+```{r}
+
+# Calculate p-values of numeric variable correlations
+p.mat <- Glass %>% 
+  select(-Type) %>% 
+  cor_pmat()
+
+# Evaluate correlation
+Glass %>% 
+  keep(is.numeric) %>% 
+  
+  # Calculate correlations
+  cor() %>% 
+  
+  # Plot correlogram
+  ggcorrplot(title = 'Glass: Correlations Between Predictors',
+             hc.order = TRUE, 
+             type = "upper",
+             p.mat = p.mat,
+             outline.col = "white")
+
+```
+
+#### Most of the variables with symmetric distributions are not correlated, save the two with strong positive skew `Ca` and `RI`, which show strong correlation.  `RI` and `Si` show some negative correlation, as does `Mg` with both `Al` and `Ba`.
+
+<br>
+
+#### (b) Do there appear to be any outliers in the data?  Are any predictors skewed?
+
+```{r, warning = FALSE}
+
+# Tidy dataset, removing non-numeric variables
+Glass %>% 
+  keep(is.numeric) %>%
+  gather() %>% 
+  
+  # Calculate outliers
+  mutate(outlier = value > median(value) + IQR(value) * 1.5) %>% 
+  
+  # Depict distributions for each variable with violin plots
+  ggplot(aes(x = key, y = value)) +
+  geom_violin(alpha = .5) +
+  
+  # Highlight non-outlier points in black
+  geom_point(data = function(x) dplyr::filter_(x, ~ outlier == 'FALSE'),
+             size = 1,
+             shape = 16, 
+             alpha = .2,
+             position = position_jitter(w = .1, h = .01)) +
+  
+  # Highlight outlier points in red
+  geom_point(data = function(x) dplyr::filter_(x, ~ outlier == 'TRUE'),
+               size = 1,
+               color = 'red',
+               shape = 16, 
+               alpha = .5,
+               position = position_jitter(w = .1, h = .01)) +
+  
+  # Facet plots by variable and attenuate chart look
+  facet_wrap(~ key, scales = 'free') +
+  theme_minimal() +
+  labs(title = 'Glass: Predictor Distributions Highlighting Outliers',
+       y = '', 
+       x = '')
+
+```
+
+#### `Ca` and `Na` see a few outliers (outside 1.5 times the interquartile range), but the most curious finding is `Si`, for which every point displays as an outlier.  This must be a computational or graphing error, as the preceding histrogram displayed a fairly normal kurtosis and many of these points fall well within the IQR.
+
+<br>
+
+#### (c) Are there any relevant transformations of one or more predictors that might improve the classification model?
+
+```{r, message = FALSE, warning = FALSE}
+
+# Tidy dataset, removing non-numeric variables
+Glass %>%
+  select(-Type) %>% 
+  
+  # Implement Box-Cox transformations
+  mutate_all(funs(
+    caret::BoxCoxTrans(.) %>% 
+      predict(.))
+    ) %>% 
+  gather() %>% 
+  
+  # Depict distribution of each variable with histograms
+  ggplot(aes(x = value)) +
+  geom_histogram(fill = 'grey40') +
+  
+  # Facet plots by variable and attenuate chart look
+  facet_wrap(~ key, scales = 'free') +
+  theme_minimal() +
+  labs(title = 'Glass: Predictor Distributions, Box-Cox Transformed',
+       y = '', 
+       x = '')
+  
+```
+
+#### A Box-Cox transformation can be applied to attempt to address skew.  Doing so scales most of the symmetrically scaled predictors closer to 0 save for `Si`, another curious result.  The shape of the distributions has not changed markedly, so it's not clear whether this will enhance performance during modeling.
+
+<br>
+
+***
+
+###Exercise 3.2
+####The soybean data can also be found at the UC Irvine Machine Learning Repository.  Data were collected to predict disease in 683 soybeans.  The 35 predictors are mostly categorical and include information on the environmental conditions (e.g. temperature, precipitation) and plant conditions (e.g. left spots, mold growth).  The outcome labels consist of 19 distinct classes.
+
+```{r}
+
+data(Soybean)
+# str(Soybean)
+
+```
+
+<br>
+
+#### (a) Investigate the frequency distributions for the categorical predictors.  Are any of the distributions degenerate in the ways discussed earlier in this chapter?
+
+```{r, warning = FALSE}
+
+# Tidy dataset, removing non-numeric variables
+Soybean %>% 
+  select(-Class) %>% 
+  gather() %>% 
+  
+  # Depict distribution of each class within categories
+  ggplot(aes(value, fill = value)) +
+  geom_bar() +
+  
+  # Code all 0 factor values as red for easier visual detection of degenerate distribution
+  scale_fill_manual(values = c('red', rep('grey40', 7))) +
+  
+  # Facet plots by predictor and attenuate chart look
+  facet_wrap(~ key) +
+  theme_minimal()+
+  labs(title = 'Soybean: Distributions by Predictor')
+
+```
+
+#### Distributions are regarded as degenerate when they have a unique values with extremely low frequencies, i.e. 'predictors with a single value for the vast majority of samples'.  `mycelium` and `sclerotica` both fall into this category, and arguably `leaf.mild`, `lodging`, `seed.discolor`, `seed.size`, and `shriveling` could also be considered. 
+
+<br>
+
+#### (b) Roughly 18% of the data are missing.  Are there particular predictors that are more likely to be missing?  Is the pattern of missing data related to the classes?
+
+<br>
+
+```{r}
+
+# Tidy dataset, removing non-numeric variables
+Soybean %>%
+  select(-Class, -date) %>%
+  
+  # Calculate proportion of data missing by predictor
+  summarise_all(funs(
+    perc_missing = sum(is.na((.)) / nrow(Soybean)))
+    ) %>% 
+  rename_all(funs(
+    str_replace(., '_perc_missing', ''))
+    ) %>%
+  gather() %>% 
+  
+  # Chart predictors based on how many values are missing
+  ggplot(aes(x = reorder(key, value), 
+             y = value)) +
+  geom_bar(stat = 'identity', fill = 'grey40') +
+  
+  # Annotate bar chart with percentage missing
+  geom_text(aes(
+    label = scales::percent(value), y = -.01), 
+    size = 3,
+    position = position_dodge(width = 0.9)
+    ) +
+  
+  # Attenuate chart look
+  coord_flip() +
+  labs(title = 'Soybean: Missing Data by Predictor',
+         x = '', 
+         y = '') +
+  theme_minimal() +
+  theme(axis.text.x = element_blank())
+  
+```
+
+#### Of the 18% of incomplete cases, the predictors `sever`, `seed.tmt`, and `lodging`, and `hail` are missing in almost all of them.  Apart from `Class` and `date`, `leaves` is the only other predictor that's present for all cases.  We should check to see if this is the result of chance, or if there are systematic issues (i.e. the data generating process, measurement challenges, recording errors, data loss, etc.) that could explain this.
+
+<br>
+
+```{r}
+
+# Calculate total cases in Soybean set
+total_cases <- nrow(Soybean)
+
+# Tidy dataset, calculating complete cases by predictor and predictor cases overall
+Soybean %>%
+  mutate(complete_cases = complete.cases(Soybean)) %>% 
+  group_by(Class) %>% 
+  summarize(cases = n(), 
+            complete_cases = sum(complete_cases), 
+            completeness = complete_cases / cases, 
+            proportion_allcases = cases / total_cases) %>% 
+  
+  # Display only predictors with missing data
+  filter(completeness != 1) %>% 
+  arrange(desc(proportion_allcases)) %>% 
+  
+  # Attenuate table look
+  mutate(completeness = scales::percent(completeness), 
+         proportion_allcases = scales::percent(proportion_allcases)) %>% 
+  select(Class, 
+         cases, 
+         complete_cases,
+         completeness, 
+         proportion_allcases) %>% 
+  rename(class = Class)
+
+```
+
+#### When completeness is examined from the viewpoint of `Class`, it becomes apparent that five classes are responsible for all missing data: `phytophthora-rot`, `2-4-d-injury`, `diaporthe-pod-&-stem-blight`, `cyst-nematode`, and `herbicide-injury`.  Diagnosis of the cause of missing data should focus on these classes.
+
+<br>
+
+```{r, echo = FALSE}
+
+sessionInfo()
+
+```

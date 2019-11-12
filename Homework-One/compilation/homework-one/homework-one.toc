@@ -1,0 +1,113 @@
+\contentsline {chapter}{Overview}{3}{chapter*.2}% 
+\contentsline {section}{Dependencies}{3}{section*.3}% 
+\contentsline {section}{Data Files}{3}{section*.3}% 
+\contentsline {chapter}{\numberline {1}Assignment One}{4}{chapter.1}% 
+\contentsline {section}{Hyndman Exercise 2.1}{4}{section*.4}% 
+\contentsline {subsection}{a. Use \texttt {autoplot()} to plot each of these in separate plots.}{4}{section*.4}% 
+\contentsline {subsubsection}{\texttt {gold}}{4}{section*.4}% 
+\contentsline {subsubsection}{\texttt {woolyrnq}}{5}{section*.4}% 
+\contentsline {subsubsection}{\texttt {gas}}{5}{section*.4}% 
+\contentsline {subsection}{b. What is the frequency of each series? Hint: apply the \texttt {frequency()} function.}{6}{section*.4}% 
+\contentsline {subsection}{c. Use \texttt {which.max()} to spot the outlier in the gold series. Which observation was it?}{6}{section*.4}% 
+\contentsline {section}{Hyndman Exercise 2.3}{6}{section*.4}% 
+\contentsline {subsection}{a. You can read the data into R with the following script:}{7}{section*.4}% 
+\contentsline {subsection}{b. Select one of the time series as follows (but replace the column name with your own chosen column):}{7}{section*.4}% 
+\contentsline {subsection}{c. Explore your chosen retail time series using the following functions: \texttt {autoplot()}, \texttt {ggseasonplot()}, \texttt {ggsubseriesplot()}, \texttt {gglagplot()}, \texttt {ggAcf()}.}{7}{section*.4}% 
+\contentsline {subsubsection}{Autoplot}{7}{section*.4}% 
+\contentsline {subsubsection}{Seasonal Plot}{7}{section*.4}% 
+\contentsline {subsubsection}{Subseries Plot}{8}{section*.4}% 
+\contentsline {subsubsection}{Lag Plots}{8}{section*.4}% 
+\contentsline {subsubsection}{Autocorrelation Plot}{9}{section*.4}% 
+\contentsline {chapter}{\numberline {2}Assignment Two}{10}{chapter.2}% 
+\contentsline {section}{Hyndman 6.2}{10}{section*.5}% 
+\contentsline {subsection}{a. Plot the time series of sales of product A. Can you identify seasonal fluctuations and/or a trend-cycle?}{10}{section*.5}% 
+\contentsline {subsection}{b. Use a classical multiplicative decomposition to calculate the trend cycle and seasonal indices.}{11}{section*.5}% 
+\contentsline {subsection}{c. Do the results support the graphical interpretations from part a?}{12}{section*.5}% 
+\contentsline {subsection}{d. Compute and plot the seasonally adjusted data.}{12}{section*.5}% 
+\contentsline {subsection}{e. Change one observation to be an outlier and recompute the seasonally adjusted data. What is the effect of the outlier?}{12}{section*.5}% 
+\contentsline {subsection}{f. Does it make any difference if the outlier is near the end rather than in the middle of the time series?}{13}{section*.5}% 
+\contentsline {chapter}{\numberline {3}Assignment Three}{15}{chapter.3}% 
+\contentsline {section}{Kuhn \& Johnson 3.1}{15}{section*.6}% 
+\contentsline {subsection}{a. Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors.}{15}{section*.6}% 
+\contentsline {subsubsection}{Descriptive Statistics}{15}{section*.6}% 
+\contentsline {subsubsection}{Skewness}{15}{table.3.1}% 
+\contentsline {subsubsection}{Distribution}{16}{table.3.1}% 
+\contentsline {subsubsection}{Correlation}{17}{table.3.1}% 
+\contentsline {subsection}{b. Do there appear to be any outliers in the data? Are any predictors skewed?}{18}{table.3.1}% 
+\contentsline {subsubsection}{Boxplot}{18}{table.3.1}% 
+\contentsline {subsection}{c. Are there any relevant transformations of one or more predictors that might improve the classification model?}{18}{table.3.1}% 
+\contentsline {section}{Kuhn \& Johnson 3.2}{23}{table.3.3}% 
+\contentsline {subsection}{a. Investigate the frequency distributions for the categorical predictors. Are any of the distributions degenerate in the ways discussed earlier in this chapter?}{23}{table.3.3}% 
+\contentsline {subsection}{b. Roughly 18\% of the data are missing. Are there particular predictors that are more likely to be missing? Is the pattern of missing data related to the classes?**}{24}{table.3.3}% 
+\contentsline {subsection}{c. Develop a strategy for handling missing data, either by eliminating predictors or imputation.**}{26}{table.3.5}% 
+\contentsline {chapter}{\numberline {4}Assignment Four}{27}{chapter.4}% 
+\contentsline {section}{Hyndman 7.1}{27}{section*.7}% 
+\contentsline {subsection}{a. Use the \texttt {ses()} function in R to find the optimal values of \(\alpha \) and \(\ell _0\), and generate forecasts for the next four months.}{27}{section*.7}% 
+\contentsline {subsubsection}{Forecast Summary}{27}{section*.7}% 
+\contentsline {subsubsection}{Visualization}{28}{section*.7}% 
+\contentsline {subsection}{b. Compute a 95\% prediction interval for the first forecast using \(\mathaccentV {hat}05E{y}\pm 1.96s\) where \(s\) is the standard deviation of the residuals. Compare your interval with the interval produced by R.}{28}{section*.7}% 
+\contentsline {section}{Hyndman 7.3}{29}{section*.7}% 
+\contentsline {subsubsection}{Function}{29}{section*.7}% 
+\contentsline {subsubsection}{Optimization}{29}{section*.7}% 
+\contentsline {subsubsection}{Visualization}{30}{section*.7}% 
+\contentsline {chapter}{\numberline {5}Assignment Five}{31}{chapter.5}% 
+\contentsline {section}{Hyndman 7.5}{31}{section*.8}% 
+\contentsline {subsection}{a. Plot the series and discuss the main features of the data.}{31}{section*.8}% 
+\contentsline {subsubsection}{Timeseries Plot}{31}{section*.8}% 
+\contentsline {subsubsection}{Decomposed Plot}{32}{section*.8}% 
+\contentsline {subsection}{b. Use the \texttt {ses()} function to forecast each series, and plot the forecasts.}{33}{section*.8}% 
+\contentsline {subsubsection}{Paperback SES}{33}{section*.8}% 
+\contentsline {subsubsection}{Hardcover SES}{34}{section*.8}% 
+\contentsline {subsubsection}{Plot}{34}{section*.8}% 
+\contentsline {subsection}{c. Compute the RMSE values for the training data in each case.}{35}{section*.8}% 
+\contentsline {section}{Hyndman 7.6}{36}{section*.8}% 
+\contentsline {subsection}{a. Now apply Holt's linear method to the paperback and hardback series and compute four-day forecasts in each case.}{36}{section*.8}% 
+\contentsline {subsection}{b. Compare the RMSE measures of Holt's method for the two series to those of simple exponential smoothing in the previous question. Discuss the merits of the two forecasting methods for these data sets.}{37}{section*.8}% 
+\contentsline {subsection}{c. Compare the forecasts for the two series using both methods. Which do you think is best?}{37}{section*.8}% 
+\contentsline {subsubsection}{d. Calculate a 95\% prediction interval for the first forecast for each series, using the RMSE values and assuming normal errors. Compare your intervals with those produced using ses and holt.}{38}{section*.8}% 
+\contentsline {section}{Hyndman 7.10}{38}{table.5.1}% 
+\contentsline {subsection}{a. Plot the data and describe the main features of the series.}{39}{table.5.1}% 
+\contentsline {subsection}{b. Decompose the series using STL and obtain the seasonally adjusted data.}{39}{table.5.1}% 
+\contentsline {subsection}{STL Decomposition}{39}{table.5.1}% 
+\contentsline {subsection}{Seasonal Plots}{40}{table.5.1}% 
+\contentsline {subsection}{c. Forecast the next two years of the series using an additive damped trend method applied to the seasonally adjusted data. (This can be done in one step using stlf() with arguments etsmodel=``AAN'', damped=TRUE.)}{42}{table.5.1}% 
+\contentsline {subsubsection}{Forecast}{42}{table.5.1}% 
+\contentsline {subsubsection}{Plot}{42}{table.5.1}% 
+\contentsline {subsection}{d. Forecast the next two years of the series using Holt's linear method applied to the seasonally adjusted data (as before but with damped=FALSE).}{43}{table.5.1}% 
+\contentsline {subsubsection}{Forecast}{43}{table.5.1}% 
+\contentsline {subsubsection}{Plot}{43}{table.5.1}% 
+\contentsline {subsection}{e. Now use ets() to choose a seasonal model for the data.}{43}{table.5.1}% 
+\contentsline {subsubsection}{Seasonal Model}{44}{table.5.1}% 
+\contentsline {subsubsection}{Forecast}{44}{table.5.1}% 
+\contentsline {subsubsection}{Plot}{45}{table.5.1}% 
+\contentsline {subsection}{f. Compare the RMSE of the ETS model with the RMSE of the models you obtained using STL decompositions. Which gives the better in-sample fits?}{45}{table.5.1}% 
+\contentsline {subsection}{g. Compare the forecasts from the three approaches? Which seems most reasonable?}{45}{table.5.1}% 
+\contentsline {subsection}{h. Check the residuals of your preferred model.}{46}{table.5.1}% 
+\contentsline {chapter}{\numberline {6}Assignment Six}{47}{chapter.6}% 
+\contentsline {section}{Hyndman 8.1}{47}{section*.9}% 
+\contentsline {subsection}{a. Explain the differences among these figures. Do they all indicate that the data are white noise?}{47}{section*.9}% 
+\contentsline {subsection}{b. Why are the critical values at different distances from the mean of zero? Why are the autocorrelations different in each figure when they each refer to white noise?}{47}{section*.9}% 
+\contentsline {section}{Hyndman 8.2}{47}{section*.9}% 
+\contentsline {subsection}{a. Time Series Plot}{47}{section*.9}% 
+\contentsline {subsection}{b. ACF Plot}{48}{section*.9}% 
+\contentsline {subsection}{c. PACF Plot}{48}{section*.9}% 
+\contentsline {section}{Hyndman 8.6}{49}{section*.9}% 
+\contentsline {subsection}{a. Use the following R code to generate data from an AR(1) model with \(\phi _1=0.6\) and \(\sigma ^2=1\). The process starts with \(y_1=0\).}{49}{section*.9}% 
+\contentsline {subsection}{b. Produce a time plot for the series. How does the plot change as you change \(\phi _1\)?}{51}{section*.9}% 
+\contentsline {subsection}{c. Write your own code to generate data from an MA(1) model with \(\theta _1=0.6\) and \(sigma^2=1\).}{51}{section*.9}% 
+\contentsline {subsection}{d. Produce a time plot for the series. How does the plot change as you change \(\theta _1\)?}{53}{section*.9}% 
+\contentsline {subsection}{e. Generate data from an ARMA(1,1) model with \(\phi _1=0.6\), \(\theta _1=0.6\), and \(\sigma ^2=1\).}{53}{section*.9}% 
+\contentsline {subsection}{f. Generate data from an AR(2) model with \(\phi _1=-0.8\), \(\phi _2=0.3\), and \(\sigma ^2=1\). (Note that these parameters will give a non-stationary series.)}{55}{section*.9}% 
+\contentsline {subsection}{g. Graph the latter two series and compare them.}{56}{section*.9}% 
+\contentsline {section}{Hyndman 8.8}{57}{section*.9}% 
+\contentsline {subsection}{a. Use auto.arima() to find an appropriate ARIMA model. What model was selected. Check that the residuals look like white noise. Plot forecasts for the next 10 periods.}{57}{section*.9}% 
+\contentsline {subsection}{b. Plot forecasts from an ARIMA(0,1,1) model with no drift and compare these to part a. Remove the MA term and plot again.}{58}{section*.9}% 
+\contentsline {subsection}{With MA}{59}{section*.9}% 
+\contentsline {subsection}{Without MA}{60}{section*.9}% 
+\contentsline {subsection}{Comparing}{60}{section*.9}% 
+\contentsline {subsection}{(c.) Plot forecasts from an ARIMA(2,1,3) model with drift.}{60}{section*.9}% 
+\contentsline {subsection}{(d.) Plot forecasts from an ARIMA(0,0,1) model with a constant. Remove the MA term and plot again.}{64}{section*.9}% 
+\contentsline {subsection}{With MA}{65}{section*.9}% 
+\contentsline {subsection}{Without MA}{66}{section*.9}% 
+\contentsline {subsection}{Accuracy}{66}{section*.9}% 
+\contentsline {subsection}{(e.) Plot forecasts from an ARIMA(0,2,1) model with no constant.}{66}{section*.9}% 

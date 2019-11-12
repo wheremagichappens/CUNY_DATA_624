@@ -1,0 +1,271 @@
+# Assignment One
+
+*  Hyndman 2.1  
+*  Hyndman 2.3
+
+```{r library-01, echo=F, warning=F, message=F, comment=F, error=F}
+#Textbook Packages
+library(fpp2)
+library(AppliedPredictiveModeling)
+library(mlbench)
+library(tsfeatures)
+
+#Processing
+library(tidyverse)
+
+#Graphing
+library(ggplot2)
+library(gridExtra)
+library(grid)
+
+#Math
+library(caret)
+library(randomForest)
+library(seasonal)
+library(psych)
+
+#Formatting
+require(knitr)
+require(kableExtra)
+require(default)
+library(RCurl)
+```
+
+
+```{r settings-01, echo=F}
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default augments for `kable_styling()` 
+default(kable_styling)  <- list(bootstrap_options = c("striped"), 
+                                position = "center", 
+                                full_width = T,
+                                font_size = 10)
+
+# Set default for ggplot theme
+default(theme) <- list(axis.title.x = element_blank(),
+                       axis.title.y = element_blank(),
+                       plot.title = element_text(color="#3d248a", size=10, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#D3D3D3", size=1, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# wrap text
+if(!knitr:::is_html_output())
+{
+  options("width"=56)
+  knitr::opts_chunk$set(tidy.opts=list(width.cutoff=56, indent = 2), tidy = TRUE)
+  knitr::opts_chunk$set(fig.pos = 'H')
+}
+```
+
+## Hyndman Exercise 2.1 
+
+> Use the help function to explore what the series `gold`, `woolyrnq` and `gas` represent.
+
+```{r ha-2.1-help}
+data("gold"); #help("gold")
+data("woolyrnq"); #help("woolyrnq")
+data('gold'); #help("gas")
+```
+
+Per the `help` function, the `gold` series represents "daily morning gold prices in US dollars. 1 January 1985-31 March 1989"; the `woolyrnq` series represents "quarterly production of woollen yarn in Australia: tonnes. Mar 1965-Sep 1994"; and, the `gas` series represents "Australian monthly gas production: 1956-1995."
+
+### a. Use `autoplot()` to plot each of these in separate plots.
+
+The time plots below were generated from the `autoplot` function. 
+
+#### `gold` 
+
+```{r ha-2.1a-gold}
+p1 <- autoplot(gold) + 
+  labs(title = "Daily Morning Gold Prices",
+       subtitle = "Time Series: 01 Jan 1985 - 31 Mar 1989",
+       x = "Day", 
+       y = "Price (USD)")+
+  theme_bw()+
+  theme()
+
+p2 <- ggAcf(gold)+
+  labs(title = "",
+       subtitle = "ACF Plot") +
+  theme_bw()+
+  theme()
+
+grid.arrange(p1, p2, nrow=1)
+```  
+
+The `gold` series demonstrates a general, incremental trend until a large spike around day 775 (February 15, 1997).   Thereafter the value of gold decreases over the remaining until the end of the timespan (March 31, 1989).
+
+Based on the ACF plot, the trend increases until lag 22, after which it proceeds to decrease.  The slightly scalloped shape between lags 5 and 10 suggest the possibility of some seasonality.
+
+
+#### `woolyrnq`
+
+```{r ha-2.1a-woolyrnq}
+p1 <- autoplot(woolyrnq)  +
+  labs(title = "Quarterly Australian Woollen Yarn Production", 
+       subtitle = "Time Series: Mar 1965 - Sep 1994", 
+       x = "Year", 
+       y = "Quantity (Tons)")+
+  theme_bw()+
+  theme()
+
+p2 <- ggAcf(woolyrnq)+
+      labs(title = "", 
+      subtitle = "ACF Plot") +
+  theme_bw()+
+  theme()
+
+grid.arrange(p1, p2, nrow=1)
+``` 
+The `woolyrng` series exhibits a decremental trend, with a dramatic dip in early 1975.
+
+The slight “U” shape repeating every 4 lags in the ACF plot suggests some seasonality, which can be described as mild cyclic behavior.
+
+#### `gas` 
+
+```{r ha-2.1a-gas, fig.height=3}
+p1 <- autoplot(gas) +
+  labs(title = "Monthly Australian Gas Production", 
+       subtitle = "Time Series: 1956 - 1995", 
+       x = "Year", 
+       y = "Quantity")+
+  theme_bw()+
+  theme()
+
+p2 <- ggAcf(gas, lag = 80)+
+      labs(title = "", 
+      subtitle = "ACF Plot") +
+  theme_bw()+
+  theme()
+
+grid.arrange(p1, p2, nrow=1)
+```
+
+Lastly, the `gas` plot shows monthly changes to Australian gas production.  As production takes off around 1970 in an overall increasing trend, the seasonal peaks and valleys also grow wider apart, suggesting a multiplicative relationship.
+
+A moderate “U” shape repeats every 12 lags in the ACF plot, indicating a seasonal pattern.
+
+### b. What is the frequency of each series? Hint: apply the `frequency()` function.
+
+```{r ha-2.1b, eval=FALSE}
+frequency(gold)
+frequency(woolyrnq)
+frequency(gas)
+```
+The frequency of timeseries shows us the number of observations within a singular seasonal pattern.
+
+*  **Gas Frequency:** `r frequency(gas)`  
+*  **Yarn Frequency:** `r frequency(woolyrnq)`
+*  **Gold Frequency:** `r frequency(gold)`   
+
+The output of the `frequency` function indicates that `gold` is an annual time series, `woolyrnq` is a quarterly series, and `gas` is a monthly series. 
+
+### c. Use `which.max()` to spot the outlier in the gold series. Which observation was it?
+
+```{r ha-2.1c, eval=FALSE}
+which.max(gold)
+```
+
+The `which.max()` function returns the index of the maximum value in a series: 
+
+**Gold Maximum Value:** `r which.max(gold)`  
+
+This number aligns with the observed spike in gold price from the time series plot in part (a). 
+
+## Hyndman Exercise 2.3 
+
+>  Download some monthly Australian retail data from the book website. These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
+
+### a. You can read the data into R with the following script:
+
+```{r ha-2.3a1, eval=TRUE, echo=FALSE}
+retaildata <- readxl::read_excel("../data/retail.xlsx", skip=1)
+```
+
+
+```{r ha-2.3a2, eval=FALSE, echo=TRUE}
+retaildata <- readxl::read_excel("data/retail.xlsx", skip=1)
+```
+*The second argument (skip=1) is required because the Excel sheet has two header rows.*
+
+### b. Select one of the time series as follows (but replace the column name with your own chosen column):
+
+```{r ha-2.3b}
+myts <- ts(retaildata[,"A3349335T"], frequency=12, start=c(1982,4))
+```
+
+### c. Explore your chosen retail time series using the following functions: `autoplot()`, `ggseasonplot()`, `ggsubseriesplot()`, `gglagplot()`, `ggAcf()`.
+
+#### Autoplot
+
+```{r ha-2.3c-autoplot}
+autoplot(myts) + 
+  labs(title = "Monthly Australian Book Retail Data: A3349335T", 
+       subtitle = "Time Plot: Apr 1982 - Dec 2013",
+       x = "Year", 
+       y = "Sales")+
+  theme_bw()+
+  theme()
+```
+
+The output of the `autoplot` function demonstrate a general, incremental trend over the observed period, with a more pronounced peaks and valleys in the seasonal pattern.
+
+#### Seasonal Plot
+
+```{r ha-2.3c-ggseasonplot}
+ggseasonplot(myts,year.labels=TRUE, year.labels.left=TRUE) + 
+  labs(title = "Monthly Australian Book Retail Data: A3349335T", 
+       subtitle = "Seasonal Plot: Apr 1982 - Dec 2013", 
+       x = "Month", 
+       y = "Sales")+
+  theme_bw()+
+  theme()
+```
+Seasonal plots shows the observed data plotted for each year within the series. The seasons overlap to highlight underlying seasonal patterns and the years in which these trends occur. The seasonal plot below reveals that book sales tend to decline over January and February, rise in March and bump around over spring and summer before increasing over fall months into December.  The overall increasing trend is evidenced by the roughly chronological progression in years on the right and left margins. 
+
+
+#### Subseries Plot
+
+```{r ha-2.3c-ggsubseriesplot}
+ggsubseriesplot(myts) +
+  labs(title = "Monthly Australian Book Retail Data: A3349335T", 
+       subtitle = "Subseries Plot: Apr 1982 - Dec 2013", 
+       x = "Month", 
+       y = "Sales") +
+  theme_bw()+
+  theme()
+```
+
+The subseries plot provides a different way to view underlying seasonal patterns by separating each season in a year into an individual plot. The horizontal line shows the mean value of each month. The plot below reveals that, on average, the month of February sees the lowest sales and the month of December the highest over the observed time period. 
+
+#### Lag Plots
+
+```{r ha-2.3c-gglagplot, fig.height=5}
+gglagplot(myts)+
+  labs(title = "Monthly Australian Book Retail Data: A3349335T", 
+       subtitle = "Lag Plot: Apr 1982 - Dec 2013", 
+       x = "Month", 
+       y = "Sales") +
+  theme_bw()+
+  theme()
+```
+
+Lag plots are used to examine the correlation between the X and Y axis over a fixed period of time with a scatterplot. Per the text, “each graph shows $y_{t}$ plotted against $y_{t} - k$ for different values of $k$.” The lag plot below shows an overall positive relationship at each lag, indicating a strong seasonal relationship in the series.
+
+#### Autocorrelation Plot
+
+```{r ha-2.3c-ggAcf}
+ggAcf(myts) +
+  labs(title = "Monthly Australian Book Retail Data: A3349335T", 
+       subtitle = "Correlogram Plot: Apr 1982 - Dec 2013", 
+       x = "Month", 
+       y = "Sales") +
+  theme_bw()+
+  theme()
+```
+
+Lastly, our autocorrelation plot (also referred to as correlogram plot) measures the linear relationship between the time series’ lagged values. Below we used the autocorrelation function `ggAcf` to examine this relationship for the selected variable from the book retail data. As $r1$ shows the largest lag and $r25$ the smallest, this decrease in positive values as lags accrue clearly indicates a trend in the series.

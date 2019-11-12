@@ -1,0 +1,133 @@
+---
+title: 'DATA 624: Group 2 Homework'
+author: 'Juliann McEachern'
+output: 
+  html_document:
+    theme: yeti
+    highlight: pygments
+    toc: true
+    toc_float: true
+    df_print: paged
+    code_folding: hide
+---
+
+# Dependencies
+
+The following packages were used in R for completion of all homework assignments:
+
+```{r dependencies, echo=T, warning=F, message=F, comment=F}
+#Textbook Packages
+library(fpp2)
+library(AppliedPredictiveModeling)
+library(mlbench)
+
+#Processing
+library(tidyverse)
+
+#Graphing
+library(ggplot2)
+library(gridExtra)
+
+#Math
+library(caret)
+library(randomForest)
+library(seasonal)
+library(psych)
+
+#Formatting
+library(knitr)
+```
+
+# Assignment 2
+Week 2: HA #6.2
+
+## 6.2: The `plastics` data set consists of the monthly sales (in thousands) of product A for a plastics manufacturer for five years. 
+
+### (a). Plot the time series of sales of product A. Can you identify seasonal fluctuations and/or a trend-cycle?
+
+The `plastics` time plot below shows monthly, seasonal fluctionations in each one-year period. The overall trend-cycle gruadually increases across the full 5-year period. 
+
+```{r ha-6.2a, fig.height=3}
+autoplot(plastics) + 
+  labs(title = "Product A: Monthly Sales for a Plastics Manufacturer", 
+       subtitle = "Time Plot over a 5-Year Period", 
+       x = "Year", 
+       y = "Monthly Sales")
+```
+
+### (b). Use a classical multiplicative decomposition to calculate the trend-cycle and seasonal indices.
+
+Using the `decompose` function from the `stats` package, we can view the trend-cycle and seasonal indices for our `plastics` data. The graphs below show the sales rise and fall within each season. The trend-cycle increases throughout our observed 5-year period. 
+
+```{r ha-6.2b}
+plastics %>% 
+  decompose(type="multiplicative") %>% 
+  autoplot() + 
+  labs(title = "Product A: Monthly Sales for a Plastics Manufacturer", 
+       subtitle = "Classical Multiplicative Decomposition Graphs over a 5-Year Period", 
+       x = "Year")
+```
+
+### (c). Do the results support the graphical interpretation from part a?
+
+The results from part b align with our initial interpretation of the time plot from part a. The trend-cycle appears to decrease at the end of year 5. This may be due to the fact that the trend-cycle data is unavailable for the few and last few observations of a series. This is a recognized  limitation of classical decomposition.
+
+### (d). Compute and plot the seasonally adjusted data.
+
+The graph below overlays our original `plastics` time plot for product A with a plot containing seasonally adjusted data. The adjustments smooth out the observed seasonal fluctuations and the data follows the same overall trend-cycle we observed in part a and b. 
+
+```{r ha-6.2d}
+# decompose data using classical multiplicative decomposition
+plastics_cmd <- decompose(plastics, type = "multiplicative")
+
+# calculate and stare seasonal adjustments of data
+plastics_seas <- seasadj(plastics_cmd)
+
+# plot seasonally adjusted data; compare to original time series
+autoplot(plastics, series="Data") +
+  autolayer(plastics_seas, series="Seasonally Adjusted") +
+   labs(title = "Product A: Monthly Sales for a Plastics Manufacturer", 
+       subtitle = "Time Plot over a 5-Year Period", 
+       x = "Year", 
+       y = "Monthly Sales")+
+  scale_colour_manual(values=c("gray","blue"),
+                      breaks=c("Data","Seasonally Adjusted","Trend"))
+```
+
+### (e). Change one observation to be an outlier (e.g., add 500 to one observation), and recompute the seasonally adjusted data. What is the effect of the outlier?
+
+```{r ha-6.2e}
+# duplicate data; change a singular observation to an outlier
+plastics2 <- plastics; plastics2[12] <- plastics2[12]+500
+
+#recompute seasonal adjustment
+plastics2 %>% 
+  decompose(type="multiplicative") %>% 
+  autoplot() + 
+  labs(title = "Product A: Monthly Sales for a Plastics Manufacturer", 
+       subtitle = "Classical Multiplicative Decomposition Graphs over a 5-Year Period",
+       caption = "*Changes made to the 12th oberserved value.",
+       x = "Year")
+```
+
+We changed the last observation in year one to be an outlier by adding 500 to the observed value in the 12th month. From our original data, we know that our data follows a decremental trend towards the end of the year. By altering the value of December of Year 1, we can see that an outlier creates a large spike in our data and remainder plots; however, the outlier has little affect on our seasonal and trend cycles. 
+
+### (f). Does it make any difference if the outlier is near the end rather than in the middle of the time series?
+
+Yes, the location of the outlier affects the time series graph. In the example below, we moved the outlier from Year 1, Month 12 to Year 2, Month 6. During the middle of the seasonal cycle, we expect to see the data peak. Unlike part e, our new outlier shows a much more prominent spike in the seasonally adjusted data. 
+
+```{r ha-6.2f}
+# duplicate data; change a singular observation to an outlier
+plastics3 <- plastics; plastics3[18] <- plastics3[18]+500
+
+#recompute seasonal adjustment
+plastics3 %>% 
+  decompose(type="multiplicative") %>% 
+  autoplot() + 
+  labs(title = "Product A: Monthly Sales for a Plastics Manufacturer", 
+       subtitle = "Classical Multiplicative Decomposition Graphs over a 5-Year Period",
+       caption = "*Changes made to the 18th oberserved value.",
+       x = "Year")
+```
+
+

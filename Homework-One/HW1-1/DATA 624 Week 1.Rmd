@@ -1,0 +1,154 @@
+---
+title: "DATA 624 Week 1"
+author: "Vinicio Haro"
+date: "September 12, 2019"
+output: html_document
+---
+
+This document contains the homework problems for the first half of the semester. 
+book 1: https://otexts.com/fpp2/
+
+Rpubs: http://rpubs.com/vharo00/527511
+
+# Week 1 HW Problems 
+## HA 2.1 & 2.3
+
+### 2.1 
+Use the help function to explore what the series gold, woolyrnq and gas represent.
+
+* Use autoplot() to plot each of these in separate plots:
+
+* What is the frequency of each series? Hint: apply the frequency() function.
+ 
+* Use which.max() to spot the outlier in the gold series. Which observation was it?
+
+```{r warning=FALSE, message=FALSE}
+library(fpp2)
+library(ggplot2)
+
+#help("gold")
+#help("woolyrnq")
+#help("gas")
+```
+
+#### Gold
+
+The Gold data represents the daily morning gold prices in US dollars. The time range for this data runs from Januay 1st 1985 through March 31st 1989. 
+```{r warning=FALSE, message=FALSE}
+summary(gold);
+
+autoplot(gold) +
+  ggtitle("Daily Morning Gold Prices") +
+  xlab("Day") +
+  ylab("Price")
+```
+
+What is the Frequency of Gold? 
+```{r warning=FALSE, message=FALSE}
+print(paste0("The Frequency of Gold is ",frequency(gold)))
+```
+
+Where is the outlier?
+```{r warning=FALSE, message=FALSE}
+print(paste0("Outlier: ", which.max(gold)))
+```
+
+Using autoplot,we can see the overall daily trend of gold prices. They appear to be mostly increasing up until a bit before day 800. 
+
+The frequency is 1,which is to be expected based on the description of the data. For TS objects, the time series frequency is the time partiton. In our case, our time is partitioned daily. 
+
+The data has an outlier at 770. The gold price surges. This would be interesting to investigate what happened on that day. Was there some external force that influenced the price of gold that day? 
+
+#### Wool
+
+The woolyrnq data represents the quarterly production of wollen yar in Australia. This data set runs from March 1965 through September 1994. 
+```{r warning=FALSE, message=FALSE}
+summary(woolyrnq)
+
+autoplot(woolyrnq) +
+  ggtitle("Quarterly Production of Woollen Yarn in Australia") +
+  xlab("Year") +
+  ylab("Wool")
+```
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("The Frequency of Woolyrnq is ",frequency(woolyrnq)))
+```
+
+The plot of the time series seems to indicate a mostly decreasing trend. The frequency of our time series is 4, which makes sense since the data is partitioned quarterly. Such a drastic decrease around 1970 is something worth investigating. 
+
+
+#### Gas
+
+The gas data represents Australian monthly gas production. The data runs from 1956 through 1995. 
+```{r message=FALSE, warning=FALSE}
+summary(gas)
+
+autoplot(gas) +
+  ggtitle("Australian Mothly Gas Production") +
+  xlab("Year") +
+  ylab("Gas Produced")
+```
+
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("The Frequency of Gas is ",frequency(gas)))
+```
+
+
+The trend is indicating a mostly increasing trend, especially aftr 1970. One could speculate if there was a spike in the demand for gas produced. The frequency is 12, meaning monthly time partitons. 
+
+
+### 2.3 
+
+Download some monthly Australian retail data from the book website. These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
+
+* You can read the data into R with the following script: retaildata <- readxl::read_excel("retail.xlsx", skip=1) The second argument (skip=1) is required because the Excel sheet has two header rows.
+
+* Select one of the time series as follows (but replace the column name with your own chosen column): myts <- ts(retaildata[,"A3349873A"],
+  frequency=12, start=c(1982,4))
+  
+* Explore your chosen retail time series using the following functions: autoplot(), ggseasonplot(), ggsubseriesplot(), gglagplot(), ggAcf(). Can you spot any seasonality, cyclicity and trend? What do you learn about the series?
+
+#### Loading in the Data Using the Provided Script 
+The data will be kept here: https://github.com/vindication09/DATA-624/blob/master/retail.xlsx
+```{r message=FALSE, warning=FALSE}
+library(readxl)
+
+retaildata <- readxl::read_excel("/Users/bpoulin/Dropbox/Data-624-mine/data/homework-one/retail.xlsx", skip=1)
+
+head(retaildata)
+```
+
+#### Select a  Time Series of your Choosing by Replacing the Column Name
+```{r warning=FALSE, message=FALSE}
+myts <- ts(retaildata[,"A3349350R"], frequency=12, start=c(1982,4))
+```
+
+
+#### Explore the Selected Time Series with the Given Functions 
+autoplot(), ggseasonplot(), ggsubseriesplot(), gglagplot(), ggAcf()
+
+```{r warning=FALSE, message=FALSE}
+autoplot(myts) + 
+  ggtitle("A3349350R")+
+  xlab("Time") +
+  ylab("Sales");
+
+ggseasonplot(myts);
+
+ggsubseriesplot(myts);
+
+gglagplot(myts);
+
+ggAcf(myts)
+```
+
+There appears to be mostly increasing tred with the exception of a slight dip after 2010. The auto plot shows evidence of seasonal changes in the data, evident by the constant fluctiations withi each period. We can use the seaosonal plot to drill down furthur.
+
+The seasonal plot actually shows a spike in consumer spending between from Nov and December. The slope of each spike increases every year. This could be representative of an increasing consumer culture mindset. 
+
+The sub series plot is confirming what we have already suspected regarding seasonality especially when it comes to the month of December. We know December to be a major retail month. 
+
+Lag plots show negative and positive relationships. We see evidence of trends within the lag plots. 
+

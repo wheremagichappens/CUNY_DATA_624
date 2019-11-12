@@ -1,0 +1,427 @@
+---
+title: 'DATA 624: Group 2 Homework'
+author: 'Juliann McEachern'
+output: 
+  html_document:
+    theme: yeti
+    highlight: pygments
+    toc: true
+    toc_float: true
+    toc_depth: 1
+    df_print: paged
+    code_folding: hide
+---
+
+# Assignment 6
+
+Assignment 6 contains work from week 6 and 7 and includes problems 8.1, 8.2, 8.6 and 8.6 from the HA text. The following R packages have been used for completion of all homework assignments to date:
+
+```{r dependencies, echo=T, warning=F, message=F, comment=F}
+#Textbook Packages
+library(fpp2)
+library(AppliedPredictiveModeling)
+library(mlbench)
+
+#Processing
+library(tidyverse)
+
+#Graphing
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(lemon)
+
+#Math
+library(caret)
+library(forecast)
+library(randomForest)
+library(seasonal)
+library(psych)
+library(corrplot)
+
+#Formatting
+library(knitr)
+library(kableExtra)
+```
+
+# 8.1: Figure 8.31 shows the ACFs for 36 random numbers, 360 random numbers and 1,000 random numbers. {.tabset}
+
+```{r fig-8.31, echo=F, fig.width=8, fig.align = "center"}
+include_graphics("../data/HA_figure_8.1a.jpg")
+```
+
+## (a). 
+
+### Explain the differences among these figures. Do they all indicate that the data are white noise?
+
+ACF plots (also known as correlograms) are used to graph the autocorrelation coeffients of lag values in a timeseries. In white noise series, we expect autocorrelation to be close to zero. This component is observed in the ACF plots by examining the dashed blue lines. 
+
+Using this knowledge, we can determine that all three series are white noise they all show just a small spread between these blue lines and hover around 0. Only two lag lines come close to exceeding this boundary, but none are significant or escape the denoted critical value. 
+
+## (b). 
+
+### Why are the critical values at different distances from the mean of zero? Why are the autocorrelations different in each figure when they each refer to white noise?
+
+The blue line boundary on an ACF plot is calculated using the formula $\pm 2 / \sqrt{T}$, where $T$ represents the length of time in a series. The series from figure 8.31 all consist of different time values, thus they have different critical values.  
+
+#  8.2: A classic example of a non-stationary series is the daily closing IBM stock price series (data set `ibmclose`). Use R to plot the daily closing prices for IBM stock and the ACF and PACF. Explain how each plot shows that the series is non-stationary and should be differenced. {.tabset}
+
+## (a).
+
+### Time Series Plot
+
+```{r 8.2a, fig.width=8, fig.height=3,fig.align="center"}
+p1 <- autoplot(ibmclose) + labs(title="Non-Stationary", y="Price", x="Days")
+p2 <- autoplot(diff(ibmclose)) + labs(title="Differenced", y="Price", x="Days")
+
+grid.arrange(p1, p2, ncol=2, top="Daily Closing IBM Stock Price")
+```
+Daily closing prices from the `ibmclose` dataset are non-stationary and show an overall trend component. Seasonality is harder to distinguish at this frequency. There may be a cyclical component where pattern changes occur over a non-specific period of time, however, there are not enough observations to determine this. 
+
+We can compare this plot to a differenced timeseries, in which the stock prices are stationary and do not depend on the time at which the series is observed. Stationary models are required for autoregression modeling and analysis. 
+
+## (b).
+
+### Acf Plot 
+
+```{r 8.2b, fig.width=8, fig.height=3, fig.align="center"}
+p1 <- ggAcf(ibmclose)
+p2 <- ggAcf(diff(ibmclose))
+
+grid.arrange(p1, p2, ncol=2, top="Daily Closing IBM Stock Price")
+```
+In our `ibmclose` series, we can identify large, positive, and slowly decreasing lags. This further indicates that our data is non-stationary, trended, and autocorrelated. Seasonal fluxuations do not appear present within our lags. 
+
+Autoregressive models, however, require stationary data. The `ibmclose` data could be differenced to meet this requirement.  The `diff(ibmclose)` series has no signs of autocorrelation outside the 95% limit ($\pm 0.1$) as shown by the dashed blue lines. This plot appears similiar to a white noise series.  
+
+## (c).
+
+### Pacf Plot
+
+```{r 8.2c, fig.width=8, fig.height=3, fig.align="center"}
+p1 <- ggPacf(ibmclose)
+p2 <- ggPacf(diff(ibmclose))
+
+grid.arrange(p1, p2, ncol=2, top="Daily Closing IBM Stock Price")
+```
+
+Lastly, the Pacf plot is used to look at partial autocorrelation. This plot analyzes the correlation of residuals after removing the effect explained by previous lags.  Our Pacf plot of the `ibmclose` series a sharp cut off after the first lag.
+
+Pacf is very beneficial in determining order of moving averages component of a non-seasonal ARIMA model. In the differentiated data, there are two spikes outside the 95% limit. These can be ignored though as they do not occur in our initial lags and fall just outside the $\pm 0.1$ limit. The differentiated Pacf plot further suggests a white-noise ARIMA model of the stationary data. 
+
+
+# 8.6: Use R to simulate and plot some data from simple ARIMA models. {.tabset}
+
+## (a). 
+
+### Use the following R code to generate data from an AR(1) model with $\phi_1=0.6$ and $\sigma^2=1$. The process starts with $y_1=0$. 
+
+```{r 8.6a, error=T}
+# Sample Code 
+y <- ts(numeric(100))
+e <- rnorm(100)
+for(i in 2:100)
+  y[i] <- 0.6*y[i-1] + e[i]
+
+# Function
+
+AR1 <- function(phi1,sigma2, c){
+  # add warnings for expected constraints for AR1 parameters values 
+  if (phi1 < -1) warning("'phi1' should be > -1 for AR(1) models")
+  if (phi1 > 1) warning("'phi1' should be < 1 for AR(1) models")
+  if (phi1 < 1 & phi1 >-1) message("Model: AR(1) ")
+  
+  # set random number generation (RNG) state 
+  set.seed(5)
+  
+  # generate time series 1:100
+  y <- ts(numeric(100))
+  
+  #  RNG of epsilon with constant variance (sigma^2)
+  e <- rnorm(100, sd=sigma2)
+  
+  # apply formula to all but the first ts observation so that y1=0
+  for(i in 2:100){
+    y[i] <- c+phi1*y[i-1] + e[i]
+  }
+  return(y)
+}
+
+# Set parameters per instruction
+phi1=0.6; sigma2=1; c=0
+
+# Generate Data
+AR1(phi1, sigma2, c)
+```
+
+## (b). 
+
+### Produce a time plot for the series. How does the plot change as you change $\phi_1$?
+
+```{r 8.6b, fig.width=8, fig.height=4, fig.align="center"}
+nam <- expression(phi[1])
+
+AR1_phi1 <- suppressMessages(cbind("-0.9" = AR1(-0.9, 1,0),
+                 "-0.6" = AR1(-0.6, 1,0),
+                 "0.0" = AR1(0.0, 1,0), 
+                 "0.6" = AR1(0.6, 1,0),
+                 "0.9" = AR1(0.9, 1,0)))
+
+pallete = c("#dfb1c5", '#86d1f1', "#000000", '#5ead7f', '#a931a1')
+
+autoplot(AR1_phi1, size=1, alpha=.5)+
+  scale_color_manual(name = nam, values=pallete)+
+  labs(title="Time Plot of AR(1) Model Series", 
+       subtitle=expression("Display of Changes in"~phi~"when c=0"),
+       y="Value") +
+  theme(legend.position = "bottom")
+```
+The AR(1) Model at $\phi=0$ should be the equivalent of white noise. The $y_t$ is expected to oscillate around the mean when $\phi<0$. We observe this pattern in the time plot below. The variation and pattern observed in $y$ changes as the $\phi$ parameter changes We would expect $y_t$ to resemble a random walk when $\phi=1$ and $c=0$. 
+
+
+## (c). 
+
+### Write your own code to generate data from an MA(1) model with $\theta_1=0.6$ and $sigma^2=1$.
+
+```{r 8.6c}
+# Function
+MA1 <- function(theta1,sigma2,c){
+  # add warnings for expected constraints for MA1 parameters values 
+  if (theta1 < 0) warning("'theta' should be > 0 for MA(1) models")
+  if (theta1 > 1) warning("'theta' should be < 1 for MA(1) models")
+  if (theta1 < 1 & theta1 >0) message("Model: MA(1)")
+  
+  # set random number generation (RNG) state 
+  set.seed(5)
+  
+  # generate time series 1:100
+  y <- ts(numeric(100))
+  
+  #  RNG of epsilon with constant variance (sigma^2)
+  e <- rnorm(100, sd=sigma2)
+  
+  # apply formula to all but the first ts observation so that y1=0
+  for(i in 2:100){
+    y[i] <- c+theta1*e[i-1] + e[i]
+  }
+  return(y)
+}
+
+# Set parameters per instruction
+theta1=0.6; sigma2=1; c=0
+
+# Generate Data
+MA1(theta1, sigma2, c)
+```
+
+## (d).
+
+### Produce a time plot for the series. How does the plot change as you change $\theta_1$?
+
+```{r 8.6d, fig.width=8, fig.height=3, fig.align="center"}
+nam <- expression(theta[1])
+
+MA1_theta1 <- cbind("0.1" = suppressMessages(MA1(0.1,1,0)), 
+              "0.3" = suppressMessages(MA1(0.3,1,0)),
+              "0.6" = suppressMessages(MA1(0.6,1,0)),
+              "0.9" = suppressMessages(MA1(0.9,1,0)))
+
+pallete = c("#d74887", "#000000", "#86d1f1", "#5ead7f")
+
+autoplot(suppressMessages(MA1_theta1), size=1, alpha=.5) +
+  scale_color_manual(name=nam, values=pallete) +
+  labs(title="Time Plot of MA(1) Model Series", 
+       subtitle=expression("Display of Changes in"~theta[1]~"when c=0 and"~sigma^2~"=1"),
+       y="Value")  +
+  theme(legend.position = "bottom")
+```
+
+When $\theta_1$ increases, we observe higher peaks and troughs in the $y_t$ value.  In a MA(1) model, we expect the weight of the moving average to be the most constant when $\theta_1$ nears the value of 1. Conversely, the most recent observations have more influence on $y_t$ than past observations when $\theta_1<1$.
+
+
+## (e). 
+
+### Generate data from an ARMA(1,1) model with $\phi_1=0.6$, $\theta_1=0.6$, and $\sigma^2=1$.
+
+```{r 8.6e}
+# Reference ARMA(1,1) Equation:  http://feldman.faculty.pstat.ucsb.edu/174-03/lectures/l7.pdf
+
+# Function
+ARMA11 <- function(phi1, theta1, sigma2, c){
+  # add warnings for expected constraints for ARMA(1,1) parameters values 
+  if (phi1 + theta1 == 0) warning("'phi1 + theta1' should be != 0 for ARMA(1,1) models ")
+  if (phi1 + theta1 != 0) message("Model: ARMA(1,1) ")
+  # set random number generation (RNG) state 
+  set.seed(5)
+  # generate time series 1:100
+  y <- ts(numeric(100))
+  #  RNG of epsilon with constant variance (sigma^2)
+  e <- rnorm(100, sd=sigma2)
+  # apply formula to all but the first ts observation so that y1=0
+  for(t in 2:100){
+    y[t] <- phi1*y[t-1]+e[t]+theta1*e[t-1]
+  }
+  return(y)
+}
+
+# Set parameters per instruction
+phi1=0.6; theta1=0.6; sigma2=1; c=0
+
+# Generate Data
+e <- ARMA11(phi1, theta1, sigma2, c)
+e
+```
+
+## (f). 
+
+### Generate data from an AR(2) model with $\phi_1=-0.8$, $\phi_2=0.3$, and $\sigma^2=1$. (Note that these parameters will give a non-stationary series.) 
+
+```{r 8.6f1}
+# Function
+AR2 <- function(phi1, phi2, sigma2, c){
+  # add warnings for expected constraints for AR2 parameters values 
+  if (phi2 < -1) warning("Warning: 'phi2' should be > -1 for AR(2) model. ")
+  if (phi2 > 1) warning("Warning: 'phi2' should be < 1 for AR(2) model. ")
+  if (phi1 + phi2 > 1) warning("Warning: 'phi1+phi2' should be < 1 for AR(2) model. ")
+  if (phi2 - phi1 > 1) warning("Warning: 'phi2-phi1' should be < 1 for AR(2) model. ")
+  if (phi2 > -1 & phi1 < 1 & phi1 + phi2 < 1 & phi2 - phi1 < 1) message("Model: AR(2). ")
+  # set random number generation (RNG) state 
+  set.seed(5)
+  # generate time series 1:100
+  y <- ts(numeric(100))
+  #  RNG of epsilon with constant variance (sigma^2)
+  e <- rnorm(100, sd=sigma2)
+  # apply formula to all but the first ts observation so that y1=0
+  for(i in 2:100){
+    y[i] <- c+phi1*y[i-1] + phi2*y[i-1]+ e[i]
+  }
+  return(y)
+}
+
+# Set parameters per instruction
+phi1=-0.8; phi2=0.3; sigma2=1; c=0
+
+# Generate Data
+f <- AR2(phi1, phi2, sigma2, c)
+f
+```
+
+## (g). 
+
+### Graph the latter two series and compare them.
+
+```{r 8.6g, message=F, fig.width=8, fig.height=3, fig.align="center"}
+autoplot(suppressMessages(e), series="AR(1,1)", size=1, alpha=.5)+
+  autolayer(suppressMessages(f), series="AR(2)")+
+  labs(title="Time Plot of AR(1,1) and AR(2) Model Series",
+       y="Value")  +
+  theme(legend.position = "bottom")
+```
+When $|\theta_1|$ nears 0 in an ARMA(1,1) model, the data follows a pattern similiar to an AR(1) model. When $|\phi_1|$ nears zero, it behaves similarly to a MA(1) model. Our ARMA(1,1) model from  8.6(e). has parameters of $\phi_1=0.6$ and $\theta_1=0.6$, thus we do not expect explict AR(1) or MA(1) patterns.  
+
+Our AR(2) series shows some evidence of trend. This is likely due to the parameters of the AR(2) model from 8.6(f) being set to generate non-staionary data. Conversely, the parameters in the ARMA(1, 1) model from 8.6(e) generate stationary.  
+
+# 8.8: Consider `austa`, the total international visitors to Australia (in millions) for the period 1980-2015. {.tabset}
+
+```{r 8.8, echo=F, fig.width=8, fig.height=3, fig.align="center"}
+p1 <- autoplot(austa) + labs(title="Time Plot", x="Years", y="Visitors (in Millions)")
+p2 <- ggAcf(austa) + labs(title="ACF", y="Correlation ")
+p3 <- ggPacf(austa) + labs(title="PACF", y="Correlation ")
+
+grid.arrange(p1,p2,p3, ncol=3, top="International Visitors to Australia (1980-2015)")
+```
+
+## (a). 
+
+### Use `auto.arima()` to find an appropriate ARIMA model. What model was selected. Check that the residuals look like white noise. Plot forecasts for the next 10 periods. {.tabset}
+
+#### ARIMA Model Selection 
+
+The `auto.arima()` function selected ARIMA(0,1,1) with drift. 
+
+```{r 8.8a1, fig.height=3, fig.width=8}
+auto.arima(austa)
+```
+
+#### ARIMA Residuals 
+
+```{r 8.8a2, fig.height=3, fig.width=8, fig.align="center"}
+checkresiduals(auto.arima(austa))
+```
+
+ARIMA(0,1,0) model appears to meet the two expected properties of for residuals: The residual plot displays constant variance and the residual histogram follows a normal distribution. There is evidence of white noise as shown in the Ljung-Box test and ACF plot. The Ljung-Box test has a low Q* value and significant p-value and the ACF lags all fall below the critical value. 
+
+#### ARIMA Forecasts 
+
+The following shows our ARIMA(0,1,0) forecasts for the next 10 periods.
+
+```{r 8.8a3}
+forecast(auto.arima(austa), h="10")
+```
+
+## (b). 
+
+### Plot forecasts from an ARIMA(0,1,1) model with no drift and compare these to part a. Remove the MA term and plot again.
+
+```{r 8.8b, fig.height=3, fig.width=8, fig.align="center"}
+p1 <- austa %>% auto.arima() %>% forecast(h="10") %>% autoplot() + labs(y="Visitors (in Millions)", x="Years")
+p2 <- austa %>% Arima(order = c(0, 1, 0)) %>% forecast(h="10") %>% autoplot() + labs(y="Visitors (in Millions)", x="Years")
+grid.arrange(p1, p2, ncol=2, top="10-Year Forecast Comparison for International Australian Visitors")
+```
+The ARIMA(0,1,1) model estimate and prediction interval increases over the 10-year forecast. Meanwhile, the ARIMA(0,1,0) maintains stable point forecast over the estimated time with an increasing prediction interval. The prediction interval appears larger in the ARIMA(0,1,0), likely due to additional error terms used in this model. 
+
+## (c). 
+
+### Plot forecasts from an ARIMA(2,1,3) model with drift. Remove the constant and see what happens.
+
+```{r 8.8c, fig.height=3, fig.width=8, fig.align="center"}
+ARIMA213d <- austa %>% 
+  Arima(order = c(2, 1, 3), include.drift = T, include.constant = T) %>% 
+  forecast(h="10") 
+
+ARIMA213nc <- austa %>% 
+  Arima(order = c(2, 1, 3), include.constant = F, method='ML') %>% 
+  forecast(h="10") 
+
+p1 <- autoplot(ARIMA213d) + labs(y="Visitors (in Millions)", x="Years")
+p2 <- autoplot(ARIMA213nc)+ labs(y="Visitors (in Millions)", x="Years")
+grid.arrange(p1, p2, ncol=2, top="10-Year Forecast Comparison for International Australian Visitors")
+```
+We are unable to move the constant from the ARIMA(2,1,3) using the `Arima` function when the default fitting method includes a conditional sum-of-squares (CSS) component. An error was thrown when attempting this method as CSS would have generated a non-stationary autoregression when the constant was removed. Instead, we removed the constant by changing the method to maximum likelihood ("ML"). This also removed the drift component from our forecast. 
+
+The forecast comparison below shows that removing the constant and drift significantly increases the prediction and prediction interval for our `austa` time series. 
+
+## (d). 
+
+### Plot forecasts from an ARIMA(0,0,1) model with a constant. Remove the MA term and plot again.
+
+```{r 8.8d, fig.height=3, fig.width=8, fig.align="center"}
+ARIMA001c <- austa %>% 
+  Arima(order = c(0, 0, 1), include.constant = T) %>% 
+  forecast(h="10") 
+
+ARIMA000c <- austa %>% 
+  Arima(order = c(0, 0, 0), include.constant = T) %>% 
+  forecast(h="10") 
+
+p1 <- autoplot(ARIMA001c) + labs(y="Visitors (in Millions)", x="Years")
+p2 <- autoplot(ARIMA000c)+ labs(y="Visitors (in Millions)", x="Years")
+grid.arrange(p1, p2, ncol=2, top="10-Year Forecast Comparison for International Australian Visitors")
+```
+The ARIMA(0,0,1) model with moving averages shows a sharp decline in the predicted values before stabilizing to a linear trend. There prediction interval is very large for the ARIMA(0,0,1) modeling of our `austa` series.  We removed the moving average component using a ARIMA(0,0,0) model. This increased the prediction interval even more and created a steady linear point forecast. Neither forecasts seem realistic for our given data. 
+
+## (e). 
+
+### Plot forecasts from an ARIMA(0,2,1) model with no constant.
+
+```{r 8.8e, fig.height=3, fig.width=8, fig.align="center"}
+austa %>% 
+  Arima(order = c(0, 2, 1), include.constant = F) %>% 
+  forecast(h="10") %>% 
+  autoplot() + 
+  labs(subtitle="Without constant",y="Visitors (in Millions)", x="Years")
+```
+Our final plot shows the ARIMA(0,2,1) model without a constant. The presence of a constant in this model does not appear to affect the prediction or prediction interval. 
+
+ARIMA(0,2,1) specifies a differencing and moving average component within the model. This creates an increasing affect in the forecast and prediction interval. 
+
