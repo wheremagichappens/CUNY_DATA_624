@@ -9,6 +9,7 @@
 *  Only call plotting and formatting libraries as needed in the RMD to compile assignment 
 
 ## FORMATTING:
+#### GENERAL:
 *  Update homework YAML with name and date completed only 
 *  Universal latex formatting will be applied to the final submission to ensure everyone can compile document on their machine
 *  Each document should be knitted to a pdf for each group member to review.
