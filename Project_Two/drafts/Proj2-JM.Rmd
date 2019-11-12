@@ -1,0 +1,8 @@
+---
+title: 'DATA 624: Project 2'
+author: "Juliann McEachern"
+date: "December 10, 2019"
+output: pdf_document
+---
+
+Juliann's individual contribution to Project-2. 
