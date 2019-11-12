@@ -17,7 +17,7 @@ All members are expected to fully complete each assignment. Answers for final su
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | **HW2-1**  |  Completed: 10/26  | Completed: 10/27  | Not Complete  | Completed: 10/23 | Completed: 10/28  |
 | **HW2-2**  | Completed: 10/31  | Completed: 11/05  | Not Complete  | Completed: 10/29  | Completed: 11/01  |
-| **HW2-3**  | Not Complete  | Not Complete  | Not Complete  | Not Complete | Not Complete  |
+| **HW2-3**  | Not Complete  | Not Complete  | Not Complete  | Completed: 11/12 | Not Complete  |
 | **HW2-4**  | Not Complete  | Not Complete  | Not Complete  | Not Complete  | Not Complete  |
 
 ## Meet-Ups
