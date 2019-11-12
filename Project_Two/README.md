@@ -2,14 +2,14 @@
 
 ### Overview 
 
-Add information here based on next meet up pertaining to how the group will divide roles and responsibilities for Project. 
+Add information here based on next meet up pertaining to how the group will divide roles and responsibilities for project. 
 
 ### Roles and Responsibilities
 
 Add roles and responsibilities here. 
 
-#### Timeline
+### Timeline
 
 Add timeline here. 
 
-Due date: 12/16
+**Due date: 12/16**
