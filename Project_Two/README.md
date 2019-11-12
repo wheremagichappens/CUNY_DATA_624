@@ -12,4 +12,4 @@ Add roles and responsibilities here.
 
 Add timeline here. 
 
-**Due date: 12/16**
+**Due date:** 12/10
