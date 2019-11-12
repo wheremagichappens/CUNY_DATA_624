@@ -179,8 +179,6 @@ I was unable to find a package which plotted the terminal nodes of the cubist pa
 
 ```{r kj-8.7c, fig.height=8}
 cbDotPlot
-
-summary(cbModel)
 ```
 
 ## R Code
@@ -306,6 +304,5 @@ cbImpPlot <- cbImp$importance %>% as.data.frame()%>% rownames_to_column("Variabl
 
 # (8.7c)
 cbDotPlot<- dotplot(cbModel$finalModel)
-summary(cbModel)
 ```
 
