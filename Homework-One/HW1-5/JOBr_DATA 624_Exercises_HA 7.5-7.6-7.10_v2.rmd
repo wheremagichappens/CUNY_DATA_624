@@ -1,0 +1,404 @@
+---
+title: "DATA 624_Exercises_HA 7.5, 7.6, 7.10"
+author: "Jeremy O'Brien"
+date: "September 23, 2019"
+output: html_document
+---
+
+```{r, message = FALSE, warning = FALSE}
+
+if (!require('fpp2')) (install.packages('fpp2'))
+if (!require('kableExtra')) (install.packages('kableExtra'))
+if (!require('dplyr')) (install.packages('dplyr'))
+
+#if (!require('forecast')) (install.packages('forecast'))
+#if (!require('tidyr')) (install.packages('tidyr'))
+#if (!require('magrittr')) (install.packages('magrittr'))
+#if (!require('scales')) (install.packages('scales'))
+
+```
+
+
+### Exercise 7.5
+#### Data set `books` contains the daily sales of paperback and hardcover books at the same store.  The task is to forecast the next four days' sales for paperback and hardcover books.
+
+```{r, echo = FALSE}
+
+data(books)
+
+```
+
+<br>
+
+#### (a) Plot the series and discuss the main features of the data.
+
+```{r, warning = FALSE}
+
+autoplot(books) +
+  theme_minimal() +
+  labs(title = 'Books: daily unit sales by type',
+       y = 'Unit Sales', 
+       x = 'Days')
+
+
+```
+
+#### Per the description, daily unit sales of paperback and hardcover books at a single store for 30 days.  Both are increasing over the time period, with considerable perturbation day-to-day.  While paperbacks and hardcovers both have a similar range of unit salesp, peaks and valleys are not well synchronized.
+
+<br>
+
+#### (b) Use the `ses()` function to forecast each series, and plot the forecasts.
+
+```{r, warning = FALSE}
+
+# Subset the multivariate time series, extracting only paperback data
+paper <- books[,1]
+
+# Create a simple exponential smoothing forecast
+fc_paper <- ses(paper, h = 5)
+
+# Output the summary and plot the forecast
+summary(fc_paper)
+autoplot(fc_paper) +
+  theme_minimal() +
+  labs(title = 'Paperbacks: units sales with four-day SES forecast',
+       y = 'Unit Sales', 
+       x = 'Days')
+
+
+```
+
+#### [ANSWER]
+
+<br>
+
+``` {r}
+
+# Subset only for hardcover data
+hard <- books[,2]
+
+# Create a simple exponential smoothing forecast
+fc_hard <- ses(hard, h = 5)
+
+# Plot the forecast
+summary(fc_hard)
+autoplot(fc_hard)  +
+  theme_minimal() +
+  labs(title = 'Hardcovers: units sales with four-day SES forecast',
+       y = 'Unit Sales', 
+       x = 'Days')
+
+```
+
+<br>
+
+#### (c) Compute the RMSE values for the training data in each case.
+
+```{r, warning = FALSE}
+
+cat('\n Paperback forecast RMSE = ', round(accuracy(fc_paper)[2], 2))
+cat('\n Hardcover forecast RMSE = ', round(accuracy(fc_hard)[2], 2))
+
+```
+
+#### The RMSE values indicate that the time series model accounts for more of the variance in paperbacks than that in hardcovers.  RMSE penalizes large errors more than consistent variances, and is thus less robust to large outliers.
+
+<br>
+
+#### Exercise 7.6
+#### (a) Now apply Holt's linear method to the `paperback` and `hardback` series and compute four-day forecasts in each case.
+
+```{r, warning = FALSE}
+
+# Apply linear method with four-day forecast for paperbacks
+fc_h_paper <- holt(paper, h = 4)
+
+# Same for hardcovers
+fc_h_hard <- holt(hard, h = 4)
+
+# Plot the forecasts
+autoplot(fc_h_paper) +
+  theme_minimal() +
+  labs(title = 'Paperbacks: units sales with four-day Holt linear forecast',
+       y = 'Unit Sales', 
+       x = 'Days')
+autoplot(fc_h_hard) +
+  theme_minimal() +
+  labs(title = 'Paperbacks: units sales with four-day Holt linear forecast',
+       y = 'Unit Sales', 
+       x = 'Days')
+
+```
+
+#### With the linear method, the clear positive trend is taken into account for both the paperback and hardcover time series, with hardcover demonstrating a steeper slope in the forecast.
+
+<br>
+
+#### (b) Compare the RMSE measures of Holt's method for the two series to those of simple exponential smoothing in the previous question.  (Remember that Holt's method is using one more parameter than SES.)  Discuss the merits of the two forecasting methods for these data sets.
+
+```{r, warning = FALSE}
+
+cat('\n Paperback Holt linear forecast RMSE = ', round(accuracy(fc_h_paper)[2], 2))
+cat('\n Hardcover Holt linear forecast RMSE = ', round(accuracy(fc_h_hard)[2], 2))
+
+```
+
+#### The RMSE values using Holt's method are slightly lower than for SES, indicating that this model accounts for more variance.  SES does not address the 30-day upward trend in both series and thus leaves some important information out in this case.
+
+#### (c) Compare the forecasts for the two series using both methods.  Which do you think is best?
+
+#### Given the visual evidence of a 30-day upward trend, including a trend parameter with Holt's linear method is likely to provide a better forecast.
+
+<br>
+
+#### (d) Calculate a 95% prediction interval for the first forecast for each series, using the RMSE values and assuming normal errors.  Compare your intervals with those produced using `ses` and `holt`.
+
+```{r}
+
+# For paperbacks, call mean prediction of SES and compute upper and lower values of interval
+fc_interv_paper <- c((fc_paper$mean[1] - sd(fc_paper$residuals) * 1.96),
+             (fc_paper$mean[1] + sd(fc_paper$residuals) * 1.96))
+
+fc_h_interv_paper <- c((fc_h_paper$mean[1] - sd(fc_h_paper$residuals) * 1.96),
+             (fc_h_paper$mean[1] + sd(fc_h_paper$residuals) * 1.96))
+
+cat('\n Paperback SES low forecast = ', scales::comma(fc_paper$lower[5]), 
+    '\n Paperback Holt linear low forecast = ', scales::comma(fc_h_paper$lower[5]), 
+    '\n Paperback manual SES low forecast = ', scales::comma(fc_interv_paper[1]),
+    '\n Paperback manual SES Holt linear low forecast = ', scales::comma(fc_h_interv_paper[1]))
+
+fc_interv_hard <- c((fc_hard$mean[1] - sd(fc_hard$residuals) * 1.96),
+             (fc_hard$mean[1] + sd(fc_hard$residuals) * 1.96))
+
+fc_h_interv_hard <- c((fc_h_hard$mean[1] - sd(fc_h_hard$residuals) * 1.96),
+             (fc_h_hard$mean[1] + sd(fc_h_hard$residuals) * 1.96))
+
+cat('\n \n Hardcover SES low forecast = ', scales::comma(fc_hard$lower[5]), 
+    '\n Hardcover Holt linear low forecast = ', scales::comma(fc_h_hard$lower[5]), 
+    '\n Hardcover manual low forecast = ', scales::comma(fc_interv_hard[1]),
+    '\n Hardcover manual SES Holt linear low forecast = ', scales::comma(fc_h_interv_paper[1]))
+
+```
+
+***
+
+### Exercise 7.10
+#### For this exercise use the dataset `ukcars`, the quarterly UK passenger vehicle production data from 1977Q1-2005Q1.
+
+#### (a) Plot the data and describe the main features of the series.
+
+```{r}
+
+data(ukcars)
+autoplot(ukcars) +
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       y = 'Passenger Vehicles (000s)', 
+       x = '')
+
+```
+
+#### This quarterly data shows seeming seasonal variation.  It does not, however, evince a consistent trend - it moves downward pre-1980 before turning back upward from 1982 until the milennium. at which time it drops to 1995 levels and plateaues.
+
+<br>
+
+#### (b) Decompose the series using STL and obtain the seasonally adjusted data.
+
+```{r}
+
+fit_stl_ukcars <- stl(ukcars, s.window = 'periodic') 
+autoplot(fit_stl_ukcars) + 
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       subtitle = 'STL method decomposition')
+
+```
+
+#### The decomposition supports the visual interpretation above - strong, consistent seasonal variation without a clear trend and a remainder that appears stochastic.
+
+<br>
+
+#### (c) Forecast the next two years of the series using an additive damped trend method applied to the seasonnaly adjusted data.  (This can be done in one step using `stlf()` with arguments etsmodel = AAN, damped = TRUE)
+
+```{r}
+
+# Forecast additive damped trend (A_dN) with stlf
+fc_adn_ukcars <- stlf(ukcars, 
+                      h = 8,
+                      etsmodel = 'AAN', 
+                      damped = TRUE)
+autoplot(fc_adn_ukcars) +
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       subtitle = '2yr forecasts from STL + ETS(A, Ad, N)',
+       y = 'Passenger Vehicles (000s)', 
+       x = '')
+
+fc8q_adn_ukcars <-
+  summary(fc_adn_ukcars) %>% 
+  as.data.frame() %>% 
+  select(`Point Forecast`) %>% 
+  rename('A_dN' = 'Point Forecast')
+
+fc8q_adn_ukcars %>% 
+  kable()
+  
+```
+
+<br>
+
+#### (d) Forecast the next two year of the series using Holt's linear method applied to the seasonally adjusted data (as before but with `damped = FALSE`)
+
+```{r}
+
+# Forecast Holt's linear method (AN)
+fc_an_ukcars <- stlf(ukcars, 
+                       h = 8,
+                       etsmodel = 'AAN', 
+                       damped = FALSE)
+autoplot(fc_an_ukcars) +
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       subtitle = '2yr forecasts from STL + ETS(A, A, N)',
+       y = 'Passenger Vehicles (000s)', 
+       x = '')
+
+fc8q_an_ukcars <-
+  summary(fc_an_ukcars) %>% 
+  as.data.frame() %>% 
+  select(`Point Forecast`) %>% 
+  rename('AN' = 'Point Forecast')
+
+fc8q_an_ukcars %>% 
+  kable()
+
+```
+
+<br>
+
+#### (e) Now use `ets()` to choose a seasonal model for the data.
+
+```{r}
+
+# additive errors, no trend, additive seasonal method
+fit_ana_ukcars <- ets(ukcars, 
+                     model = 'ZZZ',  # obtain model by minimizing AIC_c
+                     damped = NULL,
+                     alpha = NULL,
+                     beta = NULL,
+                     gamma = NULL,
+                     phi = NULL,
+                     lambda = NULL,
+                     additive.only = TRUE,
+                     restrict = TRUE,
+                     allow.multiplicative.trend = FALSE)
+
+# Estimated states over time                     
+autoplot(fit_ana_ukcars) + 
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       subtitle = 'ETS(A, N, A) method decomposition')
+```
+
+#### We should choose a seasonal additive model as seasonal variation does not appear to grow multiplicatively over time.
+
+<br>
+
+```{r}
+# Because additive, residuals are equal to one-step training errors
+cbind('residuals' = residuals(fit_ana_ukcars),
+      'forecast errors' = residuals(fit_ana_ukcars, type = 'response')) %>% 
+  autoplot(facet = TRUE) +
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       subtitle = 'ETS(A, N, A) method residuals and forecast errors',
+       x = '',
+       y = '')
+
+```
+
+<br>
+
+```{r}
+
+fc_ana_ukcars <- fit_ana_ukcars %>% 
+  forecast(h = 8) 
+
+fc_ana_ukcars %>% 
+  autoplot() +
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       subtitle = '2yr forecasts from ETS(A, N, A)',
+       y = 'Passenger Vehicles (000s)', 
+       x = '')
+
+fc8q_ana_ukcars <-
+  summary(fc_ana_ukcars) %>% 
+  as.data.frame() %>% 
+  select(`Point Forecast`) %>% 
+  rename('ANA' = 'Point Forecast')
+
+fc8q_ana_ukcars %>% 
+  kable()
+
+```
+
+#### (f) Compare the RMSE of the ETS model with the RMSE of the models you obtained using STL decompositions.  Which gives the better in-sample fits?
+
+```{r}
+
+cat('\n Additive error additive damped trend no seasonal RMSE = ', round(accuracy(fc_adn_ukcars)[2], 2))
+cat('\n Additive error additive seasonal RMSE = ', round(accuracy(fc_an_ukcars)[2], 2))
+cat('\n Additive error, forecast RMSE = ', round(accuracy(fc_ana_ukcars)[2], 2))
+
+```
+
+<br>
+
+#### (g) Compare the forecasts from the three approaches.  Which seems most reasonable?
+
+```{r}
+
+fc_compare <- cbind(fc8q_adn_ukcars, fc8q_an_ukcars, fc8q_ana_ukcars)
+
+fc_compare %>% 
+  kable()
+
+fc_3ts <- ts(fc_compare)
+
+autoplot(fc_3ts) +
+  theme_minimal() +
+  labs(title = 'UK Cars: comparison of 2yr forecasts',
+       y = 'Passenger Vehicles (000s)', 
+       x = 'Quarters')
+
+```
+
+
+<br>
+
+#### (h) Check the residuals of your preferred model.
+
+```{r}
+
+# Because additive, residuals are equal to one-step training errors
+cbind('residuals' = residuals(fc_an_ukcars),
+      'forecast errors' = residuals(fc_an_ukcars, type = 'response')) %>% 
+  autoplot(facet = TRUE) +
+  theme_minimal() +
+  labs(title = 'UK Cars: quarterly passenger vehicle unit production',
+       subtitle = 'ETS(A, A, N) method residuals and forecast errors',
+       x = '',
+       y = '')
+
+```
+
+<br>
+
+***
+
+```{r, echo = FALSE}
+
+sessionInfo()
+
+```

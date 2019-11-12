@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Assignment Three | Homework One</title>
+  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Assignment Three | Homework One" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Assignment Three | Homework One" />
+  
+  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Vinicio Haro" />
+<meta name="author" content="Sang Yoon (Andy) Hwang" />
+<meta name="author" content="Julian McEachern" />
+<meta name="author" content="Jeremy O’Brien" />
+<meta name="author" content="Bethany Poulin" />
+
+
+<meta name="date" content="2019-10-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="assignment-two.html"/>
+<link rel="next" href="assignment-four.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Data 624 - Homework I</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Overview</a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#dependencies"><i class="fa fa-check"></i><b>0.1</b> Dependencies</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#data-files"><i class="fa fa-check"></i><b>0.2</b> Data Files</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="assignment-one.html"><a href="assignment-one.html"><i class="fa fa-check"></i><b>1</b> Assignment One</a><ul>
+<li class="chapter" data-level="1.1" data-path="assignment-one.html"><a href="assignment-one.html#hyndman-exercise-2.1"><i class="fa fa-check"></i><b>1.1</b> Hyndman Exercise 2.1</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="assignment-one.html"><a href="assignment-one.html#a.-use-autoplot-to-plot-each-of-these-in-separate-plots."><i class="fa fa-check"></i><b>1.1.1</b> a. Use <code>autoplot()</code> to plot each of these in separate plots.</a></li>
+<li class="chapter" data-level="1.1.2" data-path="assignment-one.html"><a href="assignment-one.html#b.-what-is-the-frequency-of-each-series-hint-apply-the-frequency-function."><i class="fa fa-check"></i><b>1.1.2</b> b. What is the frequency of each series? Hint: apply the <code>frequency()</code> function.</a></li>
+<li class="chapter" data-level="1.1.3" data-path="assignment-one.html"><a href="assignment-one.html#c.-use-which.max-to-spot-the-outlier-in-the-gold-series.-which-observation-was-it"><i class="fa fa-check"></i><b>1.1.3</b> c. Use <code>which.max()</code> to spot the outlier in the gold series. Which observation was it?</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="assignment-one.html"><a href="assignment-one.html#hyndman-exercise-2.3"><i class="fa fa-check"></i><b>1.2</b> Hyndman Exercise 2.3</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="assignment-one.html"><a href="assignment-one.html#a.-you-can-read-the-data-into-r-with-the-following-script"><i class="fa fa-check"></i><b>1.2.1</b> a. You can read the data into R with the following script:</a></li>
+<li class="chapter" data-level="1.2.2" data-path="assignment-one.html"><a href="assignment-one.html#b.-select-one-of-the-time-series-as-follows-but-replace-the-column-name-with-your-own-chosen-column"><i class="fa fa-check"></i><b>1.2.2</b> b. Select one of the time series as follows (but replace the column name with your own chosen column):</a></li>
+<li class="chapter" data-level="1.2.3" data-path="assignment-one.html"><a href="assignment-one.html#c.-explore-your-chosen-retail-time-series-using-the-following-functions-autoplot-ggseasonplot-ggsubseriesplot-gglagplot-ggacf."><i class="fa fa-check"></i><b>1.2.3</b> c. Explore your chosen retail time series using the following functions: <code>autoplot()</code>, <code>ggseasonplot()</code>, <code>ggsubseriesplot()</code>, <code>gglagplot()</code>, <code>ggAcf()</code>.</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="assignment-two.html"><a href="assignment-two.html"><i class="fa fa-check"></i><b>2</b> Assignment Two</a><ul>
+<li class="chapter" data-level="2.1" data-path="assignment-two.html"><a href="assignment-two.html#hyndman-6.2"><i class="fa fa-check"></i><b>2.1</b> Hyndman 6.2</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="assignment-two.html"><a href="assignment-two.html#a.-plot-the-time-series-of-sales-of-product-a.-can-you-identify-seasonal-fluctuations-andor-a-trend-cycle"><i class="fa fa-check"></i><b>2.1.1</b> a. Plot the time series of sales of product A. Can you identify seasonal fluctuations and/or a trend-cycle?</a></li>
+<li class="chapter" data-level="2.1.2" data-path="assignment-two.html"><a href="assignment-two.html#b.-use-a-classical-multiplicative-decomposition-to-calculate-the-trend-cycle-and-seasonal-indices."><i class="fa fa-check"></i><b>2.1.2</b> b. Use a classical multiplicative decomposition to calculate the trend cycle and seasonal indices.</a></li>
+<li class="chapter" data-level="2.1.3" data-path="assignment-two.html"><a href="assignment-two.html#c.-do-the-results-support-the-graphical-interpretations-from-part-a"><i class="fa fa-check"></i><b>2.1.3</b> c. Do the results support the graphical interpretations from part a?</a></li>
+<li class="chapter" data-level="2.1.4" data-path="assignment-two.html"><a href="assignment-two.html#d.-compute-and-plot-the-seasonally-adjusted-data."><i class="fa fa-check"></i><b>2.1.4</b> d. Compute and plot the seasonally adjusted data.</a></li>
+<li class="chapter" data-level="2.1.5" data-path="assignment-two.html"><a href="assignment-two.html#e.-change-one-observation-to-be-an-outlier-and-recompute-the-seasonally-adjusted-data.-what-is-the-effect-of-the-outlier"><i class="fa fa-check"></i><b>2.1.5</b> e. Change one observation to be an outlier and recompute the seasonally adjusted data. What is the effect of the outlier?</a></li>
+<li class="chapter" data-level="2.1.6" data-path="assignment-two.html"><a href="assignment-two.html#f.-does-it-make-any-difference-if-the-outlier-is-near-the-end-rather-than-in-the-middle-of-the-time-series"><i class="fa fa-check"></i><b>2.1.6</b> f. Does it make any difference if the outlier is near the end rather than in the middle of the time series?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="assignment-three.html"><a href="assignment-three.html"><i class="fa fa-check"></i><b>3</b> Assignment Three</a><ul>
+<li class="chapter" data-level="3.1" data-path="assignment-three.html"><a href="assignment-three.html#kuhn-johnson-3.1"><i class="fa fa-check"></i><b>3.1</b> Kuhn &amp; Johnson 3.1</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="assignment-three.html"><a href="assignment-three.html#a.-using-visualizations-explore-the-predictor-variables-to-understand-their-distributions-as-well-as-the-relationships-between-predictors."><i class="fa fa-check"></i><b>3.1.1</b> a. Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors.</a></li>
+<li class="chapter" data-level="3.1.2" data-path="assignment-three.html"><a href="assignment-three.html#b.-do-there-appear-to-be-any-outliers-in-the-data-are-any-predictors-skewed"><i class="fa fa-check"></i><b>3.1.2</b> b. Do there appear to be any outliers in the data? Are any predictors skewed?</a></li>
+<li class="chapter" data-level="3.1.3" data-path="assignment-three.html"><a href="assignment-three.html#c.-are-there-any-relevant-transformations-of-one-or-more-predictors-that-might-improve-the-classification-model"><i class="fa fa-check"></i><b>3.1.3</b> c. Are there any relevant transformations of one or more predictors that might improve the classification model?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="assignment-three.html"><a href="assignment-three.html#kuhn-johnson-3.2"><i class="fa fa-check"></i><b>3.2</b> Kuhn &amp; Johnson 3.2</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="assignment-three.html"><a href="assignment-three.html#a.-investigate-the-frequency-distributions-for-the-categorical-predictors.-are-any-of-the-distributions-degenerate-in-the-ways-discussed-earlier-in-this-chapter"><i class="fa fa-check"></i><b>3.2.1</b> a. Investigate the frequency distributions for the categorical predictors. Are any of the distributions degenerate in the ways discussed earlier in this chapter?</a></li>
+<li class="chapter" data-level="3.2.2" data-path="assignment-three.html"><a href="assignment-three.html#b.-roughly-18-of-the-data-are-missing.-are-there-particular-predictors-that-are-more-likely-to-be-missing-is-the-pattern-of-missing-data-related-to-the-classes"><i class="fa fa-check"></i><b>3.2.2</b> b. Roughly 18% of the data are missing. Are there particular predictors that are more likely to be missing? Is the pattern of missing data related to the classes?**</a></li>
+<li class="chapter" data-level="3.2.3" data-path="assignment-three.html"><a href="assignment-three.html#c.-develop-a-strategy-for-handling-missing-data-either-by-eliminating-predictors-or-imputation."><i class="fa fa-check"></i><b>3.2.3</b> c. Develop a strategy for handling missing data, either by eliminating predictors or imputation.**</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="assignment-four.html"><a href="assignment-four.html"><i class="fa fa-check"></i><b>4</b> Assignment Four</a><ul>
+<li class="chapter" data-level="4.1" data-path="assignment-four.html"><a href="assignment-four.html#hyndman-7.1"><i class="fa fa-check"></i><b>4.1</b> Hyndman 7.1</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="assignment-four.html"><a href="assignment-four.html#a.-use-the-ses-function-in-r-to-find-the-optimal-values-of-alpha-and-ell_0-and-generate-forecasts-for-the-next-four-months."><i class="fa fa-check"></i><b>4.1.1</b> a. Use the <code>ses()</code> function in R to find the optimal values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\ell_0\)</span>, and generate forecasts for the next four months.</a></li>
+<li class="chapter" data-level="4.1.2" data-path="assignment-four.html"><a href="assignment-four.html#b.-compute-a-95-prediction-interval-for-the-first-forecast-using-hatypm1.96s-where-s-is-the-standard-deviation-of-the-residuals.-compare-your-interval-with-the-interval-produced-by-r."><i class="fa fa-check"></i><b>4.1.2</b> b. Compute a 95% prediction interval for the first forecast using <span class="math inline">\(\hat{y}\pm1.96s\)</span> where <span class="math inline">\(s\)</span> is the standard deviation of the residuals. Compare your interval with the interval produced by R.</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="assignment-four.html"><a href="assignment-four.html#hyndman-7.3"><i class="fa fa-check"></i><b>4.2</b> Hyndman 7.3</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="assignment-five.html"><a href="assignment-five.html"><i class="fa fa-check"></i><b>5</b> Assignment Five</a><ul>
+<li class="chapter" data-level="5.1" data-path="assignment-five.html"><a href="assignment-five.html#hyndman-7.5"><i class="fa fa-check"></i><b>5.1</b> Hyndman 7.5</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="assignment-five.html"><a href="assignment-five.html#a.-plot-the-series-and-discuss-the-main-features-of-the-data."><i class="fa fa-check"></i><b>5.1.1</b> a. Plot the series and discuss the main features of the data.</a></li>
+<li class="chapter" data-level="5.1.2" data-path="assignment-five.html"><a href="assignment-five.html#b.-use-the-ses-function-to-forecast-each-series-and-plot-the-forecasts."><i class="fa fa-check"></i><b>5.1.2</b> b. Use the <code>ses()</code> function to forecast each series, and plot the forecasts.</a></li>
+<li class="chapter" data-level="5.1.3" data-path="assignment-five.html"><a href="assignment-five.html#c.-compute-the-rmse-values-for-the-training-data-in-each-case."><i class="fa fa-check"></i><b>5.1.3</b> c. Compute the RMSE values for the training data in each case.</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="assignment-five.html"><a href="assignment-five.html#hyndman-7.6"><i class="fa fa-check"></i><b>5.2</b> Hyndman 7.6</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="assignment-five.html"><a href="assignment-five.html#a.-now-apply-holts-linear-method-to-the-paperback-and-hardback-series-and-compute-four-day-forecasts-in-each-case."><i class="fa fa-check"></i><b>5.2.1</b> a. Now apply Holt’s linear method to the paperback and hardback series and compute four-day forecasts in each case.</a></li>
+<li class="chapter" data-level="5.2.2" data-path="assignment-five.html"><a href="assignment-five.html#b.-compare-the-rmse-measures-of-holts-method-for-the-two-series-to-those-of-simple-exponential-smoothing-in-the-previous-question.-discuss-the-merits-of-the-two-forecasting-methods-for-these-data-sets."><i class="fa fa-check"></i><b>5.2.2</b> b. Compare the RMSE measures of Holt’s method for the two series to those of simple exponential smoothing in the previous question. Discuss the merits of the two forecasting methods for these data sets.</a></li>
+<li class="chapter" data-level="5.2.3" data-path="assignment-five.html"><a href="assignment-five.html#c.-compare-the-forecasts-for-the-two-series-using-both-methods.-which-do-you-think-is-best"><i class="fa fa-check"></i><b>5.2.3</b> c. Compare the forecasts for the two series using both methods. Which do you think is best?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="assignment-five.html"><a href="assignment-five.html#hyndman-7.10"><i class="fa fa-check"></i><b>5.3</b> Hyndman 7.10</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="assignment-five.html"><a href="assignment-five.html#a.-plot-the-data-and-describe-the-main-features-of-the-series."><i class="fa fa-check"></i><b>5.3.1</b> a. Plot the data and describe the main features of the series.</a></li>
+<li class="chapter" data-level="5.3.2" data-path="assignment-five.html"><a href="assignment-five.html#b.-decompose-the-series-using-stl-and-obtain-the-seasonally-adjusted-data."><i class="fa fa-check"></i><b>5.3.2</b> b. Decompose the series using STL and obtain the seasonally adjusted data.</a></li>
+<li class="chapter" data-level="5.3.3" data-path="assignment-five.html"><a href="assignment-five.html#c.-forecast-the-next-two-years-of-the-series-using-an-additive-damped-trend-method-applied-to-the-seasonally-adjusted-data.-this-can-be-done-in-one-step-using-stlf-with-arguments-etsmodelaan-dampedtrue."><i class="fa fa-check"></i><b>5.3.3</b> c. Forecast the next two years of the series using an additive damped trend method applied to the seasonally adjusted data. (This can be done in one step using stlf() with arguments etsmodel=“AAN”, damped=TRUE.)</a></li>
+<li class="chapter" data-level="5.3.4" data-path="assignment-five.html"><a href="assignment-five.html#d.-forecast-the-next-two-years-of-the-series-using-holts-linear-method-applied-to-the-seasonally-adjusted-data-as-before-but-with-dampedfalse."><i class="fa fa-check"></i><b>5.3.4</b> d. Forecast the next two years of the series using Holt’s linear method applied to the seasonally adjusted data (as before but with damped=FALSE).</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="assignment-six.html"><a href="assignment-six.html"><i class="fa fa-check"></i><b>6</b> Assignment Six</a><ul>
+<li class="chapter" data-level="6.1" data-path="assignment-six.html"><a href="assignment-six.html#hyndman-8.1"><i class="fa fa-check"></i><b>6.1</b> Hyndman 8.1</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="assignment-six.html"><a href="assignment-six.html#a.-explain-the-differences-among-these-figures.-do-they-all-indicate-that-the-data-are-white-noise"><i class="fa fa-check"></i><b>6.1.1</b> a. Explain the differences among these figures. Do they all indicate that the data are white noise?</a></li>
+<li class="chapter" data-level="6.1.2" data-path="assignment-six.html"><a href="assignment-six.html#b.-why-are-the-critical-values-at-different-distances-from-the-mean-of-zero-why-are-the-autocorrelations-different-in-each-figure-when-they-each-refer-to-white-noise"><i class="fa fa-check"></i><b>6.1.2</b> b. Why are the critical values at different distances from the mean of zero? Why are the autocorrelations different in each figure when they each refer to white noise?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="assignment-six.html"><a href="assignment-six.html#hyndman-8.2"><i class="fa fa-check"></i><b>6.2</b> Hyndman 8.2</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="assignment-six.html"><a href="assignment-six.html#a.-time-series-plot"><i class="fa fa-check"></i><b>6.2.1</b> a. Time Series Plot</a></li>
+<li class="chapter" data-level="6.2.2" data-path="assignment-six.html"><a href="assignment-six.html#b.-acf-plot"><i class="fa fa-check"></i><b>6.2.2</b> b. ACF Plot</a></li>
+<li class="chapter" data-level="6.2.3" data-path="assignment-six.html"><a href="assignment-six.html#c.-pacf-plot"><i class="fa fa-check"></i><b>6.2.3</b> c. PACF Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="assignment-six.html"><a href="assignment-six.html#hyndman-8.6"><i class="fa fa-check"></i><b>6.3</b> Hyndman 8.6</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="assignment-six.html"><a href="assignment-six.html#a.-use-the-following-r-code-to-generate-data-from-an-ar1-model-with-phi_10.6-and-sigma21.-the-process-starts-with-y_10."><i class="fa fa-check"></i><b>6.3.1</b> a. Use the following R code to generate data from an AR(1) model with <span class="math inline">\(\phi_1=0.6\)</span> and <span class="math inline">\(\sigma^2=1\)</span>. The process starts with <span class="math inline">\(y_1=0\)</span>.</a></li>
+<li class="chapter" data-level="6.3.2" data-path="assignment-six.html"><a href="assignment-six.html#b.-produce-a-time-plot-for-the-series.-how-does-the-plot-change-as-you-change-phi_1"><i class="fa fa-check"></i><b>6.3.2</b> b. Produce a time plot for the series. How does the plot change as you change <span class="math inline">\(\phi_1\)</span>?</a></li>
+<li class="chapter" data-level="6.3.3" data-path="assignment-six.html"><a href="assignment-six.html#c.-write-your-own-code-to-generate-data-from-an-ma1-model-with-theta_10.6-and-sigma21."><i class="fa fa-check"></i><b>6.3.3</b> c. Write your own code to generate data from an MA(1) model with <span class="math inline">\(\theta_1=0.6\)</span> and <span class="math inline">\(sigma^2=1\)</span>.</a></li>
+<li class="chapter" data-level="6.3.4" data-path="assignment-six.html"><a href="assignment-six.html#d.-produce-a-time-plot-for-the-series.-how-does-the-plot-change-as-you-change-theta_1"><i class="fa fa-check"></i><b>6.3.4</b> d. Produce a time plot for the series. How does the plot change as you change <span class="math inline">\(\theta_1\)</span>?</a></li>
+<li class="chapter" data-level="6.3.5" data-path="assignment-six.html"><a href="assignment-six.html#e.-generate-data-from-an-arma11-model-with-phi_10.6-theta_10.6-and-sigma21."><i class="fa fa-check"></i><b>6.3.5</b> e. Generate data from an ARMA(1,1) model with <span class="math inline">\(\phi_1=0.6\)</span>, <span class="math inline">\(\theta_1=0.6\)</span>, and <span class="math inline">\(\sigma^2=1\)</span>.</a></li>
+<li class="chapter" data-level="6.3.6" data-path="assignment-six.html"><a href="assignment-six.html#f.-generate-data-from-an-ar2-model-with-phi_1-0.8-phi_20.3-and-sigma21.-note-that-these-parameters-will-give-a-non-stationary-series."><i class="fa fa-check"></i><b>6.3.6</b> f. Generate data from an AR(2) model with <span class="math inline">\(\phi_1=-0.8\)</span>, <span class="math inline">\(\phi_2=0.3\)</span>, and <span class="math inline">\(\sigma^2=1\)</span>. (Note that these parameters will give a non-stationary series.)</a></li>
+<li class="chapter" data-level="6.3.7" data-path="assignment-six.html"><a href="assignment-six.html#g.-graph-the-latter-two-series-and-compare-them."><i class="fa fa-check"></i><b>6.3.7</b> g. Graph the latter two series and compare them.</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="assignment-six.html"><a href="assignment-six.html#hyndman-8.8"><i class="fa fa-check"></i><b>6.4</b> Hyndman 8.8</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="assignment-six.html"><a href="assignment-six.html#a.-use-auto.arima-to-find-an-appropriate-arima-model.-what-model-was-selected.-check-that-the-residuals-look-like-white-noise.-plot-forecasts-for-the-next-10-periods."><i class="fa fa-check"></i><b>6.4.1</b> a. Use auto.arima() to find an appropriate ARIMA model. What model was selected. Check that the residuals look like white noise. Plot forecasts for the next 10 periods.</a></li>
+<li class="chapter" data-level="6.4.2" data-path="assignment-six.html"><a href="assignment-six.html#b.-plot-forecasts-from-an-arima011-model-with-no-drift-and-compare-these-to-part-a.-remove-the-ma-term-and-plot-again."><i class="fa fa-check"></i><b>6.4.2</b> b. Plot forecasts from an ARIMA(0,1,1) model with no drift and compare these to part a. Remove the MA term and plot again.</a></li>
+<li class="chapter" data-level="6.4.3" data-path="assignment-six.html"><a href="assignment-six.html#with-ma"><i class="fa fa-check"></i><b>6.4.3</b> With MA</a></li>
+<li class="chapter" data-level="6.4.4" data-path="assignment-six.html"><a href="assignment-six.html#without-ma"><i class="fa fa-check"></i><b>6.4.4</b> Without MA</a></li>
+<li class="chapter" data-level="6.4.5" data-path="assignment-six.html"><a href="assignment-six.html#comparing"><i class="fa fa-check"></i><b>6.4.5</b> Comparing</a></li>
+<li class="chapter" data-level="6.4.6" data-path="assignment-six.html"><a href="assignment-six.html#c.-plot-forecasts-from-an-arima213-model-with-drift."><i class="fa fa-check"></i><b>6.4.6</b> (c.) Plot forecasts from an ARIMA(2,1,3) model with drift.</a></li>
+<li class="chapter" data-level="6.4.7" data-path="assignment-six.html"><a href="assignment-six.html#d.-plot-forecasts-from-an-arima001-model-with-a-constant.-remove-the-ma-term-and-plot-again."><i class="fa fa-check"></i><b>6.4.7</b> (d.) Plot forecasts from an ARIMA(0,0,1) model with a constant. Remove the MA term and plot again.</a></li>
+<li class="chapter" data-level="6.4.8" data-path="assignment-six.html"><a href="assignment-six.html#with-ma-1"><i class="fa fa-check"></i><b>6.4.8</b> With MA</a></li>
+<li class="chapter" data-level="6.4.9" data-path="assignment-six.html"><a href="assignment-six.html#without-ma-1"><i class="fa fa-check"></i><b>6.4.9</b> Without MA</a></li>
+<li class="chapter" data-level="6.4.10" data-path="assignment-six.html"><a href="assignment-six.html#accuracy"><i class="fa fa-check"></i><b>6.4.10</b> Accuracy</a></li>
+<li class="chapter" data-level="6.4.11" data-path="assignment-six.html"><a href="assignment-six.html#e.-plot-forecasts-from-an-arima021-model-with-no-constant."><i class="fa fa-check"></i><b>6.4.11</b> (e.) Plot forecasts from an ARIMA(0,2,1) model with no constant.</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Homework One</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="assignment-three" class="section level1">
+<h1><span class="header-section-number">3</span> Assignment Three</h1>
+<ul>
+<li>Kuhn &amp; Johnson 3.1<br />
+</li>
+<li>Kuhn &amp; Johnson 3.2</li>
+</ul>
+<div id="kuhn-johnson-3.1" class="section level2">
+<h2><span class="header-section-number">3.1</span> Kuhn &amp; Johnson 3.1</h2>
+<blockquote>
+<p>The UC Irvine Machine Learning Repository contains a data set related to glass identification. The data consist of 214 glass samples labeled as one of seven class categories. There are nine predictors, including the refractive index and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.</p>
+</blockquote>
+<div id="a.-using-visualizations-explore-the-predictor-variables-to-understand-their-distributions-as-well-as-the-relationships-between-predictors." class="section level3">
+<h3><span class="header-section-number">3.1.1</span> a. Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors.</h3>
+<div id="descriptive-statistics" class="section level4">
+<h4><span class="header-section-number">3.1.1.1</span> Descriptive Statistics</h4>
+<p>The output of the <code>describe( )</code> function suggests some variables to take closer looks at. RI, Mg, K, Ca, Ba and Fe appear skewed; and RI, Na, Si, K , Ca, Ba, and (to a lesser extent) Fe exhibit some challenging tails (kurtosis != 3.0).</p>
+
+</div>
+<div id="skewness" class="section level4">
+<h4><span class="header-section-number">3.1.1.2</span> Skewness</h4>
+<p>We can also look at the skew of our numeric variables using the <code>e1071</code> package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">skewer&lt;-<span class="cf">function</span>(df){</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">  new_skew =<span class="st"> </span><span class="kw">setNames</span>(<span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">nrow =</span> <span class="dv">0</span>)), <span class="kw">c</span>(<span class="st">&quot;Element&quot;</span>, <span class="st">&quot;Skew&quot;</span>))</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="cf">for</span>(name <span class="cf">in</span> <span class="kw">colnames</span>(df)){</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">    skew &lt;-<span class="kw">skewness</span>(df[,name])</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">    temp =<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(<span class="st">&#39;Element&#39;</span> =name, <span class="st">&#39;Skew&#39;</span> =skew))</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">    new_skew &lt;-<span class="kw">rbind</span>(new_skew, temp)}</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  <span class="kw">return</span>(new_skew)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">skewer</span>(Glass[, <span class="dv">1</span><span class="op">:</span><span class="dv">9</span>])<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">  </span><span class="kw">kable</span>(<span class="st">&quot;latex&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="kw">c</span>(<span class="st">&quot;hold_position&quot;</span>, <span class="st">&quot;striped&quot;</span>))</a></code></pre></div>
+
+</div>
+<div id="distribution" class="section level4">
+<h4><span class="header-section-number">3.1.1.3</span> Distribution</h4>
+<p>Histograms visually illustrate the challenges with these distributions.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">Glass <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">keep</span>(is.numeric) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(value)) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>key, </a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> <span class="st">&quot;darkorchid&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/glass-1.png" width="960" /></p>
+</div>
+<div id="correlation" class="section level4">
+<h4><span class="header-section-number">3.1.1.4</span> Correlation</h4>
+<p>We used a corrplot to look at the correleations between numeric glass variables.</p>
+<p>There is some significant positive correlation between <code>Ca</code> and <code>RI</code>; slightly less between <code>Ba</code> and <code>Al</code>, <code>Ba</code> and <code>Na</code>, and <code>K</code> and <code>Al</code>.</p>
+<p>There are some obvious negative correlations between Si and RI, as well as <code>Al</code> and <code>RI</code>, <code>Al</code> and <code>Mg</code>, <code>Ca</code> and <code>Mg</code>, and <code>Ba</code> and <code>Mg</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">glassCor &lt;-<span class="st"> </span><span class="kw">cor</span>(Glass[<span class="op">-</span><span class="dv">10</span>])</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">corrplot</span>(glassCor, <span class="dt">method =</span> <span class="st">&quot;square&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;lower&quot;</span>)</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/glass.2-1.png" width="960" /></p>
+</div>
+</div>
+<div id="b.-do-there-appear-to-be-any-outliers-in-the-data-are-any-predictors-skewed" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> b. Do there appear to be any outliers in the data? Are any predictors skewed?</h3>
+<div id="boxplot" class="section level4">
+<h4><span class="header-section-number">3.1.2.1</span> Boxplot</h4>
+<p>The long tails of some of the predictors visible in histograms are indicative of outliers. The plot below shows a boxplot and violin plot for each variable. Many of the variables appear to have outliers; <code>Ba</code>, <code>Fe</code> and <code>K</code> appear to have the most potential outliers. Handling these outliers will depend on a mix of reference data and statistical techniques.</p>
+<p>Skewness is also visible in the histograms, <code>Mg</code> is bimodal. <code>Ba</code>, <code>K</code> and <code>Fe</code> are right skewed. The remaining variables don’t appear to be normally distributed - though they exhibit central tendency, there are signs that they are leptokurtic or platykurtic. This suggests exploring skew and possibly transformations might be of use down the line.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># boxplot with violin plot overlaid for all variables</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">Glass <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">keep</span>(is.numeric) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(key) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> ., </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>(<span class="dt">alpha =</span> <span class="fl">0.3</span>, </a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">color =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="st">&quot;lightblue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="ot">NULL</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>()) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>key, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, </a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">ncol =</span> <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/facetBox-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="c.-are-there-any-relevant-transformations-of-one-or-more-predictors-that-might-improve-the-classification-model" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> c. Are there any relevant transformations of one or more predictors that might improve the classification model?</h3>
+<p>Below we conduct a simple exploration of histograms for skewed distributions using <code>BoxCoxTrans( )</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">skews &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Mg&quot;</span>, <span class="st">&quot;Fe&quot;</span>, <span class="st">&quot;Ba&quot;</span>, <span class="st">&quot;Ca&quot;</span>, <span class="st">&quot;K&quot;</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># MASS::boxcox(Glass)</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="cf">for</span> (skw <span class="cf">in</span> skews) {</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="kw">print</span>(skw)</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="kw">print</span>(<span class="kw">BoxCoxTrans</span>(Glass[, skw]))</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">}</a></code></pre></div>
+<pre><code>FALSE [1] &quot;Mg&quot;
+FALSE Box-Cox Transformation
+FALSE 
+FALSE 214 data points used to estimate Lambda
+FALSE 
+FALSE Input data summary:
+FALSE    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+FALSE   0.000   2.115   3.480   2.685   3.600   4.490 
+FALSE 
+FALSE Lambda could not be estimated; no transformation is applied
+FALSE 
+FALSE [1] &quot;Fe&quot;
+FALSE Box-Cox Transformation
+FALSE 
+FALSE 214 data points used to estimate Lambda
+FALSE 
+FALSE Input data summary:
+FALSE    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+FALSE 0.00000 0.00000 0.00000 0.05701 0.10000 0.51000 
+FALSE 
+FALSE Lambda could not be estimated; no transformation is applied
+FALSE 
+FALSE [1] &quot;Ba&quot;
+FALSE Box-Cox Transformation
+FALSE 
+FALSE 214 data points used to estimate Lambda
+FALSE 
+FALSE Input data summary:
+FALSE    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+FALSE   0.000   0.000   0.000   0.175   0.000   3.150 
+FALSE 
+FALSE Lambda could not be estimated; no transformation is applied
+FALSE 
+FALSE [1] &quot;Ca&quot;
+FALSE Box-Cox Transformation
+FALSE 
+FALSE 214 data points used to estimate Lambda
+FALSE 
+FALSE Input data summary:
+FALSE    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+FALSE   5.430   8.240   8.600   8.957   9.172  16.190 
+FALSE 
+FALSE Largest/Smallest: 2.98 
+FALSE Sample Skewness: 2.02 
+FALSE 
+FALSE Estimated Lambda: -1.1 
+FALSE 
+FALSE [1] &quot;K&quot;
+FALSE Box-Cox Transformation
+FALSE 
+FALSE 214 data points used to estimate Lambda
+FALSE 
+FALSE Input data summary:
+FALSE    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+FALSE  0.0000  0.1225  0.5550  0.4971  0.6100  6.2100 
+FALSE 
+FALSE Lambda could not be estimated; no transformation is applied</code></pre>
+<p>A simple log transformation shows improvements in the distribution of the iron variable <code>Fe</code>. However it does introduce outliers on the left; additionally, all the zero values of <code>Fe</code> go to -Inf and are not reflected at all in this distribution.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">hist</span>(<span class="kw">log</span>(Glass<span class="op">$</span>Fe), <span class="dt">breaks =</span> <span class="dv">30</span>, <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Distribution Fe With Log Transformation&quot;</span>, </a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">xlab =</span> <span class="st">&quot;Log-transformed Fe&quot;</span>)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">hist</span>(Glass<span class="op">$</span>Fe, <span class="dt">breaks =</span> <span class="dv">30</span>, <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Fe Without Log Transformation&quot;</span>, </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">  <span class="dt">xlab =</span> <span class="st">&quot;Fe&quot;</span>)</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/3.1c.1-1.png" width="960" /></p>
+<p>We then examined the first few rows of the data before and after transformations to see what changes the Box-Cox method suggests.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">head</span>(Glass) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>(<span class="dt">caption =</span> <span class="st">&quot;Glass (without transformations)&quot;</span>, </a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="dt">digits =</span> <span class="dv">2</span>, <span class="st">&quot;latex&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="kw">c</span>(<span class="st">&quot;hold_position&quot;</span>, </a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="st">&quot;striped&quot;</span>))</a></code></pre></div>
+
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">trans &lt;-<span class="st"> </span><span class="kw">preProcess</span>(Glass, <span class="dt">method =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>, <span class="st">&quot;BoxCox&quot;</span>))</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">trans_glass &lt;-<span class="st"> </span><span class="kw">predict</span>(trans, Glass)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">head</span>(trans_glass) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>(<span class="dt">caption =</span> <span class="st">&quot;Glass (with transformations)&quot;</span>, </a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  <span class="dt">digits =</span> <span class="dv">2</span>, <span class="st">&quot;latex&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="kw">c</span>(<span class="st">&quot;hold_position&quot;</span>, </a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="st">&quot;striped&quot;</span>))</a></code></pre></div>
+
+<p>Finally, we looked at the histograms of our variables after automated application of the Box-Cox transformations.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">trans_glass <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">keep</span>(is.numeric) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(value)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>key, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> <span class="st">&quot;darkorchid&quot;</span>, </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/3.1c.3-6-1.png" width="960" /></p>
+<p>While the transformation produces marginal improvement in most of the variables the only one with noteworthy changes is <code>Ca</code>. Given the number of outliers and skew in this data, it might be useful to attempt a <code>spatialSign()</code> transformation.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">trans &lt;-<span class="st"> </span><span class="kw">preProcess</span>(Glass, <span class="dt">method =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>, <span class="st">&quot;spatialSign&quot;</span>))</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">trans_glass &lt;-<span class="st"> </span><span class="kw">predict</span>(trans, Glass)</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">trans_glass <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">keep</span>(is.numeric) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(value)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>key, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> <span class="st">&quot;darkorchid&quot;</span>, </a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">  <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/ss-1.png" width="960" />
+<strong>Without Spatial Sign:</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">head</span>(Glass) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>(<span class="st">&quot;latex&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="st">&quot;hold_position&quot;</span>)</a></code></pre></div>
+
+<p><strong>With Spatial Sign:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">head</span>(trans_glass) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>(<span class="st">&quot;latex&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="st">&quot;hold_position&quot;</span>)</a></code></pre></div>
+
+<p>The spatial sign-transformed distributions are the most normal and best for modeling. While custom transformations of each variable might prove even better robust, the simple spatial sign grooming and pre-processing method seems practical and useful for this data set.</p>
+</div>
+</div>
+<div id="kuhn-johnson-3.2" class="section level2">
+<h2><span class="header-section-number">3.2</span> Kuhn &amp; Johnson 3.2</h2>
+<blockquote>
+<p>The soybean data can also be found at the UC Irvine Machine Learning Repository. Data were collected to predict disease in 683 soybeans. The 35 predictors are mostly categorical and include information on the environmental conditions (e.g. temperature, precipitation) and plant conditions (e.g. left spots, mold growth). The outcome labels consist of 19 distinct classes.</p>
+</blockquote>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">data</span>(Soybean)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co"># str(Soybean)</span></a></code></pre></div>
+<div id="a.-investigate-the-frequency-distributions-for-the-categorical-predictors.-are-any-of-the-distributions-degenerate-in-the-ways-discussed-earlier-in-this-chapter" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> a. Investigate the frequency distributions for the categorical predictors. Are any of the distributions degenerate in the ways discussed earlier in this chapter?</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># Tidy dataset, removing non-numeric variables</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">Soybean <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>Class) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co"># Depict distribution of each class within categories</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(value, <span class="dt">fill =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co"># Code all 0 factor values as red for easier visual detection of</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co"># degenerate distribution</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="kw">rep</span>(<span class="st">&quot;grey40&quot;</span>, <span class="dv">7</span>))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co"># Facet plots by predictor and attenuate chart look</span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw">facet_wrap</span>(<span class="op">~</span>key) <span class="op">+</span><span class="st"> </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Soybean: Distributions by Predictor&quot;</span>)</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/kj3.2a-1.png" width="960" /></p>
+<p>Distributions are regarded as degenerate when they have a unique values with extremely low frequencies, i.e. ‘predictors with a single value for the vast majority of samples’. <code>mycelium</code> and <code>sclerotica</code> both fall into this category, and arguably <code>leaf.mild</code>, <code>lodging</code>, <code>seed.discolor</code>, <code>seed.size</code>, and <code>shriveling</code> could also be considered.</p>
+</div>
+<div id="b.-roughly-18-of-the-data-are-missing.-are-there-particular-predictors-that-are-more-likely-to-be-missing-is-the-pattern-of-missing-data-related-to-the-classes" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> b. Roughly 18% of the data are missing. Are there particular predictors that are more likely to be missing? Is the pattern of missing data related to the classes?**</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># Tidy dataset, removing non-numeric variables</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">Soybean <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>Class, <span class="op">-</span>date) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_all</span>(<span class="kw">funs</span>(<span class="dt">perc_missing =</span> <span class="kw">sum</span>(<span class="kw">is.na</span>((.))<span class="op">/</span><span class="kw">nrow</span>(Soybean)))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw">rename_all</span>(<span class="kw">funs</span>(<span class="kw">str_replace</span>(., <span class="st">&quot;_perc_missing&quot;</span>, <span class="st">&quot;&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(key, value), <span class="dt">y =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, </a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">  <span class="dt">fill =</span> <span class="st">&quot;grey40&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># Annotate bar chart with percentage missing</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> scales<span class="op">::</span><span class="kw">percent</span>(value), <span class="dt">y =</span> <span class="fl">-0.01</span>), <span class="dt">size =</span> <span class="dv">3</span>, </a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">  <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> <span class="fl">0.9</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">coord_flip</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Soybean: Missing Data by Predictor&quot;</span>, </a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">  <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
+<p><img src="homework-one_files/figure-html/kj3.2b1-1.png" width="960" /></p>
+<p>Of the 18% of incomplete cases, the predictors <code>sever</code>, <code>seed.tmt</code>, and <code>lodging</code>, and <code>hail</code> are missing in almost all of them.</p>
+<p>Apart from <code>Class</code> and <code>date</code>, <code>leaves</code> is the only other predictor that’s present for all cases.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">kable</span>(<span class="kw">table</span>(Soybean<span class="op">$</span>Class, <span class="kw">complete.cases</span>(Soybean)), <span class="dt">caption =</span> <span class="st">&quot;NA Values&quot;</span>, </a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">  <span class="st">&quot;latex&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="kw">c</span>(<span class="st">&quot;hold_position&quot;</span>, </a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">  <span class="st">&quot;striped&quot;</span>))</a></code></pre></div>
+
+<p>We should check to see if this is the result of chance, or if there are systematic issues (i.e. the data generating process, measurement challenges, recording errors, data loss, etc.) that could explain this.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># Calculate total cases in Soybean set</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">total_cases &lt;-<span class="st"> </span><span class="kw">nrow</span>(Soybean)</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co"># Tidy dataset, calculating complete cases by predictor and</span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co"># predictor cases overall</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">Soybean <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">complete_cases =</span> <span class="kw">complete.cases</span>(Soybean)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Class) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">cases =</span> <span class="kw">n</span>(), <span class="dt">complete_cases =</span> <span class="kw">sum</span>(complete_cases), <span class="dt">completeness =</span> complete_cases<span class="op">/</span>cases, </a>
+<a class="sourceLine" id="cb18-8" data-line-number="8">    <span class="dt">proportion_allcases =</span> cases<span class="op">/</span>total_cases) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co"># Display only predictors with missing data</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="kw">filter</span>(completeness <span class="op">!=</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(proportion_allcases)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="st">  </span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co"># Attenuate table look</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="kw">mutate</span>(<span class="dt">completeness =</span> scales<span class="op">::</span><span class="kw">percent</span>(completeness), <span class="dt">proportion_allcases =</span> scales<span class="op">::</span><span class="kw">percent</span>(proportion_allcases)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="st">  </span><span class="kw">select</span>(Class, cases, complete_cases, completeness, proportion_allcases) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">class =</span> Class) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>(<span class="dt">caption =</span> <span class="st">&quot;Complete Cases&quot;</span>, <span class="dt">label =</span> <span class="ot">NULL</span>, </a>
+<a class="sourceLine" id="cb18-16" data-line-number="16">  <span class="st">&quot;latex&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="kw">c</span>(<span class="st">&quot;hold_position&quot;</span>, </a>
+<a class="sourceLine" id="cb18-17" data-line-number="17">  <span class="st">&quot;striped&quot;</span>))</a></code></pre></div>
+
+<p>When completeness is examined from the viewpoint of <code>Class</code>, it becomes apparent that five classes are responsible for all missing data: <code>phytophthora-rot</code>, <code>2-4-d-injury</code>, <code>diaporthe-pod-&amp;-stem-blight</code>, <code>cyst-nematode</code>, and <code>herbicide-injury</code>. Diagnosis of the cause of missing data should focus on these classes.</p>
+</div>
+<div id="c.-develop-a-strategy-for-handling-missing-data-either-by-eliminating-predictors-or-imputation." class="section level3">
+<h3><span class="header-section-number">3.2.3</span> c. Develop a strategy for handling missing data, either by eliminating predictors or imputation.**</h3>
+<p>There is no simple method for handling missing data AND preserving the global utility of it. Because the classes with missing data have many incomplete cases in the observations, imputation that could be useful for the less empty classes would introduce a lot of error for the more empty ones.</p>
+<p>If performing imputation, it would be important to create a new, separate flag variable so that models with high sensitivity can use native values differently than imputed ones (attributing bias to the ‘flag’) - an approach we have used in logistic regression with some success. It may also be useful to reduce dimensionality by extracting the most variance through PCA or LDA.</p>
+<p>Additionally, purging the most empty four or five classes and impute the remainder could be a beneficial approach. Alternatively, we might remove the four emptiest classes, establish which variables are most important using PCA, and then see how those variables are represented by the four fragile classes with high NA counts; if those classes are less impacted, it might be possible to impute across the remaining variables for all classes using flags for the imputed values and preserving a good amount of predictive power.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="assignment-two.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="assignment-four.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["homework-one.pdf", "homework-one.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

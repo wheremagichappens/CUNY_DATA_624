@@ -1,0 +1,293 @@
+---
+  title: "hw#4.data624"
+  author: "Sang Yoon (Andy) Hwang"
+  date: "September 22, 2019"
+  output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+  
+# 7.8 Exercises
+  
+# 7.8.5 Data set books contains the daily sales of paperback and hardcover books at the same store. The task is to forecast the next four days' sales for paperback and hardcover books.
+```{r, include=FALSE}
+library(fpp2)
+library(forecast)
+data(books)
+```
+# a. Plot the series and discuss the main features of the data.
+
+From general series plot, we know that there are conflicts of sales - when Paperback sells well, Hardcover sales struggle and vice versa - at some points. The daily trend is generally increasing for both books and by the end, we notice that Hardcover sale is almost always bigger than Paperbook's which is surprising given that the sale of Paperbook at day 1 was much smaller than Hardcover's - it seems like there is a substitution effect from Paperback to Hardcover, people buy Hardcover instead of Paperback.
+
+For a white noise series, we expect all of the spikes in the ACF to lie within dashed blue lines. From ggACF, we see that 2 spikes are outside the boundaries and other spikes lie within the bounds; in this case, T = 30 and so the bounds are at +- 2/sqrt(30) = +- 0.37. 
+
+Since the data is not white noise, non-stationary time series, we can derive trend or seasonality. I would like to perform STL decomposition with weekly data (transformed with frequency = 7) to examine the features of the data. We see the trend (7 days, weekly) is increasing for both Paperback and Harcover and for seasonal pattern (7 days, weekly), we see that on day 1 and 6, there is a peak for both and then on 3 and 4, sales for both drop dramatically.
+
+From summary statistics, we know that Hardcover books are generally selling more overall - both mean and median are higher.
+```{r}
+# Daily pattern - general series
+autoplot(books) + 
+  ylab("Number of book sales") + xlab("Day")
+
+# Daily pattern - sub series
+autoplot(books, facets=TRUE) + 
+  ylab("Number of book sales") + xlab("Day")
+
+# Weekly pattern
+ts(books[, 'Paperback'], frequency = 7) %>%
+  stl(s.window = 'periodic', robust = TRUE) %>%
+  autoplot()
+
+ts(books[, 'Hardcover'], frequency = 7) %>%
+  stl(s.window = 'periodic', robust = TRUE) %>%
+  autoplot()
+
+#gglagplot(ts(books[, 'Paperback'], frequency = 7))
+#gglagplot(ts(books[, 'Hardcover'], frequency = 7))
+
+# Autocorrelation for each book
+ggAcf(books[, 'Paperback'])
+ggAcf(books[, 'Hardcover'])
+
+# summary statistics
+summary(books)
+```
+# b. Use the ses() function to forecast each series, and plot the forecasts.
+
+As we can see, since SES is suitable for data with no clear trend and seasonal pattern, we have flat forecast.
+```{r}
+# Estimate parameters
+fc_paper <- ses(books[, 'Paperback'], h=5)
+fc_hard <- ses(books[, 'Hardcover'], h=5)
+
+autoplot(fc_paper) +
+  autolayer(fitted(fc_paper), series="Fitted") +
+  ylab("Number of paperbook sales") + xlab("Day")
+
+autoplot(fc_hard) +
+  autolayer(fitted(fc_hard), series="Fitted") +
+  ylab("Number of hardbook sales") + xlab("Day")
+
+```
+# c. Compute the RMSE values for the training data in each case.
+
+RMSE for Paperbook (training set) is higher than the one for Hardbook (training set).
+```{r}
+#accuracy(fitted(fc_paper), books[, 'Paperback'])
+accuracy(fc_paper)
+accuracy(fc_hard)
+```
+# 7.8.6
+# a. Now apply Holt's linear method to the paperback and hardback series and compute four-day forecasts in each case.
+
+As we expected, since Holt's linear method is linear, we see the linear trend forecasting line.
+```{r}
+fc_paper_hl <- holt(books[, 'Paperback'], h=4)
+fc_hard_hl <- holt(books[, 'Hardcover'], h=4)
+
+autoplot(fc_paper_hl) +
+  autolayer(fitted(fc_paper_hl), series="Fitted") +
+  ylab("Number of paperbook sales") + xlab("Day")
+
+autoplot(fc_hard_hl) +
+  autolayer(fitted(fc_hard_hl), series="Fitted") +
+  ylab("Number of hardbook sales") + xlab("Day")
+
+accuracy(fc_paper_hl)
+accuracy(fc_hard_hl)
+```
+# b. Compare the RMSE measures of Holt's method for the two series to those of simple exponential smoothing in the previous question. (Remember that Holt's method is using one more parameter than SES.) Discuss the merits of the two forecasting methods for these data sets.
+
+RMSEs for Holt's are lower than SES's. Since we know data is not white noise, Holt's is suitable for these datasets. Holt's is the extended version of SES to allow the forecasting of data with a trend. SES is suitable for data without a trend or seasonality.
+```{r}
+# Let's compare RMSE on training set between Hort Linear and SES
+
+# Hort's
+print(accuracy(fc_paper_hl))
+print(accuracy(fc_hard_hl))
+
+# SES
+print(accuracy(fc_paper))
+print(accuracy(fc_hard))
+```
+# c. Compare the forecasts for the two series using both methods. Which do you think is best?
+
+One might think that Holt's method is better than SES since it does provide trend. I would choose Holt's for these datasets as they are not stationary.
+```{r}
+autoplot(fc_paper_hl) +
+  autolayer(fitted(fc_paper_hl), series="Fitted") +
+  ylab("Number of paperbook sales") + xlab("Day")
+
+autoplot(fc_hard_hl) +
+  autolayer(fitted(fc_hard_hl), series="Fitted") +
+  ylab("Number of hardbook sales") + xlab("Day")
+```
+# d. Calculate a 95% prediction interval for the first forecast for each series, using the RMSE values and assuming normal errors. Compare your intervals with those produced using ses and holt.
+
+As expected, PIs are all different. Since SES is flat forecast and has higher RMSE, it does have wider PI than Holt's.
+```{r}
+# Hort's
+print(forecast(fc_paper_hl))[1,]
+
+
+holt(books[, 'Paperback'], h=1)$mean[1] - (1.96 * accuracy(fc_paper_hl)[2])
+holt(books[, 'Paperback'], h=1)$mean[1] + (1.96 * accuracy(fc_paper_hl)[2])
+
+print(forecast(fc_hard_hl))[1,]
+
+
+holt(books[, 'Hardcover'], h=1)$mean[1] - (1.96 * accuracy(fc_paper_hl)[2])
+holt(books[, 'Hardcover'], h=1)$mean[1] + (1.96 * accuracy(fc_paper_hl)[2])
+
+
+# SES
+print(forecast(fc_paper))[1,]
+
+
+ses(books[, 'Paperback'], h=1)$mean[1] - (1.96 * accuracy(fc_paper_hl)[2])
+ses(books[, 'Paperback'], h=1)$mean[1] + (1.96 * accuracy(fc_paper_hl)[2])
+
+
+print(forecast(fc_hard))[1,]
+
+
+ses(books[, 'Hardcover'], h=1)$mean[1] - (1.96 * accuracy(fc_paper_hl)[2])
+ses(books[, 'Hardcover'], h=1)$mean[1] + (1.96 * accuracy(fc_paper_hl)[2])
+
+```
+# 10. For this exercise use data set `ukcars`, the quarterly UK passenger vehicle production data from 1977Q1-2005Q1.
+
+# a.Plot the data and describe the main features of the series.
+
+Strong seasonality every year (every 4 lags) from ACF, STL decomposition and Lag plot. We see an increasing trend in the data after 1980 (before, it was decreasing). From seasonal subseries plot, we know that Q.1s generally have the highest car production where as Q.3s are the lowest. The data is not white noise and stationary - every spike in every lag in ACF. Summary statistics shows that mean is almost the same as median, indicating that data is fairly normalized.
+```{r}
+# general plot
+autoplot(ukcars) +
+  ylab("Car production") + xlab("Quarters")
+
+# STL decomposition
+ukcars %>%
+  stl(s.window = 'periodic', robust = TRUE) %>%
+  autoplot()
+
+# Lag plot
+gglagplot(ukcars)
+
+# Autocorrelation
+ggAcf(ukcars)
+
+# seasonal plot
+ggseasonplot(ukcars, year.labels=TRUE, year.labels.left=TRUE) + 
+  ylab("Car production") +
+  ggtitle("Seasonal plot: UK car product")
+
+ggseasonplot(ukcars, polar=TRUE) + 
+  ylab("Car production") +
+  ggtitle("Seasonal plot: UK car product")
+
+# seasonal subseries plot
+ggsubseriesplot(ukcars) +
+  ylab("Car production") +
+  ggtitle("Seasonal subseries plot: UK car product")
+
+# summary statistics
+summary(ukcars)
+
+
+
+```
+# b. Decompose the series using STL and obtain the seasonally adjusted data.
+
+Note that seasonally adj. data is obtained as original data - seasonality.
+```{r}
+# fit normal data
+fit <- stl(ukcars, s.window="periodic",
+  robust=TRUE)
+
+#q.2 1977 -- 371.051 - 21.8574881
+# fit only seasonaly adj. data
+fit_sea <- seasadj(fit)
+head(fit_sea)
+```
+# c. Forecast the next two years of the series using an additive damped trend method applied to the seasonally adjusted data. (This can be done in one step using stlf() with arguments etsmodel="AAN", damped=TRUE.)
+
+As data is seasonally adjusted, we use error = A, trend = A and seasonal = N model. Damped is usually better in forecasting values in long run.
+```{r}
+fcast <- stlf(fit_sea, etsmodel = "AAN", damped=TRUE, h = 2)
+fcast
+# general plot
+autoplot(fcast) +
+  ylab("Car production") + xlab("Quarters")
+```
+# d. Forecast the next two years of the series using Holt's linear method applied to the seasonally adjusted data (as before but with damped=FALSE).
+
+As data is seasonally adjusted, we use error = A, trend = A and seasonality = N model. Without damped, note that point forecasts are a little bit higher than with damped.
+```{r}
+fcast_nodamp <- stlf(fit_sea, etsmodel = "AAN", damped=FALSE, h = 2)
+fcast_nodamp
+# general plot
+autoplot(fcast_nodamp) +
+  ylab("Car production") + xlab("Quarters")
+```
+# e. Now use ets() to choose a seasonal model for the data.
+
+Note that `ets()` automatically chooses the best model by minimizing AIC. The result shows that ANA is the most preferred model. (error = A, trend = N, seasonal = A)
+```{r}
+# ETS models - ANA
+ets_model <- ets(ukcars)
+summary(ets_model)
+```
+# f. Compare the RMSE of the ETS model with the RMSE of the models you obtained using STL decompositions. Which gives the better in-sample fits?
+
+For RMSE on entire set, STL model - ANN with no demped gives us the best result (the lowest RMSE).
+```{r}
+# STL model - AAN with demped (RMSE on entire set) - 23.32
+summary(fcast)
+# STL model - AAN with no demped (RMSE on entire set) - 23.3
+summary(fcast_nodamp)
+# ETS model - ANA (RMSE on entire set) - 25.23
+summary(ets_model)
+```
+# g. Compare the forecasts from the three approaches? Which seems most reasonable?
+
+For RMSE on testset, STL with demped is the most reasonable - the lowest RMSE.
+```{r}
+# MSE for STL with demped
+e <- tsCV(fit_sea, stlf, etsmodel = "AAN", damped=TRUE, h=2)
+
+# RMSE on testset - STL with demped
+sqrt(mean(e^2, na.rm=TRUE))
+#> [1] 29.77
+
+# MSE for STL with no demped
+e2 <- tsCV(fit_sea, stlf, etsmodel = "AAN", damped=FALSE, h=2)
+
+# RMSE on testset - STL with no demped
+sqrt(mean(e2^2, na.rm=TRUE))
+#> [1] 30.52
+
+# MSE for STL with no demped
+f  <- function(y, h) {
+  forecast(ets(y), h = h)
+}
+
+e3 <- tsCV(ukcars, f, h=2)
+
+# RMSE on testset - est with ANA
+sqrt(mean(e3^2, na.rm=TRUE))
+#> [1] 34.4618
+
+
+# RMSE on all dataset - For STL with demped
+#sqrt(mean(residuals(stlf(fit_sea, etsmodel = "AAN", damped=TRUE, h = 2))^2, na.rm=TRUE))
+```
+# h. Check the residuals of your preferred model.
+
+since p value < 0.05 and spikes appear in ACF plots, we reject null hypothesis that residuals are uncorrelated (null hypothesis of independence is rejected - the residuals are correlated). From the Normality plot, the plot sugests that residuals are fairly normally distributed (residuals have mean fairly close to zero).
+
+Therefore, we conclude that my preferred model does not forecast correctly.
+```{r}
+checkresiduals(fcast)
+#checkresiduals(stlf(fit_sea, etsmodel = "AAN", damped=TRUE))
+```

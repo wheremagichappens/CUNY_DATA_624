@@ -1,0 +1,118 @@
+---
+title: "data624 - hw#1"
+author: "Sang Yoon (Andy) Hwang"
+date: '2019-09-03'
+output:
+  html_document: default
+  word_document: default
+---
+## 2.10 Excercises
+
+# 2.10.1. Use the help function to explore what the series gold, woolyrnq and gas represent.
+```{r, include=FALSE}
+library(fpp2)
+```
+# a. Use autoplot() to plot each of these in separate plots.
+```{r}
+autoplot(gold)
+ggAcf(gold)
+```
+
+From autoplot, it is apparent that the trend is generally increasing until the peak but goes downward after the peak. From ACF plot, the trend is increasing until lag 22 and after that, it decreases after all. Slight "scalloped" shape, especially between lag 5 and 10, indicates the possibility of moderate seasonality. The spike appears between time = 750 to time = 780.
+```{r}
+autoplot(woolyrnq)
+ggAcf(woolyrnq)
+```
+
+A moderate downward trend is seen from the autoplot. Not only that, a moderate seasonality can be seen from slight "U" shape that happens almost every 4 lags from ACF plot and this behavior can be described as mild cyclic behavior.
+```{r}
+autoplot(gas)
+ggAcf(gas, lag = 80)
+```
+
+Increasing trend is seen from the autoplot as slope is going upward. Moderate "U" shape is seen pretty much every 12 lags according to ACF plot which indicates strong seasonality. Also notice that the increasing trend becomes much stronger after 1970 as gas production soars dramatically afterall.
+
+
+
+# b. What is the frequency of each series? Hint: apply the frequency() function.
+```{r}
+frequency(gold)
+frequency(woolyrnq)
+frequency(gas)
+```
+
+gold = 1 indicates that interval is daily (it can be yearly depending on how data is structured but in this case, it is setup as daily), woolyrng = 4 indicates that interval is quarterly and gas = 12 indicates that interval is monthly. 
+
+# c. Use which.max() to spot the outlier in the gold series. Which observation was it?
+```{r}
+which.max(gold)
+```
+
+The outlier occured at time = 770 (huge spike) as it was shown in a).
+
+# 2.10.3. Download some monthly Australian retail data from the book website. These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
+
+# a) You can read the data into R with the following script:
+```{r}
+setwd("~/GitHub/624")
+retaildata <- readxl::read_excel("data/retail.xlsx", skip=1)
+```
+
+# b) Select one of the time series as follows (but replace the column name with your own chosen column):
+```{r}
+myts <- ts(retaildata[,"A3349873A"],
+  frequency=12, start=c(1982,4))
+```
+
+# c) Explore your chosen retail time series using the following functions:
+# autoplot(), ggseasonplot(), ggsubseriesplot(), gglagplot(), ggAcf()
+# Can you spot any seasonality, cyclicity and trend? What do you learn about the series?
+```{r}
+autoplot(myts)
+```
+
+Trend: Increasing trend is seen.
+
+Seasonality: It looks like spike appears approximately every year indicating seasonality
+
+Cyclicity: There is not much evidence of cyclical behavior as strong seasonality is seen pretty much every year.
+
+```{r}
+ggseasonplot(myts)
+```
+
+Trend: Increasing trend is seen as myts is becoming larger every year for the same month.
+
+Seasonality: There are large jumps of myts in December every year. Starting 2011, however, there are larger jumps of myts in November than in December every year.
+
+Cyclicity: There is not much evidence of cyclical behavior as strong seasonality is seen.
+
+```{r}
+ggsubseriesplot(myts)
+```
+
+Trend: Increasing
+
+Seasonality: mean of myts for Dec is much higher than other months. The mean for Nov is also very high due to the fact there are larger jumps starting 2011.
+
+Cyclicity: There is no evidence of such behavior.
+
+```{r}
+gglagplot(myts)
+```
+
+Trend: Increasing
+
+Seasonality: The relationship is strongly positive at lag 12, reflecting the strong seasonality in the data as we observed from previous plots. (spike every year) 
+
+Cyclicity: There is no evidence of such behavior.
+
+```{r}
+ggAcf(myts)
+```
+
+Trend: Increasing as ACFs are all positive.
+
+Seasonality: "U" shaped is seen every 12 lags indicating pretty strong seasonality.
+
+Cyclicity: There is no evidence of such behavior.
