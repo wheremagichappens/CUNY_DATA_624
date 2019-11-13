@@ -1,9 +1,6 @@
 # Data
 
-This folder contains instructor-provided data for Project 2. Datasets include:
-*  DataDictionary.xlsx
-*  StudentData.xlsx
-*  StudentEvaluation.xlsx
+This folder contains instructor-provided data for Project 2:
 
 #### `DataDictionary`:
 
