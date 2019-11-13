@@ -6,8 +6,6 @@ Add information here based on next meet up pertaining to how the group will divi
 
 ### Roles and Responsibilities
 
------------**Proposed**----------------
-
 *  **Project content:** Everyone!
 *  **Content merging:** 
     * Primary: JO  
@@ -20,8 +18,6 @@ Add information here based on next meet up pertaining to how the group will divi
     * Secondary: JO 
 
 ### Timeline
-
------------**Proposed**----------------
 
 | Due Date      | Project Tasks         |
 | :------------- | :------------- |
