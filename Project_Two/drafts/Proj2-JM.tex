@@ -1,0 +1,202 @@
+\documentclass[]{report}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={PROJECT 2: PREDICTING PH},
+            pdfauthor={Juliann McEachern},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{PROJECT 2: PREDICTING PH}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Juliann McEachern}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{10 December 2019}
+
+% set plain style for page numbers
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{Group 2}
+\fancyhead[RE,LO]{\textbf{Project 2: Predicting PH}}
+\raggedbottom
+
+% change font
+\usepackage{fontspec}
+\setmainfont{Arial}
+
+% format titles 
+\usepackage{xcolor}
+\usepackage{sectsty}
+\usepackage{etoolbox}
+\usepackage{titling}
+\definecolor{prettyblue}{RGB}{84, 144, 240}
+\definecolor{bluegray}{RGB}{98, 107, 115}
+\pretitle{\begin{center}\Huge\color{prettyblue}\textbf}
+\posttitle{\par\LARGE\color{gray}DATA 624 - Predictive Analytics\linebreak Group 2\end{center}}
+\preauthor{\begin{center}\large\textbf{Group Members:}\linebreak\textit}
+\postauthor{\end{center}}
+
+% Format chapter output
+\usepackage{titlesec}
+\titleclass{\part}{top}
+\titleclass{\chapter}{straight}
+\titleformat{\chapter}
+  {\normalfont\color{prettyblue}\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+
+% create color block quotes
+\usepackage{tcolorbox}
+\newtcolorbox{myquote}{colback=purple!05!white, colframe=purple!75!black}
+\renewenvironment{quote}{\begin{myquote}}{\end{myquote}}
+
+% kable 
+\usepackage{tabu}
+\usepackage{float} 
+
+% multicolumn
+\usepackage{multicol}
+
+% bullets
+\newenvironment{tight_enumerate}{
+\begin{enumerate}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  }{\end{enumerate}}
+
+%hyperlink
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=bluegray,
+    filecolor=magenta,      
+    urlcolor=cyan}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\thispagestyle{empty}
+\newpage
+\clearpage
+\pagenumbering{arabic}
+
+\hypertarget{introduction}{%
+\chapter{Introduction}\label{introduction}}
+
+This project was designed to evaluate a production data set from a
+beverage manufacturing company. Our goal is to accurately predict the
+Key Performance Indicator (KPI), \texttt{PH}, through predictive
+modeling. A score set that consists of 267 cases was also provided and
+will be used to score our final model.
+
+\hypertarget{data-exploration}{%
+\chapter{Data Exploration}\label{data-exploration}}
+
+We were provided with a file containing 2,571 rows/cases of data and 33
+columns / variables.
+
+\hypertarget{response-variable}{%
+\section{Response Variable}\label{response-variable}}
+
+Understanding the influence PH has on our predictors is key to building
+an accurate predictive model. PH is a measure of acidity/alkalinity that
+must conform in a critical range.
+
+\hypertarget{predictor-variables}{%
+\section{Predictor Variables}\label{predictor-variables}}
+
+Text text text.
+
+\hypertarget{data-transformations}{%
+\section{Data Transformations}\label{data-transformations}}
+
+Text text text.
+
+\hypertarget{predictive-modeling}{%
+\chapter{Predictive Modeling}\label{predictive-modeling}}
+
+Text text.
+
+\hypertarget{train}{%
+\section{Train}\label{train}}
+
+Train text.
+
+\hypertarget{test}{%
+\section{Test}\label{test}}
+
+Test text.
+
+\hypertarget{model-evaluation}{%
+\chapter{Model Evaluation}\label{model-evaluation}}
+
+Eval text. The end.
+
+
+\end{document}
