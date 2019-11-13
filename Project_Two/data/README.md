@@ -1,30 +1,18 @@
-# Project 2 
+# Data
 
-### Overview 
+This folder contains instructor-provided data for Project 2. Datasets include:
+*  DataDictionary.xlsx
+*  StudentData.xlsx
+*  StudentEvaluation.xlsx
 
-Add information here based on next meet up pertaining to how the group will divide roles and responsibilities for project. 
+#### `DataDictionary`:
 
-### Roles and Responsibilities
+This file provides information on all variables. It includes details on variable names, data types, and data measurements. 
 
-*  **Project content:** Everyone!
-*  **Content merging:** 
-    * Primary: JO  
-    * Secondary: SY
-*  **Content editing:** 
-    * Primary: BP, VH, & SY  
-    * Secondary: JM & JO
-*  **Format editing:** 
-    * Primary: JM  
-    * Secondary: JO 
+#### `StudentData`:
 
-### Timeline
+This file is a data set from a beverage manufacturing company.  It consists of 2,571 rows/cases of data and 33 columns / variables. This data will be used for training and testing models to predict the target variable, `PH`. 
 
-| Due Date      | Project Tasks         |
-| :------------- | :------------- |
-| 11/12         | Review assignment  |
-| 11/27         | Complete individual work  |
-| 12/02         | Submit feedback on all drafts  |
-| 11/27         | Complete individual work  |
-| 12/06         | Merge all submissions into 1 file  |
-| 12/08         | Finalize & review for submission  |
-| 12/10         | Project Due  |
+#### `StudentEvaluation`:
+
+This file is a scoring set that consists of 267 cases.  All variables other than the dependent or target variable are include in this data set.  This data will be used to score the prediction's from the selected model.
