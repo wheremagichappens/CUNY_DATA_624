@@ -8,8 +8,9 @@ All members are expected to fully complete each assignment. Answers for final su
 *  **HW2-1**: Oct 21
 *  **HW2-2**: Oct 28
 *  **HW2-3**: Nov 14
-*  **HW2-4**: TBD
-*  **FINAL**: TBD
+*  **HW2-4**: Dec 01
+*  **FINAL EDITS**: Dec 14
+*  **DEADLINE**: Dec 16
 
 ## Status
 
