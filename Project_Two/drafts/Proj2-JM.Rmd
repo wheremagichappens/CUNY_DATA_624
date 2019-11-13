@@ -1,8 +1,56 @@
 ---
-title: 'DATA 624: Project 2'
-author: "Juliann McEachern"
-date: "December 10, 2019"
-output: pdf_document
+title: 'PROJECT 2: PREDICTING PH'
+author: 'Juliann McEachern'
+date: '10 December 2019'
+output: 
+  pdf_document:
+    includes:
+      in_header: preamble.tex
+    latex_engine: lualatex
+    keep_tex: yes
+    toc: true
+    number_sections: no
+documentclass: report
+subparagraph: yes
 ---
 
-Juliann's individual contribution to Project-2. 
+\thispagestyle{empty}
+\newpage
+\clearpage
+\pagenumbering{arabic} 
+
+# Introduction
+
+This project was designed to evaluate a production data set from a beverage manufacturing company. Our goal is to accurately predict the Key Performance Indicator (KPI), `PH`, through predictive modeling. A score set that consists of 267 cases was also provided and will be used to score our final model.
+
+# Data Exploration 
+
+We were provided with a file containing 2,571 rows/cases of data and 33 columns / variables.
+
+## Response Variable
+
+Understanding the influence PH has on our predictors is key to building an accurate predictive model. PH is a measure of acidity/alkalinity that must conform in a critical range.
+
+## Predictor Variables
+
+Text text text. 
+
+## Data Transformations
+
+Text text text.
+
+# Predictive Modeling
+
+Text text.
+
+## Train
+
+Train text.
+
+## Test 
+
+Test text.
+
+# Model Evaluation
+
+Eval text. The end. 
