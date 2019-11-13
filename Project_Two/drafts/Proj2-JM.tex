@@ -78,9 +78,10 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\fancyhead[LE,RO]{Group 2}
+\fancyhead[LE,RO]{\textbf{Group 2}}
 \fancyhead[RE,LO]{\textbf{Project 2: Predicting PH}}
 \raggedbottom
+\setlength{\parskip}{1em}
 
 % change font
 \usepackage{fontspec}
@@ -125,6 +126,16 @@
   \setlength{\itemsep}{0pt}
   \setlength{\parskip}{0pt}
   }{\end{enumerate}}
+  
+\newenvironment{tight_itemize}{
+\begin{itemize}
+  \setlength{\topsep}{0pt}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+  }{\end{itemize}}
+
+\usepackage{paralist}
 
 %hyperlink
 \usepackage{hyperref}
@@ -146,14 +157,35 @@
 \clearpage
 \pagenumbering{arabic}
 
-\hypertarget{introduction}{%
-\chapter{Introduction}\label{introduction}}
+\hypertarget{intro}{%
+\chapter*{Introduction}\label{intro}}
+\addcontentsline{toc}{chapter}{Introduction}
 
-This project was designed to evaluate a production data set from a
-beverage manufacturing company. Our goal is to accurately predict the
-Key Performance Indicator (KPI), \texttt{PH}, through predictive
-modeling. A score set that consists of 267 cases was also provided and
-will be used to score our final model.
+This project is designed to evaluate production data from a beverage
+manufacturing company. Our assignment is to predict \texttt{PH}, a Key
+Performance Indicator (KPI), with a high degree of accuracy through
+predictive modeling. After thorough examination, we approached this task
+by splitting the provided data into training and test sets. We evaluated
+several models on this split and found that
+\textbf{what-ever-worked-best} method yielded the best results.
+
+Each group member worked individually to create their own solution. We
+built our final submission by collaboratively evaluating and combining
+each others' approaches. Our introduction should further outline
+individual responsibilities. For example, \textbf{so-and-so} was
+responsible for \textbf{xyz task}.
+
+For replication and grading purposes, we made our code avaliable in the
+appendix section. This code, along with the provided data, score-set
+results, and individual contributions, can also be accessed through our
+group github repository:
+
+\begin{compactitem}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to R Source Code}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to Provided Data}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to Excel Results}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to Individual Work}
+\end{compactitem}
 
 \hypertarget{data-exploration}{%
 \chapter{Data Exploration}\label{data-exploration}}
@@ -193,10 +225,21 @@ Train text.
 
 Test text.
 
-\hypertarget{model-evaluation}{%
-\chapter{Model Evaluation}\label{model-evaluation}}
+\hypertarget{discussion}{%
+\chapter{Discussion}\label{discussion}}
 
 Eval text. The end.
+
+\hypertarget{conclusion}{%
+\chapter{Conclusion}\label{conclusion}}
+
+sfasdfs
+
+\hypertarget{Appendix}{%
+\chapter*{Appendix}\label{Appendix}}
+\addcontentsline{toc}{chapter}{Appendix}
+
+Code \& stuff here.
 
 
 \end{document}

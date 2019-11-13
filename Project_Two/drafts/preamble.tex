@@ -2,9 +2,10 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\fancyhead[LE,RO]{Group 2}
+\fancyhead[LE,RO]{\textbf{Group 2}}
 \fancyhead[RE,LO]{\textbf{Project 2: Predicting PH}}
 \raggedbottom
+\setlength{\parskip}{1em}
 
 % change font
 \usepackage{fontspec}
@@ -49,6 +50,16 @@
   \setlength{\itemsep}{0pt}
   \setlength{\parskip}{0pt}
   }{\end{enumerate}}
+  
+\newenvironment{tight_itemize}{
+\begin{itemize}
+  \setlength{\topsep}{0pt}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+  }{\end{itemize}}
+
+\usepackage{paralist}
 
 %hyperlink
 \usepackage{hyperref}

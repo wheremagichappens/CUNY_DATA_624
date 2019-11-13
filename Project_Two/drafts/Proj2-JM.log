@@ -1,4 +1,4 @@
-This is LuaTeX, Version 1.10.0 (TeX Live 2019/W32TeX)  (format=lualatex 2019.10.14)  12 NOV 2019 23:31
+This is LuaTeX, Version 1.10.0 (TeX Live 2019/W32TeX)  (format=lualatex 2019.10.14)  13 NOV 2019 15:20
  restricted system commands enabled.
 **Proj2-JM.tex
 (./Proj2-JM.tex
@@ -55,7 +55,7 @@ Lua module: luaotfload-multiscript 2019-09-13 3.00 luaotfload submodule / multis
 cript
 Inserting `luaotfload.rewrite_fontname' at position 5 in `luaotfload.patch_font'
 .
-luaotfload | main : initialization completed in 0.241 seconds
+luaotfload | main : initialization completed in 0.238 seconds
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/report.cls
 Document Class: report 2019/08/27 v1.4j Standard LaTeX document class
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
@@ -764,9 +764,9 @@ language=DFLT;+tlig;"
 (fontspec)             <->s*[0.8311558380414313]"Arial/BI:mode=node;script=latn;
 language=DFLT;+tlig;+smcp;"
 
-LaTeX Info: Redefining \rmfamily on input line 88.
+LaTeX Info: Redefining \rmfamily on input line 89.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 8.31161pt on input line 88.
+(Font)              scaled to size 8.31161pt on input line 89.
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
@@ -1196,37 +1196,46 @@ Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
 \colbreak@box=\box98
 \mc@col@check@num=\count312
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 135.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/paralist/paralist.
+sty
+Package: paralist 2017/01/22 v2.7 Extended list environments
+\pltopsep=\skip72
+\plpartopsep=\skip73
+\plitemsep=\skip74
+\plparsep=\skip75
+\pl@lab=\toks41
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 146.
 (./Proj2-JM.aux)
 \openout1 = Proj2-JM.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 137.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 13
-7.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 148.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 14
+8.
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
 \AtBeginShipoutBox=\box99
-Package hyperref Info: Link coloring ON on input line 137.
+Package hyperref Info: Link coloring ON on input line 148.
 
 (c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
 ty
@@ -1238,9 +1247,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count313
 )
-LaTeX Info: Redefining \ref on input line 137.
-LaTeX Info: Redefining \pageref on input line 137.
-LaTeX Info: Redefining \nameref on input line 137.
+LaTeX Info: Redefining \ref on input line 148.
+LaTeX Info: Redefining \pageref on input line 148.
+LaTeX Info: Redefining \nameref on input line 148.
 (./Proj2-JM.out) (./Proj2-JM.out)
 \@outlinefile=\write6
 
@@ -1302,23 +1311,23 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 ABD: EveryShipout initializing macros
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 20.67929pt on input line 138.
+(Font)              scaled to size 20.67929pt on input line 149.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 20.67929pt on input line 138.
+(Font)              scaled to size 20.67929pt on input line 149.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 14.36246pt on input line 138.
+(Font)              scaled to size 14.36246pt on input line 149.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 9.97394pt on input line 138.
+(Font)              scaled to size 9.97394pt on input line 149.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 9.97394pt on input line 138.
+(Font)              scaled to size 9.97394pt on input line 149.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/it' will be
-(Font)              scaled to size 9.97394pt on input line 138.
+(Font)              scaled to size 9.97394pt on input line 149.
 [1
 
 {c:/Users/15082/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex
 .map}]
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 14.36246pt on input line 142.
+(Font)              scaled to size 14.36246pt on input line 153.
 (./Proj2-JM.toc
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
 (Font)              scaled to size 8.31161pt on input line 1.
@@ -1363,53 +1372,54 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
 [1]
 Chapter 1.
-Chapter 2.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 11.96872pt on input line 165.
+(Font)              scaled to size 11.96872pt on input line 197.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 11.96872pt on input line 165.
+(Font)              scaled to size 11.96872pt on input line 197.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 165.
+(hyperref)                be the same. Added a new anchor on input line 197.
 
-Chapter 3.
+Chapter 2.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 187.
+(hyperref)                be the same. Added a new anchor on input line 219.
 
-Chapter 4.
 
 warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
 [1
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 202.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 202.
+Chapter 3.
+Chapter 4.
+[2]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 245.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 245.
 (./Proj2-JM.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 202.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 202.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 245.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 245.
 Package rerunfilecheck Info: File `Proj2-JM.out' has not changed.
-(rerunfilecheck)             Checksum: 8B2BDD94001477FA2CA60A1BC70898DB;1095.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 202.
+(rerunfilecheck)             Checksum: BFC1C6AEE2C04769BFCEFD2225616D39;1240.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 245.
 )
 
 Here is how much of LuaTeX's memory you used:
- 33852 strings out of 493864
+ 33993 strings out of 493864
  100000,794899 words of node,token memory allocated
- 550 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 8 attribute, 63 glue_spec,
+ 570 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 8 attribute, 67 glue_spec,
  8 attribute_list, 2 write nodes
-   avail lists: 1:3,2:317,3:130,4:38,5:64,6:24,7:1031,8:16,9:90,10:4,11:73
- 37642 multiletter control sequences out of 65536+600000
+   avail lists: 1:3,2:351,3:128,4:42,5:69,6:30,7:1993,8:17,9:98,10:4,11:168
+ 37771 multiletter control sequences out of 65536+600000
  64 fonts using 15749087 bytes
  59i,11n,116p,908b,429s stack positions out of 5000i,500n,10000p,200000b,100000s
 <c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmmo
 no10-regular.otf><c:/Windows/Fonts/ariali.ttf><c:/Windows/Fonts/arial.ttf><c:/Wi
 ndows/Fonts/arialbd.ttf>
-Output written on Proj2-JM.pdf (3 pages, 78990 bytes).
+Output written on Proj2-JM.pdf (4 pages, 84534 bytes).
 
-PDF statistics: 103 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
- 17 named destinations out of 1000 (max. 131072)
- 88 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 123 PDF objects out of 1000 (max. 8388607)
+ 103 compressed objects within 2 object streams
+ 20 named destinations out of 1000 (max. 131072)
+ 104 words of extra memory for PDF output out of 10000 (max. 100000000)
 
