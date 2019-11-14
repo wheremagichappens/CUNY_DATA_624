@@ -9,7 +9,7 @@ output:
 subtitle: 'Assignment 3: KJ 8.1-8.3; KJ 8.7'
 ---
 
-```{r instructions, echo=F, fig.height=3}
+```{r instructions, echo=F, fig.height=5}
 # README: GROUP TWO GUIDELINES
 # MEAT&POTATOES:
     # Submissions should be completed in a timely manner, within group internal deadlines. 
@@ -80,10 +80,16 @@ $$
 Lets deconstruct the theory. $ni_j$ stands for node importance. $w_j$ is the weighted number of samples reaching node j. $c_j$ is the impurity value of node j. Left(j) is the child node from left split on node j and right(j) is the child node from right split on node j. Once $ni_j$ is calculated,the importance for each variable on a decision tree is calculated with formula I. Formula I is then normalized as shown as formula II.The final feature importance is the average over all trees. We simply find the sum of the features importance value and then divide by all trees T, shown in formula III.
 
 $$
-I)  fi_j=\frac{ (\sum_{j \ node \ split \ on \ i}) ni_j }{ ( \sum_{all \ nodes}) ni_k}\\
-II)  \parallel  fi_j \parallel = \frac{(fi_j)}{\sum_{all \ features}fi_j} \\
-III)  RFfi_j= \frac{ ( \sum_{all \ trees})\parallel  fi_j \parallel}{T}
+I) \  fi_j \ =\frac{ (\sum_{j \ node \ split \ on \ i}) ni_j }{ ( \sum_{all \ nodes}) ni_k}\\
 $$
+
+$$
+II) \  \parallel  fi_j  \parallel = \frac{(fi_j)}{\sum_{all \ features}fi_j} \\
+$$
+$$
+III) \ RFfi_j= \frac{ ( \sum_{all \ trees})\parallel  fi_j \parallel}{T}
+$$
+
 
 
 ```{r kj-8.1a}
@@ -95,7 +101,6 @@ rf_imp <- varImp(rf_mod, scale = FALSE)
 
 ```{r kj-8.1a2}
 #dt <- as.matrix(rf_imp)
-
 rf_imp%>% kable(caption="Random Forest Variable Importance") %>% kable_styling() %>% row_spec()
 ```
 

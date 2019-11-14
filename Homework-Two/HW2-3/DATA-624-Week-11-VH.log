@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.28)  14 NOV 2019 09:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.10.28)  14 NOV 2019 10:17
 entering extended mode
 **./DATA-624-Week-11-VH.tex
 (DATA-624-Week-11-VH.tex
@@ -853,13 +853,13 @@ already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.336 
+l.340 
       pdfTeX warning (ext4): destination with the same identifier (name{table.2
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.336 
+l.340 
       ]
 <"DATA-624-Week-11-VH_files/figure-latex/""kj-8.1d-1".pdf, id=55, 722.7pt x 216
 .81pt>
@@ -867,40 +867,40 @@ File: "DATA-624-Week-11-VH_files/figure-latex/""kj-8.1d-1".pdf Graphic file (ty
 pe pdf)
 <use "DATA-624-Week-11-VH_files/figure-latex/""kj-8.1d-1".pdf>
 Package pdftex.def Info: "DATA-624-Week-11-VH_files/figure-latex/""kj-8.1d-1".p
-df  used on input line 397.
+df  used on input line 401.
 (pdftex.def)             Requested size: 469.76045pt x 140.92813pt.
 [3pdfTeX warning (ext4): destination with the same identifier (name{table.3}) h
 as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.428 \end{table}
+l.432 \end{table}
                  pdfTeX warning (ext4): destination with the same identifier (n
 ame{table.4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.428 \end{table}
+l.432 \end{table}
                  ] [4pdfTeX warning (ext4): destination with the same identifie
 r (name{table.5}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.479 ... \& Johnson 8.2}\label{kuhn-johnson-8.2}}
+l.483 ... \& Johnson 8.2}\label{kuhn-johnson-8.2}}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{table.6}) has been already used, duplicate
  ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.479 ... \& Johnson 8.2}\label{kuhn-johnson-8.2}}
+l.483 ... \& Johnson 8.2}\label{kuhn-johnson-8.2}}
                                                    <./DATA-624-Week-11-VH_files
 /figure-latex/kj-8.1d-1.pdf>] [5pdfTeX warning (ext4): destination with the sam
 e identifier (name{table.7}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.577 \end{quote}
+l.581 \end{quote}
                  ]
 <"DATA-624-Week-11-VH_files/figure-latex/""kj-8.7b2-1".pdf, id=81, 722.7pt x 21
 6.81pt>
@@ -908,20 +908,20 @@ File: "DATA-624-Week-11-VH_files/figure-latex/""kj-8.7b2-1".pdf Graphic file (t
 ype pdf)
 <use "DATA-624-Week-11-VH_files/figure-latex/""kj-8.7b2-1".pdf>
 Package pdftex.def Info: "DATA-624-Week-11-VH_files/figure-latex/""kj-8.7b2-1".
-pdf  used on input line 645.
+pdf  used on input line 649.
 (pdftex.def)             Requested size: 469.76045pt x 140.92813pt.
 [6pdfTeX warning (ext4): destination with the same identifier (name{table.8}) h
 as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.653 \end{quote}
+l.657 \end{quote}
                  pdfTeX warning (ext4): destination with the same identifier (n
 ame{table.9}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.653 \end{quote}
+l.657 \end{quote}
                   <./DATA-624-Week-11-VH_files/figure-latex/kj-8.7b2-1.pdf>]
 <"DATA-624-Week-11-VH_files/figure-latex/""kj-8.7c-1".pdf, id=93, 722.7pt x 216
 .81pt>
@@ -929,77 +929,77 @@ File: "DATA-624-Week-11-VH_files/figure-latex/""kj-8.7c-1".pdf Graphic file (ty
 pe pdf)
 <use "DATA-624-Week-11-VH_files/figure-latex/""kj-8.7c-1".pdf>
 Package pdftex.def Info: "DATA-624-Week-11-VH_files/figure-latex/""kj-8.7c-1".p
-df  used on input line 656.
+df  used on input line 660.
 (pdftex.def)             Requested size: 469.76045pt x 140.92813pt.
 
-Package xcolor Warning: Incompatible color definition on input line 671.
+Package xcolor Warning: Incompatible color definition on input line 675.
 
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-808.
+812.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/lm\ts1lmtt.fd"
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 [7 <./DATA-624-Week-11-VH_files/figure-latex/kj-8.7c-1.pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 
-Underfull \vbox (badness 10000) detected at line 858
+Underfull \vbox (badness 10000) detected at line 862
  []
 
 
-Underfull \vbox (badness 10000) detected at line 858
+Underfull \vbox (badness 10000) detected at line 862
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 [8]
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 
-Underfull \vbox (badness 10000) detected at line 858
+Underfull \vbox (badness 10000) detected at line 862
  []
 
 
-Underfull \vbox (badness 10000) detected at line 858
+Underfull \vbox (badness 10000) detected at line 862
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 [9]
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
 
-Package xcolor Warning: Incompatible color definition on input line 858.
+Package xcolor Warning: Incompatible color definition on input line 862.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 861.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 865.
 [10]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 861.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 865.
 (DATA-624-Week-11-VH.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 861.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 861.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 865.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 865.
 Package rerunfilecheck Info: File `DATA-624-Week-11-VH.out' has not changed.
 (rerunfilecheck)             Checksum: F5F0B2E8F1804071E1A6950E1B671199;881.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 861.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 865.
  ) 
 Here is how much of TeX's memory you used:
  15160 strings out of 492453
@@ -1025,7 +1025,7 @@ s/type1/public/lm/lmri12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm
 /lmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmtk10.pfb><C:/P
 rogram Files/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/public/lm/lmtti10.pfb>
-Output written on DATA-624-Week-11-VH.pdf (10 pages, 306878 bytes).
+Output written on DATA-624-Week-11-VH.pdf (10 pages, 307086 bytes).
 PDF statistics:
  180 PDF objects out of 1000 (max. 8388607)
  32 named destinations out of 1000 (max. 500000)
