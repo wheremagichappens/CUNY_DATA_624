@@ -6,13 +6,17 @@ output:
   pdf_document:
     includes:
       in_header: preamble.tex
-    latex_engine: lualatex
+    latex_engine: xelatex
     keep_tex: yes
     toc: true
     number_sections: no
 documentclass: report
 subparagraph: yes
 ---
+
+```{r source-script, echo = F, message=F, warning=F, error=F, comment=NA}
+source('~/GitHub/CUNY_DATA_624/Project_Two/drafts/Proj2-JM.R') #code
+```
 
 \thispagestyle{empty}
 \newpage
@@ -35,15 +39,26 @@ For replication and grading purposes, we made our code avaliable in the appendix
 
 # Data Exploration 
 
-We were provided with a file containing 2,571 rows/cases of data and 33 columns / variables.
+The beverage manufacturing production dataset contained 33 columns/variables and 2,571 rows/cases. In our initial review, we found that the response variable, `PH`, had four missing observations. We choose to drop the complete cases of the observations with null data in the target as they accounted for such a small proportion (< 0.002%) of the  observations. 
+
+We also identified that 94% of the predictor variables had missing data points. Despite this high occurance, the NA values in the majority of these predictors accounted for less than 1% of the total observations. Only eleven variables, highlighted in the plot below, were missing more than 1% of data: 
+
+```{r}
+Plot_MissingData
+```
+
+Without additional data regarding production, we assume that the `NA` values are missing at random. We applied a Multiple Imputation by Chained Equations (MICE) algorthim, which uses sequential regression to create multiple imputations across all the incomplete cases (including categorical data).  
+
+
+## Predictor Variables
+
 
 ## Response Variable
 
 Understanding the influence PH has on our predictors is key to building an accurate predictive model. PH is a measure of acidity/alkalinity that must conform in a critical range.
 
-## Predictor Variables
 
-Text text text. 
+
 
 ## Data Transformations
 

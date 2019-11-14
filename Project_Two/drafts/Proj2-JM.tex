@@ -144,6 +144,20 @@
     linkcolor=bluegray,
     filecolor=magenta,      
     urlcolor=cyan}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 
 \begin{document}
 \maketitle
@@ -190,8 +204,29 @@ group github repository:
 \hypertarget{data-exploration}{%
 \chapter{Data Exploration}\label{data-exploration}}
 
-We were provided with a file containing 2,571 rows/cases of data and 33
-columns / variables.
+The beverage manufacturing production dataset contained 33
+columns/variables and 2,571 rows/cases. In our initial review, we found
+that the response variable, \texttt{PH}, had four missing observations.
+We choose to drop the complete cases of the observations with null data
+in the target as they accounted for such a small proportion (\textless{}
+0.002\%) of the observations.
+
+We also identified that 94\% of the predictor variables had missing data
+points. Despite this high occurance, the NA values in the majority of
+these predictors accounted for less than 1\% of the total observations.
+Only eleven variables, highlighted in the plot below, were missing more
+than 1\% of data:
+
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+Without additional data regarding production, we assume that the
+\texttt{NA} values are missing at random. We applied a Multiple
+Imputation by Chained Equations (MICE) algorthim, which uses sequential
+regression to create multiple imputations across all the incomplete
+cases (including categorical data).
+
+\hypertarget{predictor-variables}{%
+\section{Predictor Variables}\label{predictor-variables}}
 
 \hypertarget{response-variable}{%
 \section{Response Variable}\label{response-variable}}
@@ -199,11 +234,6 @@ columns / variables.
 Understanding the influence PH has on our predictors is key to building
 an accurate predictive model. PH is a measure of acidity/alkalinity that
 must conform in a critical range.
-
-\hypertarget{predictor-variables}{%
-\section{Predictor Variables}\label{predictor-variables}}
-
-Text text text.
 
 \hypertarget{data-transformations}{%
 \section{Data Transformations}\label{data-transformations}}
