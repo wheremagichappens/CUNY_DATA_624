@@ -280,8 +280,6 @@ plot(id10$rel.inf)
 >Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several tree-based models:
 
 >> **(a). Which tree-based regression model gives the optimal resampling and test set performance?** 
-
-From hyperparameter tuning of RF, GBM and Cubist, we confirmed GBM had the lowest RMSE on test set of 0.9133422.
 ```{r kj-8.7a, echo=F, cache=T}
 # save df
 data("ChemicalManufacturingProcess")
@@ -335,41 +333,43 @@ gbmModel <- caret::train(Yield~., data=df_train,
 
 # model3 - Cubist
 cubist <- caret::train(Yield~., data=df_train, method = "cubist")
-cubistOptimal <- cubist(df_train[,-1],df_train[,1], committees = 10, neighbors = 9)
 
 # Make predictions
 p1 <- rf %>% predict(df_test)
-p2 <- gbmModel %>% predict(df_test)
-p3 <- cubistOptimal %>% predict(df_test)
+p2 <- gbmModel %>% predict(df_test, n.trees=2500, interaction.depth = 7, shrinkage = 0.01, n.minobsinnode = 5)
+p3 <- cubist %>% predict(df_test)
 
 # Model performance metrics
 sum_t <- data.frame(
-  RMSE1 = caret::RMSE(p1, df_test$Yield),
-  RMSE2 = caret::RMSE(p2, df_test$Yield),
-  RMSE3 = caret::RMSE(p3, df_test$Yield),
-  Rsquare1 = caret::R2(p1, df_test$Yield),
-  Rsquare2 = caret::R2(p2, df_test$Yield),
-  Rsquare3 = caret::R2(p3, df_test$Yield)
+  RMSE_RF = caret::RMSE(p1, df_test$Yield),
+  RMSE_GBM = caret::RMSE(p2, df_test$Yield),
+  RMSE_CUBIST = caret::RMSE(p3, df_test$Yield),
+  Rsquare_RF = caret::R2(p1, df_test$Yield),
+  Rsquare_GBM = caret::R2(p2, df_test$Yield),
+  Rsquare_CUBIST = caret::R2(p3, df_test$Yield)
 )
+
 print(sum_t)
 ```
 
+From hyperparameter tuning of RF, GBM and Cubist, we confirmed Cubist had the lowest RMSE on test set of `r sum_t$RMSE_CUBIST`.
+
 >> **(b). Which predictors are most important in the optimal tree-based regression model? Do either the biological or process variables dominate the list? How do the top 10 important predictors compare to the top 10 predictors from the optimal linear and nonlinear models?**
 
-`ManufacturingProcess32` is the top predictor and among Biological variable, `BiologicalMaterial12` is the top predictor which is 3rd most importan variable among all. 
+`BiologicalMaterial6` is the top predictor and `ManufacturingProcess32` is one of the top predictors for tree-based models and it had been one of the top predictors even for linear and non-linear model.
 
-For top 10, they are equally distributed - 5 from Manufacturing and the others from Biological. Compare to linear and nonlinear models, we found that `ManufacturingProcess32` was always in top 3 for sure. For tree-based model, we see more of balance between Manufacturing and Biological variables than the other optimal linear and nonlinear models in top 10.
+The general patterns of predictor importance ranking is similar to linear and non-linear models.
 ```{r kj-8.7b, echo = F}
 #code
-imp_var <- varImp(gbmModel)
+imp_var <- varImp(cubist)
 plot(imp_var, top = 10)
 ```
 
 >> **(c). Plot the optimal single tree with the distribution of yield in the terminal nodes. Does this view of the data provide additional knowledge about the biological or process predictors and their relationship with yield?**
 
-The optimal recursive partitioning tree shows that `ManufacturingProcess32` is at the top. `BiologicalMaterial12`, which was 3rd most important variable in GBM model, appears in the next split node which shows sort of proves why these variables had higher importance scores, thus highly associated with `Yield`, than most of other variables.
+The optimal recursive partitioning tree shows that `ManufacturingProcess32` is at the top. `BiologicalMaterial12`, which was one of the most important variables in GBM and Cubist models, appears in the next split node. This proves why these variables had higher importance scores, thus highly associated with `Yield`, than most of other variables.
 
-```{r kj-8.7c}
+```{r kj-8.7c, echo=F}
 rpartGrid <- expand.grid(maxdepth= seq(5,30,by=1))
 ctrl <- trainControl(method = "boot", number = 25)
 
@@ -620,12 +620,11 @@ gbmModel <- caret::train(Yield~., data=df_train,
 
 # model3 - Cubist
 cubist <- caret::train(Yield~., data=df_train, method = "cubist")
-cubistOptimal <- cubist(df_train[,-1],df_train[,1], committees = 10, neighbors = 9)
 
 # Make predictions
 p1 <- rf %>% predict(df_test)
 p2 <- gbmModel %>% predict(df_test)
-p3 <- cubistOptimal %>% predict(df_test)
+p3 <- cubist %>% predict(df_test)
 
 # Model performance metrics
 sum_t <- data.frame(
