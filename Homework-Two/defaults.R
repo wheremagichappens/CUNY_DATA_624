@@ -4,6 +4,7 @@ library(kableExtra)
 library(default)
 library(ggplot2)
 library(easypackages)
+library(formatR)
 
 # Set default augments for code chunks
 knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=NA,self.contained = F, tidy=T, tidy.opts=list(width.cutoff=60), fig.width=10, fig.height = 3)

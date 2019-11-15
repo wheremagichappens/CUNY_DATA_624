@@ -66,7 +66,8 @@ libraries('AppliedPredictiveModeling')
 
 >> (a). Start R and use these commands to load the data:
 
->> (b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
+>> (b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8).
+
 ```{r kj-6.3b}
 chem_data_NAs
 ```
@@ -82,7 +83,7 @@ Using MICE to impute NAs minimally impacts contours of distribution for those pr
 >> (c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 
 ```{r kj-6.3c}
-chem_mod_elnet_best
+chem_mod_elnet_bestperf
 ```
 
 An elastic net model compromising between ridge and LASSO offers best performance as measured by RMSE with $\alpha = .55$ and $\lambda = .2145648$.
@@ -90,7 +91,14 @@ An elastic net model compromising between ridge and LASSO offers best performanc
 >> (d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
 
 ```{r kj-6.3d}
-# code
+str(chem_mod_elnet)
+
+chem_mod_elnet$bestTune$lambda
+chem_mod_elnet$bestTune$alpha
+
+chem_vals_elnet
+
+
 ```
 
 Couldn't get code working in time.
@@ -98,18 +106,20 @@ Couldn't get code working in time.
 >> (e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 
 ```{r kj-6.3e}
-#code
+chem_varimp_plot
 ```
 
-Couldn't get code working in time.
+The most important predictors are those with the largest coefficients.  the `varImp` function returns a list of each feature's coefficient on an absolute vale scale of 1 to 0.  `Manufacturing Process 32` has the largest variable importance by far, followed by `17`, `09`, and `13`.  14 features have non-zerio variable importance; among them, `Biological Materials 06` and `03` are the only two biological materials features.
+
 
 >> (f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 
 ```{r kj-6.3f}
+# still troubleshooting code in appendix to generate multiple tables
 # code
 ```
 
-Couldn't get code working in time.
+This could help to identify which manufacturing processes are positively or negatively correlated with yield.  Decision-makers could then seek to improve those with negative correlations to minimize impact on yield, and would know to minimze effects on those with positive correlations.
 
 ## Appendix
 
@@ -127,7 +137,6 @@ chem_data_NAs <- chem_data %>%
   dplyr::tally(is.na(value)) %>% 
   filter(n > 0) %>% 
   arrange(desc(n))
-
 
 
 chem_data_imppmm5 <- mice(chem_data, 
@@ -172,12 +181,12 @@ chem_pred_imp <-
 
 # Split test and train datasets
 trainIndex <- 
-  caret::createDataPartition(chem_data3$Yield,
+  caret::createDataPartition(chem_data_imp$Yield,
                              p = .75,
                              list = FALSE,
                              times = 1)
-chem_train <- chem_data3[trainIndex, ]
-chem_test <- chem_data3[-trainIndex, ]
+chem_train <- chem_data_imp[trainIndex, ]
+chem_test <- chem_data_imp[-trainIndex, ]
 
 # Set cross-validation parameters
 chem_ctrl <- 
@@ -194,7 +203,7 @@ chem_mod_elnet <-
     trControl = chem_ctrl
 )
 
-chem_mod_elnet_best <- 
+chem_mod_elnet_bestperf <- 
   chem_mod_elnet$results %>% 
   as.data.frame() %>%
   arrange(RMSE) %>% 
@@ -202,23 +211,75 @@ chem_mod_elnet_best <-
   kable()
 
 
+# Elastic net model with tuned parameters
+# chem_mod_elnet <- 
+  # train(
+    # Yield ~ ., 
+    # data = chem_train,
+    # method = 'glmnet',
+    # preProcess = c('center', 'scale'),
+    # alpha = chem_mod_elnet$
+    # trControl = chem_ctrl
+# )
+
 # Elastic net prediction
-# chem_pred_elnet <- 
-  # predict(chem_mod_elnet, 
-          # chem_test)  
+chem_pred_elnet <- 
+  predict(chem_mod_elnet, 
+          chem_test)  
 
 # Estimate test set performance
-# chem_vals_elnet <- 
-  # as.data.frame(obs = chem_data_imp$Yield, 
-                # pred = chem_pred_elnet)
+chem_vals_elnet <- 
+  data.frame(obs = chem_data_imp$Yield, 
+                pred = chem_pred_elnet)
 
-# caret::defaultSummary(chem_vals_elnet) %>% 
-  # round(digits = 5) %>% 
-  # kable()
+caret::defaultSummary(chem_vals_elnet) %>% 
+  round(digits = 5) %>% 
+  kable()
 
-# chem_varimp <- caret::avarImp(chem_mod_elnet1,
-                     # scale = F,
-                     # useModel = T)
+chem_varimp <- caret::varImp(chem_mod_elnet,
+                     scale = F,
+                     useModel = T)
+  
+chem_varimp_list <- chem_varimp$importance %>% 
+  rownames_to_column('Feature') %>%  # convert row index to separate column names 'Feature' 
+  as.data.frame() 
+
+chem_varimp_plot <- chem_varimp_list %>% 
+  ggplot(aes(x = reorder(Feature, Overall), y = Overall)) + 
+           geom_point() +
+           geom_segment(aes(x = Feature, 
+                            xend = Feature, 
+                            y = 0, 
+                            yend = Overall)) +
+           coord_flip()
+         
+
+# create filter list of top features in terms of variable importance
+chem_varimp_toplist <- chem_varimp_list %>% 
+  arrange(-Overall) %>% 
+  head(n = 14) %>%
+  dplyr::select(-Overall)
+
+# still working this out - needs par() and function troubleshooting
+chem_corr_plot <- function(feature_list) {
+  
+  # plot <- c()
+  
+  for(feature in feature_list) {
+    
+    chem_train %>% 
+      dplyr::select(!!(c('Yield', feature))) %>% 
+      ggplot(aes(x = BiologicalMaterial01, y = Yield)) +
+      geom_point() +
+      geom_smooth(method = 'loess', 
+                  se = FALSE)
+  
+  }
+
+  
+}
+
+chem_corr_plot(chem_varimp_toplist)
 
 ```
 
