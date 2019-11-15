@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.11.15)  15 NOV 2019 02:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7200 64-bit) (preloaded format=pdflatex 2019.11.15)  15 NOV 2019 02:42
 entering extended mode
 **./03-SY.Andy.submit.tex
 (03-SY.Andy.submit.tex
@@ -1064,13 +1064,6 @@ File: "03-SY.Andy.submit_files/figure-latex/""kj-8.7b-1".pdf Graphic file (type
 Package pdftex.def Info: "03-SY.Andy.submit_files/figure-latex/""kj-8.7b-1".pdf
   used on input line 676.
 (pdftex.def)             Requested size: 469.76045pt x 140.92813pt.
-
-Overfull \hbox (23.10081pt too wide) in paragraph at lines 687--693
-[]\T1/lmr/m/n/10 (-20) The op-ti-mal re-cur-sive par-ti-tion-ing tree shows tha
-t \T1/lmtt/m/n/10 ManufacturingProcess32 \T1/lmr/m/n/10 (-20) is at the top. \T
-1/lmtt/m/n/10 BiologicalMaterial12\T1/lmr/m/n/10 (-20) ,
- []
-
 <"03-SY.Andy.submit_files/figure-latex/""kj-8.7c-1".pdf, id=109, 722.7pt x 216.
 81pt>
 File: "03-SY.Andy.submit_files/figure-latex/""kj-8.7c-1".pdf Graphic file (type
@@ -1187,11 +1180,11 @@ Package rerunfilecheck Info: File `03-SY.Andy.submit.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 972.
  ) 
 Here is how much of TeX's memory you used:
- 15205 strings out of 492453
- 224641 string characters out of 3119608
+ 15203 strings out of 492453
+ 224619 string characters out of 3119608
  383458 words of memory out of 3000000
  19234 multiletter control sequences out of 15000+200000
- 40471 words of font info for 73 fonts, out of 3000000 for 9000
+ 40388 words of font info for 72 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  34i,7n,42p,982b,447s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/ahwang/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ts1.
@@ -1206,7 +1199,7 @@ onts/type1/public/lm/lmri12.pfb><C:/Users/ahwang/AppData/Local/Programs/MiKTeX
 2.9/fonts/type1/public/lm/lmtk10.pfb><C:/Users/ahwang/AppData/Local/Programs/Mi
 KTeX 2.9/fonts/type1/public/lm/lmtt10.pfb><C:/Users/ahwang/AppData/Local/Progra
 ms/MiKTeX 2.9/fonts/type1/public/lm/lmtti10.pfb>
-Output written on 03-SY.Andy.submit.pdf (14 pages, 347197 bytes).
+Output written on 03-SY.Andy.submit.pdf (14 pages, 347170 bytes).
 PDF statistics:
  197 PDF objects out of 1000 (max. 8388607)
  24 named destinations out of 1000 (max. 500000)
