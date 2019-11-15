@@ -367,16 +367,17 @@ plot(imp_var, top = 10)
 
 >> **(c). Plot the optimal single tree with the distribution of yield in the terminal nodes. Does this view of the data provide additional knowledge about the biological or process predictors and their relationship with yield?**
 
-The optimal recursive partitioning tree shows that `ManufacturingProcess32` is at the top. `BiologicalMaterial12`, which was one of the most important variables in GBM and Cubist models, appears in the next split node. This proves why these variables had higher importance scores, thus highly associated with `Yield`, than most of other variables.
+The optimal recursive partitioning tree shows that `ManufacturingProcess32` is at the top. It was one of the most important variables in GBM and Cubist models. Note that it appears twice in the plot. This proves why this variable had higher importance scores, thus highly associated with `Yield`, than most of other variables.
 
 ```{r kj-8.7c, echo=F}
+set.seed(200)
 rpartGrid <- expand.grid(maxdepth= seq(5,30,by=1))
 ctrl <- trainControl(method = "boot", number = 25)
 
 rpartChemTune <- caret::train(Yield~.,
                        data = df_train,
                        method = "rpart2",
-                       metric = "Rsquared",
+                       metric = "RMSE",
                        tuneGrid = rpartGrid,
                        trControl = ctrl)
 
