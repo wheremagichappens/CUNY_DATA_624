@@ -1,0 +1,658 @@
+---
+title: "Team 2 - Homework Two"
+subtitle: "Assignment 3: KJ 8.1-8.3; KJ 8.7"
+author: "Sang Yoon (Andy) Hwang"
+date: "DATE:2019-11-14"
+output: 
+  pdf_document
+---
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+#source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+source('C:/Users/ahwang/Desktop/Cuny/DATA624/hw2/defaults.R')
+```
+
+```{r libraries, echo=T}
+# Forecast libraries
+libraries('mlbench', 'AppliedPredictiveModeling')
+
+# Regression libraries
+libraries('randomForest', 'caret', 'party', 'partykit', 'gbm', 'Cubist')
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra', 'mice', 'party')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+```
+
+
+## (1) Kuhn & Johnson 8.1
+
+> Recreate the simulated data from Exercise 7.2:
+
+```{r kj-8.1, echo=T}
+set.seed(200)
+simulated <- mlbench.friedman1(200, sd = 1) 
+simulated <- cbind(simulated$x, simulated$y)
+simulated <- as.data.frame(simulated) 
+colnames(simulated)[ncol(simulated)] <- "y"
+```
+
+>> **(a). Fit a random forest model to all of the predictors, then estimate the variable importance scores. Did the random forest model significantly use the uninformative predictors (V6-V10)?**
+
+Based on the result, we know that feature importances of V6-V10 are much less than V1-V5 -- except for V6, all of them are negative. This shows that the random forest model did not use the uninformative predictors significantly.
+```{r kj-8.1a, echo=T}
+set.seed(200)
+model1 <- randomForest(y ~ ., data = simulated, 
+                       importance = TRUE, 
+                       ntree = 1000)
+rfImp1 <- varImp(model1, scale = FALSE)
+```
+
+```{r, echo=F}
+d1 <- rfImp1[ order(-rfImp1), , drop=FALSE ]
+kable(d1)
+```
+
+>> **(b). Now add an additional predictor that is highly correlated with one of the informative predictors. Fit another random forest model to these data. Did the importance score for V1 change? What happens when you add another predictor that is also highly correlated with V1? For example:**
+
+Note that `V1` is no longer the most important variable. It looks like the importance score for `V1` was partly absorbed by new predictor which underestimates true importance of `V1` - the score sum of `V1` and `duplicate1` are similar to the V1 score in (a). It makes sense as `duplicate1` contains almost the same information as `V1`. Not only that, the importance score for some variables, such as `V9` and `V10`, have rather increased as a result of addition of new variable. The order of importance is changed. 
+```{r kj-8.1b-ex, echo=T}
+set.seed(200)
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+cor(simulated$duplicate1, simulated$V1)
+```
+
+```{r kj-8.1b, echo=F}
+set.seed(200)
+model2 <- randomForest(y ~ ., data = simulated, 
+                       importance = TRUE, 
+                       ntree = 1000)
+rfImp2 <- varImp(model2, scale = FALSE)
+#rfImp2 <- data.frame(rfImp2[0][order(rfImp2, decreasing = TRUE),], rfImp2[order(rfImp2, decreasing = TRUE),])
+#colnames(rfImp2) <- 'Importance Score'
+d2 <- rfImp2[ order(-rfImp2), , drop=FALSE ]
+kable(d2)
+```
+
+>> **(c). Use the `cforest` function in the party package to fit a random forest model using conditional inference trees. The party package function `varimp` can calculate predictor importance. The `conditional` argument of that function toggles between the traditional importance measure and the modified version described in Strobl et al. (2007). Do these importances show the same pattern as the traditional random forest model?**
+
+We performed both `varimp(, conditional = T)` and `varimp(, conditional = F)` to compare `varimp` of `cforest` in terms of permutation importance and conditional permutation importance.
+
+1. RF vs CF 
+Given that no correlated term is added, the importance pattern is similar except for the fact that V4 is now the most important feature in CF.
+
+2. RF vs CF (with correlated term added)
+Given that correlated term is added, the importance score for `duplicate1` is much smaller in CF. This is the pin point difference between importance based on Gini coefficient (decision tree) and permutation test using p-value (conditional inference tree). 
+
+3. CF conditional vs CF with correlated term added and conditional
+When `conditional = T`, we perform conditional permutation test for measuring feature importance instead. Note that `duplicate1` has even smaller importance in `CF.cor.cond` than in `CF.cor`. For `CF.cor.cond`, notice `V1` became 3rd most important feature when it was 2nd most important for `CF.cor`. This is because conditional permutation helps uncovering the spurious correlation between `V1` and `duplicate1`.
+
+In summary, we learned that `CF` model surpresses the importance score of `duplicate1` which helps maintain the importance of `V1`. When `conditional = TRUE` in `varimp` for `CF` model, the importance score of `duplicate1` is even smaller.
+```{r kj-8.1c, echo=F, cache=T}
+set.seed(200)
+# Now remove correlated predictor
+simulated$duplicate1 <- NULL
+bagCtrl <- cforest_control(mtry = ncol(simulated) - 1)
+baggedTree <- party::cforest(y ~ ., data = simulated, controls = bagCtrl)
+
+cfImp <- party::varimp(baggedTree, conditional = T)
+#cfImp <- kable(sort(cfImp, decreasing = TRUE))
+
+cfImp1 <- party::varimp(baggedTree, conditional = F)
+#cfImp1 <- kable(sort(cfImp1, decreasing = TRUE))
+
+# Keep correlated predictor
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+bagCtrl <- cforest_control(mtry = ncol(simulated) - 1)
+baggedTree <- party::cforest(y ~ ., data = simulated, controls = bagCtrl)
+
+cfImp2 <- party::varimp(baggedTree, conditional = T)
+#cfImp2 <- kable(sort(cfImp2, decreasing = TRUE))
+
+cfImp22 <- party::varimp(baggedTree, conditional = F)
+#cfImp22 <- kable(sort(cfImp22, decreasing = TRUE))
+
+simulated$duplicate1 <- NULL
+```
+
+```{r, echo=F}
+a <- data.frame(features = rownames(rfImp1), RF = rfImp1[,1])
+b <- data.frame(features = rownames(rfImp2), RF.cor = rfImp2[,1])
+c <- data.frame(features = names(cfImp), CF.cond = cfImp)
+d <- data.frame(features = names(cfImp1), CF = cfImp1)
+e <- data.frame(features = names(cfImp2), CF.cor.cond = cfImp2)
+f <- data.frame(features = names(cfImp22), CF.cor = cfImp22)
+
+aa <- merge(a,d, all=T)
+bb <- merge(b,f,all=T)
+cc <- merge(c,e,all=T)
+dd <-merge(aa,bb,all=T)
+
+final_df <- merge(dd,cc,all=T)
+final_df <- rbind(final_df[-3,], final_df[3,])
+rownames(final_df) <- c(1:11)
+
+kable(final_df)
+```
+>> **(d). Repeat this process with different tree models, such as boosted trees and Cubist. Does the same pattern occur?**
+
+For boosting method `GBM` without `duplicate1`, we see that `V4` is the most important followed by `V1`. Compared to `RF` without `duplicate1`, the general pattern in `GBM` is still similar as most important features still range from `V1` to `V5`. For `GBM` with `duplicate1`, pattern is still similar to `RF` with `duplicate1` where the importance score of `V1` shrinks substantially due to the presence of `duplicate1`.
+
+For rule-based `Cubist`, the general pattern is still similar as it assigns the most of importance scores for `V1` to `V5` and just like for `CF`, `duplicate1` still abosorves the score from `V1` and other predictors.
+```{r kj-8.1d, echo=F}
+set.seed(200)
+#GBM
+gbmModel <- gbm(y ~ ., data = simulated, distribution = "gaussian", n.trees=1000)
+print("GBM")
+summary(gbmModel)
+
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+gbmModel <- gbm(y ~ ., data = simulated, distribution = "gaussian", n.trees=1000)
+print("GBM - with duplicate1")
+summary(gbmModel)
+
+simulated$duplicate1 <- NULL
+
+#Cubist
+cubistMod <- cubist(simulated[-11], simulated$y, committees = 100)
+print("Cubist")
+varImp(cubistMod)
+
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+cubistMod <- cubist(simulated[-11], simulated$y, committees = 100)
+print("Cubist - with duplicate1")
+varImp(cubistMod)
+
+simulated$duplicate1 <- NULL
+```
+
+## (2) Kuhn & Johnson 8.2 
+> **Use a simulation to show tree bias with different granularities.**
+
+According to the text (pg.182), `Finally, these trees suffer from selection bias: predictors with a higher number of distinct values are favored over more granular predictors`, we know that there is a high probability that predictors with a higher number of distinct values are favored over the predictors with less number of distinct values. 
+
+Our equation is:
+
+* `y <- (V1 + V2) + rnorm(200,mean=0,sd=4)`
+* `V1 <- rep(1:2,each=100)`
+* `V2 <- rnorm(200, mean=0, sd=2)`
+* `V3 <- rep(1:100,each=2)`
+* `V4 <- rnorm(200, mean=0, sd=3)`
+
+Indeed, we have equal number of samples for both `V1` and `V2` but since `V2` has higher number of distinct values, `varImp` suggests `V2` is more important (and higher `cor` between `V2` and `y`) than `V1`. This confirms the hypothesis from pg.182.
+```{r kj-8.2, echo=F}
+set.seed(200)
+V1 <- rep(1:2,each=100)
+V2 <- rnorm(200, mean=0, sd=2)
+V3 <- rep(1:100,each=2)
+V4 <- rnorm(200, mean=0, sd=3)
+y <- (V1 + V2) + rnorm(200,mean=0,sd=4)
+
+simulated_df <- data.frame(y,V1,V2,V3,V4)
+
+bagCtrl <- cforest_control(mtry = ncol(simulated_df) - 1)
+simulated_RF <-  party::cforest(y ~ ., data = simulated_df, controls = bagCtrl)
+
+cor(simulated_df)
+varImp(simulated_RF)
+```
+
+## (3) Kuhn & Johnson 8.3
+> In stochastic gradient boosting the bagging fraction and learning rate will govern the construction of the trees as they are guided by the gradient. Although the optimal values of these parameters should be obtained through the tuning process, it is helpful to understand how the magnitudes of these parameters affect magnitudes of variable importance. Figure 8.24 provides the variable importance plots for boosting using two extreme values for the bagging fraction (0.1 and 0.9) and the learning rate (0.1 and 0.9) for the solubility data. The left-hand plot has both parameters set to 0.1, and the right-hand plot has both set to 0.9:
+ 
+>> **(a). Why does the model on the right focus its importance on just the first few of predictors, whereas the model on the left spreads importance across more predictors? **
+
+From the text (pg.206), we know that boosting employs "greedy" strategy of choosing the optimal weak learner at each stage. In other words, regularization (or shrinkage) strategy is used to find a fraction of the current predicted value is added to the previous iteration's predicted value. This fraction is called `learning rate` (between 0 and 1). As the fraction becomes larger, less iteration is required and vice-versa.
+
+In order to furthur improve the bosting technique through reducing prediction variance for bagging (reducing error rate on test set), Friedman updated the technique with a random sampling sceme by randomly select a fraction of the traning data known as `bagging fraction`. The iteration then is based only on the sample of data. This new technique is called `stochastic gradient boosting`. This technique is heavily depedent on previous tree - indeed, each tree is based on previous tree or correlated one another. Imagine one of the trees split on few features more often than the others. The next tree, which will be built upon the previous tree, will still be based on the previous error and again split on the same features again. In this technique, there is a chance that only few predictors (many of the same predictors) would be chosen in almost all trees and hence inflating feature importance for few predictors.
+
+Having said that, let's think about what it means by when we have `learning rate` of 0.9 vs 0.1. Intuitvely, when `learning rate` is larger, it means larger fraction of the current predicted value is being added to the previous iteration's predicted value. In other words, it means that we use more of the same predictors will be selected among the trees. This is why you tend to favor few predictors (since they are selected multiple times) when you have higher `learning rate`. 
+
+Also, when you have larger `bagging fraction`, it means for each iteration, each tree will more likely see the same data samples, therefore choose the same predictor as before. 
+
+The smaller rate/fraction is self-explanatory as it is just an opposite case to the ones above.
+
+>> **(b). Which model do you think would be more predictive of other samples? **
+
+Given that lower `learning rate` usually produces higher predictive power and higher `bagging fraction` tend to reduce variance, we really have to test on test set in order to answer this question. From testing result using `solubility` data set, we confirmed that right one (0.9/0.9) gives lower RMSE on test set.
+```{r, cache=T, echo=F}
+set.seed(200)
+data(solubility)
+
+sol_df <- data.frame(solTrainXtrans, solTrainY)
+training <- sol_df$solTrainY %>%
+  createDataPartition(p = 0.8, list = FALSE)
+
+df_train  <- sol_df[training, ]
+df_test <- sol_df[-training, ]
+
+gbm1 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.1, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+gbm10 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.9, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+gbm91 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.1, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+gbm910 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.9, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+p1 <- gbm1 %>% predict(df_test, n.trees = 100)
+p2 <- gbm10 %>% predict(df_test, n.trees = 100)
+p3 <- gbm91 %>% predict(df_test, n.trees = 100)
+p4 <- gbm910 %>% predict(df_test, n.trees = 100)
+
+sum_t <- data.frame(
+  RMSE_0.1_0.1 = caret::RMSE(p1, df_test$solTrainY),
+  RMSE_0.9_0.1 = caret::RMSE(p2, df_test$solTrainY),
+  RMSE_0.1_0.9 = caret::RMSE(p3, df_test$solTrainY),
+  RMSE_0.9_0.9 = caret::RMSE(p4, df_test$solTrainY)
+)
+print(sum_t)
+```
+ 
+>> **(c). How would increasing interaction depth affect the slope of predictor importance for either model in Fig.8.24?**
+
+As you can see, increasing `interaction.depth` decreases the slope of predictor importance since tree would grow in a more sophisticated way and hence more predictors are chosen in splitting process.
+```{r kj-8.3c, cache=T, echo=F}
+gbm1 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 1, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+gbm10 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 10, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+#gbm91 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 1, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+#gbm910 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 10, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+print("interaction.depth = 1 with shrinkage = 0.1")
+id1 <- summary(gbm1)
+plot(id1$rel.inf)
+print("interaction.depth = 10 with shrinkage = 0.1")
+id10 <- summary(gbm10)
+plot(id10$rel.inf)
+#summary(gbm91)
+#summary(gbm910)
+```
+
+## (4) Kuhn & Johnson 8.7
+
+>Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several tree-based models:
+
+>> **(a). Which tree-based regression model gives the optimal resampling and test set performance?** 
+
+From hyperparameter tuning of RF, GBM and Cubist, we confirmed GBM had the lowest RMSE on test set of 0.9133422.
+```{r kj-8.7a, echo=F, cache=T}
+# save df
+data("ChemicalManufacturingProcess")
+df <- ChemicalManufacturingProcess
+
+# set seed for split to allow for reproducibility
+set.seed(200)
+# use mice w/ default settings to impute missing data
+miceImput <- mice(df, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice <- complete(miceImput)
+
+# Look for any features with no variance:
+zero_cols <- nearZeroVar( df_mice )
+df_final <- df_mice[,-zero_cols] # drop these zero variance columns 
+#df_final <- df_mice
+
+# split data train/test
+training <- df_final$Yield %>%
+  createDataPartition(p = 0.8, list = FALSE)
+df_train  <- df_final[training, ]
+df_test <- df_final[-training, ]
+
+# model1 - RF
+# Algorithm Tune (tuneRF)
+set.seed(200)
+bestmtry <- tuneRF(df_train[,-1], df_train[,1], stepFactor=1.5, improve=1e-5, ntree=2500)
+##mtry <- ( (ncol(df_train) -1) / 3 ) or sqrt(ncol(df_train) - 1) # By default, # of predictors / 3 for regression, sqrt(# of predictors) for classification https://www.hackerearth.com/practice/machine-learning/machine-learning-algorithms/tutorial-random-forest-parameter-tuning-r/tutorial/
+
+# from above result, we got mtry= 27 and ntree=2500 as optimal parameters
+rf <- randomForest(Yield~., data=df_train, method="rf", mtry= 27, importance = TRUE, ntree = 2500)
+
+# model2 - GBM
+set.seed(200)
+Control <- trainControl(method="repeatedcv", number=5, repeats=2)
+
+gbmGrid <- expand.grid(
+  n.trees=c(1000, 1500, 2000, 2500), 
+  interaction.depth=seq(1, 10, by = 2), 
+  shrinkage = c(0.01, 0.1), 
+ # distribution = 'gaussian',
+  n.minobsinnode=c(5,10) )
+
+gbmModel <- caret::train(Yield~., data=df_train, 
+                         method = 'gbm',
+                         trControl = Control, 
+                         tuneGrid=gbmGrid, 
+                         tuneLength = 5,  
+                         verbose = FALSE)
+
+# model3 - Cubist
+cubist <- caret::train(Yield~., data=df_train, method = "cubist")
+cubistOptimal <- cubist(df_train[,-1],df_train[,1], committees = 10, neighbors = 9)
+
+# Make predictions
+p1 <- rf %>% predict(df_test)
+p2 <- gbmModel %>% predict(df_test)
+p3 <- cubistOptimal %>% predict(df_test)
+
+# Model performance metrics
+sum_t <- data.frame(
+  RMSE1 = caret::RMSE(p1, df_test$Yield),
+  RMSE2 = caret::RMSE(p2, df_test$Yield),
+  RMSE3 = caret::RMSE(p3, df_test$Yield),
+  Rsquare1 = caret::R2(p1, df_test$Yield),
+  Rsquare2 = caret::R2(p2, df_test$Yield),
+  Rsquare3 = caret::R2(p3, df_test$Yield)
+)
+print(sum_t)
+```
+
+>> **(b). Which predictors are most important in the optimal tree-based regression model? Do either the biological or process variables dominate the list? How do the top 10 important predictors compare to the top 10 predictors from the optimal linear and nonlinear models?**
+
+`ManufacturingProcess32` is the top predictor and among Biological variable, `BiologicalMaterial12` is the top predictor which is 3rd most importan variable among all. 
+
+For top 10, they are equally distributed - 5 from Manufacturing and the others from Biological. Compare to linear and nonlinear models, we found that `ManufacturingProcess32` was always in top 3 for sure. For tree-based model, we see more of balance between Manufacturing and Biological variables than the other optimal linear and nonlinear models in top 10.
+```{r kj-8.7b, echo = F}
+#code
+imp_var <- varImp(gbmModel)
+plot(imp_var, top = 10)
+```
+
+>> **(c). Plot the optimal single tree with the distribution of yield in the terminal nodes. Does this view of the data provide additional knowledge about the biological or process predictors and their relationship with yield?**
+
+The optimal recursive partitioning tree shows that `ManufacturingProcess32` is at the top. `BiologicalMaterial12`, which was 3rd most important variable in GBM model, appears in the next split node which shows sort of proves why these variables had higher importance scores, thus highly associated with `Yield`, than most of other variables.
+
+```{r kj-8.7c}
+rpartGrid <- expand.grid(maxdepth= seq(5,30,by=1))
+ctrl <- trainControl(method = "boot", number = 25)
+
+rpartChemTune <- caret::train(Yield~.,
+                       data = df_train,
+                       method = "rpart2",
+                       metric = "Rsquared",
+                       tuneGrid = rpartGrid,
+                       trControl = ctrl)
+
+plot(as.party(rpartChemTune$finalModel),gp=gpar(fontsize=11))
+```
+
+## R Code
+
+```{r 03-code, eval=F, echo=T}
+# insert code here
+
+# (8.1)
+set.seed(200)
+simulated <- mlbench.friedman1(200, sd = 1) 
+simulated <- cbind(simulated$x, simulated$y)
+simulated <- as.data.frame(simulated) 
+colnames(simulated)[ncol(simulated)] <- "y"
+
+# (8.1a)
+set.seed(200)
+model1 <- randomForest(y ~ ., data = simulated, 
+                       importance = TRUE, 
+                       ntree = 1000)
+rfImp1 <- varImp(model1, scale = FALSE)
+
+d1 <- rfImp1[ order(-rfImp1), , drop=FALSE ]
+kable(d1)
+
+# (8.1b)
+set.seed(200)
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+cor(simulated$duplicate1, simulated$V1)
+
+set.seed(200)
+model2 <- randomForest(y ~ ., data = simulated, 
+                       importance = TRUE, 
+                       ntree = 1000)
+rfImp2 <- varImp(model2, scale = FALSE)
+#rfImp2 <- data.frame(rfImp2[0][order(rfImp2, decreasing = TRUE),], rfImp2[order(rfImp2, decreasing = TRUE),])
+#colnames(rfImp2) <- 'Importance Score'
+d2 <- rfImp2[ order(-rfImp2), , drop=FALSE ]
+kable(d2)
+
+# (8.1c)
+set.seed(200)
+# Now remove correlated predictor
+simulated$duplicate1 <- NULL
+bagCtrl <- cforest_control(mtry = ncol(simulated) - 1)
+baggedTree <- cforest(y ~ ., data = simulated, controls = bagCtrl)
+
+cfImp <- varimp(baggedTree, conditional = T)
+#cfImp <- kable(sort(cfImp, decreasing = TRUE))
+
+cfImp1 <- varimp(baggedTree, conditional = F)
+#cfImp1 <- kable(sort(cfImp1, decreasing = TRUE))
+
+# Keep correlated predictor
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+bagCtrl <- cforest_control(mtry = ncol(simulated) - 1)
+baggedTree <- cforest(y ~ ., data = simulated, controls = bagCtrl)
+
+cfImp2 <- varimp(baggedTree, conditional = T)
+#cfImp2 <- kable(sort(cfImp2, decreasing = TRUE))
+
+cfImp22 <- varimp(baggedTree, conditional = F)
+#cfImp22 <- kable(sort(cfImp22, decreasing = TRUE))
+
+simulated$duplicate1 <- NULL
+
+a <- data.frame(features = rownames(rfImp1), RF = rfImp1[,1])
+b <- data.frame(features = rownames(rfImp2), RF.cor = rfImp2[,1])
+c <- data.frame(features = names(cfImp), CF.cond = cfImp)
+d <- data.frame(features = names(cfImp1), CF = cfImp1)
+e <- data.frame(features = names(cfImp2), CF.cor.cond = cfImp2)
+f <- data.frame(features = names(cfImp22), CF.cor = cfImp22)
+
+aa <- merge(a,d, all=T)
+bb <- merge(b,f,all=T)
+cc <- merge(c,e,all=T)
+dd <-merge(aa,bb,all=T)
+
+final_df <- merge(dd,cc,all=T)
+final_df <- rbind(final_df[-3,], final_df[3,])
+rownames(final_df) <- c(1:11)
+
+kable(final_df)
+
+# (8.1d)
+set.seed(200)
+#GBM
+gbmModel <- gbm(y ~ ., data = simulated, distribution = "gaussian", n.trees=1000)
+print("GBM")
+summary(gbmModel)
+
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+gbmModel <- gbm(y ~ ., data = simulated, distribution = "gaussian", n.trees=1000)
+print("GBM - with duplicate1")
+summary(gbmModel)
+
+simulated$duplicate1 <- NULL
+
+#Cubist
+cubistMod <- cubist(simulated[-11], simulated$y, committees = 100)
+print("Cubist")
+varImp(cubistMod)
+
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+cubistMod <- cubist(simulated[-11], simulated$y, committees = 100)
+print("Cubist - with duplicate1")
+varImp(cubistMod)
+
+simulated$duplicate1 <- NULL
+
+# (8.2)
+set.seed(200)
+V1 <- rep(1:2,each=100)
+V2 <- rnorm(200, mean=0, sd=2)
+V3 <- rep(1:100,each=2)
+V4 <- rnorm(200, mean=0, sd=3)
+y <- (V1 + V2) + rnorm(200,mean=0,sd=4)
+
+simulated_df <- data.frame(y,V1,V2,V3,V4)
+
+bagCtrl <- cforest_control(mtry = ncol(simulated_df) - 1)
+simulated_RF <-  cforest(y ~ ., data = simulated_df, controls = bagCtrl)
+
+cor(simulated_df)
+varImp(simulated_RF)
+
+# (8.3a)
+## Answers in text only
+
+# (8.3b)
+set.seed(200)
+data(solubility)
+
+sol_df <- data.frame(solTrainXtrans, solTrainY)
+training <- sol_df$solTrainY %>%
+  createDataPartition(p = 0.8, list = FALSE)
+
+df_train  <- sol_df[training, ]
+df_test <- sol_df[-training, ]
+
+gbm1 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.1, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+gbm10 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.9, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+gbm91 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.1, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+gbm910 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, bag.fraction = 0.9, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+p1 <- gbm1 %>% predict(df_test, n.trees = 100)
+p2 <- gbm10 %>% predict(df_test, n.trees = 100)
+p3 <- gbm91 %>% predict(df_test, n.trees = 100)
+p4 <- gbm910 %>% predict(df_test, n.trees = 100)
+
+sum_t <- data.frame(
+  RMSE_0.1_0.1 = caret::RMSE(p1, df_test$solTrainY),
+  RMSE_0.9_0.1 = caret::RMSE(p2, df_test$solTrainY),
+  RMSE_0.1_0.9 = caret::RMSE(p3, df_test$solTrainY),
+  RMSE_0.9_0.9 = caret::RMSE(p4, df_test$solTrainY)
+)
+print(sum_t)
+
+# (8.3c)
+gbm1 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 1, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+gbm10 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 10, shrinkage = 0.1, n.minobsinnode=10, verbose = FALSE)
+
+#gbm91 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 1, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+#gbm910 <- gbm(solTrainY ~ ., data = df_train, distribution = "gaussian", n.trees = 100, interaction.depth = 10, shrinkage = 0.9, n.minobsinnode=10, verbose = FALSE)
+
+summary(gbm1)
+summary(gbm10)
+#summary(gbm91)
+#summary(gbm910)
+
+#p1 <- gbm1 %>% predict(df_test, n.trees = 100)
+#p2 <- gbm10 %>% predict(df_test, n.trees = 100)
+#p3 <- gbm91 %>% predict(df_test, n.trees = 100)
+#p4 <- gbm910 %>% predict(df_test, n.trees = 100)
+
+#sum_t <- data.frame(
+#  RMSE_0.1_1 = caret::RMSE(p1, df_test$solTrainY),
+#  RMSE_0.1_10 = caret::RMSE(p2, df_test$solTrainY),
+#  RMSE_0.9_1 = caret::RMSE(p3, df_test$solTrainY),
+#  RMSE_0.9_10 = caret::RMSE(p4, df_test$solTrainY)
+#)
+#print(sum_t)
+
+# (8.7a)
+# save df
+data("ChemicalManufacturingProcess")
+df <- ChemicalManufacturingProcess
+
+# set seed for split to allow for reproducibility
+set.seed(200)
+# use mice w/ default settings to impute missing data
+miceImput <- mice(df, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice <- complete(miceImput)
+
+# Look for any features with no variance:
+zero_cols <- nearZeroVar( df_mice )
+df_final <- df_mice[,-zero_cols] # drop these zero variance columns 
+#df_final <- df_mice
+
+# split data train/test
+training <- df_final$Yield %>%
+  createDataPartition(p = 0.8, list = FALSE)
+df_train  <- df_final[training, ]
+df_test <- df_final[-training, ]
+
+# model1 - RF
+# Algorithm Tune (tuneRF)
+set.seed(200)
+bestmtry <- tuneRF(df_train[,-1], df_train[,1], stepFactor=1.5, improve=1e-5, ntree=2500)
+##mtry <- ( (ncol(df_train) -1) / 3 ) or sqrt(ncol(df_train) - 1) # By default, # of predictors / 3 for regression, sqrt(# of predictors) for classification https://www.hackerearth.com/practice/machine-learning/machine-learning-algorithms/tutorial-random-forest-parameter-tuning-r/tutorial/
+
+# from above result, we got mtry= 27 and ntree=2500 as optimal parameters
+rf <- randomForest(Yield~., data=df_train, method="rf", mtry= 27, importance = TRUE, ntree = 2500)
+
+# model2 - GBM
+set.seed(200)
+Control <- trainControl(method="repeatedcv", number=5, repeats=2)
+
+gbmGrid <- expand.grid(
+  n.trees=c(1000, 1500, 2000, 2500), 
+  interaction.depth=seq(1, 10, by = 2), 
+  shrinkage = c(0.01, 0.1), 
+  n.minobsinnode=c(5,10) )
+
+gbmModel <- caret::train(Yield~., data=df_train, 
+                         method = 'gbm',  
+                         trControl = Control, 
+                         tuneGrid=gbmGrid, 
+                         tuneLength = 5,  
+                         verbose = FALSE)
+
+# model3 - Cubist
+cubist <- caret::train(Yield~., data=df_train, method = "cubist")
+cubistOptimal <- cubist(df_train[,-1],df_train[,1], committees = 10, neighbors = 9)
+
+# Make predictions
+p1 <- rf %>% predict(df_test)
+p2 <- gbmModel %>% predict(df_test)
+p3 <- cubistOptimal %>% predict(df_test)
+
+# Model performance metrics
+sum_t <- data.frame(
+  RMSE1 = caret::RMSE(p1, df_test$Yield),
+  RMSE2 = caret::RMSE(p2, df_test$Yield),
+  RMSE3 = caret::RMSE(p3, df_test$Yield),
+  Rsquare1 = caret::R2(p1, df_test$Yield),
+  Rsquare2 = caret::R2(p2, df_test$Yield),
+  Rsquare3 = caret::R2(p3, df_test$Yield)
+)
+print(sum_t)
+
+# (8.7b)
+#code
+t < - varImp(gbmModel)
+plot(t)
+
+# (8.7c)
+rpartGrid <- expand.grid(maxdepth= seq(5,30,by=1))
+ctrl <- trainControl(method = "boot", number = 25)
+
+rpartChemTune <- caret::train(Yield~.,
+                       data = df_train,
+                       method = "rpart2",
+                       metric = "Rsquared",
+                       tuneGrid = rpartGrid,
+                       trControl = ctrl)
+
+plot(as.party(rpartChemTune$finalModel),gp=gpar(fontsize=11))
+```
