@@ -24,7 +24,6 @@ Add information here based on next meet up pertaining to how the group will divi
 | 11/12         | Review assignment  |
 | 11/27         | Complete individual work  |
 | 12/02         | Submit feedback on all drafts  |
-| 11/27         | Complete individual work  |
 | 12/06         | Merge all submissions into 1 file  |
 | 12/08         | Finalize & review for submission  |
 | 12/10         | Project Due  |
