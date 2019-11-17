@@ -39,34 +39,116 @@ For replication and grading purposes, we made our code avaliable in the appendix
 
 # Data Exploration 
 
-The beverage manufacturing production dataset contained 33 columns/variables and 2,571 rows/cases. In our initial review, we found that the response variable, `PH`, had four missing observations. We choose to drop the complete cases of the observations with null data in the target as they accounted for such a small proportion (< 0.002%) of the  observations. 
+The beverage manufacturing production dataset contained 33 columns/variables and 2,571 rows/cases. In our initial review, we found that the response variable, `PH`, had four missing observations. We choose to drop the complete cases of all observations with null data in the target as they accounted for such a small proportion (< 0.002%) of the  observations. 
 
-We also identified that 94% of the predictor variables had missing data points. Despite this high occurance, the NA values in the majority of these predictors accounted for less than 1% of the total observations. Only eleven variables, highlighted in the plot below, were missing more than 1% of data: 
+We also identified that 94% of the predictor variables had missing data points. Despite this high occurance, the NA values in the majority of these predictors accounted for less than 1% of the total observations. Only eleven variables were missing more than 1% of data. The table below shows the top variables with the most observations missing:
 
 ```{r}
-Plot_MissingData
+Tbl_Top_MissingData %>% 
+  kable(booktabs = T, digits = 1)%>%
+  kable_styling() %>% 
+  row_spec()
 ```
-
-Without additional data regarding production, we assume that the `NA` values are missing at random. We applied a Multiple Imputation by Chained Equations (MICE) algorthim, which uses sequential regression to create multiple imputations across all the incomplete cases (including categorical data).  
-
-
-## Predictor Variables
-
 
 ## Response Variable
 
-Understanding the influence PH has on our predictors is key to building an accurate predictive model. PH is a measure of acidity/alkalinity that must conform in a critical range.
+Understanding the influence pH has on our predictors is key to building an accurate predictive model. pH is a measure of acidity/alkalinity that must conform in a critical range. The value of pH ranges from 0 to 14, where 0 is acidic, 7 is neutral, and 14 is basic. 
+
+\newpage 
+
+The plots below show the distribution of `pH` in our data. The histogram shows us this variable follows a somewhat normal pattern and is centered around 8.6.  The boxplots also allows us to better visualize the outliers within our target variable. We viewed `pH` (middle) and `pH` by `BrandCode` (right) to examine the differences in distribution and relationship between these variables. Brand D has the highest median `pH` and brand C has the lowest. Brand C also appears to have the largest range in `pH` values.  
+
+```{r, fig.height=2.5}
+grid.arrange(Plt_pH1, Plt_pH2, Plt_pH3, widths=c(2,1,2), nrow=1, top = textGrob("Distribution of Response Variable: pH",gp=gpar(fontsize=10,font=3)))
+```
+
+## Predictor Variables
+
+Many of our predictors also contain outliers and have a skewed distribution. The boxplots below help us visualize this spread of our numeric predictor variables.
+
+```{r fig.width=11, fig.height=4}
+grid.arrange(Plt_Outlier1, Plt_Outlier2, nrow=2, heights=c(3,1),
+             top = textGrob("Box-Plot Distribution of Numeric Predictor Variables", 
+                            gp=gpar(fontsize=10,font=3)))
+```
+
+We examined the predictor variables with outliers in a scatterplot against our target, `pH` to better understand predictor and response relationship. The outliers, highlighted in blue, further show which predictors have a heavy-tail distribution. We can also identify many variables with strong outlier patterns, suggesting a high degree of variability within certain measurements. 
+
+```{r}
+grid.arrange(Plt_Outlier3, top = textGrob("Relationship Between Response and Predictor Variables with Outliers", 
+                            gp=gpar(fontsize=10,font=3)))
+```
+
+For example, `AirPressurer` shows one of the more distinct patterns. This variable appears bifurcated with a clear split between normal and extreme values. `MFR` also shows an interesting pattern. The outliers have a weak, negative linear relationship with `pH`, but the non-outliers have no linear relationship and follow a straight, vertical line. 
+
+ 
+## Correlation
+
+```{r, fig.height = 4, fig.width=4, fig.cap="Predictor Variable Correlation", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .3), include=F}
+#fix table alignment or remove wrap from corrplot and place in appendix.
+grid::grid.draw(ggplot_gtable(g))
+```
+
+`r length(cor_freq)` of our numeric predictor appear heavily related, with correlation values exceeding $\pm{0.75}$. The full correlation matrix can be viewed in the appendix section. *Revisit section to add more text*
+
+```{r}
+Tbl_Corr %>% kable(caption="Highly Correlated Predictors", booktabs=T, digits=2, align = "l") %>% kable_styling(position = "left") %>% row_spec() %>% column_spec(4, bold = T)
+```
 
 
+# Data Preparation
 
+Decision tree and boosted models are robust against the affect of multicollineraty, outliers, and missing values. *Tranformation approaches will vary as we play with model. Visit this section later.*
 
-## Data Transformations
+We divided data using an 80/20 split to create a train and test set. All models will incorporate k-folds cross-validation across 10 folds to protect against overfitting the data. 
 
-Text text text.
+## Data Imputation
+
+We choose to handle missing data in our predictor variables using multiple imputations. We applied a Multiple Imputation by Chained Equations (MICE) algorthim, which uses sequential regression to fill in the data across all the incomplete cases (including categorical data). 
+
+*We can also use this same approach to handle outliers (linear model) by setting their value to `NA` and predicticting a value within the expected range.*
+
+## Pre-Processing
+
+*Test the effect of pre-processing methods to maximize the success of our tree and non-tree models.  Not currently adding data transformations but may revist: ie. scale data for PLS. *
+
+For linear models, we removed the predictor `HydPressure1` as it contained near-zero variance. `HydPressure3`, `Balling`, `BallingLvl`, `FillerSpeed`, `FillerLevel`, and `Density` were also removed due to large absolute correlations with other variables.  
 
 # Predictive Modeling
 
-Text text.
+Only attempted 1 model thus far: MARS. Text explination to come. 
+
+## MARS Model
+
+Explain text here. Text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text.
+
+
+**MARS CV RMSE:** 
+```{r}
+mars_plot
+```
+
+**Train Accuracy: **
+
+```{r}
+mars_train_acc <- mars_fit$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% select(RMSE, Rsquared, MAE)
+
+mars_train_acc %>% kable() %>% kable_styling()
+```
+
+**Test Accuracy:**
+
+```{r}
+mars_perf %>% t()%>%kable() %>% kable_styling()
+```
+
+Variable Importance:
+
+
+```{r}
+mars_VarImp <- varImp(mars_fit, scale = T)
+ggplot(mars_VarImp)
+```
 
 ## Train
 
@@ -86,4 +168,16 @@ sfasdfs
 
 # Appendix {-#Appendix}
 
-Code & stuff here. 
+## Summary Statistics
+
+```{r}
+summary_stats %>% kable(digits = 1, booktabs=T) %>% kable_styling()
+```
+
+## Correlation Matrix
+
+```{r, fig.align='center', fig.height=4}
+Plt_Corr + labs(title="Predictor Variables Correlation Matrix")
+```
+
+
