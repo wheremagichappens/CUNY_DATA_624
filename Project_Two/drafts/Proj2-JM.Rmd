@@ -14,7 +14,11 @@ documentclass: report
 subparagraph: yes
 ---
 
-```{r source-script, echo = F, message=F, warning=F, error=F, comment=NA}
+```{r dependencies, echo = T, message=F, warning=F, error=F, comment=NA, }
+library(tidyverse); library(readxl); library(psych); library(ggplot2); library(mice); library(xtable); library(GGally); library(ggstance); library(grid); library(gridExtra); library(caret); library(data.table); library(recipes); library(Metrics); library(knitr); library(kableExtra);library(default); library(gbm)
+```
+
+```{r source-script, echo = F, message=F, warning=F, error=F, comment=NA, results='hide', cache=T}
 source('~/GitHub/CUNY_DATA_624/Project_Two/drafts/Proj2-JM.R') #code
 ```
 
@@ -39,145 +43,165 @@ For replication and grading purposes, we made our code avaliable in the appendix
 
 # Data Exploration 
 
-The beverage manufacturing production dataset contained 33 columns/variables and 2,571 rows/cases. In our initial review, we found that the response variable, `PH`, had four missing observations. We choose to drop the complete cases of all observations with null data in the target as they accounted for such a small proportion (< 0.002%) of the  observations. 
+The beverage manufacturing production dataset contained 33 columns/variables and 2,571 rows/cases. In our initial review, we found that the response variable, `PH`, had four missing observations. 
 
-We also identified that 94% of the predictor variables had missing data points. Despite this high occurance, the NA values in the majority of these predictors accounted for less than 1% of the total observations. Only eleven variables were missing more than 1% of data. The table below shows the top variables with the most observations missing:
+We also identified that 94% of the predictor variables had missing data points. Despite this high occurance, the NA values in the majority of these predictors accounted for less than 1% of the total observations. Only eleven variables were missing more than 1% of data.
 
 ```{r}
-Tbl_Top_MissingData %>% 
-  kable(booktabs = T, digits = 1)%>%
-  kable_styling() %>% 
-  row_spec()
+Tbl_Top_MissingData
 ```
 
 ## Response Variable
 
+```{r, fig.height=4, fig.cap="Distribution of Response Variable: pH", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .5)}
+
+grid.arrange(Plt_pH1, Plt_pH4, Plt_pH2, Plt_pH3, layout_matrix = Plt_pH_lay, heights=c(2,1), padding=unit(0, 'cm'))
+```
+
 Understanding the influence pH has on our predictors is key to building an accurate predictive model. pH is a measure of acidity/alkalinity that must conform in a critical range. The value of pH ranges from 0 to 14, where 0 is acidic, 7 is neutral, and 14 is basic. 
 
-\newpage 
+Figure 1.1 shows that our response distribution follows a somewhat normal pattern and is centered around 8.5. The histogram for `pH` is bimodal in the aggregate, but varies by brand. The boxplot view allows us to better visualize the effect outliers have on the skewness within our target variable. 
 
-The plots below show the distribution of `pH` in our data. The histogram shows us this variable follows a somewhat normal pattern and is centered around 8.6.  The boxplots also allows us to better visualize the outliers within our target variable. We viewed `pH` (middle) and `pH` by `BrandCode` (right) to examine the differences in distribution and relationship between these variables. Brand D has the highest median `pH` and brand C has the lowest. Brand C also appears to have the largest range in `pH` values.  
-
-```{r, fig.height=2.5}
-grid.arrange(Plt_pH1, Plt_pH2, Plt_pH3, widths=c(2,1,2), nrow=1, top = textGrob("Distribution of Response Variable: pH",gp=gpar(fontsize=10,font=3)))
-```
+Brand A has a negatively skewed, multimodal distribution, which could be suggestive of several distinct underlying response patterns or a higher degree of variation in `pH` response for this brand. The density plot and histogram for Brand B show two bimodal peaks with a slight positive skew.  These peaks indicate that this brand has two distinct response values that occur more frequently. The distribution for Brand C and D are both more normal, with a slight negative skew. Brand D has the highest median `pH` value and Brand C has the lowest. Brand C also appears to have the largest spread of `pH` values.  
 
 ## Predictor Variables
 
 Many of our predictors also contain outliers and have a skewed distribution. The boxplots below help us visualize this spread of our numeric predictor variables.
 
-```{r fig.width=11, fig.height=4}
-grid.arrange(Plt_Outlier1, Plt_Outlier2, nrow=2, heights=c(3,1),
-             top = textGrob("Box-Plot Distribution of Numeric Predictor Variables", 
-                            gp=gpar(fontsize=10,font=3)))
+```{r fig.height=4, fig.cap="Box-Plot Distribution of Numeric Predictor Variables"}
+grid.arrange(Plt_Outlier1, Plt_Outlier2, nrow=2, heights=c(3,2))
 ```
 
 We examined the predictor variables with outliers in a scatterplot against our target, `pH` to better understand predictor and response relationship. The outliers, highlighted in blue, further show which predictors have a heavy-tail distribution. We can also identify many variables with strong outlier patterns, suggesting a high degree of variability within certain measurements. 
 
-```{r}
-grid.arrange(Plt_Outlier3, top = textGrob("Relationship Between Response and Predictor Variables with Outliers", 
-                            gp=gpar(fontsize=10,font=3)))
+```{r, fig.cap="Response~Predictor Scatterplots"}
+Plt_Outlier3
 ```
 
-For example, `AirPressurer` shows one of the more distinct patterns. This variable appears bifurcated with a clear split between normal and extreme values. `MFR` also shows an interesting pattern. The outliers have a weak, negative linear relationship with `pH`, but the non-outliers have no linear relationship and follow a straight, vertical line. 
-
- 
-## Correlation
-
-```{r, fig.height = 4, fig.width=4, fig.cap="Predictor Variable Correlation", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .3), include=F}
-#fix table alignment or remove wrap from corrplot and place in appendix.
-grid::grid.draw(ggplot_gtable(g))
-```
-
-`r length(cor_freq)` of our numeric predictor appear heavily related, with correlation values exceeding $\pm{0.75}$. The full correlation matrix can be viewed in the appendix section. *Revisit section to add more text*
-
-```{r}
-Tbl_Corr %>% kable(caption="Highly Correlated Predictors", booktabs=T, digits=2, align = "l") %>% kable_styling(position = "left") %>% row_spec() %>% column_spec(4, bold = T)
-```
+For example, `AirPressurer` shows a very distinct, bifurcated pattern. This variable has a clear split between normal and extreme values. `MFR` also shows an interesting pattern. The outliers have a weak, negative linear relationship with `pH`, but the non-outliers have no linear relationship and follow a straight, vertical line. 
 
 
 # Data Preparation
 
-Decision tree and boosted models are robust against the affect of multicollineraty, outliers, and missing values. *Tranformation approaches will vary as we play with model. Visit this section later.*
+Decision models trees are robust against the affect of correlated variables, outliers, and missing values. We applied different tranformation to properly evaluate our three model types. 
 
-We divided data using an 80/20 split to create a train and test set. All models will incorporate k-folds cross-validation across 10 folds to protect against overfitting the data. 
+Data was divided using an 80/20 split to create a train and test set. All models incorporated k-folds cross-validation set at 10 folds to protect against overfitting the data. 
 
 ## Data Imputation
 
-We choose to handle missing data in our predictor variables using multiple imputations. We applied a Multiple Imputation by Chained Equations (MICE) algorthim, which uses sequential regression to fill in the data across all the incomplete cases (including categorical data). 
-
-*We can also use this same approach to handle outliers (linear model) by setting their value to `NA` and predicticting a value within the expected range.*
+We choose to drop the complete cases of all `pH` observations with null data in the target as they accounted for such a small proportion (< 0.002%) of the  observations. Doing such increased our non-linear modeling accuracy measures. For our predictor variables, we applied a Multiple Imputation by Chained Equations (MICE) algorthim to predict the missing data using sequential regression. This method filled in all incomplete cases, including `BrandCode`, our one unordered categorical variable.  
 
 ## Pre-Processing
 
-*Test the effect of pre-processing methods to maximize the success of our tree and non-tree models.  Not currently adding data transformations but may revist: ie. scale data for PLS. *
+In the pre-processing stage, we prepared our data for modeling by applying strategic transformations to improve our modeling techniques.
 
-For linear models, we removed the predictor `HydPressure1` as it contained near-zero variance. `HydPressure3`, `Balling`, `BallingLvl`, `FillerSpeed`, `FillerLevel`, and `Density` were also removed due to large absolute correlations with other variables.  
+#### Correlation
+
+We examined collinearity measures between our numeric predictors and found that `r length(cor_freq)` of these variables were heavily related, with correlation values exceeding $\pm{0.75}$. Linear modeling requires predictor variables to be independent of one another. Thus, the following strongly-related variables were removed from our linear models during the pre-processing stage: `HydPressure3`, `Balling`, `BallingLvl`, `FillerSpeed`, `FillerLevel`, and `Density`.
+
+```{r, fig.height = 4, fig.width=6, fig.cap="Predictor Variable Correlation Matrix", fig.align='center'}
+grid::grid.draw(ggplot_gtable(g))
+```
+
+#### Distributions
+
+We also examined the distributions of our data and applied transformations to normalize irregular center and spread seen in our data exploration
+
+One variable,`HydPressure1`, was also removed from our linear and non-linear modeling as it presented with near-zero variance features. Near-zero variance occurs when there is little variation within distribution of predictor variables. Near-zero variance can affect model stability and can bias resampling measures. 
 
 # Predictive Modeling
 
-Only attempted 1 model thus far: MARS. Text explination to come. 
+We modeled the data using linear, non-linear, and tree-based regression. Currently, I have broken up this section by model type. However, I would suggest restructing for final submission to compare the accuracy and variable importance across models in a more cohesive way. I have some ideas & would be happy to help merge this section.
 
-## MARS Model
+I am leaving my writing more vague in this piece as we will be comparing all of our work and then synthasizing results. Please let me know if you have any clarifying questions.
 
-Explain text here. Text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text.
+## Linear Regression
 
+GROUP ATTEMPT - GLM: Will write more formally if model is selected :) 
 
-**MARS CV RMSE:** 
-```{r}
-mars_plot
-```
+#### Accuracy Measures 
 
-**Train Accuracy: **
+Below are results from generalized linear model. GLM1 has no pre-processing; GLM2 has was pre-processed using caret, GLM3 used same pre-processing as caret but was controled for via the recipe approach. Recipe is my preferred approach for data transformations as it allows for more control and you can retreive information on dropped variabes, etc. 
 
 ```{r}
-mars_train_acc <- mars_fit$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% select(RMSE, Rsquared, MAE)
-
-mars_train_acc %>% kable() %>% kable_styling()
+Tbl_GLM_ACC 
 ```
 
-**Test Accuracy:**
+
+#### Linear Regression Analysis
+
+Our optimal linear model does not meet homogeneity, normality, or homoscedasticity standards for linear assumption. This model requires significant transformations and or variable selection to adhere to linear requirements. We could try transforming outliers, but I believe non-linear and tree-based regressions will be optimal over this approach.
+
+```{r, fig.cap="GLM Diagnostic Plots"}
+grid.arrange(Plt_GLM1, Plt_GLM2, Plt_GLM3, Plt_GLM4, nrow=1)
+```
+
+## Non-Linear Regression
+
+GROUP ATTEMPT - MARS: Will write up more formally if selected :)
+
+We selected the multivariate adaptive regression splines (MARS) model in our non-linear regression attempt. This method uses a weighted sum to models nonlinearities and interactions between variables.
+
+#### Accuracy
+
+Using RMSE as a cross validation metric, we can compare the performance of the mars models and see the impact of the tuning grid on RMSE performance. MARS1 & MARS2 performed fairly similiarly, with MARS2 obtaining the lowest metric. MARS3 contained more variation across degress. This version of MARS contained all the preprocessing from the linear model, was not as effective. This was to be expected. 
+
+```{r, fig.cap="MARS RMSE Cross-Validated Profile"}
+grid.arrange(mars1_plot,mars2_plot,mars3_plot, nrow=1)
+```
+
+MARS2 obtained the best overal accuracy measures. This was the only model that used a box-cox transformation to change the shape of the predictor variables. The scale of the predictors had a wide variation, which could explain some of the success this tranformation had on our modeling process.
 
 ```{r}
-mars_perf %>% t()%>%kable() %>% kable_styling()
+Tbl_MARS_ACC 
 ```
 
-Variable Importance:
 
+#### Variable Importance
+
+This section can be neatly cleaned up to display graphs and variable importance.
+
+Out of curiousity, I compared the differences in variable importance from the preferred MARS2 model and the secondary MARS1 model. There are some significant differences in which variables were selected. The chart below shows some of the biggest changes between the two:
+
+In our final selection of top models, I think we could do a nice comparison of predictors importance.
+
+```{r,fig.cap="MARS Scaled Variable Importance"}
+grid.arrange(Plt_MARS_VarImp1, Plt_MARS_VarImp2, Plt_MARS_VarImp3, nrow=1)
+```
+
+## Tree-Based Regression
+
+In this section, I tested several gradient boosted models (GBM).
+
+#### Accuracy Measures
+
+```{r, fig.cap="GBM RMSE Cross-Validated Profile"}
+grid.arrange(gbm1_plot,gbm2_plot,gbm3_plot, nrow=1)
+```
+
+Unsurprisingly, GBM3 performed the worst out of the 3 models. This model had all pre-processing applied to it, which is not needed for tree-based regression. GBM1 & GBM2 performed very similiarly, with GBM1 (train) obtaining the best RMSE score and GBM2 obtaining the best MAPE results. The difference between both models is negligent. GBM1 had no pre-processing and GBM2 used box-cox to rescale our predictors. 
 
 ```{r}
-mars_VarImp <- varImp(mars_fit, scale = T)
-ggplot(mars_VarImp)
+Tbl_GBM_ACC
 ```
 
-## Train
+#### Variable Importance
 
-Train text.
-
-## Test 
-
-Test text.
-
-# Discussion
-
-Eval text. The end. 
+```{r fig.cap="GBM Scaled Variable Importance"}
+grid.arrange(Plt_GBM_VarImp1, Plt_GBM_VarImp2, Plt_GBM_VarImp3, nrow=1)
+```
 
 # Conclusion
 
-sfasdfs
+As referenced in the modeling section, I will save sprusing up this section once everyones models are live and selected. 
 
 # Appendix {-#Appendix}
 
 ## Summary Statistics
 
-```{r}
-summary_stats %>% kable(digits = 1, booktabs=T) %>% kable_styling()
+```{r, fig.cap="Summary Statistics"}
+Tbl_summary_stats
 ```
 
-## Correlation Matrix
-
-```{r, fig.align='center', fig.height=4}
-Plt_Corr + labs(title="Predictor Variables Correlation Matrix")
-```
 
 
