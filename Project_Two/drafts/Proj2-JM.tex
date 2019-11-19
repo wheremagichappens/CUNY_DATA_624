@@ -28,6 +28,46 @@
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -179,6 +219,12 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse); }\KeywordTok{library}\NormalTok{(readxl); }\KeywordTok{library}\NormalTok{(psych); }\KeywordTok{library}\NormalTok{(ggplot2); }\KeywordTok{library}\NormalTok{(mice); }\KeywordTok{library}\NormalTok{(xtable); }\KeywordTok{library}\NormalTok{(GGally); }\KeywordTok{library}\NormalTok{(ggstance); }\KeywordTok{library}\NormalTok{(grid); }\KeywordTok{library}\NormalTok{(gridExtra); }\KeywordTok{library}\NormalTok{(caret); }\KeywordTok{library}\NormalTok{(data.table); }\KeywordTok{library}\NormalTok{(recipes); }\KeywordTok{library}\NormalTok{(Metrics); }\KeywordTok{library}\NormalTok{(knitr); }\KeywordTok{library}\NormalTok{(kableExtra);}\KeywordTok{library}\NormalTok{(default); }\KeywordTok{library}\NormalTok{(gbm)}
+\end{Highlighting}
+\end{Shaded}
+
 \thispagestyle{empty}
 \newpage
 \clearpage
@@ -226,17 +272,23 @@ points. Despite this high occurance, the NA values in the majority of
 these predictors accounted for less than 1\% of the total observations.
 Only eleven variables were missing more than 1\% of data.
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Tbl_Top_MissingData}
+\end{Highlighting}
+\end{Shaded}
+
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-1}Variables with Highest Frequency of NA Values}
+\caption{\label{tab:source-script}Variables with Highest Frequency of NA Values}
 \centering
 \fontsize{8}{10}\selectfont
 \begin{tabular}{lrrrrrrrrrrr}
 \toprule
 \textbf{ } & \textbf{MFR} & \textbf{BrandCode} & \textbf{FillerSpeed} & \textbf{PCVolume} & \textbf{PSCCO2} & \textbf{FillOunces} & \textbf{PSC} & \textbf{CarbPressure1} & \textbf{HydPressure4} & \textbf{CarbPressure} & \textbf{CarbTemp}\\
 \midrule
-\rowcolor{gray!6}  n & 212.0 & 120.0 & 57.0 & 39.0 & 39.0 & 38.0 & 33.0 & 32.0 & 30.0 & 27.0 & 26\\
-\% & 8.2 & 4.7 & 2.2 & 1.5 & 1.5 & 1.5 & 1.3 & 1.2 & 1.2 & 1.1 & 1\\
+\rowcolor{gray!6}  n & 208.0 & 120.0 & 54.0 & 39.0 & 39.0 & 38.0 & 33.0 & 32.0 & 28.0 & 27.0 & 26\\
+\% & 8.1 & 4.7 & 2.1 & 1.5 & 1.5 & 1.5 & 1.3 & 1.2 & 1.1 & 1.1 & 1\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -244,12 +296,18 @@ Only eleven variables were missing more than 1\% of data.
 \hypertarget{response-variable}{%
 \section{Response Variable}\label{response-variable}}
 
-\begin{wrapfigure}{r}{0.5\textwidth}[H]
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(Plt_pH1, Plt_pH4, Plt_pH2, Plt_pH3, }\DataTypeTok{layout_matrix =}\NormalTok{ Plt_pH_lay, }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{padding=}\KeywordTok{unit}\NormalTok{(}\DecValTok{0}\NormalTok{, }\StringTok{'cm'}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
 
 \hfill{}\includegraphics[width=1\textwidth]{Proj2-JM_files/figure-latex/unnamed-chunk-2-1} 
 
 \caption{Distribution of Response Variable: pH}\label{fig:unnamed-chunk-2}
-\end{wrapfigure}
+\end{figure}
 
 Understanding the influence pH has on our predictors is key to building
 an accurate predictive model. pH is a measure of acidity/alkalinity that
@@ -275,9 +333,22 @@ also appears to have the largest spread of \texttt{pH} values.
 \hypertarget{predictor-variables}{%
 \section{Predictor Variables}\label{predictor-variables}}
 
-Many of our predictors also contain outliers and have a skewed
-distribution. The boxplots below help us visualize this spread of our
-numeric predictor variables.
+We examined the density of our variables to visualize the distribution
+of the predictors. Many of these variables contain outliers and present
+with a skewed distribution. The outliers fall outside the red-line
+boundaries, and highlight which predictors have heavier tails.
+
+The density plots also contain an overlay of the only categorical
+indicator, \texttt{BrandCode}. This view shows us that some variables,
+including \texttt{AlchRel}, \texttt{CarbRel}, \texttt{CarbVolume},
+\texttt{HydPressure4}, and \texttt{Tempature}, are strongly influenced
+by brand type.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(Plt_Outlier1, Plt_Outlier2, }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{figure}
 \centering
@@ -285,247 +356,274 @@ numeric predictor variables.
 \caption{Box-Plot Distribution of Numeric Predictor Variables}
 \end{figure}
 
-We examined the predictor variables with outliers in a scatterplot
-against our target, \texttt{pH} to better understand predictor and
-response relationship. The outliers, highlighted in blue, further show
-which predictors have a heavy-tail distribution. We can also identify
-many variables with strong outlier patterns, suggesting a high degree of
-variability within certain measurements.
+We also looked at the relationship of our predictors against the
+response variable below. There are a few predictors that have a weak,
+linear association with our response variable. However, most of the
+indicators show no strong patterns. Given these trends, we do not expect
+linear modeling to provide optimal predictions for \texttt{pH}.
+
+This view helps us further visualize the effect \texttt{BrandCode} has
+on our predictor and \texttt{pH} values. For example, \texttt{AlchRel}
+shows distinct \texttt{BrandCode} groupings. Other variables, such as
+\texttt{PSCO2}, \texttt{BowlSetpoint}, \texttt{MinFlow}, and
+\texttt{PressureSetup} show unique features likely related to system
+processes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(Plt_Scatter1, Plt_Scatter2, }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{figure}
 \centering
 \includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-4-1.pdf}
-\caption{Response\textasciitilde{}Predictor Scatterplots}
+\caption{pH\textasciitilde{}Predictor Scatterplots}
 \end{figure}
 
-For example, \texttt{AirPressurer} shows a very distinct, bifurcated
-pattern. This variable has a clear split between normal and extreme
-values. \texttt{MFR} also shows an interesting pattern. The outliers
-have a weak, negative linear relationship with \texttt{pH}, but the
-non-outliers have no linear relationship and follow a straight, vertical
-line.
+Lastly, we examined collinearity measures between our numeric predictors
+and found that 10 of these variables were heavily related, with
+correlation values exceeding \(\pm{0.75}\). Linear modeling requires
+predictor variables to be independent of one another. This final
+evaluation confirms that standard linear modeling should not be used as
+it would require removing and transforming a significant proportion of
+our predictors, which would potentially overfit our data and lead to
+unreliable predictions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{grid}\OperatorTok{::}\KeywordTok{grid.draw}\NormalTok{(}\KeywordTok{ggplot_gtable}\NormalTok{(g))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-5-1} 
+
+}
+
+\caption{Predictor Variable Correlation Matrix}\label{fig:unnamed-chunk-5}
+\end{figure}
 
 \hypertarget{data-preparation}{%
 \chapter{Data Preparation}\label{data-preparation}}
 
-Decision models trees are robust against the affect of correlated
-variables, outliers, and missing values. We applied different
-tranformation to properly evaluate our three model types.
+In our exploration, we detected missing data, extreme outliers, and
+multicollinearity. We selected our modeling methods keeping these
+factors in mind. Our approach included the application strategic
+transformations to evaluate several types of non-linear and tree-based
+modeling.
 
-Data was divided using an 80/20 split to create a train and test set.
-All models incorporated k-folds cross-validation set at 10 folds to
-protect against overfitting the data.
+We divided the production dataset using an 80/20 split to create a train
+and test set. All models incorporated k-folds cross-validation set at 10
+folds to protect against overfitting the data. We set up unique model
+tuning grids to find the optimal parameters for each regression type to
+ensure the highest accuracy within our predictions.
 
 \hypertarget{data-imputation}{%
-\section{Data Imputation}\label{data-imputation}}
+\subsubsection{Data Imputation}\label{data-imputation}}
 
 We choose to drop the complete cases of all \texttt{pH} observations
 with null data in the target as they accounted for such a small
-proportion (\textless{} 0.002\%) of the observations. Doing such
-increased our non-linear modeling accuracy measures. For our predictor
-variables, we applied a Multiple Imputation by Chained Equations (MICE)
-algorthim to predict the missing data using sequential regression. This
-method filled in all incomplete cases, including \texttt{BrandCode}, our
-one unordered categorical variable.
+proportion (\textless{} 0.002\%) of the observations. We compared this
+approach with other types of imputation and found that dropping
+variables, in this instance, provided a slight boost within our accuracy
+measures.
 
-\emph{We can also use this same approach to handle outliers (linear
-model) by setting their value to \texttt{NA} and predicticting a value
-within the expected range.}
+For our predictor variables, we applied a Multiple Imputation by Chained
+Equations (MICE) algorthim to predict the missing data using sequential
+regression. This method filled in all incomplete cases, including
+\texttt{BrandCode}, our one unordered categorical variable.
 
 \hypertarget{pre-processing}{%
-\section{Pre-Processing}\label{pre-processing}}
+\subsubsection{Pre-Processing}\label{pre-processing}}
 
-\hypertarget{correlation}{%
-\section{Correlation}\label{correlation}}
+Decision models trees are robust against these identifed issues. Thus,
+requiring minimal data tranformation to properly evaluate our data. Our
+non-linear models required more attention, so we incorporated variable
+centering and scaling into the pre-processing to maximize their
+performance.
 
-We examined the relationship between our numeric predictors and found
-that 9 of the variables appear heavily related, with correlation values
-exceeding \(\pm{0.75}\). The full correlation matrix can be viewed in
-the appendix section. \emph{Revisit section to add more text}
+We tested the effect of box-cox transformations on our non-linear and
+tree-based models. The box-cox method changes the distribution shape of
+our predictor variables, which normalizes the scale that they are
+evaluated on. We found this transformation improve our modeling outcomes
+in some instances.
+
+\hypertarget{modeling}{%
+\chapter{Modeling}\label{modeling}}
+
+For our non-linear approach, we selected Support Vector Machines (SVM),
+Multivariate Adaptive Regression Splines (MARS), and Elastic Net (eNet)
+models. We compared these methods to tree-based regression using
+gradient boosted models (GBM).
+
+\hypertarget{svm}{%
+\subsubsection{SVM}\label{svm}}
+
+For SVM, we choose to work with a non-linear, radial kernel because many
+of our data's features did not appear to be linearly separable. SVM
+models work well in maintain a large amount of features and can make
+distinctions between class differences.
+
+Our RMSE Cross Validation plots show us that bost models performed
+similiary, but the second model performed slightly better. We choose
+this model, which contained box-cox, centering, and spread
+transformations, to be our preferred SVM model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(svm1_plot, svm2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{left=}\KeywordTok{textGrob}\NormalTok{(}\StringTok{"RMSE (Cross Valiadation)"}\NormalTok{, }\DataTypeTok{rot=}\DecValTok{90}\NormalTok{), }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"Sigma"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (geom_point).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (geom_path).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (geom_point).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (geom_path).
+\end{verbatim}
+
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\hypertarget{mars}{%
+\subsubsection{MARS}\label{mars}}
+
+MARS modeling was also selected to assess the non-linear features in our
+data. This method uses a weighted sum to models nonlinearities and
+interactions between variables. The model assesses cut-points between
+features that create the smallest error and prunes insignificant points
+to improve model accuracy.
+
+Our RMSE Cross Validation plots show us that the best tune for both MARS
+were very similiar. The second model, with box-cox transformations,
+performed the most consistently, thus we selected this as our preferred
+MARS model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(mars1_plot, mars2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{left=}\KeywordTok{textGrob}\NormalTok{(}\StringTok{"RMSE (Cross Valiadation)"}\NormalTok{, }\DataTypeTok{rot=}\DecValTok{90}\NormalTok{), }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"#Terms"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\hypertarget{enet}{%
+\subsubsection{eNET}\label{enet}}
+
+The Elasticnet model was used as it can handle a large number of
+predictor variables. It combines ridge and lasso regression techniques
+to reduce the size of coefficients.
+
+Our RMSE Cross Validation plots show us that the best tune for both eNET
+were also similiar, with eNET1 performing slightly better. This model
+center and scaled the data but did not apply a box-cox transformations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(enet1_plot, enet2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{left=}\KeywordTok{textGrob}\NormalTok{(}\StringTok{"RMSE (Cross Valiadation)"}\NormalTok{, }\DataTypeTok{rot=}\DecValTok{90}\NormalTok{), }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"Fraction of Full Solution"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\hypertarget{gbm}{%
+\subsubsection{GBM}\label{gbm}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(gbm1_plot,gbm2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-9-1.pdf}
+\caption{GBM RMSE Cross-Validated Profile}
+\end{figure}
+
+\hypertarget{regression-analysis}{%
+\chapter{Regression Analysis}\label{regression-analysis}}
+
+This section will discuss the highlights and draw back of our tested
+models. I am withholding content until we review and merge.
+
+\hypertarget{accuracy}{%
+\section{Accuracy}\label{accuracy}}
+
+MAPE not currently working for selected SVM/MARS train model. NaN is
+indicative of a zero in the calculations. Will address in final merge.
+The SVM model achieved the highest accuracy measures for non-linear
+modeling and the GBM model outperformed all of those other attempts.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Tbl_Accuracy}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-6}Highly Correlated Predictors}
+\caption{\label{tab:source-script}Accuracy Measures}
+\centering
 \fontsize{8}{10}\selectfont
-\begin{tabular}{lll>{\bfseries}llll}
+\begin{tabular}{lrrrrrrrr}
 \toprule
-\textbf{V1} & \textbf{V2} & \textbf{COR} & \textbf{|} & \textbf{V1  } & \textbf{V2 } & \textbf{COR }\\
+  & SVM\_Train & SVM\_Test & MARS\_Train & MARS\_Test & eNET\_Train & eNET\_Test & GBM\_PERF\_TST & gbm1\_Train\\
 \midrule
-\rowcolor{gray!6}  AlchRel & BallingLvl & 0.93 & | & CarbVolume & BallingLvl & 0.78\\
-AlchRel & CarbRel & 0.84 & | & CarbVolume & Density & 0.76\\
-\rowcolor{gray!6}  Balling & BallingLvl & 0.98 & | & Density & Balling & 0.96\\
-Balling & AlchRel & 0.92 & | & Density & BallingLvl & 0.95\\
-\rowcolor{gray!6}  Balling & CarbRel & 0.82 & | & Density & AlchRel & 0.90\\
-\addlinespace
-CarbPressure & CarbTemp & 0.81 & | & Density & CarbRel & 0.82\\
-\rowcolor{gray!6}  CarbRel & BallingLvl & 0.84 & | & FillerLevel & BowlSetpoint & 0.95\\
-CarbVolume & CarbRel & 0.79 & | & FillerSpeed & MFR & 0.93\\
-\rowcolor{gray!6}  CarbVolume & Balling & 0.78 & | & HydPressure2 & HydPressure3 & 0.92\\
-CarbVolume & AlchRel & 0.78 & | & MnfFlow & HydPressure3 & 0.76\\
+\rowcolor{gray!6}  RMSE & 0.12187 & 0.11057 & 0.12303 & 0.11669 & 0.13581 & 0.12581 & 0.10157 & 0.10622\\
+Rsquared & 0.51456 & 0.55908 & 0.50555 & 0.52490 & 0.39269 & 0.42688 & 0.62633 & 0.62788\\
+\rowcolor{gray!6}  MAE & 0.08861 & 0.08142 & 0.09286 & 0.08964 & 0.10506 & 0.09740 & 0.07589 & 0.07894\\
+MAPE & 0.01110 & 0.00958 & 0.01142 & 0.01053 & 0.01298 & 0.01061 & 0.01021 & 0.00891\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\emph{Test the effect of pre-processing methods to maximize the success
-of our tree and non-tree models. Not currently adding data
-transformations but may revist: ie. scale data for PLS. }
+\hypertarget{variable-importance}{%
+\section{Variable Importance}\label{variable-importance}}
 
-For linear models, we removed the predictor \texttt{HydPressure1} as it
-contained near-zero variance. \texttt{HydPressure3}, \texttt{Balling},
-\texttt{BallingLvl}, \texttt{FillerSpeed}, \texttt{FillerLevel}, and
-\texttt{Density} were also removed due to large absolute correlations
-with other variables.
+This section will discuss the trends in variable features in our
+selected models.
 
-\hypertarget{predictive-modeling}{%
-\chapter{Predictive Modeling}\label{predictive-modeling}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{grid.arrange}\NormalTok{(Plt_SVM_VarImp, Plt_MARS_VarImp, Plt_eNET_VarImp, Plt_GBM_VarImp, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"Overall Variable Importance"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
-We modeled the data using linear, non-linear, and tree-based regression.
-In this section, we discuss the attempts from our best model performance
-for each regression type.
-
-\hypertarget{linear-regression}{%
-\section{Linear Regression}\label{linear-regression}}
-
-multicollineraty
-
-Explain text here. Text text text text text text text text text text
-text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text
-text text text text text text text text text.
-
-\hypertarget{non-linear-regression}{%
-\section{Non-Linear Regression}\label{non-linear-regression}}
-
-Explain text here. Text text text text text text text text text text
-text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text
-text text text text text text text text text.
-
-\hypertarget{tree-based-regression}{%
-\section{Tree-Based Regression}\label{tree-based-regression}}
-
-\textbf{MARS CV RMSE:}
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-7-1.pdf}
-
-\textbf{Train Accuracy: }
-
-\begin{table}[H]
-\centering\begingroup\fontsize{8}{10}\selectfont
-
-\begin{tabular}{l|r|r|r|r}
-\hline
-  & MARS1\_Train & MARS2\_Train & MARS1\_Test & MARS2\_Test\\
-\hline
-\rowcolor{gray!6}  RMSE & 0.1223 & 0.1230 & 0.1179 & 0.1269\\
-\hline
-Rsquared & 0.5023 & 0.5034 & 0.5214 & 0.4577\\
-\hline
-\rowcolor{gray!6}  MAE & 0.0938 & 0.0934 & 0.0882 & 0.0897\\
-\hline
-MAPE & 0.0105 & 0.0102 & 0.0103 & 0.0105\\
-\hline
-\end{tabular}
-\endgroup{}
-\end{table}
-
-Variable Importance:
-
-\begin{wraptable}{l}{0pt}[H]
-
-\caption{\label{tab:unnamed-chunk-9}Comparison of MARS Models Var Importance}
+\begin{figure}
 \centering
-\fontsize{8}{10}\selectfont
-\begin{tabular}{l|r|r|r}
-\hline
-Variable & MARS2 & MARS1 & diff\\
-\hline
-\rowcolor{gray!6}  MnfFlow & 100.00 & 100.00 & 0.00\\
-\hline
-BrandCodeC & 78.60 & 77.38 & -1.21\\
-\hline
-\rowcolor{gray!6}  PCVolume & 78.60 & 16.54 & -62.06\\
-\hline
-HydPressure2 & 78.60 & 61.28 & -17.31\\
-\hline
-\rowcolor{gray!6}  AirPressurer & 69.77 & 66.43 & -3.34\\
-\hline
-Temperature & 65.27 & 61.28 & -3.99\\
-\hline
-\rowcolor{gray!6}  MFR & 65.27 & 0.00 & -65.27\\
-\hline
-BrandCodeD & 59.59 & 0.00 & -59.59\\
-\hline
-\rowcolor{gray!6}  CarbPressure1 & 54.94 & 39.12 & -15.82\\
-\hline
-OxygenFiller & 54.94 & 22.29 & -32.66\\
-\hline
-\rowcolor{gray!6}  Usagecont & 51.02 & 33.70 & -17.32\\
-\hline
-BowlSetpoint & 47.93 & 42.65 & -5.28\\
-\hline
-\rowcolor{gray!6}  PressureVacuum & 44.96 & 49.93 & 4.98\\
-\hline
-HydPressure1 & 39.72 & 39.12 & -0.60\\
-\hline
-\rowcolor{gray!6}  CarbFlow & 36.19 & 0.00 & -36.19\\
-\hline
-BrandCodeB & 0.00 & 0.00 & 0.00\\
-\hline
-\rowcolor{gray!6}  CarbVolume & 0.00 & 0.00 & 0.00\\
-\hline
-FillOunces & 0.00 & 0.00 & 0.00\\
-\hline
-\rowcolor{gray!6}  CarbPressure & 0.00 & 0.00 & 0.00\\
-\hline
-CarbTemp & 0.00 & 0.00 & 0.00\\
-\hline
-\rowcolor{gray!6}  PSC & 0.00 & 0.00 & 0.00\\
-\hline
-PSCFill & 0.00 & 0.00 & 0.00\\
-\hline
-\rowcolor{gray!6}  PSCCO2 & 0.00 & 0.00 & 0.00\\
-\hline
-FillPressure & 0.00 & 0.00 & 0.00\\
-\hline
-\rowcolor{gray!6}  HydPressure4 & 0.00 & 0.00 & 0.00\\
-\hline
-PressureSetpoint & 0.00 & 0.00 & 0.00\\
-\hline
-\rowcolor{gray!6}  CarbRel & 0.00 & 0.00 & 0.00\\
-\hline
-BallingLvl & 0.00 & 0.00 & 0.00\\
-\hline
-\end{tabular}
-\end{wraptable}
-
-\hypertarget{train}{%
-\section{Train}\label{train}}
-
-Train text.
-
-\hypertarget{test}{%
-\section{Test}\label{test}}
-
-Test text.
-
-\hypertarget{discussion}{%
-\chapter{Discussion}\label{discussion}}
-
-Eval text. The end.
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-11-1.pdf}
+\caption{Top 10 Important Variables by Model}
+\end{figure}
 
 \hypertarget{conclusion}{%
 \chapter{Conclusion}\label{conclusion}}
 
-sfasdfs
+I will save sprusing up this section once everyones models are live and
+selected for final analysis.
 
 \hypertarget{Appendix}{%
 \chapter*{Appendix}\label{Appendix}}
 \addcontentsline{toc}{chapter}{Appendix}
 
 \hypertarget{summary-statistics}{%
-\section{Summary Statistics}\label{summary-statistics}}
+\subsubsection{Summary Statistics}\label{summary-statistics}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Tbl_summary_stats}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{table}[H]
 \centering\begingroup\fontsize{8}{10}\selectfont
@@ -534,54 +632,58 @@ sfasdfs
 \toprule
   & vars & n & mean & sd & median & trimmed & mad & min & max & range & skew & kurtosis & se\\
 \midrule
-\rowcolor{gray!6}  BrandCode* & 1 & 2451 & 2.5 & 1.0 & 2.0 & 2.5 & 0.0 & 1.0 & 4.0 & 3.0 & 0.4 & -1.1 & 0.0\\
-CarbVolume & 2 & 2561 & 5.4 & 0.1 & 5.3 & 5.4 & 0.1 & 5.0 & 5.7 & 0.7 & 0.4 & -0.5 & 0.0\\
-\rowcolor{gray!6}  FillOunces & 3 & 2533 & 24.0 & 0.1 & 24.0 & 24.0 & 0.1 & 23.6 & 24.3 & 0.7 & 0.0 & 0.9 & 0.0\\
-PCVolume & 4 & 2532 & 0.3 & 0.1 & 0.3 & 0.3 & 0.1 & 0.1 & 0.5 & 0.4 & 0.3 & 0.7 & 0.0\\
-\rowcolor{gray!6}  CarbPressure & 5 & 2544 & 68.2 & 3.5 & 68.2 & 68.1 & 3.6 & 57.0 & 79.4 & 22.4 & 0.2 & 0.0 & 0.1\\
+\rowcolor{gray!6}  BrandCode* & 1 & 2447 & 2.5 & 1.0 & 2.0 & 2.5 & 0.0 & 1.0 & 4.0 & 3.0 & 0.4 & -1.1 & 0.0\\
+CarbVolume & 2 & 2557 & 5.4 & 0.1 & 5.3 & 5.4 & 0.1 & 5.0 & 5.7 & 0.7 & 0.4 & -0.5 & 0.0\\
+\rowcolor{gray!6}  FillOunces & 3 & 2529 & 24.0 & 0.1 & 24.0 & 24.0 & 0.1 & 23.6 & 24.3 & 0.7 & 0.0 & 0.9 & 0.0\\
+PCVolume & 4 & 2528 & 0.3 & 0.1 & 0.3 & 0.3 & 0.1 & 0.1 & 0.5 & 0.4 & 0.3 & 0.7 & 0.0\\
+\rowcolor{gray!6}  CarbPressure & 5 & 2540 & 68.2 & 3.5 & 68.2 & 68.1 & 3.6 & 57.0 & 79.4 & 22.4 & 0.2 & 0.0 & 0.1\\
 \addlinespace
-CarbTemp & 6 & 2545 & 141.1 & 4.0 & 140.8 & 141.0 & 3.9 & 128.6 & 154.0 & 25.4 & 0.2 & 0.2 & 0.1\\
-\rowcolor{gray!6}  PSC & 7 & 2538 & 0.1 & 0.0 & 0.1 & 0.1 & 0.0 & 0.0 & 0.3 & 0.3 & 0.8 & 0.6 & 0.0\\
-PSCFill & 8 & 2548 & 0.2 & 0.1 & 0.2 & 0.2 & 0.1 & 0.0 & 0.6 & 0.6 & 0.9 & 0.8 & 0.0\\
-\rowcolor{gray!6}  PSCCO2 & 9 & 2532 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.2 & 0.2 & 1.7 & 3.7 & 0.0\\
-MnfFlow & 10 & 2569 & 24.6 & 119.5 & 65.2 & 21.1 & 169.0 & -100.2 & 229.4 & 329.6 & 0.0 & -1.9 & 2.4\\
+CarbTemp & 6 & 2541 & 141.1 & 4.0 & 140.8 & 141.0 & 3.9 & 128.6 & 154.0 & 25.4 & 0.2 & 0.2 & 0.1\\
+\rowcolor{gray!6}  PSC & 7 & 2534 & 0.1 & 0.0 & 0.1 & 0.1 & 0.0 & 0.0 & 0.3 & 0.3 & 0.9 & 0.7 & 0.0\\
+PSCFill & 8 & 2544 & 0.2 & 0.1 & 0.2 & 0.2 & 0.1 & 0.0 & 0.6 & 0.6 & 0.9 & 0.8 & 0.0\\
+\rowcolor{gray!6}  PSCCO2 & 9 & 2528 & 0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.2 & 0.2 & 1.7 & 3.7 & 0.0\\
+MnfFlow & 10 & 2567 & 24.6 & 119.5 & 70.2 & 21.1 & 161.6 & -100.2 & 229.4 & 329.6 & 0.0 & -1.9 & 2.4\\
 \addlinespace
-\rowcolor{gray!6}  CarbPressure1 & 11 & 2539 & 122.6 & 4.7 & 123.2 & 122.5 & 4.4 & 105.6 & 140.2 & 34.6 & 0.1 & 0.1 & 0.1\\
+\rowcolor{gray!6}  CarbPressure1 & 11 & 2535 & 122.6 & 4.7 & 123.2 & 122.5 & 4.4 & 105.6 & 140.2 & 34.6 & 0.0 & 0.1 & 0.1\\
 FillPressure & 12 & 2549 & 47.9 & 3.2 & 46.4 & 47.7 & 2.4 & 34.6 & 60.4 & 25.8 & 0.5 & 1.4 & 0.1\\
-\rowcolor{gray!6}  HydPressure1 & 13 & 2560 & 12.4 & 12.4 & 11.4 & 10.8 & 16.9 & -0.8 & 58.0 & 58.8 & 0.8 & -0.1 & 0.2\\
-HydPressure2 & 14 & 2556 & 21.0 & 16.4 & 28.6 & 21.1 & 13.3 & 0.0 & 59.4 & 59.4 & -0.3 & -1.6 & 0.3\\
-\rowcolor{gray!6}  HydPressure3 & 15 & 2556 & 20.5 & 16.0 & 27.6 & 20.5 & 13.9 & -1.2 & 50.0 & 51.2 & -0.3 & -1.6 & 0.3\\
+\rowcolor{gray!6}  HydPressure1 & 13 & 2556 & 12.5 & 12.4 & 11.4 & 10.9 & 16.9 & -0.8 & 58.0 & 58.8 & 0.8 & -0.1 & 0.2\\
+HydPressure2 & 14 & 2552 & 21.0 & 16.4 & 28.6 & 21.1 & 13.3 & 0.0 & 59.4 & 59.4 & -0.3 & -1.6 & 0.3\\
+\rowcolor{gray!6}  HydPressure3 & 15 & 2552 & 20.5 & 16.0 & 27.6 & 20.5 & 13.8 & -1.2 & 50.0 & 51.2 & -0.3 & -1.6 & 0.3\\
 \addlinespace
-HydPressure4 & 16 & 2541 & 96.3 & 13.1 & 96.0 & 95.5 & 11.9 & 52.0 & 142.0 & 90.0 & 0.5 & 0.6 & 0.3\\
+HydPressure4 & 16 & 2539 & 96.3 & 13.1 & 96.0 & 95.5 & 11.9 & 62.0 & 142.0 & 80.0 & 0.6 & 0.6 & 0.3\\
 \rowcolor{gray!6}  FillerLevel & 17 & 2551 & 109.3 & 15.7 & 118.4 & 111.0 & 9.2 & 55.8 & 161.2 & 105.4 & -0.8 & 0.0 & 0.3\\
-FillerSpeed & 18 & 2514 & 3687.2 & 770.8 & 3982.0 & 3920.0 & 47.4 & 998.0 & 4030.0 & 3032.0 & -2.9 & 6.7 & 15.4\\
-\rowcolor{gray!6}  Temperature & 19 & 2557 & 66.0 & 1.4 & 65.6 & 65.8 & 0.9 & 63.6 & 76.2 & 12.6 & 2.4 & 10.2 & 0.0\\
-Usagecont & 20 & 2566 & 21.0 & 3.0 & 21.8 & 21.3 & 3.2 & 12.1 & 25.9 & 13.8 & -0.5 & -1.0 & 0.1\\
+FillerSpeed & 18 & 2513 & 3688.1 & 769.6 & 3982.0 & 3920.2 & 47.4 & 998.0 & 4030.0 & 3032.0 & -2.9 & 6.8 & 15.4\\
+\rowcolor{gray!6}  Temperature & 19 & 2555 & 66.0 & 1.4 & 65.6 & 65.8 & 0.9 & 63.6 & 76.2 & 12.6 & 2.4 & 10.3 & 0.0\\
+Usagecont & 20 & 2562 & 21.0 & 3.0 & 21.8 & 21.3 & 3.2 & 12.1 & 25.9 & 13.8 & -0.5 & -1.0 & 0.1\\
 \addlinespace
-\rowcolor{gray!6}  CarbFlow & 21 & 2569 & 2468.4 & 1073.7 & 3028.0 & 2601.1 & 326.2 & 26.0 & 5104.0 & 5078.0 & -1.0 & -0.6 & 21.2\\
-Density & 22 & 2570 & 1.2 & 0.4 & 1.0 & 1.2 & 0.1 & 0.2 & 1.9 & 1.7 & 0.5 & -1.2 & 0.0\\
+\rowcolor{gray!6}  CarbFlow & 21 & 2565 & 2472.1 & 1070.4 & 3030.0 & 2604.2 & 323.2 & 26.0 & 5104.0 & 5078.0 & -1.0 & -0.6 & 21.1\\
+Density & 22 & 2567 & 1.2 & 0.4 & 1.0 & 1.2 & 0.1 & 0.2 & 1.9 & 1.7 & 0.5 & -1.2 & 0.0\\
 \rowcolor{gray!6}  MFR & 23 & 2359 & 704.0 & 73.9 & 724.0 & 718.2 & 15.4 & 31.4 & 868.6 & 837.2 & -5.1 & 30.5 & 1.5\\
-Balling & 24 & 2570 & 2.2 & 0.9 & 1.6 & 2.1 & 0.4 & -0.2 & 4.0 & 4.2 & 0.6 & -1.4 & 0.0\\
-\rowcolor{gray!6}  PressureVacuum & 25 & 2571 & -5.2 & 0.6 & -5.4 & -5.3 & 0.6 & -6.6 & -3.6 & 3.0 & 0.5 & 0.0 & 0.0\\
+Balling & 24 & 2567 & 2.2 & 0.9 & 1.6 & 2.1 & 0.4 & 0.2 & 4.0 & 3.9 & 0.6 & -1.4 & 0.0\\
+\rowcolor{gray!6}  PressureVacuum & 25 & 2567 & -5.2 & 0.6 & -5.4 & -5.3 & 0.6 & -6.6 & -3.6 & 3.0 & 0.5 & 0.0 & 0.0\\
 \addlinespace
 PH & 26 & 2567 & 8.5 & 0.2 & 8.5 & 8.6 & 0.2 & 7.9 & 9.4 & 1.5 & -0.3 & 0.1 & 0.0\\
-\rowcolor{gray!6}  OxygenFiller & 27 & 2559 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.4 & 0.4 & 2.7 & 11.1 & 0.0\\
-BowlSetpoint & 28 & 2569 & 109.3 & 15.3 & 120.0 & 111.3 & 0.0 & 70.0 & 140.0 & 70.0 & -1.0 & -0.1 & 0.3\\
-\rowcolor{gray!6}  PressureSetpoint & 29 & 2559 & 47.6 & 2.0 & 46.0 & 47.6 & 0.0 & 44.0 & 52.0 & 8.0 & 0.2 & -1.6 & 0.0\\
-AirPressurer & 30 & 2571 & 142.8 & 1.2 & 142.6 & 142.6 & 0.6 & 140.8 & 148.2 & 7.4 & 2.3 & 4.7 & 0.0\\
+\rowcolor{gray!6}  OxygenFiller & 27 & 2556 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.4 & 0.4 & 2.4 & 8.8 & 0.0\\
+BowlSetpoint & 28 & 2565 & 109.3 & 15.3 & 120.0 & 111.4 & 0.0 & 70.0 & 140.0 & 70.0 & -1.0 & -0.1 & 0.3\\
+\rowcolor{gray!6}  PressureSetpoint & 29 & 2555 & 47.6 & 2.0 & 46.0 & 47.6 & 0.0 & 44.0 & 52.0 & 8.0 & 0.2 & -1.6 & 0.0\\
+AirPressurer & 30 & 2567 & 142.8 & 1.2 & 142.6 & 142.6 & 0.6 & 140.8 & 148.2 & 7.4 & 2.3 & 4.7 & 0.0\\
 \addlinespace
-\rowcolor{gray!6}  AlchRel & 31 & 2562 & 6.9 & 0.5 & 6.6 & 6.8 & 0.1 & 5.3 & 8.6 & 3.3 & 0.9 & -0.9 & 0.0\\
-CarbRel & 32 & 2561 & 5.4 & 0.1 & 5.4 & 5.4 & 0.1 & 5.0 & 6.1 & 1.1 & 0.5 & -0.3 & 0.0\\
-\rowcolor{gray!6}  BallingLvl & 33 & 2570 & 2.1 & 0.9 & 1.5 & 2.0 & 0.2 & 0.0 & 3.7 & 3.7 & 0.6 & -1.5 & 0.0\\
+\rowcolor{gray!6}  AlchRel & 31 & 2560 & 6.9 & 0.5 & 6.6 & 6.8 & 0.1 & 5.3 & 8.6 & 3.3 & 0.9 & -0.9 & 0.0\\
+CarbRel & 32 & 2559 & 5.4 & 0.1 & 5.4 & 5.4 & 0.1 & 5.0 & 6.1 & 1.1 & 0.5 & -0.3 & 0.0\\
+\rowcolor{gray!6}  BallingLvl & 33 & 2566 & 2.1 & 0.9 & 1.5 & 2.0 & 0.2 & 0.0 & 3.7 & 3.7 & 0.6 & -1.5 & 0.0\\
 \bottomrule
 \end{tabular}
 \endgroup{}
 \end{table}
 
-\hypertarget{correlation-matrix}{%
-\section{Correlation Matrix}\label{correlation-matrix}}
+\hypertarget{code}{%
+\subsubsection{Code}\label{code}}
 
-\begin{center}\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-11-1} \end{center}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Final R Code Will Be Inserted Here}
+\end{Highlighting}
+\end{Shaded}
 
 
 \end{document}

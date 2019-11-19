@@ -14,8 +14,8 @@ documentclass: report
 subparagraph: yes
 ---
 
-```{r dependencies, echo = T, message=F, warning=F, error=F, comment=NA, }
-library(tidyverse); library(readxl); library(psych); library(ggplot2); library(mice); library(xtable); library(GGally); library(ggstance); library(grid); library(gridExtra); library(caret); library(data.table); library(recipes); library(Metrics); library(knitr); library(kableExtra);library(default); library(gbm)
+```{r formatting, echo = F, message=F, warning=F, error=F, comment=NA}
+source('~/GitHub/CUNY_DATA_624/Project_Two/defaults.R')
 ```
 
 ```{r source-script, echo = F, message=F, warning=F, error=F, comment=NA, results='hide', cache=T}
@@ -48,12 +48,20 @@ The beverage manufacturing production dataset contained 33 columns/variables and
 We also identified that 94% of the predictor variables had missing data points. Despite this high occurance, the NA values in the majority of these predictors accounted for less than 1% of the total observations. Only eleven variables were missing more than 1% of data.
 
 ```{r}
+Tbl_Top_MissingData <- MissingData %>% top_n(11, n)  %>%  column_to_rownames("predictor")%>%t() %>% kable(caption="Variables with Highest Frequency of NA Values", booktabs = T, digits = 1)%>% kable_styling() %>% row_spec() 
+
 Tbl_Top_MissingData
 ```
 
 ## Response Variable
 
 ```{r, fig.height=4, fig.cap="Distribution of Response Variable: pH", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .5)}
+
+Plt_pH1 <- StudentData %>% select(PH) %>% mutate(type="pH") %>% ggplot(aes(PH)) + geom_histogram(aes(y=..density..), bins=40, fill="#57A0D3", alpha=.65)+geom_density(alpha=.2, color="#000000",size=.65)+scale_x_continuous() + scale_y_continuous(limits = c(0,3.5)) + labs(x="",y="")+theme_bw()+theme(axis.title.x = element_blank(), axis.ticks.length.x = unit(0, "cm"))+facet_wrap(~type)
+Plt_pH2 <- StudentData %>% select(PH) %>% mutate(type="pH") %>% ggplot(aes(PH,"")) + geom_boxploth(fill="#57A0D3", outlier.colour="#4682B4",alpha=.65)+ theme_bw()+theme(legend.title = element_blank(), strip.background = element_blank(), strip.text.x = element_blank(),axis.title.x = element_blank(), axis.ticks.length.x = unit(0, "cm"))+labs(x="",y="")+ scale_y_discrete(labels = 'pH')+ scale_x_continuous() + facet_wrap(~type,nrow=1, strip.position = "top")
+Plt_pH3 <- StudentData %>% filter(!is.na(BrandCode)) %>% ggplot(aes(PH,"")) + geom_boxploth(aes(fill = BrandCode),outlier.colour="#4682B4",alpha=.3) + scale_fill_manual()+theme_bw()+theme(legend.position = "none", strip.background = element_blank(),strip.text.x = element_blank(),axis.title.x = element_blank(), axis.text.y = element_blank())+ labs(x="", y="")+ scale_x_continuous() + facet_wrap(~BrandCode, nrow=1, strip.position = "top", scales = 'fixed')
+Plt_pH4 <- StudentData %>% select(PH, BrandCode) %>% filter(!is.na(BrandCode)) %>% ggplot(aes(PH)) + geom_histogram(aes(y=..density..,fill=BrandCode), bins=20, alpha=.65)+geom_density(alpha=.2, color="#000000",size=.65)+scale_fill_manual()+scale_x_continuous() + scale_y_continuous(limits = c(0,3.5)) + labs(x="",y="")+facet_wrap(~BrandCode, nrow=1)+theme_bw()+theme(axis.title.x = element_blank(),axis.ticks.length.x = unit(0, "cm"), axis.text.y = element_blank(), legend.position = "none")
+Plt_pH_lay <- rbind(c(1,2,2), c(3,4,4))
 
 grid.arrange(Plt_pH1, Plt_pH4, Plt_pH2, Plt_pH3, layout_matrix = Plt_pH_lay, heights=c(2,1), padding=unit(0, 'cm'))
 ```
@@ -66,142 +74,263 @@ Brand A has a negatively skewed, multimodal distribution, which could be suggest
 
 ## Predictor Variables
 
-Many of our predictors also contain outliers and have a skewed distribution. The boxplots below help us visualize this spread of our numeric predictor variables.
+We examined the density of our variables to visualize the distribution of the predictors.  Many of these variables contain outliers and present with a skewed distribution. The outliers fall outside the red-line boundaries, and highlight which predictors have heavier tails.
 
-```{r fig.height=4, fig.cap="Box-Plot Distribution of Numeric Predictor Variables"}
+The density plots also contain an overlay of the only categorical indicator, `BrandCode`. This view shows us that some variables, including `AlchRel`, `CarbRel`, `CarbVolume`, `HydPressure4`, and  `Tempature`, are strongly influenced by brand type.  
+
+```{r, fig.height=4}
+Plt_Outlier1 <- ggplot(outlier_with, aes(value)) + geom_density(aes(fill=BrandCode), color="#999999", alpha=.3) + labs(title="Box-Plot Distribution of Numeric Predictor Variables", subtitle="With Outliers", x="", y="")+ geom_vline(data = outlier_with, mapping = aes(xintercept=outlier_lower), color="#ff8080")+geom_vline(data = outlier_with, mapping = aes(xintercept=outlier_upper),  color="#ff8080")+facet_wrap(~key, scales = 'free', nrow = 3)+theme_bw()+theme(axis.text.y = element_blank(), axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "none")+scale_fill_manual()
+Plt_Outlier2 <- ggplot(outlier_wo, aes(value)) + geom_density(aes(fill=BrandCode), color="#999999", alpha=.3)+ labs(subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free', nrow = 1)+ theme_bw()+theme(axis.text.y = element_blank(),axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(.4, "cm"))+scale_fill_manual()
+
 grid.arrange(Plt_Outlier1, Plt_Outlier2, nrow=2, heights=c(3,2))
 ```
 
-We examined the predictor variables with outliers in a scatterplot against our target, `pH` to better understand predictor and response relationship. The outliers, highlighted in blue, further show which predictors have a heavy-tail distribution. We can also identify many variables with strong outlier patterns, suggesting a high degree of variability within certain measurements. 
+We also looked at the relationship of our predictors against the response variable below. There are a few predictors that have a weak, linear association with our response variable. However, most of the indicators show no strong patterns. Given these trends, we do not expect linear modeling to provide optimal predictions for `pH`.  
 
-```{r, fig.cap="Response~Predictor Scatterplots"}
-Plt_Outlier3
+This view helps us further visualize the effect `BrandCode` has on our predictor and `pH` values. For example, `AlchRel` shows distinct `BrandCode` groupings. Other variables, such as `PSCO2`, `BowlSetpoint`, `MinFlow`, and `PressureSetup` show unique features likely related to system processes. 
+
+```{r, fig.height=4}
+Plt_Scatter1 <- outlier_with %>% mutate(PH=as.numeric(as.character(PH))) %>% ggplot(aes(x=value, y=PH)) + geom_jitter(aes(color=BrandCode), alpha=.15) + stat_smooth(color="#000000", method = "loess") + labs(title="pH~Predictor Scatterplots", subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free_x', nrow = 3) + theme_bw() + theme(axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "none", legend.key.size = unit(.4, "cm"))+scale_color_manual(values=c("#999999", "#95C8D8", "#008081", "#034D92"))
+Plt_Scatter2 <- outlier_wo %>% mutate(PH=as.numeric(as.character(PH))) %>% ggplot(aes(x=value, y=PH)) + geom_jitter(aes(color=BrandCode), alpha=.15) + stat_smooth(color="#000000", method = "loess") + labs(subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free_x', nrow = 1)+ theme_bw()+theme(axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(.4, "cm"))+scale_color_manual(values=c("#999999", "#95C8D8", "#008081", "#034D92"))
+
+grid.arrange(Plt_Scatter1, Plt_Scatter2, nrow=2, heights=c(3,2))
 ```
 
-For example, `AirPressurer` shows a very distinct, bifurcated pattern. This variable has a clear split between normal and extreme values. `MFR` also shows an interesting pattern. The outliers have a weak, negative linear relationship with `pH`, but the non-outliers have no linear relationship and follow a straight, vertical line. 
+Lastly, we examined collinearity measures between our numeric predictors and found that `r length(cor_freq)` of these variables were heavily related, with correlation values exceeding $\pm{0.75}$. Linear modeling requires predictor variables to be independent of one another. This final evaluation confirms that standard linear modeling should not be used as it would require removing and transforming a significant proportion of our predictors, which would potentially overfit our data and lead to unreliable predictions.
 
+```{r, fig.height = 3, fig.width=3}
+Plt_Corr <- StudentData %>% select_if(is.numeric)%>%  select(-PH)%>% ggcorr(method='pairwise.complete.obs', geom = "tile", label = F, hjust = .95, layout.exp = 7,  label_round =1, low="#95C8D8", mid="grey90",high="#034D92") +  theme_bw()+ theme(legend.key.size = unit(.6, "cm"), legend.justification=c(.05,.98), legend.position=c(.05,.98))+labs(title="Predictor Variable Correlation Matrix")
+g = ggplot_build(Plt_Corr); g$data[[2]]$size = 2
 
-# Data Preparation
-
-Decision models trees are robust against the affect of correlated variables, outliers, and missing values. We applied different tranformation to properly evaluate our three model types. 
-
-Data was divided using an 80/20 split to create a train and test set. All models incorporated k-folds cross-validation set at 10 folds to protect against overfitting the data. 
-
-## Data Imputation
-
-We choose to drop the complete cases of all `pH` observations with null data in the target as they accounted for such a small proportion (< 0.002%) of the  observations. Doing such increased our non-linear modeling accuracy measures. For our predictor variables, we applied a Multiple Imputation by Chained Equations (MICE) algorthim to predict the missing data using sequential regression. This method filled in all incomplete cases, including `BrandCode`, our one unordered categorical variable.  
-
-## Pre-Processing
-
-In the pre-processing stage, we prepared our data for modeling by applying strategic transformations to improve our modeling techniques.
-
-#### Correlation
-
-We examined collinearity measures between our numeric predictors and found that `r length(cor_freq)` of these variables were heavily related, with correlation values exceeding $\pm{0.75}$. Linear modeling requires predictor variables to be independent of one another. Thus, the following strongly-related variables were removed from our linear models during the pre-processing stage: `HydPressure3`, `Balling`, `BallingLvl`, `FillerSpeed`, `FillerLevel`, and `Density`.
-
-```{r, fig.height = 4, fig.width=6, fig.cap="Predictor Variable Correlation Matrix", fig.align='center'}
 grid::grid.draw(ggplot_gtable(g))
 ```
 
-#### Distributions
+# Data Preparation
 
-We also examined the distributions of our data and applied transformations to normalize irregular center and spread seen in our data exploration
+In our exploration, we detected missing data, extreme outliers, and multicollinearity. We selected our modeling methods keeping these factors in mind. Our approach included the application strategic transformations to evaluate several types of non-linear and tree-based modeling.  
 
-One variable,`HydPressure1`, was also removed from our linear and non-linear modeling as it presented with near-zero variance features. Near-zero variance occurs when there is little variation within distribution of predictor variables. Near-zero variance can affect model stability and can bias resampling measures. 
+We divided the production dataset using an 80/20 split to create a train and test set. All models incorporated k-folds cross-validation set at 10 folds to protect against overfitting the data. We set up unique model tuning grids to find the optimal parameters for each regression type to ensure the highest accuracy within our predictions.
 
-# Predictive Modeling
+#### Data Imputation
 
-We modeled the data using linear, non-linear, and tree-based regression. Currently, I have broken up this section by model type. However, I would suggest restructing for final submission to compare the accuracy and variable importance across models in a more cohesive way. I have some ideas & would be happy to help merge this section.
+We choose to drop the complete cases of all `pH` observations with null data in the target as they accounted for such a small proportion ($< 0.002%$) of the  observations. We compared this approach with other types of imputation and found that dropping variables, in this instance, provided a slight boost within our accuracy measures. 
 
-I am leaving my writing more vague in this piece as we will be comparing all of our work and then synthasizing results. Please let me know if you have any clarifying questions.
+For our predictor variables, we applied a Multiple Imputation by Chained Equations (MICE) algorthim to predict the missing data using sequential regression. This method filled in all incomplete cases, including `BrandCode`, our one unordered categorical variable.  
 
-## Linear Regression
+#### Pre-Processing
 
-GROUP ATTEMPT - GLM: Will write more formally if model is selected :) 
+Decision models trees are robust against these identifed issues. Thus, requiring minimal data tranformation to properly evaluate our data. Our non-linear models required more attention, so we incorporated variable centering and scaling into the pre-processing to maximize their performance.
 
-#### Accuracy Measures 
+We tested the effect of box-cox transformations on our non-linear and tree-based models. The box-cox method changes the distribution shape of our predictor variables, which normalizes the scale that they are evaluated on. We found this transformation improve our modeling outcomes in some instances. 
 
-Below are results from generalized linear model. GLM1 has no pre-processing; GLM2 has was pre-processed using caret, GLM3 used same pre-processing as caret but was controled for via the recipe approach. Recipe is my preferred approach for data transformations as it allows for more control and you can retreive information on dropped variabes, etc. 
+# Modeling
+
+For our non-linear approach, we selected Support Vector Machines (SVM), Multivariate Adaptive Regression Splines (MARS), and Elastic Net (eNet) models. We compared these methods to tree-based regression using gradient boosted models (GBM).
+
+#### SVM
+
+For SVM, we choose to work with a non-linear, radial kernel because many of our data's features did not appear to be linearly separable. SVM models work well in maintain a large amount of features and can make distinctions between class differences. 
+
+Our RMSE Cross Validation plots show us that both models performed similiary, but the second model performed slightly better. We choose this model, which applied zero-varience, box-cox, centering, and spread transformations, to be our preferred SVM model.
+
+```{r, fig.height=2.5}
+svm1_plot <- ggplot(svm_fit1) + theme_bw()+
+  theme(legend.position = "none", axis.title.x=element_blank(), axis.title.y=element_blank()) + 
+  labs(title="SVM1")+scale_color_manual(values=c("#95C8D8", "#008081", "#034D92"))+
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005),
+                     limits = c(0.120, 0.140))
+svm2_plot <- ggplot(svm_fit2) + theme_bw()+
+  theme(legend.justification=c(1,1), 
+        axis.title.x=element_blank(), 
+        legend.direction = 'horizontal', 
+        legend.position = c(.96,.96), 
+        axis.title.y = element_blank(), 
+        axis.text.y=element_blank(), 
+        legend.key.size = unit(.05, "cm"), 
+        legend.box.background = element_rect(color="#999999", size=1), 
+        legend.text = element_text(color="#999999"))+
+  labs(title="SVM2")+scale_color_manual(values=c("#95C8D8", "#008081", "#034D92"))+
+  scale_shape(guide=FALSE)+
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005), limits = c(0.120, 0.140))
+
+grid.arrange(svm1_plot, svm2_plot, nrow=1, left=textGrob("RMSE (CV)", rot=90), bottom = textGrob("Sigma"))
+```
+
+#### MARS
+
+MARS modeling was also selected to assess the non-linear features in our data. This method uses a weighted sum to models nonlinearities and interactions between variables. The model assesses cut-points between features that create the smallest error and prunes insignificant points to improve model accuracy.  
+
+Our RMSE Cross Validation plots show us that the best tune for both MARS were very similiar. The second model, which contained box-cox transformations, was selected as it performed the most consistently across degrees and obtained a lower RMSE score. 
+
+```{r, fig.height=2.5}
+mars1_plot <- ggplot(mars_fit1)+
+  theme_bw()+
+  theme(legend.position = "none", axis.title.y=element_blank(), axis.title.x = element_blank()) + 
+  labs(title="MARS1", x="", y="")+
+  scale_color_manual(values=c("#000000","#999999", "#95C8D8", "#008081", "#034D92"))+
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005),limits = c(0.118, 0.16))
+
+mars2_plot <- ggplot(mars_fit2)+
+  theme_bw()+
+  theme(legend.justification=c(1,1), 
+        legend.position = c(.98,.98), 
+        axis.title.y = element_blank(), 
+        axis.text.y=element_blank(), 
+        legend.direction = 'horizontal', 
+        legend.key.size = unit(.1, "cm"), 
+        legend.box.background = element_rect(color="#999999", size=1), 
+        legend.text = element_text(color="#999999"), 
+        axis.title.x = element_blank())+
+  labs(title="MARS2", x="", y="") +
+  scale_color_manual(values = c("#000000","#999999", "#95C8D8", "#008081", "#034D92"))+
+  scale_shape(guide=FALSE)+
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005),limits = c(0.118, 0.16))
+
+grid.arrange(mars1_plot, mars2_plot, nrow=1, left=textGrob("RMSE (CV)", rot=90), bottom = textGrob("#Terms"))
+```
+
+#### eNET
+
+The Elasticnet model was used as it can handle a large number of predictor variables. It combines ridge and lasso regression techniques to reduce the size of coefficients. 
+
+Our RMSE Cross Validation plots show us that the best tune for both eNET were also similiar, with eNET1 performing slightly better. This model center and scaled the data but did not apply a box-cox transformations.
+
+```{r, fig.height=2.5}
+enet1_plot <- ggplot(enet_fit1)+
+  theme_bw()+
+  theme(axis.title.x = element_blank(),legend.position = "none", axis.title.y=element_blank()) +
+  labs(title="eNET1")+
+  scale_color_manual(values=c("#95C8D8", "#008081", "#034D92"))+
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005),limits = c(0.13, 0.17))
+
+enet2_plot <- ggplot(enet_fit2)+
+  theme_bw()+
+  theme(legend.justification=c(1,1), 
+        legend.position = c(.98,.98), 
+        axis.title.y = element_blank(), 
+        axis.title.x = element_blank(), 
+        axis.text.y=element_blank(), legend.direction = 'horizontal', 
+        legend.key.size = unit(.1, "cm"),
+        legend.box.background = element_rect(color="#999999", size=1), 
+        legend.text = element_text(color="#999999"))+
+  labs(title="eNET2")+
+  scale_color_manual(values=c("#95C8D8", "#008081", "#034D92"))+
+  scale_shape(guide=FALSE)+
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005),limits = c(0.13, 0.17))
+
+
+grid.arrange(enet1_plot, enet2_plot, nrow=1, left=textGrob("RMSE (CV)", rot=90), bottom = textGrob("Fraction of Full Solution"))
+```
+
+#### GBM
+
+Gradient boosting uses machine learning to train a prediction model using decision trees. Our GBM used 1000 trees and was evaluated on a grid using varying interaction depths, shrinkage, and terminal node parameters.
+
+We found that our second model with box-cox transformations help boosted RMSE performance when the shrinkage size was $0.5$. We choose the best tune from the second model as our preferred model.
+
+```{r, fig.height=2.5}
+gbm1_plot <- ggplot(gbm_fit1)+
+  theme_bw()+
+  theme(strip.text.y = element_blank(), axis.title.x = element_blank(),
+        legend.position = "none", axis.title.y = element_blank())+
+  labs(title="GBM1", x="")+
+  scale_color_manual(values=c("#95C8D8", "#008081", "#034D92"))+
+  scale_y_continuous(labels = scales::number_format(accuracy = .001, scale=1, decimal.mark = '.'), 
+                     breaks = seq(0.09,0.155, by=0.01), limits = c(0.1,0.13))
+
+gbm2_plot <- ggplot(gbm_fit2)+
+  theme_bw()+
+  theme(legend.justification=c(1,1), 
+        legend.position = c(.98,.98), 
+        axis.title.y = element_blank(), 
+        axis.text.y=element_blank(), 
+        legend.direction = 'horizontal', 
+        legend.key.size = unit(.05, "cm"), 
+        legend.box.background = element_rect(color="#999999", size=1), 
+        legend.text = element_text(color="#999999"),
+        axis.title.x = element_blank())+
+  labs(title="GBM2", x="", color="dpth.")+
+  scale_color_manual(values=c("#95C8D8", "#008081", "#034D92"))+
+  scale_shape(guide=FALSE)+
+  scale_y_continuous(labels = scales::number_format(accuracy = .001, scale=1, decimal.mark = '.'), 
+                     breaks = seq(0.1,0.145, by=0.01),limits = c(0.1,0.13))
+
+
+grid.arrange(gbm1_plot,gbm2_plot, nrow=1, left=textGrob("RMSE (CV)", rot=90), bottom=textGrob("Minimal Terminal Node Size"))
+
+```
+
+# Regression Analysis
+
+This section will discuss the highlights and draw back of our tested models. I am withholding content until we review and merge. 
+
+## Accuracy
+
+The SVM model achieved the highest accuracy measures for non-linear modeling and the GBM model outperformed all of those other attempts. Will add to a more indepth analysis of these metrics after the merge. 
 
 ```{r}
-Tbl_GLM_ACC 
+SVM_MAPE_TRN <- Metrics::mape(svm_fit2$pred$obs, svm_fit2$pred$pred)
+MARS_MAPE_TRN <- Metrics::mape(mars_fit2$pred$obs, mars_fit2$pred$pred)
+eNET_MAPE_TRN <- Metrics::mape(enet_fit2$pred$obs, enet_fit2$pred$pred)
+GBM_MAPE_TRN <- Metrics::mape(gbm_fit2$pred$obs, gbm_fit2$pred$pred)
+
+SVM_MAPE_TST <- Metrics::mape(test$PH, svm_test_pred2)
+MARS_MAPE_TST <- Metrics::mape(test$PH, mars_test_pred2)
+eNET_MAPE_TST <- Metrics::mape(test$PH, enet_test_pred2)
+GBM_MAPE_TST <- Metrics::mape(test$PH, gbm_test_pred2)
+
+SVM_PERF_TRN <- svm_fit2$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable="SVM_Train") %>% column_to_rownames("Variable") %>% t() 
+MARS_PERF_TRN <- mars_fit2$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable="MARS_Train") %>% column_to_rownames("Variable") %>% t(); 
+eNET_PERF_TRN <- enet_fit2$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable="eNET_Train") %>% column_to_rownames("Variable") %>% t(); 
+GBM_PERF_TRN <- gbm_fit2$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable="GBM_Train") %>% column_to_rownames("Variable") %>% t();
+
+SVM_PERF_TST <- postResample(pred = svm_test_pred2, obs = test$PH); 
+MARS_PERF_TST <- postResample(pred = mars_test_pred2, obs = test$PH);
+eNET_PERF_TST <- postResample(pred = enet_test_pred2, obs = test$PH);
+GBM_PERF_TST <- postResample(pred = gbm_test_pred2, obs = test$PH)
+
+bind1 <- cbind(SVM_PERF_TRN, "SVM_Test"=SVM_PERF_TST, MARS_PERF_TRN, "MARS_Test"=MARS_PERF_TST, eNET_PERF_TRN, "eNET_Test"=eNET_PERF_TST, GBM_PERF_TRN, "GBM_Test"=GBM_PERF_TST)
+bind2 <- cbind(SVM_MAPE_TRN, SVM_MAPE_TST, MARS_MAPE_TRN, MARS_MAPE_TST, eNET_MAPE_TRN, eNET_MAPE_TST, GBM_MAPE_TRN, GBM_MAPE_TST); row.names(bind2) <- 'MAPE'
+
+
+Tbl_Accuracy <- rbind(bind1, bind2) %>% kable(digits=5,booktabs=T, caption="Accuracy Measures") %>% kable_styling() %>% column_spec(8:9, color = "black", background = "#B0DFe5", bold = T)
+
+Tbl_Accuracy
 ```
 
+## Variable Importance 
 
-#### Linear Regression Analysis
+This section will discuss the trends in variable features in our selected models. Below shows the top ten important variables by model.
 
-Our optimal linear model does not meet homogeneity, normality, or homoscedasticity standards for linear assumption. This model requires significant transformations and or variable selection to adhere to linear requirements. We could try transforming outliers, but I believe non-linear and tree-based regressions will be optimal over this approach.
+```{r, fig.height=4}
+Plt_SVM_VarImp <- SVM_VarImp$importance %>% as.data.frame.array() %>% rownames_to_column("Variable") %>% top_n(10, Overall) %>% ggplot(aes(x=reorder(Variable, Overall), y=Overall)) + geom_point()+geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + coord_flip() + labs(y="Overall", x="", title="SVM")+theme_bw()+theme(axis.title.y = element_blank(), axis.title.x = element_blank())+scale_y_continuous(labels = scales::number_format(accuracy = 1,decimal.mark = '.')); 
+Plt_MARS_VarImp <- MARS_VarImp$importance %>% as.data.frame.array() %>% rownames_to_column("Variable") %>% top_n(10, Overall) %>% ggplot(aes(x=reorder(Variable, Overall), y=Overall)) + geom_point()+geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + coord_flip() + labs(y="Overall", x="", title="MARS") + theme_bw() + theme(axis.title.y = element_blank(), axis.title.x = element_blank())+scale_y_continuous(labels = scales::number_format(accuracy = 1,decimal.mark = '.')); 
+Plt_eNET_VarImp <- eNET_VarImp$importance %>% as.data.frame.array() %>% rownames_to_column("Variable") %>% top_n(10, Overall) %>% ggplot(aes(x=reorder(Variable, Overall), y=Overall)) + geom_point() + geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + coord_flip() + labs(y="Overall", x="", title="eNET") + theme_bw() + theme(axis.title.y = element_blank(), axis.title.x = element_blank())+scale_y_continuous(labels = scales::number_format(accuracy = 1,decimal.mark = '.'));
+Plt_GBM_VarImp <- GBM_VarImp$importance %>% as.data.frame.array() %>% rownames_to_column("Variable") %>% top_n(10, Overall) %>% ggplot(aes(x=reorder(Variable, Overall), y=Overall)) + geom_point()+geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + coord_flip() + labs(y="Overall", x="", title="GBM")+theme_bw()+theme(axis.title.y = element_blank(), axis.title.x = element_blank())+scale_y_continuous(labels = scales::number_format(accuracy = 1,decimal.mark = '.'))
 
-```{r, fig.cap="GLM Diagnostic Plots"}
-grid.arrange(Plt_GLM1, Plt_GLM2, Plt_GLM3, Plt_GLM4, nrow=1)
-```
-
-## Non-Linear Regression
-
-GROUP ATTEMPT - MARS: Will write up more formally if selected :)
-
-We selected the multivariate adaptive regression splines (MARS) model in our non-linear regression attempt. This method uses a weighted sum to models nonlinearities and interactions between variables.
-
-#### Accuracy
-
-Using RMSE as a cross validation metric, we can compare the performance of the mars models and see the impact of the tuning grid on RMSE performance. MARS1 & MARS2 performed fairly similiarly, with MARS2 obtaining the lowest metric. MARS3 contained more variation across degress. This version of MARS contained all the preprocessing from the linear model, was not as effective. This was to be expected. 
-
-```{r, fig.cap="MARS RMSE Cross-Validated Profile"}
-grid.arrange(mars1_plot,mars2_plot,mars3_plot, nrow=1)
-```
-
-MARS2 obtained the best overal accuracy measures. This was the only model that used a box-cox transformation to change the shape of the predictor variables. The scale of the predictors had a wide variation, which could explain some of the success this tranformation had on our modeling process.
-
-```{r}
-Tbl_MARS_ACC 
-```
-
-
-#### Variable Importance
-
-This section can be neatly cleaned up to display graphs and variable importance.
-
-Out of curiousity, I compared the differences in variable importance from the preferred MARS2 model and the secondary MARS1 model. There are some significant differences in which variables were selected. The chart below shows some of the biggest changes between the two:
-
-In our final selection of top models, I think we could do a nice comparison of predictors importance.
-
-```{r,fig.cap="MARS Scaled Variable Importance"}
-grid.arrange(Plt_MARS_VarImp1, Plt_MARS_VarImp2, Plt_MARS_VarImp3, nrow=1)
-```
-
-## Tree-Based Regression
-
-In this section, I tested several gradient boosted models (GBM).
-
-#### Accuracy Measures
-
-```{r, fig.cap="GBM RMSE Cross-Validated Profile"}
-grid.arrange(gbm1_plot,gbm2_plot,gbm3_plot, nrow=1)
-```
-
-Unsurprisingly, GBM3 performed the worst out of the 3 models. This model had all pre-processing applied to it, which is not needed for tree-based regression. GBM1 & GBM2 performed very similiarly, with GBM1 (train) obtaining the best RMSE score and GBM2 obtaining the best MAPE results. The difference between both models is negligent. GBM1 had no pre-processing and GBM2 used box-cox to rescale our predictors. 
-
-```{r}
-Tbl_GBM_ACC
-```
-
-#### Variable Importance
-
-```{r fig.cap="GBM Scaled Variable Importance"}
-grid.arrange(Plt_GBM_VarImp1, Plt_GBM_VarImp2, Plt_GBM_VarImp3, nrow=1)
+grid.arrange(Plt_SVM_VarImp, Plt_MARS_VarImp, Plt_eNET_VarImp, Plt_GBM_VarImp, nrow=2, bottom = textGrob("Overall Variable Importance"))
 ```
 
 # Conclusion
 
-As referenced in the modeling section, I will save sprusing up this section once everyones models are live and selected. 
+I will save sprusing up this section once everyones models are live and selected for final analysis.
 
 # Appendix {-#Appendix}
 
-## Summary Statistics
+#### Summary Statistics
 
 ```{r, fig.cap="Summary Statistics"}
+Tbl_summary_stats <- summary_stats %>% kable(digits = 1, booktabs=T) %>% kable_styling()
+
 Tbl_summary_stats
 ```
+
+#### Code
+
+```{r, echo=T}
+#Final R Code Will Be Inserted Here
+```
+
 
 
 

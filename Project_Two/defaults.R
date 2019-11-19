@@ -5,7 +5,7 @@ library(default)
 library(ggplot2)
 
 # Set default augments for code chunks
-knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=NA, tidy=T, tidy.opts=list(width.cutoff=60), fig.width=10, fig.height = 3, fig.pos = 'H')
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=NA, tidy=T, tidy.opts=list(width.cutoff=60), fig.width=10, fig.height = 3)
 
 # wrap plot 
 defOut <- knitr::knit_hooks$get("plot")  # save the default plot hook 
@@ -32,7 +32,7 @@ default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
                        plot.title = element_text(color="#0F52BA", size=10, face="bold", hjust = 0.5),
                        plot.subtitle = element_text(size=8, color="#868b8c"),
                        legend.title = element_text(size=8, color="#868b8c", face="bold"),
-                       strip.background = element_rect(color="#000000", fill="#73C2FB", size=.25,linetype="solid"),
+                       strip.background = element_rect(color="#000000", fill="#F1F1F1", size=.25,linetype="solid"),
                        strip.text.x = element_text(size = 8, color = "#000000", face="bold", margin = margin(.05,0,.05,0, "cm")),
                        plot.caption = element_text(size = 6)
                        )
