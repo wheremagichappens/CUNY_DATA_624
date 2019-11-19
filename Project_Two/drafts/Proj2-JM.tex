@@ -219,12 +219,6 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(tidyverse); }\KeywordTok{library}\NormalTok{(readxl); }\KeywordTok{library}\NormalTok{(psych); }\KeywordTok{library}\NormalTok{(ggplot2); }\KeywordTok{library}\NormalTok{(mice); }\KeywordTok{library}\NormalTok{(xtable); }\KeywordTok{library}\NormalTok{(GGally); }\KeywordTok{library}\NormalTok{(ggstance); }\KeywordTok{library}\NormalTok{(grid); }\KeywordTok{library}\NormalTok{(gridExtra); }\KeywordTok{library}\NormalTok{(caret); }\KeywordTok{library}\NormalTok{(data.table); }\KeywordTok{library}\NormalTok{(recipes); }\KeywordTok{library}\NormalTok{(Metrics); }\KeywordTok{library}\NormalTok{(knitr); }\KeywordTok{library}\NormalTok{(kableExtra);}\KeywordTok{library}\NormalTok{(default); }\KeywordTok{library}\NormalTok{(gbm)}
-\end{Highlighting}
-\end{Shaded}
-
 \thispagestyle{empty}
 \newpage
 \clearpage
@@ -272,15 +266,9 @@ points. Despite this high occurance, the NA values in the majority of
 these predictors accounted for less than 1\% of the total observations.
 Only eleven variables were missing more than 1\% of data.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Tbl_Top_MissingData}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{table}[H]
 
-\caption{\label{tab:source-script}Variables with Highest Frequency of NA Values}
+\caption{\label{tab:unnamed-chunk-2}Variables with Highest Frequency of NA Values}
 \centering
 \fontsize{8}{10}\selectfont
 \begin{tabular}{lrrrrrrrrrrr}
@@ -296,18 +284,12 @@ Only eleven variables were missing more than 1\% of data.
 \hypertarget{response-variable}{%
 \section{Response Variable}\label{response-variable}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(Plt_pH1, Plt_pH4, Plt_pH2, Plt_pH3, }\DataTypeTok{layout_matrix =}\NormalTok{ Plt_pH_lay, }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{padding=}\KeywordTok{unit}\NormalTok{(}\DecValTok{0}\NormalTok{, }\StringTok{'cm'}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
+\begin{wrapfigure}{r}{0.5\textwidth}
 
-\begin{figure}
+\hfill{}\includegraphics[width=1\textwidth]{Proj2-JM_files/figure-latex/unnamed-chunk-3-1} 
 
-\hfill{}\includegraphics[width=1\textwidth]{Proj2-JM_files/figure-latex/unnamed-chunk-2-1} 
-
-\caption{Distribution of Response Variable: pH}\label{fig:unnamed-chunk-2}
-\end{figure}
+\caption{Distribution of Response Variable: pH}\label{fig:unnamed-chunk-3}
+\end{wrapfigure}
 
 Understanding the influence pH has on our predictors is key to building
 an accurate predictive model. pH is a measure of acidity/alkalinity that
@@ -344,17 +326,7 @@ including \texttt{AlchRel}, \texttt{CarbRel}, \texttt{CarbVolume},
 \texttt{HydPressure4}, and \texttt{Tempature}, are strongly influenced
 by brand type.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(Plt_Outlier1, Plt_Outlier2, }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-3-1.pdf}
-\caption{Box-Plot Distribution of Numeric Predictor Variables}
-\end{figure}
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-4-1.pdf}
 
 We also looked at the relationship of our predictors against the
 response variable below. There are a few predictors that have a weak,
@@ -369,41 +341,13 @@ shows distinct \texttt{BrandCode} groupings. Other variables, such as
 \texttt{PressureSetup} show unique features likely related to system
 processes.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(Plt_Scatter1, Plt_Scatter2, }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-4-1.pdf}
-\caption{pH\textasciitilde{}Predictor Scatterplots}
-\end{figure}
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-5-1.pdf}
 
 Lastly, we examined collinearity measures between our numeric predictors
-and found that 10 of these variables were heavily related, with
-correlation values exceeding \(\pm{0.75}\). Linear modeling requires
-predictor variables to be independent of one another. This final
-evaluation confirms that standard linear modeling should not be used as
-it would require removing and transforming a significant proportion of
-our predictors, which would potentially overfit our data and lead to
-unreliable predictions.
+and found that several of these variables were heavily related, with
+correlation values exceeding \(\pm{0.7}\).
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{grid}\OperatorTok{::}\KeywordTok{grid.draw}\NormalTok{(}\KeywordTok{ggplot_gtable}\NormalTok{(g))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-
-{\centering \includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-5-1} 
-
-}
-
-\caption{Predictor Variable Correlation Matrix}\label{fig:unnamed-chunk-5}
-\end{figure}
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-6-1.pdf}
 
 \hypertarget{data-preparation}{%
 \chapter{Data Preparation}\label{data-preparation}}
@@ -466,34 +410,12 @@ of our data's features did not appear to be linearly separable. SVM
 models work well in maintain a large amount of features and can make
 distinctions between class differences.
 
-Our RMSE Cross Validation plots show us that bost models performed
+Our RMSE Cross Validation plots show us that both models performed
 similiary, but the second model performed slightly better. We choose
-this model, which contained box-cox, centering, and spread
+this model, which applied zero-varience, box-cox, centering, and spread
 transformations, to be our preferred SVM model.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(svm1_plot, svm2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{left=}\KeywordTok{textGrob}\NormalTok{(}\StringTok{"RMSE (Cross Valiadation)"}\NormalTok{, }\DataTypeTok{rot=}\DecValTok{90}\NormalTok{), }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"Sigma"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: Removed 1 rows containing missing values (geom_point).
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Removed 1 rows containing missing values (geom_path).
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Removed 1 rows containing missing values (geom_point).
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Removed 1 rows containing missing values (geom_path).
-\end{verbatim}
-
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-7-1.pdf}
 
 \hypertarget{mars}{%
 \subsubsection{MARS}\label{mars}}
@@ -505,17 +427,11 @@ features that create the smallest error and prunes insignificant points
 to improve model accuracy.
 
 Our RMSE Cross Validation plots show us that the best tune for both MARS
-were very similiar. The second model, with box-cox transformations,
-performed the most consistently, thus we selected this as our preferred
-MARS model.
+were very similiar. The second model, which contained box-cox
+transformations, was selected as it performed the most consistently
+across degrees and obtained a lower RMSE score.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(mars1_plot, mars2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{left=}\KeywordTok{textGrob}\NormalTok{(}\StringTok{"RMSE (Cross Valiadation)"}\NormalTok{, }\DataTypeTok{rot=}\DecValTok{90}\NormalTok{), }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"#Terms"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-7-1.pdf}
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-8-1.pdf}
 
 \hypertarget{enet}{%
 \subsubsection{eNET}\label{enet}}
@@ -528,28 +444,21 @@ Our RMSE Cross Validation plots show us that the best tune for both eNET
 were also similiar, with eNET1 performing slightly better. This model
 center and scaled the data but did not apply a box-cox transformations.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(enet1_plot, enet2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{left=}\KeywordTok{textGrob}\NormalTok{(}\StringTok{"RMSE (Cross Valiadation)"}\NormalTok{, }\DataTypeTok{rot=}\DecValTok{90}\NormalTok{), }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"Fraction of Full Solution"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 \hypertarget{gbm}{%
 \subsubsection{GBM}\label{gbm}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(gbm1_plot,gbm2_plot, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+Gradient boosting uses machine learning to train a prediction model
+using decision trees. Our GBM used 1000 trees and was evaluated on a
+grid using varying interaction depths, shrinkage, and terminal node
+parameters.
 
-\begin{figure}
-\centering
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-9-1.pdf}
-\caption{GBM RMSE Cross-Validated Profile}
-\end{figure}
+We found that our second model with box-cox transformations help boosted
+RMSE performance when the shrinkage size was 0.5. We choose the best
+tune from the second model as our preferred model.
+
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-10-1.pdf}
 
 \hypertarget{regression-analysis}{%
 \chapter{Regression Analysis}\label{regression-analysis}}
@@ -560,30 +469,23 @@ models. I am withholding content until we review and merge.
 \hypertarget{accuracy}{%
 \section{Accuracy}\label{accuracy}}
 
-MAPE not currently working for selected SVM/MARS train model. NaN is
-indicative of a zero in the calculations. Will address in final merge.
 The SVM model achieved the highest accuracy measures for non-linear
 modeling and the GBM model outperformed all of those other attempts.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Tbl_Accuracy}
-\end{Highlighting}
-\end{Shaded}
+Will add to a more indepth analysis of these metrics after the merge.
 
 \begin{table}[H]
 
-\caption{\label{tab:source-script}Accuracy Measures}
+\caption{\label{tab:unnamed-chunk-11}Accuracy Measures}
 \centering
 \fontsize{8}{10}\selectfont
-\begin{tabular}{lrrrrrrrr}
+\begin{tabular}{lrrrrrr>{\bfseries\leavevmode\color{black}\columncolor[HTML]{B0DFe5}}r>{\bfseries\leavevmode\color{black}\columncolor[HTML]{B0DFe5}}r}
 \toprule
-  & SVM\_Train & SVM\_Test & MARS\_Train & MARS\_Test & eNET\_Train & eNET\_Test & GBM\_PERF\_TST & gbm1\_Train\\
+  & SVM\_Train & SVM\_Test & MARS\_Train & MARS\_Test & eNET\_Train & eNET\_Test & GBM\_Train & GBM\_Test\\
 \midrule
-\rowcolor{gray!6}  RMSE & 0.12187 & 0.11057 & 0.12303 & 0.11669 & 0.13581 & 0.12581 & 0.10157 & 0.10622\\
-Rsquared & 0.51456 & 0.55908 & 0.50555 & 0.52490 & 0.39269 & 0.42688 & 0.62633 & 0.62788\\
-\rowcolor{gray!6}  MAE & 0.08861 & 0.08142 & 0.09286 & 0.08964 & 0.10506 & 0.09740 & 0.07589 & 0.07894\\
-MAPE & 0.01110 & 0.00958 & 0.01142 & 0.01053 & 0.01298 & 0.01061 & 0.01021 & 0.00891\\
+\rowcolor{gray!6}  RMSE & 0.12187 & 0.11057 & 0.12303 & 0.11669 & 0.13474 & 0.12594 & 0.10536 & 0.10347\\
+Rsquared & 0.51456 & 0.55908 & 0.50555 & 0.52490 & 0.40186 & 0.42577 & 0.63554 & 0.61309\\
+\rowcolor{gray!6}  MAE & 0.08861 & 0.08142 & 0.09286 & 0.08964 & 0.10515 & 0.09721 & 0.07820 & 0.07807\\
+MAPE & 0.01110 & 0.00958 & 0.01142 & 0.01053 & 0.01297 & 0.01141 & 0.01021 & 0.00916\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -592,19 +494,9 @@ MAPE & 0.01110 & 0.00958 & 0.01142 & 0.01053 & 0.01298 & 0.01061 & 0.01021 & 0.0
 \section{Variable Importance}\label{variable-importance}}
 
 This section will discuss the trends in variable features in our
-selected models.
+selected models. Below shows the top ten important variables by model.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{grid.arrange}\NormalTok{(Plt_SVM_VarImp, Plt_MARS_VarImp, Plt_eNET_VarImp, Plt_GBM_VarImp, }\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{, }\DataTypeTok{bottom =} \KeywordTok{textGrob}\NormalTok{(}\StringTok{"Overall Variable Importance"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-11-1.pdf}
-\caption{Top 10 Important Variables by Model}
-\end{figure}
+\includegraphics{Proj2-JM_files/figure-latex/unnamed-chunk-12-1.pdf}
 
 \hypertarget{conclusion}{%
 \chapter{Conclusion}\label{conclusion}}
@@ -618,12 +510,6 @@ selected for final analysis.
 
 \hypertarget{summary-statistics}{%
 \subsubsection{Summary Statistics}\label{summary-statistics}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Tbl_summary_stats}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{table}[H]
 \centering\begingroup\fontsize{8}{10}\selectfont
@@ -681,7 +567,7 @@ CarbRel & 32 & 2559 & 5.4 & 0.1 & 5.4 & 5.4 & 0.1 & 5.0 & 6.1 & 1.1 & 0.5 & -0.3
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Final R Code Will Be Inserted Here}
+\CommentTok{# Final R Code Will Be Inserted Here}
 \end{Highlighting}
 \end{Shaded}
 
