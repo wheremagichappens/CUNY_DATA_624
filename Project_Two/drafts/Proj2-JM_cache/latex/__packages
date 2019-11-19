@@ -5,8 +5,11 @@ utils
 grDevices
 graphics
 stats
-tidyverse
+knitr
+kableExtra
+default
 ggplot2
+tidyverse
 tibble
 tidyr
 readr
@@ -27,9 +30,6 @@ caret
 data.table
 recipes
 Metrics
-knitr
-kableExtra
-default
 gbm
 Formula
 plotrix

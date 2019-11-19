@@ -22,6 +22,24 @@ source('~/GitHub/CUNY_DATA_624/Project_Two/defaults.R')
 source('~/GitHub/CUNY_DATA_624/Project_Two/drafts/Proj2-JM.R') #code
 ```
 
+```{r}
+library(tidyverse)
+library(readxl)
+library(psych)
+library(ggplot2)
+library(mice)
+library(xtable)
+library(GGally)
+library(ggstance)
+library(grid)
+library(gridExtra)
+library(caret)
+library(data.table)
+library(recipes)
+library(Metrics)
+library(gbm)
+```
+
 \thispagestyle{empty}
 \newpage
 \clearpage
@@ -55,7 +73,7 @@ Tbl_Top_MissingData
 
 ## Response Variable
 
-```{r, fig.height=4, fig.cap="Distribution of Response Variable: pH", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .5)}
+```{r, fig.height=5, fig.cap="Distribution of Response Variable: pH", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .5)}
 
 Plt_pH1 <- StudentData %>% select(PH) %>% mutate(type="pH") %>% ggplot(aes(PH)) + geom_histogram(aes(y=..density..), bins=40, fill="#57A0D3", alpha=.65)+geom_density(alpha=.2, color="#000000",size=.65)+scale_x_continuous() + scale_y_continuous(limits = c(0,3.5)) + labs(x="",y="")+theme_bw()+theme(axis.title.x = element_blank(), axis.ticks.length.x = unit(0, "cm"))+facet_wrap(~type)
 Plt_pH2 <- StudentData %>% select(PH) %>% mutate(type="pH") %>% ggplot(aes(PH,"")) + geom_boxploth(fill="#57A0D3", outlier.colour="#4682B4",alpha=.65)+ theme_bw()+theme(legend.title = element_blank(), strip.background = element_blank(), strip.text.x = element_blank(),axis.title.x = element_blank(), axis.ticks.length.x = unit(0, "cm"))+labs(x="",y="")+ scale_y_discrete(labels = 'pH')+ scale_x_continuous() + facet_wrap(~type,nrow=1, strip.position = "top")
@@ -78,7 +96,7 @@ We examined the density of our variables to visualize the distribution of the pr
 
 The density plots also contain an overlay of the only categorical indicator, `BrandCode`. This view shows us that some variables, including `AlchRel`, `CarbRel`, `CarbVolume`, `HydPressure4`, and  `Tempature`, are strongly influenced by brand type.  
 
-```{r, fig.height=4}
+```{r, fig.height=5}
 Plt_Outlier1 <- ggplot(outlier_with, aes(value)) + geom_density(aes(fill=BrandCode), color="#999999", alpha=.3) + labs(title="Box-Plot Distribution of Numeric Predictor Variables", subtitle="With Outliers", x="", y="")+ geom_vline(data = outlier_with, mapping = aes(xintercept=outlier_lower), color="#ff8080")+geom_vline(data = outlier_with, mapping = aes(xintercept=outlier_upper),  color="#ff8080")+facet_wrap(~key, scales = 'free', nrow = 3)+theme_bw()+theme(axis.text.y = element_blank(), axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "none")+scale_fill_manual()
 Plt_Outlier2 <- ggplot(outlier_wo, aes(value)) + geom_density(aes(fill=BrandCode), color="#999999", alpha=.3)+ labs(subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free', nrow = 1)+ theme_bw()+theme(axis.text.y = element_blank(),axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(.4, "cm"))+scale_fill_manual()
 
@@ -89,16 +107,16 @@ We also looked at the relationship of our predictors against the response variab
 
 This view helps us further visualize the effect `BrandCode` has on our predictor and `pH` values. For example, `AlchRel` shows distinct `BrandCode` groupings. Other variables, such as `PSCO2`, `BowlSetpoint`, `MinFlow`, and `PressureSetup` show unique features likely related to system processes. 
 
-```{r, fig.height=4}
+```{r, fig.height=5}
 Plt_Scatter1 <- outlier_with %>% mutate(PH=as.numeric(as.character(PH))) %>% ggplot(aes(x=value, y=PH)) + geom_jitter(aes(color=BrandCode), alpha=.15) + stat_smooth(color="#000000", method = "loess") + labs(title="pH~Predictor Scatterplots", subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free_x', nrow = 3) + theme_bw() + theme(axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "none", legend.key.size = unit(.4, "cm"))+scale_color_manual(values=c("#999999", "#95C8D8", "#008081", "#034D92"))
 Plt_Scatter2 <- outlier_wo %>% mutate(PH=as.numeric(as.character(PH))) %>% ggplot(aes(x=value, y=PH)) + geom_jitter(aes(color=BrandCode), alpha=.15) + stat_smooth(color="#000000", method = "loess") + labs(subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free_x', nrow = 1)+ theme_bw()+theme(axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(.4, "cm"))+scale_color_manual(values=c("#999999", "#95C8D8", "#008081", "#034D92"))
 
 grid.arrange(Plt_Scatter1, Plt_Scatter2, nrow=2, heights=c(3,2))
 ```
 
-Lastly, we examined collinearity measures between our numeric predictors and found that `r length(cor_freq)` of these variables were heavily related, with correlation values exceeding $\pm{0.75}$. Linear modeling requires predictor variables to be independent of one another. This final evaluation confirms that standard linear modeling should not be used as it would require removing and transforming a significant proportion of our predictors, which would potentially overfit our data and lead to unreliable predictions.
+Lastly, we examined collinearity measures between our numeric predictors and found that several of these variables were heavily related, with correlation values exceeding $\pm{0.7}$. 
 
-```{r, fig.height = 3, fig.width=3}
+```{r, fig.height = 3.5, fig.width=10}
 Plt_Corr <- StudentData %>% select_if(is.numeric)%>%  select(-PH)%>% ggcorr(method='pairwise.complete.obs', geom = "tile", label = F, hjust = .95, layout.exp = 7,  label_round =1, low="#95C8D8", mid="grey90",high="#034D92") +  theme_bw()+ theme(legend.key.size = unit(.6, "cm"), legend.justification=c(.05,.98), legend.position=c(.05,.98))+labs(title="Predictor Variable Correlation Matrix")
 g = ggplot_build(Plt_Corr); g$data[[2]]$size = 2
 
@@ -113,7 +131,7 @@ We divided the production dataset using an 80/20 split to create a train and tes
 
 #### Data Imputation
 
-We choose to drop the complete cases of all `pH` observations with null data in the target as they accounted for such a small proportion ($< 0.002%$) of the  observations. We compared this approach with other types of imputation and found that dropping variables, in this instance, provided a slight boost within our accuracy measures. 
+We choose to drop the complete cases of all `pH` observations with null data in the target as they accounted for such a small proportion (< 0.002%) of the  observations. We compared this approach with other types of imputation and found that dropping variables, in this instance, provided a slight boost within our accuracy measures. 
 
 For our predictor variables, we applied a Multiple Imputation by Chained Equations (MICE) algorthim to predict the missing data using sequential regression. This method filled in all incomplete cases, including `BrandCode`, our one unordered categorical variable.  
 
@@ -226,7 +244,7 @@ grid.arrange(enet1_plot, enet2_plot, nrow=1, left=textGrob("RMSE (CV)", rot=90),
 
 Gradient boosting uses machine learning to train a prediction model using decision trees. Our GBM used 1000 trees and was evaluated on a grid using varying interaction depths, shrinkage, and terminal node parameters.
 
-We found that our second model with box-cox transformations help boosted RMSE performance when the shrinkage size was $0.5$. We choose the best tune from the second model as our preferred model.
+We found that our second model with box-cox transformations help boosted RMSE performance when the shrinkage size was 0.5. We choose the best tune from the second model as our preferred model.
 
 ```{r, fig.height=2.5}
 gbm1_plot <- ggplot(gbm_fit1)+
