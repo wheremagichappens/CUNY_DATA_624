@@ -125,28 +125,25 @@ grid::grid.draw(ggplot_gtable(g))
 
 # Data Preparation
 
-In our exploration, we detected missing data, extreme outliers, and multicollinearity. We kept these factors in mind and applied strategic transformations when preparing our models to evaluate their performance with and without normalization.
+In our exploration, we detected missing data, extreme outliers, and multicollinearity. We kept these factors in mind and applied strategic transformations when preparing our models to evaluate their performance with and without normalization changes.
+
+**Train/Test Splits:**   
 
 We divided the production dataset using an 80/20 split to create a train and test set. All models incorporated k-folds cross-validation set at 10 folds to protect against overfitting the data. We set up unique model tuning grids to find the optimal parameters for each regression type to ensure the highest accuracy within our predictions.
 
-#### Data Imputation
+**Data Imputation:**  
 
 We applied a Multiple Imputation by Chained Equations (MICE) algorthim to predict the missing data using sequential regression. This method filled in all incomplete cases, including `BrandCode`, our one unordered categorical variable.  
 
-#### Pre-Processing
+**Pre-Processing:**  
 
-Due to the strong non-normality exhibited in the data, we tested our models using three different approaches:
-
-1. No pre-processing techniques
-2. Centering and Scaling 
-3. Removing zero (and near-zero) variance and box-cox, centering, and scaling transformations.
-
+Due to the strong non-normality exhibited in the data, we tested our models using three different approaches: (1) No pre-processing techniques, (2) centering and Scaling, and (3) removing zero (and near-zero) variance and box-cox, centering, and scaling transformations.
 
 # Modeling
 
-We compared the effectiveness of the Multivariate Adaptive Regression Splines (MARS) to the Elastic Net (eNet) models.
+We compared the effectiveness of the Multivariate Adaptive Regression Splines (MARS) to the Elastic Net (eNet) model.
 
-#### MARS
+## Multivariate Adaptive Regression Splines 
 
 MARS modeling was selected to assess the non-linear features in our data. This method uses a weighted sum to models non-linearities and interactions between variables. The model assesses cut-points between features that create the smallest error and prunes insignificant points to improve model accuracy.  
 
@@ -189,11 +186,9 @@ ggarrange(mars1_plot, mars2_plot, mars3_plot, ncol=3, common.legend = TRUE, lege
 
 ```
 
-#### eNET
+## Elastic Net
 
-The Elasticnet model was used as it can handle a large number of predictor variables. It combines ridge and lasso regression techniques to reduce the size of coefficients. 
-
-Our RMSE Cross Validation plots show us that the best tune for both eNET were also similiar, with eNET3 performing the best. The third version of this model incorporated all pre-processing methods. 
+The Elastic Net model was used as it can handle a large number of predictor variables. It combines ridge and lasso regression techniques to reduce the size of coefficients. Our RMSE Cross Validation plots show us that the best tune for both eNET were also similiar, with eNET3 performing the best. The third version of this model incorporated all pre-processing methods. 
 
 ```{r, fig.height=2.5}
 enet1_plot <- ggplot(enet_fit1)+
@@ -233,15 +228,19 @@ ggarrange(enet1_plot, enet2_plot, enet3_plot, ncol=3, common.legend = TRUE, lege
 
 # Regression Analysis
 
+#### Accuracy 
+
 The MARS model performed the best with the lowest accuracy scores. The MARS model fit the data the best with the lowest variation between predicted and observed data for both the training and the test set.  
 
 ```{r}
 Tbl_Accuracy %>% kable(digits=5,booktabs=T, caption="Accuracy Measures") %>% kable_styling() %>% column_spec(2:3, color = "#0074D9",bold = T)
 ```
 
+#### Variable Importance
+
 Variable importance varied greatly between the two models. The predictors, `MnfFlow`, `HydPressure3`, `Useagecont`, and `BowelSetpoint`, both ranked in the top 10 important variables for MARS and eNET model.
 
-```{r, fig.height=4}
+```{r, fig.height=2.5}
 Plt_MARS_VarImp <- MARS_VarImp$importance %>% as.data.frame.array() %>% rownames_to_column("Variable") %>% top_n(10, Overall) %>% ggplot(aes(x=reorder(Variable, Overall), y=Overall)) + geom_point()+geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + coord_flip() + labs(y="Overall", x="", title="MARS") + theme_bw() + theme(axis.title.y = element_blank(), axis.title.x = element_blank())+scale_y_continuous(labels = scales::number_format(accuracy = 1,decimal.mark = '.')); 
 Plt_eNET_VarImp <- eNET_VarImp$importance %>% as.data.frame.array() %>% rownames_to_column("Variable") %>% top_n(10, Overall) %>% ggplot(aes(x=reorder(Variable, Overall), y=Overall)) + geom_point() + geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + coord_flip() + labs(y="Overall", x="", title="eNET") + theme_bw() + theme(axis.title.y = element_blank(), axis.title.x = element_blank())+scale_y_continuous(labels = scales::number_format(accuracy = 1,decimal.mark = '.'));
 
@@ -254,7 +253,7 @@ This section should contain final thoughts and save/discuss our student evaluati
 
 # Appendix {-#Appendix}
 
-```{r, echo=T}
+```{r, eval=F, echo=T}
 library(tidyverse); library(readxl); library(psych); library(mice); library(xtable); library(caret); library(data.table); library(Metrics)
 
 # SEEDING
