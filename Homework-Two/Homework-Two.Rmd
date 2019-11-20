@@ -1,23 +1,27 @@
 ---
 title: "Data 624 - Group 2  \nHomework Part 2"
-author: 
+author:
 - Vinicio Haro
 - Sang Yoon (Andy) Hwang
 - Julian McEachern
 - Jeremy O'Brien
 - Bethany Poulin
 date: "16 December 2019"
-output: 
+output:
   pdf_document:
     includes:
-      in_header: preamble.tex
-    latex_engine: xelatex
+      in_header: C:/Users/traveler/Documents/Github/CUNY_DATA_624/Homework-Two/preamble.tex
     keep_tex: yes
-    toc: true
-    toc_depth: 3
+    latex_engine: xelatex
     number_sections: no
-documentclass: report
+    toc: yes
+    toc_depth: 3
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '3'
 subparagraph: yes
+documentclass: report
 ---
 
 # Getting Started {-#Overview}
@@ -28,20 +32,22 @@ Include details on our process in creating this document.
 
 ## Dependencies 
 
+
 ```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
 # SOURCE DEFAULT SETTINGS
-source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+#source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+source('C:/Users/traveler/Documents/Github/CUNY_DATA_624/Homework-Two/defaults.R') 
+
 # SOURCE HW ANSWERS
-source('~/GitHub/CUNY_DATA_624/Homework-Two/answers.R')
+#source('~/GitHub/CUNY_DATA_624/Homework-Two/answers.R')
+source('C:/Users/traveler/Documents/Github/CUNY_DATA_624/Homework-Two/answers.R') 
 ```
 
 ```{r libraries, echo=T}
-# Predictive Modeling
-libraries('AppliedPredictiveModeling', 'mlbench', 'caret', 'randomForest')
-
+# Predicitve Modeling
+libraries('AppliedPredictiveModeling', 'mice','caret', 'tidyverse','impute','pls','caTools','mlbench')
 # Formatting Libraries
 libraries('default', 'knitr', 'kableExtra')
-
 # Plotting Libraries
 libraries('ggplot2', 'grid', 'ggfortify')
 ```
@@ -58,44 +64,84 @@ libraries('ggplot2', 'grid', 'ggfortify')
 \begin{subquestion}{(a).}Start R and use these commands to load the data:
 \end{subquestion}
 
+The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. 
+
 ```{r kj-6.3a, echo=T}
 data("ChemicalManufacturingProcess")
+
+yield_plot
 ```
 
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
 
+
 ```{r kj-6.3b}
 #code
+total_na %>% kable(caption="Distribution of Missing data in Chemical Manufacturing Process") %>%  kable_styling(full_width = F, position = "center")
+
 ```
+
+ManufacturingProcess03 has the largest volume of missing data followed by ManufacturingProcess11. Given that each variable has less than 25% of data missing, we should introduce methods of imputation. For our purposes, we will use the MICE method. MICE is formally known as Multiple Imputation with Chained Equations. On a high level, MICE is built off a tehcnique known as the Gibbs sampler. The Gibbs sampler is a Markov chain based on Monte Carlo. MICE iterates drawing estimates of missing values and parameters related to the distribution of said variables. Chained equations are generally faster than the monte carlo based Gibbs sampler. MICE has 5 imputations listed as its default. predictive mean matching is also a default method for MICE. PMM does a better job at keeping non-linear relationships within individual variables. 
+
+In addition to MICE, we drop variables that have near zero variance, however we point out that only one variable was dropped. We still include it as a process step to follow the literature's specifications. After completing MICE, we no longer had missing data in our set. We examined other imputation methods such as KNN but determined that there was no significant change in the summary statistics across different imputation methods. 
+
 
 \begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 \end{subquestion}
 
+We will build a PLS model also known as partial least squares. PLS is a statistical method that fits a linear regression model by projecting the feature variables and response variable to some new space via a mapping function. Because of this projection mechanisim, for both predictors and the response, the method becomes bilinear or simply known as linear with respect to to each of the variable types. PLS also has certain advantages over other methods such as being more robust to dealing with issues arising from multicolinearity. 
+
+For our PLS model, we partitioned the data by taking 80% of the data as training and the remaining 20% as testing subsets. We also apply center and scaling arguments set to true. We built a standard PLS model and evaluated the root mean summary areas to determine the optimal number of components to select. In our case, 41 components seemed to cause the root meean summary area to flatten. Any changes after 41 were marginal. We generate performance metrics agasint the training data for our baseline PLS model with all components.  
+
 ```{r kj-6.3c}
 #code
+caret::defaultSummary(train_eval) %>% kable(caption="PLS Performance Metrics on Training Subset") %>% kable_styling()# %>% row_spec()
 ```
+
+Our Baseline PLS model generates a RMSE of 1.3. In addition, the model captures 49% of data variability. We include the visualizations pertaining to the RMSEP values against Yield. At roughly 41 components, the RMSEP flattens. 
+
+```{r kj-6.3c2}
+#code
+plot(pls_model)
+abline(0, 1, col="red")
+validationplot(pls_model, val.type="RMSEP")
+```
+
 
 \begin{subquestion}{(d).} Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
 \end{subquestion}
 
 ```{r kj-6.3d}
 #code
+caret::defaultSummary(pls2test_eval)%>% kable(caption="PLS Performance Metrics on Test Subset") %>% kable_styling();
+
+eval_plot
 ```
+
+We see an increased R squared against the test data with 56 percent of the data variability accounted for. We also see the RMSE decrease to 1.2 from 1.3. There is also a slight decrease in the MAE. Overall, it seems that using PLS with 41 components imporved the performance metrics vs our baseline PLS model with all components. 
 
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
 
 ```{r kj-6.3e}
 #code
+imp_plot
 ```
+
+VarImp allows us to identify the variables by name and compute their importance. ManufacturingProcess32 was flagged as the most important predictor overall and within the group of other Manufacturing Process variables. BiologicalMaterial02 was the most important variable within the BiologicalMaterial group but ranks 6th overall. The variable importance rankings are dominated by Manufacturing Process 9 to 6 within the top 15 predictors. 
 
 \begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 \end{subquestion}
 
 ```{r kj-6.3f}
 #code
+p1;p2;p3;
+
+cor_df['Yield']%>% kable(caption="Correlation of top 5 Important Variables vs Yield") %>% kable_styling()# %>% row_spec()%>%  kable_styling(full_width = F, position = "center")
 ```
+
+Out of the top three important variables, only ManufacturingProcess32 has a positive correlation with yield. We can drill down to the extent of the correlation with ManufacturingProcess32,ManufacturingProcess17, and ManufacturingProcess13 vs Yield. Please note we also applied a loess smoother in our visualizations. ManufacturingProcess13 and ManufacturingProcess17 have a moderate negative correlation with yield, meaning that there exists an inverse relationship between these predictors and yield. From a business point of view, our aim is to increase yield since we know that yield ties into revenue. We do not have insight into what mechanics go into each manufacturing process but we can use this knowledge to adjust the processes to emulate manufacturing process 32.
 
 # Assignment 2 {-#AS-2}
 
@@ -106,23 +152,17 @@ data("ChemicalManufacturingProcess")
 ```{r kj-7.2-ex1}
 # The package `mlbench` contains a function called `mlbench.friedman1` 
 # that simulates these data:
-
 set.seed(200) 
 trainingData <- mlbench.friedman1(200, sd = 1)
-
 ## We convert the 'x' data from a matrix to a data frame 
 ## One reason is that this will give the columns names.
-
 trainingData$x <- data.frame(trainingData$x) 
-
 ## Look at the data using 
 featurePlot(trainingData$x, trainingData$y) 
 ## or other methods. 
-
 ## This creates a list with a vector 'y' and a matrix 
 ## of predictors 'x'. Also simulate a large test set to 
 ## estimate the true error rate with good precision: 
-
 testData <- mlbench.friedman1(5000, sd = 1)
 testData$x <- data.frame(testData$x) 
 ```
@@ -138,9 +178,7 @@ knnModel <- train(x = trainingData$x,
                   preProc = c("center", "scale"), 
                   tuneLength = 10) 
 knnModel 
-
 knnPred <- predict(knnModel, newdata = testData$x) 
-
 ## The function 'postResample' can be used to get the test set performance values
 postResample(pred = knnPred, obs = testData$y)
 ```
@@ -218,17 +256,17 @@ colnames(simulated)[ncol(simulated)] <- "y"
 \begin{subquestion}{(a).} Fit a random forest model to all of the predictors, then estimate the variable importance scores. Did the random forest model significantly use the uninformative predictors (V6-V10)?\end{subquestion}
 
 ```{r kj-8.1a}
-model1 <- randomForest(y ~ ., data = simulated, 
-                       importance = TRUE, 
-                       ntree = 1000)
-rfImp1 <- varImp(model1, scale = FALSE)
+#model1 <- randomForest(y ~ ., data = simulated, 
+#                       importance = TRUE, 
+#                       ntree = 1000)
+#rfImp1 <- varImp(model1, scale = FALSE)
 ```
 
 \begin{subquestion}{(b).} Now add an additional predictor that is highly correlated with one of the informative predictors. Fit another random forest model to these data. Did the importance score for V1 change? What happens when you add another predictor that is also highly correlated with V1? For example:\end{subquestion}
 
 ```{r kj-8.1b-ex, eval=F}
-simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
-cor(simulated$duplicate1, simulated$V1)
+#simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+#cor(simulated$duplicate1, simulated$V1)
 ```
 
 ```{r kj-8.1b}
@@ -310,5 +348,3 @@ Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. 
 ```{r}
 #Compile R Script Here for Professors Review
 ```
-
-
