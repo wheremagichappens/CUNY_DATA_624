@@ -1,27 +1,23 @@
 ---
 title: "Data 624 - Group 2  \nHomework Part 2"
-author:
+author: 
 - Vinicio Haro
 - Sang Yoon (Andy) Hwang
 - Julian McEachern
 - Jeremy O'Brien
 - Bethany Poulin
 date: "16 December 2019"
-output:
+output: 
   pdf_document:
     includes:
-      in_header: C:/Users/traveler/Documents/Github/CUNY_DATA_624/Homework-Two/preamble.tex
-    keep_tex: yes
+      in_header: preamble.tex
     latex_engine: xelatex
-    number_sections: no
-    toc: yes
+    keep_tex: yes
+    toc: true
     toc_depth: 3
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '3'
-subparagraph: yes
+    number_sections: no
 documentclass: report
+subparagraph: yes
 ---
 
 # Getting Started {-#Overview}
@@ -32,16 +28,13 @@ Include details on our process in creating this document.
 
 ## Dependencies 
 
-
 ```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
 # SOURCE DEFAULT SETTINGS
-#source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
-source('C:/Users/traveler/Documents/Github/CUNY_DATA_624/Homework-Two/defaults.R') 
-
+source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
 # SOURCE HW ANSWERS
-#source('~/GitHub/CUNY_DATA_624/Homework-Two/answers.R')
-source('C:/Users/traveler/Documents/Github/CUNY_DATA_624/Homework-Two/answers.R') 
+source('~/GitHub/CUNY_DATA_624/Homework-Two/answers.R')
 ```
+
 
 ```{r libraries, echo=T}
 # Predicitve Modeling
@@ -68,24 +61,24 @@ The matrix processPredictors contains the 57 predictors (12 describing the input
 
 ```{r kj-6.3a, echo=T}
 data("ChemicalManufacturingProcess")
+```
 
+```{r}
 yield_plot
 ```
 
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
 
+ManufacturingProcess03 has the largest volume of missing data followed by ManufacturingProcess11. Given that each variable has less than 25% of data missing, we should introduce methods of imputation. For our purposes, we will use the MICE method. MICE is formally known as Multiple Imputation with Chained Equations. On a high level, MICE is built off a tehcnique known as the Gibbs sampler. The Gibbs sampler is a Markov chain based on Monte Carlo. MICE iterates drawing estimates of missing values and parameters related to the distribution of said variables. Chained equations are generally faster than the monte carlo based Gibbs sampler. MICE has 5 imputations listed as its default. predictive mean matching is also a default method for MICE. PMM does a better job at keeping non-linear relationships within individual variables. 
+
+In addition to MICE, we drop variables that have near zero variance, however we point out that only one variable was dropped. We still include it as a process step to follow the literature's specifications. After completing MICE, we no longer had missing data in our set. We examined other imputation methods such as KNN but determined that there was no significant change in the summary statistics across different imputation methods. 
 
 ```{r kj-6.3b}
 #code
 total_na %>% kable(caption="Distribution of Missing data in Chemical Manufacturing Process") %>%  kable_styling(full_width = F, position = "center")
 
 ```
-
-ManufacturingProcess03 has the largest volume of missing data followed by ManufacturingProcess11. Given that each variable has less than 25% of data missing, we should introduce methods of imputation. For our purposes, we will use the MICE method. MICE is formally known as Multiple Imputation with Chained Equations. On a high level, MICE is built off a tehcnique known as the Gibbs sampler. The Gibbs sampler is a Markov chain based on Monte Carlo. MICE iterates drawing estimates of missing values and parameters related to the distribution of said variables. Chained equations are generally faster than the monte carlo based Gibbs sampler. MICE has 5 imputations listed as its default. predictive mean matching is also a default method for MICE. PMM does a better job at keeping non-linear relationships within individual variables. 
-
-In addition to MICE, we drop variables that have near zero variance, however we point out that only one variable was dropped. We still include it as a process step to follow the literature's specifications. After completing MICE, we no longer had missing data in our set. We examined other imputation methods such as KNN but determined that there was no significant change in the summary statistics across different imputation methods. 
-
 
 \begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 \end{subquestion}
