@@ -222,21 +222,41 @@ each run.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{data}\NormalTok{(}\StringTok{"ChemicalManufacturingProcess"}\NormalTok{)}
-
-\NormalTok{yield_plot}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Homework-Two_files/figure-latex/kj-6.3a-1.pdf}
+\includegraphics{Homework-Two_files/figure-latex/unnamed-chunk-2-1.pdf}
 
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
+
+ManufacturingProcess03 has the largest volume of missing data followed
+by ManufacturingProcess11. Given that each variable has less than 25\%
+of data missing, we should introduce methods of imputation. For our
+purposes, we will use the MICE method. MICE is formally known as
+Multiple Imputation with Chained Equations. On a high level, MICE is
+built off a tehcnique known as the Gibbs sampler. The Gibbs sampler is a
+Markov chain based on Monte Carlo. MICE iterates drawing estimates of
+missing values and parameters related to the distribution of said
+variables. Chained equations are generally faster than the monte carlo
+based Gibbs sampler. MICE has 5 imputations listed as its default.
+predictive mean matching is also a default method for MICE. PMM does a
+better job at keeping non-linear relationships within individual
+variables.
+
+In addition to MICE, we drop variables that have near zero variance,
+however we point out that only one variable was dropped. We still
+include it as a process step to follow the literature's specifications.
+After completing MICE, we no longer had missing data in our set. We
+examined other imputation methods such as KNN but determined that there
+was no significant change in the summary statistics across different
+imputation methods.
 
 \begin{table}[H]
 
 \caption{\label{tab:kj-6.3b}Distribution of Missing data in Chemical Manufacturing Process}
 \centering
-\begin{tabular}[t]{l|r|l|r}
+\begin{tabular}{l|r|l|r}
 \hline
 Variable & Count & Variable & Count\\
 \hline
@@ -299,28 +319,6 @@ ManufacturingProcess41 & 1 & ManufacturingProcess44 & 0\\
 \end{tabular}
 \end{table}
 
-ManufacturingProcess03 has the largest volume of missing data followed
-by ManufacturingProcess11. Given that each variable has less than 25\%
-of data missing, we should introduce methods of imputation. For our
-purposes, we will use the MICE method. MICE is formally known as
-Multiple Imputation with Chained Equations. On a high level, MICE is
-built off a tehcnique known as the Gibbs sampler. The Gibbs sampler is a
-Markov chain based on Monte Carlo. MICE iterates drawing estimates of
-missing values and parameters related to the distribution of said
-variables. Chained equations are generally faster than the monte carlo
-based Gibbs sampler. MICE has 5 imputations listed as its default.
-predictive mean matching is also a default method for MICE. PMM does a
-better job at keeping non-linear relationships within individual
-variables.
-
-In addition to MICE, we drop variables that have near zero variance,
-however we point out that only one variable was dropped. We still
-include it as a process step to follow the literature's specifications.
-After completing MICE, we no longer had missing data in our set. We
-examined other imputation methods such as KNN but determined that there
-was no significant change in the summary statistics across different
-imputation methods.
-
 \begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 \end{subquestion}
 
@@ -346,15 +344,15 @@ baseline PLS model with all components.
 
 \caption{\label{tab:kj-6.3c}PLS Performance Metrics on Training Subset}
 \centering
-\begin{tabular}[t]{l|r}
+\begin{tabular}{l|r}
 \hline
   & x\\
 \hline
-\rowcolor{gray!6}  RMSE & 1.3116314\\
+\rowcolor{gray!6}  RMSE & 1.3067750\\
 \hline
-Rsquared & 0.4896581\\
+Rsquared & 0.4934303\\
 \hline
-\rowcolor{gray!6}  MAE & 1.0584889\\
+\rowcolor{gray!6}  MAE & 1.0546925\\
 \hline
 \end{tabular}
 \end{table}
@@ -374,15 +372,15 @@ the RMSEP flattens.
 
 \caption{\label{tab:kj-6.3d}PLS Performance Metrics on Test Subset}
 \centering
-\begin{tabular}[t]{l|r}
+\begin{tabular}{l|r}
 \hline
   & x\\
 \hline
-\rowcolor{gray!6}  RMSE & 1.222201\\
+\rowcolor{gray!6}  RMSE & 1.2586244\\
 \hline
-Rsquared & 0.579859\\
+Rsquared & 0.5653015\\
 \hline
-\rowcolor{gray!6}  MAE & 0.988292\\
+\rowcolor{gray!6}  MAE & 0.9959796\\
 \hline
 \end{tabular}
 \end{table}
@@ -419,7 +417,7 @@ the top 15 predictors.
 
 \caption{\label{tab:kj-6.3f}Correlation of top 5 Important Variables vs Yield}
 \centering
-\begin{tabular}[t]{l|r}
+\begin{tabular}{l|r}
 \hline
   & Yield\\
 \hline
@@ -431,7 +429,7 @@ ManufacturingProcess32 & 0.6083321\\
 \hline
 ManufacturingProcess13 & -0.5036797\\
 \hline
-\rowcolor{gray!6}  ManufacturingProcess36 & -0.4907962\\
+\rowcolor{gray!6}  ManufacturingProcess36 & -0.5013575\\
 \hline
 ManufacturingProcess09 & 0.5034705\\
 \hline
