@@ -39,3 +39,11 @@ default(theme) <- list(axis.text.x = element_text(angle = 0, hjust = NULL),
 default(scale_x_continuous) <- list(labels = scales::number_format(accuracy = 0.1,decimal.mark = '.'))
 default(scale_y_continuous) <- list(labels = scales::number_format(accuracy = 0.1,decimal.mark = '.'))
 default(scale_fill_manual) <- list(values=c("#999999", "#95C8D8", "#008081", "#034D92"))
+
+
+# wrap text
+if(!knitr:::is_html_output())
+{
+  options("width"=56)
+  knitr::opts_chunk$set(tidy.opts=list(width.cutoff=56, indent = 1), tidy = TRUE)
+}

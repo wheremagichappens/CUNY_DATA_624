@@ -30,7 +30,6 @@ caret
 data.table
 recipes
 Metrics
-gbm
 Formula
 plotrix
 TeachingDemos
