@@ -43,13 +43,13 @@ source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Ho
 
 ```{r libraries, echo=T}
 # predictive modeling
-libraries('tidyverse', 'mlbench', 'caret', 'mice', 'kernlab', 'e1071')  # added kernlab for SVM model
+libraries('tidyverse', 'mlbench', 'caret', 'mice', 'kernlab', 'e1071')  # added kernlab and e1071 for SVM models
 
 # Formatting Libraries
-libraries('default', 'knitr', 'kableExtra')  
+libraries('default', 'knitr', 'kableExtra')
 
 # Plotting Libraries
-libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify', 'earth', 'ggcorrplot')  # added earth for plotmo used with MARS
+libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify', 'earth', 'ggcorrplot')  # added earth for MARS model, ggcorrplot for correlograms
 
 #Data libraries
 libraries('AppliedPredictiveModeling')
