@@ -9,7 +9,6 @@ knitr
 kableExtra
 default
 ggplot2
-easypackages
 tidyverse
 tibble
 tidyr

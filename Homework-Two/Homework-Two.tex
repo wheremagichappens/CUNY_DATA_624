@@ -191,12 +191,11 @@ Include details on our process in creating this document.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Predictive Modeling}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }\StringTok{"randomForest"}\NormalTok{)}
-
+\CommentTok{# Predicitve Modeling}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mice"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }\StringTok{"tidyverse"}\NormalTok{, }
+    \StringTok{"impute"}\NormalTok{, }\StringTok{"pls"}\NormalTok{, }\StringTok{"caTools"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{)}
 \CommentTok{# Formatting Libraries}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{)}
-
 \CommentTok{# Plotting Libraries}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{)}
 \end{Highlighting}
@@ -215,26 +214,240 @@ Include details on our process in creating this document.
 \begin{subquestion}{(a).}Start R and use these commands to load the data:
 \end{subquestion}
 
+The matrix processPredictors contains the 57 predictors (12 describing
+the input biological material and 45 describing the process predictors)
+for the 176 manufacturing runs. yield contains the percent yield for
+each run.
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{data}\NormalTok{(}\StringTok{"ChemicalManufacturingProcess"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
+\includegraphics{Homework-Two_files/figure-latex/unnamed-chunk-2-1.pdf}
+
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
+
+ManufacturingProcess03 has the largest volume of missing data followed
+by ManufacturingProcess11. Given that each variable has less than 25\%
+of data missing, we should introduce methods of imputation. For our
+purposes, we will use the MICE method. MICE is formally known as
+Multiple Imputation with Chained Equations. On a high level, MICE is
+built off a tehcnique known as the Gibbs sampler. The Gibbs sampler is a
+Markov chain based on Monte Carlo. MICE iterates drawing estimates of
+missing values and parameters related to the distribution of said
+variables. Chained equations are generally faster than the monte carlo
+based Gibbs sampler. MICE has 5 imputations listed as its default.
+predictive mean matching is also a default method for MICE. PMM does a
+better job at keeping non-linear relationships within individual
+variables.
+
+In addition to MICE, we drop variables that have near zero variance,
+however we point out that only one variable was dropped. We still
+include it as a process step to follow the literature's specifications.
+After completing MICE, we no longer had missing data in our set. We
+examined other imputation methods such as KNN but determined that there
+was no significant change in the summary statistics across different
+imputation methods.
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3b}Distribution of Missing data in Chemical Manufacturing Process}
+\centering
+\begin{tabular}{l|r|l|r}
+\hline
+Variable & Count & Variable & Count\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess03 & 15 & BiologicalMaterial01 & 0\\
+\hline
+ManufacturingProcess11 & 10 & BiologicalMaterial02 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess10 & 9 & BiologicalMaterial03 & 0\\
+\hline
+ManufacturingProcess25 & 5 & BiologicalMaterial04 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess26 & 5 & BiologicalMaterial05 & 0\\
+\hline
+ManufacturingProcess27 & 5 & BiologicalMaterial06 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess28 & 5 & BiologicalMaterial07 & 0\\
+\hline
+ManufacturingProcess29 & 5 & BiologicalMaterial08 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess30 & 5 & BiologicalMaterial09 & 0\\
+\hline
+ManufacturingProcess31 & 5 & BiologicalMaterial10 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess33 & 5 & BiologicalMaterial11 & 0\\
+\hline
+ManufacturingProcess34 & 5 & BiologicalMaterial12 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess35 & 5 & ManufacturingProcess09 & 0\\
+\hline
+ManufacturingProcess36 & 5 & ManufacturingProcess13 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess02 & 3 & ManufacturingProcess15 & 0\\
+\hline
+ManufacturingProcess06 & 2 & ManufacturingProcess16 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess01 & 1 & ManufacturingProcess17 & 0\\
+\hline
+ManufacturingProcess04 & 1 & ManufacturingProcess18 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess05 & 1 & ManufacturingProcess19 & 0\\
+\hline
+ManufacturingProcess07 & 1 & ManufacturingProcess20 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess08 & 1 & ManufacturingProcess21 & 0\\
+\hline
+ManufacturingProcess12 & 1 & ManufacturingProcess32 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess14 & 1 & ManufacturingProcess37 & 0\\
+\hline
+ManufacturingProcess22 & 1 & ManufacturingProcess38 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess23 & 1 & ManufacturingProcess39 & 0\\
+\hline
+ManufacturingProcess24 & 1 & ManufacturingProcess42 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess40 & 1 & ManufacturingProcess43 & 0\\
+\hline
+ManufacturingProcess41 & 1 & ManufacturingProcess44 & 0\\
+\hline
+\end{tabular}
+\end{table}
 
 \begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 \end{subquestion}
 
+We will build a PLS model also known as partial least squares. PLS is a
+statistical method that fits a linear regression model by projecting the
+feature variables and response variable to some new space via a mapping
+function. Because of this projection mechanisim, for both predictors and
+the response, the method becomes bilinear or simply known as linear with
+respect to to each of the variable types. PLS also has certain
+advantages over other methods such as being more robust to dealing with
+issues arising from multicolinearity.
+
+For our PLS model, we partitioned the data by taking 80\% of the data as
+training and the remaining 20\% as testing subsets. We also apply center
+and scaling arguments set to true. We built a standard PLS model and
+evaluated the root mean summary areas to determine the optimal number of
+components to select. In our case, 41 components seemed to cause the
+root meean summary area to flatten. Any changes after 41 were marginal.
+We generate performance metrics agasint the training data for our
+baseline PLS model with all components.
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3c}PLS Performance Metrics on Training Subset}
+\centering
+\begin{tabular}{l|r}
+\hline
+  & x\\
+\hline
+\rowcolor{gray!6}  RMSE & 1.3067750\\
+\hline
+Rsquared & 0.4934303\\
+\hline
+\rowcolor{gray!6}  MAE & 1.0546925\\
+\hline
+\end{tabular}
+\end{table}
+
+Our Baseline PLS model generates a RMSE of 1.3. In addition, the model
+captures 49\% of data variability. We include the visualizations
+pertaining to the RMSEP values against Yield. At roughly 41 components,
+the RMSEP flattens.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3c2-1.pdf}
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3c2-2.pdf}
+
 \begin{subquestion}{(d).} Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
 \end{subquestion}
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3d}PLS Performance Metrics on Test Subset}
+\centering
+\begin{tabular}{l|r}
+\hline
+  & x\\
+\hline
+\rowcolor{gray!6}  RMSE & 1.2586244\\
+\hline
+Rsquared & 0.5653015\\
+\hline
+\rowcolor{gray!6}  MAE & 0.9959796\\
+\hline
+\end{tabular}
+\end{table}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3d-1.pdf}
+
+We see an increased R squared against the test data with 56 percent of
+the data variability accounted for. We also see the RMSE decrease to 1.2
+from 1.3. There is also a slight decrease in the MAE. Overall, it seems
+that using PLS with 41 components imporved the performance metrics vs
+our baseline PLS model with all components.
 
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
 
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3e-1.pdf}
+
+VarImp allows us to identify the variables by name and compute their
+importance. ManufacturingProcess32 was flagged as the most important
+predictor overall and within the group of other Manufacturing Process
+variables. BiologicalMaterial02 was the most important variable within
+the BiologicalMaterial group but ranks 6th overall. The variable
+importance rankings are dominated by Manufacturing Process 9 to 6 within
+the top 15 predictors.
+
 \begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 \end{subquestion}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3f-1.pdf}
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3f-2.pdf}
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3f-3.pdf}
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3f}Correlation of top 5 Important Variables vs Yield}
+\centering
+\begin{tabular}{l|r}
+\hline
+  & Yield\\
+\hline
+\rowcolor{gray!6}  Yield & 1.0000000\\
+\hline
+ManufacturingProcess32 & 0.6083321\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess17 & -0.4258069\\
+\hline
+ManufacturingProcess13 & -0.5036797\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess36 & -0.5013575\\
+\hline
+ManufacturingProcess09 & 0.5034705\\
+\hline
+\end{tabular}
+\end{table}
+
+Out of the top three important variables, only ManufacturingProcess32
+has a positive correlation with yield. We can drill down to the extent
+of the correlation with ManufacturingProcess32,ManufacturingProcess17,
+and ManufacturingProcess13 vs Yield. Please note we also applied a loess
+smoother in our visualizations. ManufacturingProcess13 and
+ManufacturingProcess17 have a moderate negative correlation with yield,
+meaning that there exists an inverse relationship between these
+predictors and yield. From a business point of view, our aim is to
+increase yield since we know that yield ties into revenue. We do not
+have insight into what mechanics go into each manufacturing process but
+we can use this knowledge to adjust the processes to emulate
+manufacturing process 32.
 
 \hypertarget{AS-2}{%
 \chapter*{Assignment 2}\label{AS-2}}

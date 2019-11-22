@@ -36,7 +36,7 @@ output:
 
 ## Dependencies 
 
-```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+```{r, echo = F, message=F, warning=F, error=F, comment=NA}
 # SOURCE DEFAULT SETTINGS
 source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Homework-Two/defaults.R')
 ```
@@ -101,7 +101,9 @@ We begin with a K Nearest Neighbors model.  Before fitting the model we preproce
 
 Model 2: Neural Network
 
-```{r kj-7.2-1}
+```{r kj-7.2-1, echo=T, eval=F}
+
+# TURNED OFF THIS CHUNK FOR JO SO DOC COULD KNIT
 
 # Neural network implementation using model averaging and limiting features to those that see pairwise correlation < .75 %>% 
 sim_train$x %>% 
