@@ -25,10 +25,9 @@ data("ChemicalManufacturingProcess")
 # (6.3a) 
 Plt_CMP.Yield <-ggplot(ChemicalManufacturingProcess, aes(x = Yield))+
   geom_histogram(color=dark_gold, fill = light_gold)+
-  scale_x_continuous(labels = scales::number_format(accuracy = 1))+
-  labs(title="Distribution of Yield",
-       subtitle="Chemical Manufacturing Data Set")+
-  theme_bw()+theme(axis.title.y = element_blank())
+  scale_x_continuous(labels = scales::number_format(accuracy = .1))+
+  labs(title="Distribution of Yield") +
+  theme_bw()+theme(plot.title = element_text(color="#745010", size=10, face="bold"), axis.title.y = element_blank())
 
 # (6.3b) 
 
@@ -76,7 +75,7 @@ Plt_CMP.test.obs_vs_pred <- ggplot(CMP.pls.test.obs_vs_pred, aes(Observed, Predi
   scale_x_continuous(labels = scales::number_format(accuracy = 1))+
   scale_y_continuous(labels = scales::number_format(accuracy = 1))+
   theme_bw()+
-  theme()
+  theme(plot.title = element_text(color="#745010", size=10, face="bold"))
 
 # (6.3e) 
 CMP.pls.imp <- caret::varImp(CMP.pls.fit, scale=T)
@@ -124,8 +123,10 @@ testData$x <- data.frame(testData$x)
 #featurePlot(trainingData$x, trainingData$y) 
 
 # created ggplot instead of featurePlot()
-Plt_Sim.featurePlot <- trainingData %>% as.data.frame() %>% gather(x, value, -y) %>% mutate(x = str_replace(x, "x.","")) %>% arrange(desc(x)) %>% mutate(x = as.factor(x)) %>% ggplot(aes(value, y)) + geom_point(color=dark_gold)+facet_wrap(~x, nrow=2, scales = "fixed")+theme_bw()+theme()+labs(title="Feature Plot")
-
+ 
+Sim.featurePlot <- trainingData %>% as.data.frame() %>% gather(x, value, -y) %>% mutate(x = str_replace(x, "x.","")) %>% arrange(desc(x)) %>% mutate(x = as.factor(x)) 
+Sim.featurePlot$x <- factor(Sim.featurePlot$x, levels = c("X1","X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10"))
+Plt_Sim.featurePlot <- ggplot(Sim.featurePlot, aes(value, y)) + geom_point(color=dark_gold, alpha=.5)+facet_wrap(~ x, nrow=2, scales = "fixed")+theme_bw()+theme()+labs(title="XY Scatter Plots of Simulated Data")
 # revert seed back to our set group number: 
 set.seed(58677)
 

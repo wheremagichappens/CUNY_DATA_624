@@ -17,7 +17,9 @@ default(kable_styling)  <- list(latex_options = c("HOLD_position", "striped"), f
 default(row_spec) <- list(row=0, bold=T)
 
 # Set default augments for ggplot2 `theme()`
-default(theme) <- list(axis.title.x = element_text(color="#7d7464", face="bold", size=10, angle = 0, hjust = NULL),
+default(theme) <- list(axis.text.x = element_text(size=8),
+                       axis.text.y = element_text(size=8),
+                       axis.title.x = element_text(color="#7d7464", face="bold", size=10, angle = 0, hjust = NULL),
                        axis.title.y = element_text(color="#7d7464", face="bold", size=10),
                        plot.title = element_text(color="#745010", size=12, face="bold"),
                        plot.subtitle = (element_text(size=10, color="#868b8c")),

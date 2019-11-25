@@ -62,9 +62,9 @@ library(ggplot2); library(grid); library(ggfortify); library(gridExtra)
 data("ChemicalManufacturingProcess")
 ```
 
-The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. 
+The matrix processPredictors contains the 57 predictors (12 describing the input biological material and 45 describing the process predictors) for the 176 manufacturing runs. yield contains the percent yield for each run. Using a histogram, we examined the distribution of `Yield` and found that the response variable appears unimodal with a normal distribution.
 
-```{r kj-6.3a-plot}
+```{r kj-6.3a-plot, fig.height=2, fig.width=5, fig.align='center'}
 Plt_CMP.Yield
 ```
 
@@ -94,7 +94,7 @@ CMP.pls.train.perf %>% kable(caption="PLS Performance Metrics on Training Subset
 
 Our Baseline PLS model generates a RMSE of `r round(CMP.pls.train.perf$RMSE, 2)`. In addition, the model captures `r round(CMP.pls.train.perf$Rsquared, 4)*100` % of data variability. We include the visualizations pertaining to the train set cross-validation RMSE tunes and a plot comparing the observed and predicted outcome from our model.
 
-```{r kj-6.3c2}
+```{r kj-6.3c2, fig.height=2.75}
 grid.arrange(Plt_CMP.RMSE, Plt_CMP.fit.obs_vs_pred, ncol=2)
 ```
 
@@ -110,7 +110,7 @@ CMP.pls.test.perf  %>% kable(caption="PLS Performance Metrics on Test Subset", b
 
 We also plotted the observed and predicted values from our test set against each other below. The deviation from the fitted line tells us that our selected linear model may not provide the best predictions for `Yield`.
 
-```{r kj-6.3d-2}
+```{r kj-6.3d-2, fig.height=2, fig.width=5, fig.align='center'}
 Plt_CMP.test.obs_vs_pred
 ```
 
@@ -147,24 +147,19 @@ CMP_DF.corr.tbl %>% kable(caption="Variable Correlation with Yield", booktabs=T)
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 7.2}
 
-\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
+\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+\newline
+The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data. We convert the 'x' data from a matrix to a data frame. One reason is that this will give the columns names. The `testData` code creates a list with a vector 'y' and a matrix of predictors 'x'. It also simulates a large test set to estimate the true error rate with good precision: \end{question}
 
-The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:
 
 ```{r kj-7.2-ex1, echo=T, eval=F}
 set.seed(200) 
 trainingData <- mlbench.friedman1(200, sd = 1)
-```
-
-We convert the 'x' data from a matrix to a data frame. One reason is that this will give the columns names. This creates a list with a vector 'y' and a matrix of predictors 'x'. Also simulate a large test set to estimate the true error rate with good precision:
-
-```{r kj-7.2-ex2, echo=T, eval=F}
 trainingData$x <- data.frame(trainingData$x) 
 testData <- mlbench.friedman1(5000, sd = 1)
 testData$x <- data.frame(testData$x) 
 ```
 
-Using ggplots, we can look at a feature plot of the simulated data:
 
 ```{r kj-7.2-ex3, echo=F}
 Plt_Sim.featurePlot
@@ -175,18 +170,13 @@ Plt_Sim.featurePlot
 \end{subquestion}
 
 ```{r kj-7.2-ex4, echo=T, eval=F}
-knnModel <- train(x = trainingData$x,
-                  y = trainingData$y, 
-                  method = "knn",
-                  preProc = c("center", "scale"), 
-                  tuneLength = 10) 
+knnModel <- train(x = trainingData$x, y = trainingData$y, method = "knn", preProc = c("center", "scale"), tuneLength = 10) 
 knnModel 
 knnPred <- predict(knnModel, newdata = testData$x) 
-## The function 'postResample' can be used to get the test set performance values
 postResample(pred = knnPred, obs = testData$y)
 ```
 
-Model 1: 
+###Model 1: 
 ```{r kj-7.2-1}
 #code
 ```
