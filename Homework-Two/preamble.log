@@ -1,0 +1,1029 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.11.24)  24 NOV 2019 19:16
+entering extended mode
+**./preamble.tex
+(preamble.tex
+LaTeX2e <2019-10-01> patch level 3
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.6 \usepackage{
+                fontspec}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+! Undefined control sequence.
+l.7 \setmainfont
+                {Arial}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.7 \setmainfont{A
+                  rial}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+Missing character: There is no A in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no l in font nullfont!
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 7--8
+[] 
+ []
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.10 \usepackage[dvipsnames]{
+                             xcolor}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+! Undefined control sequence.
+l.11 \definecolor
+                 {navyblue}{RGB}{16, 52, 166}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.11 \definecolor{n
+                   avyblue}{RGB}{16, 52, 166}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+Missing character: There is no n in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no v in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no R in font nullfont!
+Missing character: There is no G in font nullfont!
+Missing character: There is no B in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+! Undefined control sequence.
+l.12 \definecolor
+                 {greyblue}{RGB}{76, 81, 109}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no g in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no R in font nullfont!
+Missing character: There is no G in font nullfont!
+Missing character: There is no B in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 8 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 9 in font nullfont!
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 \usepackage{
+                 tcolorbox}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+! Undefined control sequence.
+l.14 \newtcolorbox
+                  {question}[1]{colback=white, colframe=navyblue ,fonttitle=...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no q in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no k in font nullfont!
+Missing character: There is no = in font nullfont!
+Missing character: There is no w in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no m in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no = in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no v in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no = in font nullfont!
+! You can't use `macro parameter character #' in horizontal mode.
+l.14 ...ame=navyblue ,fonttitle=\bfseries, title=#
+                                                  1}
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 11--15
+[]
+ []
+
+
+Overfull \hbox (3.19443pt too wide) in paragraph at lines 11--15
+\OT1/cmr/bx/n/10 ,
+ []
+
+
+Overfull \hbox (11.49994pt too wide) in paragraph at lines 11--15
+\OT1/cmr/bx/n/10 ti-
+ []
+
+
+Overfull \hbox (27.6318pt too wide) in paragraph at lines 11--15
+\OT1/cmr/bx/n/10 tle=1 
+ []
+
+! Undefined control sequence.
+l.16 \newtcolorbox
+                  {subquestion}[1]{colback=white,colframe=white, coltitle=na...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.16 \newtcolorbox{s
+                    ubquestion}[1]{colback=white,colframe=white, coltitle=na...
+
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+Missing character: There is no s in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no q in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no [ in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no k in font nullfont!
+Missing character: There is no = in font nullfont!
+Missing character: There is no w in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no m in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no = in font nullfont!
+Missing character: There is no w in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no = in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no v in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no ! in font nullfont!
+Missing character: There is no 7 in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no ! in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no k in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no = in font nullfont!
+! Undefined control sequence.
+l.16 ...ack, detach title, before upper={\tcbtitle
+                                                  \quad\hangindent7mm}, titl...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no , in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no = in font nullfont!
+! You can't use `macro parameter character #' in horizontal mode.
+l.16 ...r={\tcbtitle\quad\hangindent7mm}, title={#
+                                                  1},fonttitle=\bfseries, fo...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no , in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no = in font nullfont!
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 16--17
+[]
+ []
+
+
+Overfull \hbox (3.19443pt too wide) in paragraph at lines 16--17
+\OT1/cmr/bx/n/10 ,
+ []
+
+
+Overfull \hbox (36.41647pt too wide) in paragraph at lines 16--17
+\OT1/cmr/bx/n/10 fontup-
+ []
+
+
+Overfull \hbox (25.6596pt too wide) in paragraph at lines 16--17
+\OT1/cmr/bx/n/10 per= 
+ []
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.19 \usepackage{
+                 xcolor}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20 \usepackage{
+                 sectsty}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 \usepackage{
+                 etoolbox}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \usepackage{
+                 titling}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.24 \usepackage{
+                 titling}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+! Undefined control sequence.
+l.25 \pretitle
+              {\begin{flushright}\Huge\color{navyblue}\textbf}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.25 \pretitle{\begin{flushright}
+                                 \Huge\color{navyblue}\textbf}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 25--25
+[] 
+ []
+
+! Undefined control sequence.
+l.25 \pretitle{\begin{flushright}\Huge
+                                      \color{navyblue}\textbf}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.25 \pretitle{\begin{flushright}\Huge\color
+                                            {navyblue}\textbf}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no n in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no v in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no e in font nullfont!
+! Argument of \textbf  has an extra }.
+<inserted text> 
+                \par 
+l.25 ...n{flushright}\Huge\color{navyblue}\textbf}
+                                                  
+I've run across a `}' that doesn't seem to match anything.
+For example, `\def\a#1{...}' and `\a}' would produce
+this error. If you simply proceed now, the `\par' that
+I've just inserted will cause me to report a runaway
+argument that might be the root of the problem. But if
+your `}' was spurious, just type `2' and it will go away.
+
+Runaway argument?
+! Paragraph ended before \textbf  was complete.
+<to be read again> 
+                   \par 
+l.25 ...n{flushright}\Huge\color{navyblue}\textbf}
+                                                  
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
+
+! Extra }, or forgotten \endgroup.
+<recently read> }
+                 
+l.25 ...n{flushright}\Huge\color{navyblue}\textbf}
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Undefined control sequence.
+l.26 \posttitle
+               {\par\Large\color{gray}Data 624 - Predictive Analytics\par 16...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.26 \posttitle{\par\Large
+                          \color{gray}Data 624 - Predictive Analytics\par 16...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.26 \posttitle{\par\Large\color
+                                {gray}Data 624 - Predictive Analytics\par 16...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no g in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no D in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no - in font nullfont!
+Missing character: There is no P in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no v in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no A in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no D in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no m in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 9 in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.26 ...ytics\par 16 December 2019\end{flushright}
+                                                  }
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Undefined control sequence.
+l.27 \preauthor
+               {\begin{flushright}\large \lineskip 0.5em\textbf{Group Member...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.27 \preauthor{\begin{flushright}
+                                  \large \lineskip 0.5em\textbf{Group Member...
+
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 27--27
+[] 
+ []
+
+! Undefined control sequence.
+l.27 \preauthor{\begin{flushright}\large
+                                         \lineskip 0.5em\textbf{Group Member...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Argument of \textit  has an extra }.
+<inserted text> 
+                \par 
+l.27 ...m\textbf{Group Members:}\linebreak\textit}
+                                                  
+I've run across a `}' that doesn't seem to match anything.
+For example, `\def\a#1{...}' and `\a}' would produce
+this error. If you simply proceed now, the `\par' that
+I've just inserted will cause me to report a runaway
+argument that might be the root of the problem. But if
+your `}' was spurious, just type `2' and it will go away.
+
+Runaway argument?
+! Paragraph ended before \textit  was complete.
+<to be read again> 
+                   \par 
+l.27 ...m\textbf{Group Members:}\linebreak\textit}
+                                                  
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
+
+
+Overfull \hbox (32.30539pt too wide) in paragraph at lines 27--27
+ \OT1/cmr/bx/n/10 Group
+ []
+
+
+Overfull \hbox (29.60402pt too wide) in paragraph at lines 27--27
+ \OT1/cmr/bx/n/10 Mem-
+ []
+
+
+Overfull \hbox (24.44571pt too wide) in paragraph at lines 27--27
+ \OT1/cmr/bx/n/10 bers:
+ []
+
+! Extra }, or forgotten \endgroup.
+<recently read> }
+                 
+l.27 ...m\textbf{Group Members:}\linebreak\textit}
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Undefined control sequence.
+l.28 \postauthor
+                {\par\end{flushright}}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.28 \postauthor{\par\end{flushright}
+                                     }
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Undefined control sequence.
+l.29 \predate
+             {\begin{flushright}\large}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.29 \predate{\begin{flushright}
+                                \large}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 29--29
+[] 
+ []
+
+! Undefined control sequence.
+l.29 \predate{\begin{flushright}\large
+                                      }
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Extra }, or forgotten \endgroup.
+l.29 \predate{\begin{flushright}\large}
+                                       
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Undefined control sequence.
+l.30 \postdate
+              {\par\end{flushright}}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.30 \postdate{\par\end{flushright}
+                                   }
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.36 \usepackage{
+                 titlesec}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+! Undefined control sequence.
+l.37 \titleformat
+                 {\chapter}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.37 \titleformat{\chapter
+                          }
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.38   {\normalfont\color
+                         {greyblue}\LARGE\bfseries}{\thechapter}{1em}{}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38   {\normalfont\color{g
+                           reyblue}\LARGE\bfseries}{\thechapter}{1em}{}
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+! Undefined control sequence.
+l.38   {\normalfont\color{greyblue}\LARGE
+                                         \bfseries}{\thechapter}{1em}{}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.38 ...olor{greyblue}\LARGE\bfseries}{\thechapter
+                                                  }{1em}{}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no m in font nullfont!
+! Undefined control sequence.
+l.39 \titlespacing
+                  *{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no * in font nullfont!
+! Undefined control sequence.
+l.39 \titlespacing*{\chapter
+                            }{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 5 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no m in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+
+Overfull \hbox (56.9723pt too wide) in paragraph at lines 38--40
+[]\OT1/cmr/m/n/10 greyblue
+ []
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 \usepackage{
+                 geometry}[textwidth=6in]
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 \usepackage{geometry}[
+                           textwidth=6in]
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no x in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no w in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no = in font nullfont!
+Missing character: There is no 6 in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no ] in font nullfont!
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 43--44
+[] 
+ []
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.46 \usepackage{
+                 tabu}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.47 \usepackage{
+                 float}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+
+! LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 \usepackage{
+                 multicol}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+)
+! Emergency stop.
+<*> ./preamble.tex
+                  
+*** (job aborted, no legal \end found)
+
+ 
+Here is how much of TeX's memory you used:
+ 9 strings out of 492450
+ 227 string characters out of 3120004
+ 60404 words of memory out of 3000000
+ 4470 multiletter control sequences out of 15000+200000
+ 3948 words of font info for 15 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 15i,1n,14p,232b,96s stack positions out of 5000i,500n,10000p,200000b,50000s
+!  ==> Fatal error occurred, no output PDF file produced!

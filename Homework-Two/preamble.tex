@@ -8,33 +8,45 @@
 
 % create color block quotes
 \usepackage[dvipsnames]{xcolor}
+\definecolor{navyblue}{RGB}{16, 52, 166}
+\definecolor{stealblue}{RGB}{72, 90, 122}
 \usepackage{tcolorbox}     
-\newtcolorbox{question}[1]{colback=white, colframe=Emerald ,fonttitle=\bfseries, title=#1}
+\newtcolorbox{question}[1]{colback=white, colframe=navyblue ,fonttitle=\bfseries, title=#1}
 
-\newtcolorbox{subquestion}[1]{colback=white,colframe=white, coltitle=Emerald!75!black, detach title, before upper={\tcbtitle\quad\hangindent7mm}, title={#1},fonttitle=\bfseries, fontupper=\bfseries}
+\newtcolorbox{subquestion}[1]{colback=white,colframe=white, coltitle=navyblue!75!black, detach title, before upper={\tcbtitle\quad\hangindent7mm}, title={#1},fonttitle=\bfseries, fontupper=\bfseries}
 
-% remove "chapter" from chapter title
-\usepackage{titlesec}
 
-\titleformat{\chapter}
-  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
-\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\usepackage{xcolor}
+\usepackage{sectsty}
+\usepackage{etoolbox}
+\usepackage{titling}
 
 \usepackage{titling}
-\pretitle{\begin{flushright}\LARGE}
-\posttitle{\par\end{flushright}\vskip 0.5em}
-\preauthor{\begin{flushright}\large \lineskip 0.5em}
+\pretitle{\begin{flushright}\Huge\color{navyblue}\textbf}
+\posttitle{\par\Large\color{gray}Data 624 - Predictive Analytics\linebreak 16 December 2019\end{flushright}}
+\preauthor{\begin{flushright}\large \lineskip 0.5em\textbf{Group Members:}\linebreak\textit}
 \postauthor{\par\end{flushright}}
 \predate{\begin{flushright}\large}
 \postdate{\par\end{flushright}}
 
 
-% wrap text
-\usepackage{geometry}[textwidth=6in]
+
+
+% remove "chapter" from chapter title
+\usepackage{titlesec}
+\titleformat{\chapter}
+  {\normalfont\color{navyblue}\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+
+% margins
+\usepackage[margin=1in]{geometry}
 
 % kable 
 \usepackage{tabu}
 \usepackage{float} 
+\usepackage{booktabs}
+\usepackage[font={color=navyblue,bf}]{caption}
 
 % multicolumn
 \usepackage{multicol}
