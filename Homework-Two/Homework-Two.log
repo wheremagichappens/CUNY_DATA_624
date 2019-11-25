@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  25 NOV 2019 02:17
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  25 NOV 2019 13:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1506,13 +1506,13 @@ File: "Homework-Two_files/figure-latex/""kj-6.3a-plot-1".pdf Graphic file (type
  pdf)
 <use "Homework-Two_files/figure-latex/""kj-6.3a-plot-1".pdf>
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 6.64929pt on input line 283.
+(Font)              scaled to size 6.64929pt on input line 285.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 284.
+(Font)              <8> on input line 286.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 284.
+(Font)              <6> on input line 286.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 6.64929pt on input line 286.
+(Font)              scaled to size 6.64929pt on input line 288.
 [3
 
 ]
@@ -1526,88 +1526,80 @@ f)
 File: "Homework-Two_files/figure-latex/""kj-6.3e-1".pdf Graphic file (type pdf)
 
 <use "Homework-Two_files/figure-latex/""kj-6.3e-1".pdf>
+[5]
 File: "Homework-Two_files/figure-latex/""kj-6.3f-1-1".pdf Graphic file (type pd
 f)
 <use "Homework-Two_files/figure-latex/""kj-6.3f-1-1".pdf>
-[5] [6]
+[6]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 433.
+(hyperref)                than one, level fixed on input line 435.
 
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 433.
+(hyperref)                be the same. Added a new anchor on input line 435.
 
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 5.81813pt on input line 435.
+(Font)              scaled to size 5.81813pt on input line 437.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 4.1558pt on input line 435.
+(Font)              scaled to size 4.1558pt on input line 437.
 
-Package xcolor Warning: Incompatible color definition on input line 440.
-
-
-Package xcolor Warning: Incompatible color definition on input line 445.
+Package xcolor Warning: Incompatible color definition on input line 441.
 
 
-Package xcolor Warning: Incompatible color definition on input line 445.
+Package xcolor Warning: Incompatible color definition on input line 449.
 
 
-Package xcolor Warning: Incompatible color definition on input line 452.
-
-
-Package xcolor Warning: Incompatible color definition on input line 458.
-
-
-Package xcolor Warning: Incompatible color definition on input line 458.
+Package xcolor Warning: Incompatible color definition on input line 449.
 
 File: "Homework-Two_files/figure-latex/""kj-7.2-ex3-1".pdf Graphic file (type p
 df)
 <use "Homework-Two_files/figure-latex/""kj-7.2-ex3-1".pdf>
 
-Package xcolor Warning: Incompatible color definition on input line 467.
+Package xcolor Warning: Incompatible color definition on input line 456.
 
 
-Package xcolor Warning: Incompatible color definition on input line 477.
+Package xcolor Warning: Incompatible color definition on input line 464.
 
 
-Package xcolor Warning: Incompatible color definition on input line 477.
+Package xcolor Warning: Incompatible color definition on input line 464.
 
 [7
 
 ] [8]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 511.
+(hyperref)                than one, level fixed on input line 498.
 
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 511.
+(hyperref)                be the same. Added a new anchor on input line 498.
 
 [9
 
 ] [10]
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 554.
+(hyperref)                be the same. Added a new anchor on input line 541.
 
 [11
 
 ] [12
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 561.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 561.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 548.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 548.
 (./Homework-Two.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 561.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 561.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 548.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 548.
 Package rerunfilecheck Info: File `Homework-Two.out' has not changed.
 (rerunfilecheck)             Checksum: C05BA7425D31F6676F8488E5BD5F280D.
  ) 
 Here is how much of TeX's memory you used:
- 36174 strings out of 494468
- 700806 string characters out of 6172222
- 802923 words of memory out of 5000000
- 40043 multiletter control sequences out of 15000+600000
+ 36203 strings out of 494468
+ 700963 string characters out of 6172222
+ 802924 words of memory out of 5000000
+ 40044 multiletter control sequences out of 15000+600000
  553318 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  59i,11n,116p,809b,491s stack positions out of 5000i,500n,10000p,200000b,80000s

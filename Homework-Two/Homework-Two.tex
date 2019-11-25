@@ -246,9 +246,11 @@ Include details on our process in creating this document.
 The matrix processPredictors contains the 57 predictors (12 describing
 the input biological material and 45 describing the process predictors)
 for the 176 manufacturing runs. yield contains the percent yield for
-each run.
+each run. Using a histogram, we examined the distribution of
+\texttt{Yield} and found that the response variable appears unimodal
+with a normal distribution.
 
-\includegraphics{Homework-Two_files/figure-latex/kj-6.3a-plot-1.pdf}
+\begin{center}\includegraphics{Homework-Two_files/figure-latex/kj-6.3a-plot-1} \end{center}
 
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
@@ -372,7 +374,7 @@ against each other below. The deviation from the fitted line tells us
 that our selected linear model may not provide the best predictions for
 \texttt{Yield}.
 
-\includegraphics{Homework-Two_files/figure-latex/kj-6.3d-2-1.pdf}
+\begin{center}\includegraphics{Homework-Two_files/figure-latex/kj-6.3d-2-1} \end{center}
 
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
@@ -432,32 +434,19 @@ BiologicalMaterial03 & 0.4451\\
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 7.2}
 
-\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
-
-The package \texttt{mlbench} contains a function called
-\texttt{mlbench.friedman1} that simulates these data:
+\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+\newline
+The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data. We convert the 'x' data from a matrix to a data frame. One reason is that this will give the columns names. The `testData` code creates a list with a vector 'y' and a matrix of predictors 'x'. It also simulates a large test set to estimate the true error rate with good precision: \end{question}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{200}\NormalTok{)}
 \NormalTok{trainingData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-We convert the `x' data from a matrix to a data frame. One reason is
-that this will give the columns names. This creates a list with a vector
-`y' and a matrix of predictors `x'. Also simulate a large test set to
-estimate the true error rate with good precision:
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{trainingData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x)}
 \NormalTok{testData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{5000}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
 \NormalTok{testData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(testData}\OperatorTok{$}\NormalTok{x)}
 \end{Highlighting}
 \end{Shaded}
-
-Using ggplots, we can look at a feature plot of the simulated data:
 
 \includegraphics{Homework-Two_files/figure-latex/kj-7.2-ex3-1.pdf}
 
@@ -470,13 +459,11 @@ Using ggplots, we can look at a feature plot of the simulated data:
     \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{), }\DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{)}
 \NormalTok{knnModel}
 \NormalTok{knnPred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(knnModel, }\DataTypeTok{newdata =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{x)}
-\CommentTok{## The function 'postResample' can be used to get the test set}
-\CommentTok{## performance values}
 \KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ knnPred, }\DataTypeTok{obs =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{y)}
 \end{Highlighting}
 \end{Shaded}
 
-Model 1:
+\#\#\#Model 1:
 
 Model 2:
 
