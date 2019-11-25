@@ -377,15 +377,16 @@ that our selected linear model may not provide the best predictions for
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
 
-\includegraphics{Homework-Two_files/figure-latex/kj-6.3e-1.pdf}
-
 VarImp allows us to identify the variables by name and compute their
 importance. \texttt{ManufacturingProcess32} was flagged as the most
 important predictor overall and within the group of other Manufacturing
 Process variables. \texttt{BiologicalMaterial06} ranked second and was
 the most important variable within the BiologicalMaterial group. The
 variable importance rankings are mixed with 8 variables belonging to
-Biology and 7 by Manufacturing Process within the top \(15\) predictors.
+Biology and 7 Manufacturing Process variables within the top 15
+predictors.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3e-1.pdf}
 
 \begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 \end{subquestion}
@@ -433,10 +434,47 @@ BiologicalMaterial03 & 0.4451\\
 
 \begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
 
-\includegraphics{Homework-Two_files/figure-latex/kj-7.2-ex1-1.pdf}
+The package \texttt{mlbench} contains a function called
+\texttt{mlbench.friedman1} that simulates these data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{200}\NormalTok{)}
+\NormalTok{trainingData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We convert the `x' data from a matrix to a data frame. One reason is
+that this will give the columns names. This creates a list with a vector
+`y' and a matrix of predictors `x'. Also simulate a large test set to
+estimate the true error rate with good precision:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{trainingData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x)}
+\NormalTok{testData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{5000}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
+\NormalTok{testData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(testData}\OperatorTok{$}\NormalTok{x)}
+\end{Highlighting}
+\end{Shaded}
+
+Using ggplots, we can look at a feature plot of the simulated data:
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-ex3-1.pdf}
 
 \begin{subquestion}{(a).} Tune several models on these data. For example: 
 \end{subquestion}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }
+    \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{), }\DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{)}
+\NormalTok{knnModel}
+\NormalTok{knnPred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(knnModel, }\DataTypeTok{newdata =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{x)}
+\CommentTok{## The function 'postResample' can be used to get the test set}
+\CommentTok{## performance values}
+\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ knnPred, }\DataTypeTok{obs =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
 
 Model 1:
 

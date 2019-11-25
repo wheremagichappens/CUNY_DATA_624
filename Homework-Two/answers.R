@@ -115,6 +115,20 @@ CMP_DF.corr.tbl <- CMP_DF.corr %>% select(Yield) %>% rownames_to_column('Variabl
 # ASSIGNMENT 2
 # KJ 7.2; KJ 7.5
 
+# instructions from text 
+set.seed(200) 
+trainingData <- mlbench.friedman1(200, sd = 1)
+trainingData$x <- data.frame(trainingData$x) 
+testData <- mlbench.friedman1(5000, sd = 1)
+testData$x <- data.frame(testData$x) 
+#featurePlot(trainingData$x, trainingData$y) 
+
+# created ggplot instead of featurePlot()
+Plt_Sim.featurePlot <- trainingData %>% as.data.frame() %>% gather(x, value, -y) %>% mutate(x = str_replace(x, "x.","")) %>% arrange(desc(x)) %>% mutate(x = as.factor(x)) %>% ggplot(aes(value, y)) + geom_point(color=dark_gold)+facet_wrap(~x, nrow=2, scales = "fixed")+theme_bw()+theme()+labs(title="Feature Plot")
+
+# revert seed back to our set group number: 
+set.seed(58677)
+
 # (7.2a)
 
 # (7.2b)

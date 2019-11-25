@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  25 NOV 2019 01:19
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  25 NOV 2019 02:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1532,47 +1532,74 @@ f)
 [5] [6]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 432.
+(hyperref)                than one, level fixed on input line 433.
 
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 432.
+(hyperref)                be the same. Added a new anchor on input line 433.
 
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 5.81813pt on input line 434.
+(Font)              scaled to size 5.81813pt on input line 435.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 4.1558pt on input line 434.
-File: "Homework-Two_files/figure-latex/""kj-7.2-ex1-1".pdf Graphic file (type p
+(Font)              scaled to size 4.1558pt on input line 435.
+
+Package xcolor Warning: Incompatible color definition on input line 440.
+
+
+Package xcolor Warning: Incompatible color definition on input line 445.
+
+
+Package xcolor Warning: Incompatible color definition on input line 445.
+
+
+Package xcolor Warning: Incompatible color definition on input line 452.
+
+
+Package xcolor Warning: Incompatible color definition on input line 458.
+
+
+Package xcolor Warning: Incompatible color definition on input line 458.
+
+File: "Homework-Two_files/figure-latex/""kj-7.2-ex3-1".pdf Graphic file (type p
 df)
-<use "Homework-Two_files/figure-latex/""kj-7.2-ex1-1".pdf>
+<use "Homework-Two_files/figure-latex/""kj-7.2-ex3-1".pdf>
+
+Package xcolor Warning: Incompatible color definition on input line 467.
+
+
+Package xcolor Warning: Incompatible color definition on input line 477.
+
+
+Package xcolor Warning: Incompatible color definition on input line 477.
+
 [7
 
-]
+] [8]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 473.
+(hyperref)                than one, level fixed on input line 511.
 
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 473.
+(hyperref)                be the same. Added a new anchor on input line 511.
 
-[8
+[9
 
-] [9]
+] [10]
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 516.
+(hyperref)                be the same. Added a new anchor on input line 554.
 
-[10
+[11
 
-] [11
+] [12
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 523.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 523.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 561.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 561.
 (./Homework-Two.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 523.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 523.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 561.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 561.
 Package rerunfilecheck Info: File `Homework-Two.out' has not changed.
 (rerunfilecheck)             Checksum: C05BA7425D31F6676F8488E5BD5F280D.
  ) 
@@ -1585,4 +1612,4 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  59i,11n,116p,809b,491s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Homework-Two.pdf (12 pages).
+Output written on Homework-Two.pdf (13 pages).
