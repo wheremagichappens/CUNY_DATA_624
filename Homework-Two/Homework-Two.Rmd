@@ -118,11 +118,11 @@ Plt_CMP.test.obs_vs_pred
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
 
+VarImp allows us to identify the variables by name and compute their importance. `ManufacturingProcess32` was flagged as the most important predictor overall and within the group of other Manufacturing Process variables. `BiologicalMaterial06` ranked second and was the most important variable within the BiologicalMaterial group. The variable importance rankings are mixed with `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Bio")) %>% nrow()` variables belonging to Biology and `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Manufacturing")) %>% nrow()` Manufacturing Process variables within the top 15 predictors. 
+
 ```{r kj-6.3e}
 Plt_CMP.pls.imp
 ```
-
-VarImp allows us to identify the variables by name and compute their importance. `ManufacturingProcess32` was flagged as the most important predictor overall and within the group of other Manufacturing Process variables. `BiologicalMaterial06` ranked second and was the most important variable within the BiologicalMaterial group. The variable importance rankings are mixed with `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Bio")) %>% nrow()` variables belonging to Biology and `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Manufacturing")) %>% nrow()` by Manufacturing Process within the top $15$ predictors. 
 
 \begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 \end{subquestion}
@@ -149,29 +149,32 @@ CMP_DF.corr.tbl %>% kable(caption="Variable Correlation with Yield", booktabs=T)
 
 \begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
 
-```{r kj-7.2-ex1}
-# The package `mlbench` contains a function called `mlbench.friedman1` 
-# that simulates these data:
+The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:
+
+```{r kj-7.2-ex1, echo=T, eval=F}
 set.seed(200) 
 trainingData <- mlbench.friedman1(200, sd = 1)
-## We convert the 'x' data from a matrix to a data frame 
-## One reason is that this will give the columns names.
+```
+
+We convert the 'x' data from a matrix to a data frame. One reason is that this will give the columns names. This creates a list with a vector 'y' and a matrix of predictors 'x'. Also simulate a large test set to estimate the true error rate with good precision:
+
+```{r kj-7.2-ex2, echo=T, eval=F}
 trainingData$x <- data.frame(trainingData$x) 
-## Look at the data using 
-featurePlot(trainingData$x, trainingData$y) 
-## or other methods. 
-## This creates a list with a vector 'y' and a matrix 
-## of predictors 'x'. Also simulate a large test set to 
-## estimate the true error rate with good precision: 
 testData <- mlbench.friedman1(5000, sd = 1)
 testData$x <- data.frame(testData$x) 
+```
+
+Using ggplots, we can look at a feature plot of the simulated data:
+
+```{r kj-7.2-ex3, echo=F}
+Plt_Sim.featurePlot
 ```
 
 
 \begin{subquestion}{(a).} Tune several models on these data. For example: 
 \end{subquestion}
 
-```{r kj-7.2-ex2, eval=F}
+```{r kj-7.2-ex4, echo=T, eval=F}
 knnModel <- train(x = trainingData$x,
                   y = trainingData$y, 
                   method = "knn",
