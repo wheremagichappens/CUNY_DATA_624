@@ -248,7 +248,7 @@ bagged regression and least square method better.
 
 The final version of report will contain all of our approaches with
 results of \texttt{MAPE} for each model with detailed explanation of
-why/what/how each model of choice was constructed.
+why/what/how each model of choice was chosen.
 
 \chapter{Data Exploration}\label{data-exploration}
 
@@ -397,8 +397,8 @@ D & 615\\
 \subsection{Missing data}\label{missing-data}
 
 With the help of visualization, it is easier to navigate how much each
-variable is missing. Note that \texttt{MFR} is the most missing
-variable.
+variable is missing. Note that \texttt{MFR} has the most number of
+missing values.
 
 \begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
@@ -415,10 +415,11 @@ As we expected, there are many outliers in \texttt{Temperature} and
 presence of outliers.
 
 From the presence of multiple outliers, we then have to explain
-why/what/how we revise our initial model choice of \texttt{Bagged\ Tree}
-and apply necessary adjustment before applying \texttt{PLS}.
+why/what/how we decided to add \texttt{Random\ Forest} as an additional
+model and apply necessary pre-processing before modeling \texttt{PLS}
+and \texttt{Bagged\ Tree}.
 
-Ensembled model such as\texttt{Random\ Forest} is robust to outliers
+Ensembled model such as \texttt{Random\ Forest} is robust to outliers
 since only a subset of features are selected at random out of the total
 and the best split feature from the subset is used to split each node in
 a tree, unlike in bagging where all features are considered for
@@ -429,8 +430,9 @@ Partial least squares regression (PLS regression) is used as an
 alternative for ordinary least squares regression in the presence of
 multicollinearity. This does not mean, however, \texttt{PLS} is robust
 to outliers. Thus, we will use Blocked Adaptive
-Computationally-Efficient Outlier Nominators (\texttt{BACON}) to
-eliminate outliers and then apply \texttt{PLS}.
+Computationally-Efficient Outlier Nominators (\texttt{BACON}) before
+modeling relatively outlier sensitive models such as \texttt{PLS} and
+\texttt{Bagged\ Tree}.
 
 Reference:
 
@@ -446,9 +448,11 @@ resulting in a robust linear PLS.'' )
 
 \subsection{Bivariate relationships}\label{bivariate-relationships}
 
-Note that when \texttt{Oxygen\ Filler} has fairly positive relationship
-with \texttt{PH}, \texttt{Temparature} has negative relationship. We
-confirmed the relationships between predictors and target variable.
+Note that \texttt{Oxygen\ Filler} has weak positive relationship with
+\texttt{PH}. On the other hand, we know that \texttt{Temparature} has
+weak negative relationship with \texttt{PH}. All of the predictors have
+really weak relationship with \texttt{PH} suggesting that linear models
+might not work well.
 
 \begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
@@ -466,9 +470,9 @@ correlated with other combincations of predictors in variable
 importance. According to the reference, it may mislead business audience
 to think that some features are not more important than others
 vice-versa. However, we really do not know whether the reader of this
-paper would still treat highly correlated variable such as
-\texttt{HydPressure3} different from \texttt{HydPressure2} or not. Thus,
-we will just keep the variables as they are.
+paper would treat highly correlated variable such as
+\texttt{HydPressure3} and \texttt{HydPressure2} differently or not.
+Therefore, we will just keep the variables as they are.
 
 Reference:
 
@@ -491,8 +495,7 @@ Applied Predictive Modeling - Max KJ)
 
 Before modeling can be done, the issues identified during the data
 exploration, namely, zero variance predictors, outliers and missing data
-need to be addressed. For \texttt{BACON} (outlier handling method)
-approach, categorical variable needs to be converted to numeric.
+need to be addressed.
 
 \section{Imputation}\label{imputation}
 
@@ -504,21 +507,21 @@ will be imputed by mode. For \texttt{BACON} to work, we will also
 convert \texttt{Brand\ Code} to numeric.
 
 We will also remove zero variance Predictors using \texttt{nearZeroVar}.
-It diagnoses predictors that have one unique value (i.e.~are zero
-variance predictors) or predictors that are have both of the following
-characteristics: they have very few unique values relative to the number
-of samples and the ratio of the frequency of the most common value to
-the frequency of the second most common value is large.
+It diagnoses predictors that have one unique value or predictors that
+have both of the following characteristics: 1. they have very few unique
+values relative to the number of samples and 2. the ratio of the
+frequency of the most common value to the frequency of the second most
+common value is large.
 
-For outlier handling, \texttt{BACON} is used. \texttt{BACON}, short for
-`Blocked Adaptive Computationally-Efficient Outlier Nominators', is a
-somewhat robust algorithm (set), with an implementation for regression
-or multivariate covariance estimation. The function produces index with
-\texttt{TRUE} or \texttt{FALSE} to identify rows with outliers. This
-index will be used as \texttt{subset} to train outlier free train set in
-the process of hyper-parameter tuning in \texttt{train} function and
-train the final model using full train set without removing outliers
-after being applied with best hyper-parameters.
+For outlier handling, we will use \texttt{BACON}, short for `Blocked
+Adaptive Computationally-Efficient Outlier Nominators'. It is a somewhat
+robust algorithm (set), with an implementation for regression or
+multivariate covariance estimation. The function produces index with
+\texttt{FALSE} to identify rows with outliers. This index will be used
+as \texttt{subset} to fit outlier-free train \texttt{subset} in the
+process of hyper-parameter tuning in \texttt{train} function and
+re-train the final model using full train set (with no outliers) with
+best tuned hyperparameters.
 
 \chapter{Modeling}\label{modeling}
 
@@ -544,7 +547,7 @@ BACON}\label{model-1-bagged-tree-with-bacon}
 MAPE is 0.0106783 where as top 3 important predictors are
 \texttt{CarbRel}, \texttt{OxygenFiler} and \texttt{Usuagecont}. Since
 \texttt{Bagged\ Tree} uses all features for splitting a node Unlike
-\texttt{Random\ Forest} which uses only a subset of features at random
+\texttt{Random\ Forest}, which uses only a subset of features at random
 out of the total for splitting each node in a tree, the order of feature
 importances between two models can be quite different.
 
@@ -566,19 +569,18 @@ importances between two models can be quite different.
 
 \begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-13-1} \end{center}
 
-The final value used for the model was ncomp = 10. MAPE is 0.0123968,
-0.0123968, 0.0123968, 0.0123968, 0.0123968, 0.0123968, 0.0123968,
-0.0123968, 0.0123968, 0.0123968 where as top 3 important predictors are
-\texttt{MnfFlow}, \texttt{Usuagecont} and \texttt{BowlSetpoint}. The
-order of variable importance, again, is quite different from
-\texttt{Bagged\ Tree} as \texttt{PLS} is not a tree-based model. Note
-that PLS is a dimension reduction technique with some similarity to
-principal component analysis. The predictor variables are mapped to a
-smaller set of variables and within that smaller space we perform a
-regression against the outcome variable. In contrast to principal
-component analysis where the dimension reduction ignores the outcome
-variable, the \texttt{PLS} procedure aims to choose new mapped variables
-that maximally explain the outcome variable.
+The final value used for the model was ncomp = 10. MAPE is 0.0123968
+where as top 3 important predictors are \texttt{MnfFlow},
+\texttt{Usuagecont} and \texttt{BowlSetpoint}. The order of variable
+importance, again, is quite different from \texttt{Bagged\ Tree} as
+\texttt{PLS} is not a tree-based model. Note that PLS is a dimension
+reduction technique with some similarity to principal component
+analysis. The predictor variables are mapped to a smaller set of
+variables and within that smaller space we perform a regression against
+the outcome variable. In contrast to principal component analysis where
+the dimension reduction ignores the outcome variable, the \texttt{PLS}
+procedure aims to choose new mapped variables that maximally explain the
+outcome variable.
 
 \section{Model 3: Random Forest with original data
 set}\label{model-3-random-forest-with-original-data-set}
@@ -599,8 +601,8 @@ set}\label{model-3-random-forest-with-original-data-set}
 
 \begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-15-1} \end{center}
 
-The final value used for the model was ncomp = 10. MAPE is 0.0081279
-where as top 3 important predictors are \texttt{MnfFlow},
+The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is
+0.0081279 where as top 3 important predictors are \texttt{MnfFlow},
 \texttt{BrandCode} and \texttt{PressureVacuum} for \%incMSE and
 \texttt{MnfFlow}, \texttt{BrandCode} and \texttt{OxygenFiller} for
 IncNodePurity. Unlike \texttt{PLS}, \texttt{Random\ Forest} can produce
@@ -695,14 +697,12 @@ model) on \texttt{StudentEvaluation} as CSV file.
 \KeywordTok{library}\NormalTok{(ggcorrplot)     }\CommentTok{# Vis corr matrix}
 \KeywordTok{library}\NormalTok{(e1071)          }\CommentTok{# Misc stats functions}
 
-\NormalTok{df <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{'C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentData.xlsx'}\NormalTok{)}
-\NormalTok{df_eval <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{'C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentEvaluation.xlsx'}\NormalTok{)}
-\NormalTok{dict <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{'C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/DataDictionary.xlsx'}\NormalTok{)}
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx'}\NormalTok{)}
+\NormalTok{df_eval <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx'}\NormalTok{)}
+\NormalTok{dict <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Project_Two/data/DataDictionary.xlsx'}\NormalTok{)}
 
 \CommentTok{# remove space in-between variable names}
 \KeywordTok{colnames}\NormalTok{(df) <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{" "}\NormalTok{,}\StringTok{""}\NormalTok{,}\KeywordTok{colnames}\NormalTok{(df))}
-
-\CommentTok{# Introduction \{-#intro\}}
 
 \CommentTok{# Data Exploration }
 \NormalTok{## Data dictionary}
