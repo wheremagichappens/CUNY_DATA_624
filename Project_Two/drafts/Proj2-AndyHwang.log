@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.26)  26 NOV 2019 12:20
+This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.26)  26 NOV 2019 13:01
 entering extended mode
 **./Proj2-AndyHwang.tex
 (Proj2-AndyHwang.tex
@@ -1657,7 +1657,7 @@ Package hyperref Warning: The anchor of a bookmark and its parent's must not
 Chapter 3.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 529.
+(hyperref)                be the same. Added a new anchor on input line 528.
 
 [8]
 File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-12-1".pdf Graphic fil
@@ -1688,122 +1688,122 @@ e (type pdf)
 <use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-4".pdf>
 [13]
 
-Package xcolor Warning: Incompatible color definition on input line 678.
+Package xcolor Warning: Incompatible color definition on input line 677.
 
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 680.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 679.
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
+
+
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 [14]
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 [15]
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 [16]
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 [17]
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 [18]
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1034
+Underfull \vbox (badness 10000) detected at line 1033
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 [19]
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1034.
+Package xcolor Warning: Incompatible color definition on input line 1033.
 
 [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1037.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1037.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1036.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1036.
 (Proj2-AndyHwang.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1037.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1037.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1036.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1036.
 
 Package rerunfilecheck Info: File `Proj2-AndyHwang.out' has not changed.
 (rerunfilecheck)             Checksum: FE7C3C73E26E483A9A0336C29CB59D66.

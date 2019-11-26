@@ -520,8 +520,7 @@ multivariate covariance estimation. The function produces index with
 \texttt{FALSE} to identify rows with outliers. This index will be used
 as \texttt{subset} to fit outlier-free train \texttt{subset} in the
 process of hyper-parameter tuning in \texttt{train} function and
-re-train the final model using full train set (with no outliers) with
-best tuned hyperparameters.
+re-train the final model with best tuned hyperparameters.
 
 \chapter{Modeling}\label{modeling}
 
@@ -546,8 +545,8 @@ BACON}\label{model-1-bagged-tree-with-bacon}
 
 MAPE is 0.0106783 where as top 3 important predictors are
 \texttt{CarbRel}, \texttt{OxygenFiler} and \texttt{Usuagecont}. Since
-\texttt{Bagged\ Tree} uses all features for splitting a node Unlike
-\texttt{Random\ Forest}, which uses only a subset of features at random
+\texttt{Bagged\ Tree} uses all features for splitting a node unlike
+\texttt{Random\ Forest} which uses only a subset of features at random
 out of the total for splitting each node in a tree, the order of feature
 importances between two models can be quite different.
 
