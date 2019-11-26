@@ -43,8 +43,11 @@ library(e1071)          # Misc stats functions
 
 ```{r, echo=F}
 df <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentData.xlsx')
+#df <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx')
 df_eval <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentEvaluation.xlsx')
+#df_eval <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx')
 dict <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/DataDictionary.xlsx')
+#dict <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/DataDictionary.xlsx')
 
 # remove space in-between variable names
 colnames(df) <- gsub(" ","",colnames(df))
@@ -63,7 +66,7 @@ As a group project, each member of the group is responsible for creating their o
 
 Explaining why some necessary steps were applied before modeling and model A was preferred to Model B is often a topic in academic papers which is a meaningful topic that helps audience learn the concept of bagged regression and least square method better. 
 
-The final version of report will contain all of our approaches with results of `MAPE` for each model with detailed explanation of why/what/how each model of choice was constructed.
+The final version of report will contain all of our approaches with results of `MAPE` for each model with detailed explanation of why/what/how each model of choice was chosen.
 
 # Data Exploration 
 
@@ -119,7 +122,7 @@ table(df$`BrandCode`, useNA = "ifany")%>%kable(caption="Frequency distribution o
 
 ### Missing data
 
-With the help of visualization, it is easier to navigate how much each variable is missing. Note that `MFR` is the most missing variable.
+With the help of visualization, it is easier to navigate how much each variable is missing. Note that `MFR` has the most number of missing values.
 
 ```{r, fig.align='center', warning=FALSE, fig.height=6, cache=T, echo=F}
 dfSumTrain %>% 
@@ -159,11 +162,11 @@ df %>%
 
 As we expected, there are many outliers in `Temperature` and `Oxygen Filler`. Note that `MFR` greatly suffers from the presence of outliers.
 
-From the presence of multiple outliers, we then have to explain why/what/how we revise our initial model choice of `Bagged Tree` and apply necessary adjustment before applying `PLS`.
+From the presence of multiple outliers, we then have to explain why/what/how we decided to add `Random Forest` as an additional model and apply necessary pre-processing before modeling `PLS` and `Bagged Tree`.
 
-Ensembled model such as`Random Forest` is robust to outliers since only a subset of features are selected at random out of the total and the best split feature from the subset is used to split each node in a tree, unlike in bagging where all features are considered for splitting a node and this makes `Random Forest` a good altrenative for `Bagged Tree`.
+Ensembled model such as `Random Forest` is robust to outliers since only a subset of features are selected at random out of the total and the best split feature from the subset is used to split each node in a tree, unlike in bagging where all features are considered for splitting a node and this makes `Random Forest` a good altrenative for `Bagged Tree`.
 
-Partial least squares regression (PLS regression) is used as an alternative for ordinary least squares regression in the presence of multicollinearity. This does not mean, however, `PLS` is robust to outliers. Thus, we will use Blocked Adaptive Computationally-Efficient Outlier Nominators (`BACON`) to eliminate outliers and then apply `PLS`.
+Partial least squares regression (PLS regression) is used as an alternative for ordinary least squares regression in the presence of multicollinearity. This does not mean, however, `PLS` is robust to outliers. Thus, we will use Blocked Adaptive Computationally-Efficient Outlier Nominators (`BACON`) before modeling relatively outlier sensitive models such as `PLS` and `Bagged Tree`.
 
 Reference:
 
@@ -188,7 +191,7 @@ df %>%
 
 ### Bivariate relationships 
 
-Note that when `Oxygen Filler` has fairly positive relationship with `PH`, `Temparature` has negative relationship. We confirmed the relationships between predictors and target variable.
+Note that `Oxygen Filler` has weak positive relationship with `PH`. On the other hand, we  know that `Temparature` has weak negative relationship with `PH`. All of the predictors have really weak relationship with `PH` suggesting that linear models might not work well.
 
 ```{r, fig.align='center', warning=FALSE, fig.height=6, cache=T, echo=F}
 df %>% 
@@ -206,7 +209,7 @@ df %>%
 
 ### Correlation Matrix
 
-We confirmed that there are several highly correlated predictors. This is another reason why `Random Forest` would be more preferred to `Bagged Tree` model. In fact, `Random Forest` is more robust to strong correlation than `Bagged Tree`. Although multicollinearity is not a big problem for for `PLS` and `Random Forest`, it can cause some problem when it comes to inferring the importance of certain predictors in tree model. Multicollinearity means that some predictors are shown as highly correlated with other combincations of predictors in variable importance. According to the reference, it may mislead business audience to think that some features are not more important than others vice-versa. However, we really do not know whether the reader of this paper would still treat highly correlated variable such as `HydPressure3` different from `HydPressure2` or not. Thus, we will just keep the variables as they are.
+We confirmed that there are several highly correlated predictors. This is another reason why `Random Forest` would be more preferred to `Bagged Tree` model. In fact, `Random Forest` is more robust to strong correlation than `Bagged Tree`. Although multicollinearity is not a big problem for for `PLS` and `Random Forest`, it can cause some problem when it comes to inferring the importance of certain predictors in tree model. Multicollinearity means that some predictors are shown as highly correlated with other combincations of predictors in variable importance. According to the reference, it may mislead business audience to think that some features are not more important than others vice-versa. However, we really do not know whether the reader of this paper would treat highly correlated variable such as `HydPressure3` and `HydPressure2` differently or not. Therefore, we will just keep the variables as they are.
 
 Reference:
 
@@ -220,7 +223,7 @@ have likely been used twice in the tree, therefore inflating its importance
 value. Instead, including both surface area predictors in the data causes their
 importance to have only moderate values." Page 181 of Applied Predictive Modeling - Max KJ)
 
-```{r, fig.align='center', warning=FALSE, fig.height=6, echo=F}
+```{r, fig.align='center', warning=FALSE, fig.height=8, echo=F}
 # Calculate pairwise pearson correlation and display as upper matrix plot
 df %>% 
   # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
@@ -232,16 +235,15 @@ df %>%
 
 # Data preparation
 
-Before modeling can be done, the issues identified during the data exploration, namely, zero variance predictors, outliers and missing data need to be addressed. For `BACON` (outlier handling method) approach, categorical variable needs to be converted to numeric.
+Before modeling can be done, the issues identified during the data exploration, namely, zero variance predictors, outliers and missing data need to be addressed.
 
 ## Imputation
 
 After reviewing a few methods of multiple imputation techniques, Multiple Imputation Chained Equations (MICE) was selected for its strength in handling imputation for observations with more than one predictor missing. For categorical variable such as `Brand Code` will be imputed by mode. For `BACON` to work, we will also convert `Brand Code` to numeric.
 
-We will also remove zero variance Predictors using `nearZeroVar`.
-It diagnoses predictors that have one unique value (i.e. are zero variance predictors) or predictors that are have both of the following characteristics: they have very few unique values relative to the number of samples and the ratio of the frequency of the most common value to the frequency of the second most common value is large.
+We will also remove zero variance Predictors using `nearZeroVar`. It diagnoses predictors that have one unique value or predictors that have both of the following characteristics: 1. they have very few unique values relative to the number of samples and 2. the ratio of the frequency of the most common value to the frequency of the second most common value is large.
 
-For outlier handling, `BACON` is used. `BACON`, short for 'Blocked Adaptive Computationally-Efficient Outlier Nominators', is a somewhat robust algorithm (set), with an implementation for regression or multivariate covariance estimation. The function produces index with `TRUE` or `FALSE` to identify rows with outliers. This index will be used as `subset` to train outlier free train set in the process of hyper-parameter tuning in `train` function and train the final model using full train set without removing outliers after being applied with best hyper-parameters.  
+For outlier handling, we will use `BACON`, short for 'Blocked Adaptive Computationally-Efficient Outlier Nominators'. It is a somewhat robust algorithm (set), with an implementation for regression or multivariate covariance estimation. The function produces index with `FALSE` to identify rows with outliers. This index will be used as `subset` to fit outlier-free train `subset` in the process of hyper-parameter tuning in `train` function and re-train the final model using full train set (with no outliers) with best tuned hyperparameters.  
 
 ```{r, cache=T, results = 'hide', warning=F, message=F, echo=F}
 # set seed for split to allow for reproducibility
@@ -305,7 +307,7 @@ bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree wit
 # plot varImp
 plot(varImp(bagged_model))
 ```
-MAPE is `r bagged_model$results$MAPE` where as top 3 important predictors are `CarbRel`, `OxygenFiler` and `Usuagecont`. Since `Bagged Tree` uses all features for splitting a node Unlike `Random Forest` which uses only a subset of features at random out of the total for splitting each node in a tree, the order of feature importances between two models can be quite different.
+MAPE is `r bagged_model$results$MAPE` where as top 3 important predictors are `CarbRel`, `OxygenFiler` and `Usuagecont`. Since `Bagged Tree` uses all features for splitting a node Unlike `Random Forest`, which uses only a subset of features at random out of the total for splitting each node in a tree, the order of feature importances between two models can be quite different.
 
 ## Model 2: PLS with BACON
 
@@ -328,7 +330,7 @@ pls_model$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS with BACON",
 plot(varImp(pls_model))
 ```
 
-The final value used for the model was ncomp = 10. MAPE is `r pls_model$results$MAPE` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. The order of variable importance, again, is quite different from `Bagged Tree` as `PLS` is not a tree-based model. Note that PLS is a dimension reduction technique with some similarity to principal component analysis. The predictor variables are mapped to a smaller set of variables and within that smaller space we perform a regression against the outcome variable.  In contrast to principal component analysis where the dimension reduction ignores the outcome variable, the `PLS` procedure aims to choose new mapped variables that maximally explain the outcome variable. 
+The final value used for the model was ncomp = 10. MAPE is `r pls_model$results$MAPE[10]` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. The order of variable importance, again, is quite different from `Bagged Tree` as `PLS` is not a tree-based model. Note that PLS is a dimension reduction technique with some similarity to principal component analysis. The predictor variables are mapped to a smaller set of variables and within that smaller space we perform a regression against the outcome variable.  In contrast to principal component analysis where the dimension reduction ignores the outcome variable, the `PLS` procedure aims to choose new mapped variables that maximally explain the outcome variable. 
 
 ```{r, cache=T, echo=F}
 ## Model 3-1: Random Forest with BACON
@@ -378,7 +380,7 @@ s%>%kable(caption="Model Summary - RF with original data set", booktabs=T)%>%kab
 varImpPlot(rf_model2)
 ```
 
-The final value used for the model was ncomp = 10. MAPE is `r s$MAPE` where as top 3 important predictors are `MnfFlow`, `BrandCode` and `PressureVacuum` for %incMSE and `MnfFlow`, `BrandCode` and `OxygenFiller` for IncNodePurity. Unlike `PLS`, `Random Forest` can produce 2 different variable importance plots. 
+The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is `r s$MAPE` where as top 3 important predictors are `MnfFlow`, `BrandCode` and `PressureVacuum` for %incMSE and `MnfFlow`, `BrandCode` and `OxygenFiller` for IncNodePurity. Unlike `PLS`, `Random Forest` can produce 2 different variable importance plots. 
 
 The first graph shows that if a variable is assigned values by random permutation by how much will the MSE increase. The second plot is based on `node purity` which is measured by `Gini Index` and it is the the difference between RSS before and after the split on that variable.
 In short, each graph shows how much MSE or Impurity increases when each variable is randomly permuted.
@@ -515,14 +517,12 @@ library(robustX)        # BACON
 library(ggcorrplot)     # Vis corr matrix
 library(e1071)          # Misc stats functions
 
-df <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentData.xlsx')
-df_eval <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentEvaluation.xlsx')
-dict <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/DataDictionary.xlsx')
+df <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx')
+df_eval <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx')
+dict <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/DataDictionary.xlsx')
 
 # remove space in-between variable names
 colnames(df) <- gsub(" ","",colnames(df))
-
-# Introduction {-#intro}
 
 # Data Exploration 
 ## Data dictionary

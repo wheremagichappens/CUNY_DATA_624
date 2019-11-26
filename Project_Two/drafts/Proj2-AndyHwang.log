@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.26)  26 NOV 2019 01:57
+This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.26)  26 NOV 2019 11:53
 entering extended mode
 **./Proj2-AndyHwang.tex
 (Proj2-AndyHwang.tex
@@ -1652,12 +1652,12 @@ e (type pdf)
 Chapter 2.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 497.
+(hyperref)                be the same. Added a new anchor on input line 500.
 
 Chapter 3.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 526.
+(hyperref)                be the same. Added a new anchor on input line 529.
 
 [8]
 File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-12-1".pdf Graphic fil
@@ -1688,10 +1688,10 @@ e (type pdf)
 <use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-4".pdf>
 [13]
 
-Package xcolor Warning: Incompatible color definition on input line 676.
+Package xcolor Warning: Incompatible color definition on input line 678.
 
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 678.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 680.
 
 Package xcolor Warning: Incompatible color definition on input line 1033.
 
@@ -1811,7 +1811,7 @@ Package rerunfilecheck Info: File `Proj2-AndyHwang.out' has not changed.
 Here is how much of TeX's memory you used:
  38195 strings out of 427243
  723973 string characters out of 3141308
- 927011 words of memory out of 3000000
+ 926972 words of memory out of 3000000
  42197 multiletter control sequences out of 15000+200000
  553310 words of font info for 81 fonts, out of 3000000 for 9000
  1348 hyphenation exceptions out of 8191
