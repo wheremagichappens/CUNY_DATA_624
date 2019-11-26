@@ -1,0 +1,267 @@
+---
+  title: "hw#6.data624"
+  author: "Sang Yoon (Andy) Hwang"
+  date: "October 7th, 2019"
+  output:
+  pdf_document: default
+---
+  
+# 8.11 Exercises
+  
+# 8.1 Figure 8.31 shows the ACFs for 36 random numbers, 360 random numbers and 1,000 random numbers
+```{r, include=FALSE}
+library(fpp2)
+library(forecast)
+```
+# a. Explain the differences among these figures. Do they all indicate that the data are white noise?
+
+Note: Conditions for being white noise (at least 1 condition should be met)
+
+1. one or more large spikes are not outside these bounds (CI - 95%)
+2. substantially less than 5% of spikes are outside these bounds
+
+
+The X1 might not be white noise (lags are autocorrelated) given that large spike at 12 seems to go over the 95% CI. However, this is border line issue so we may have to rely on Box-LJung test to figure out whether p-value is less than 0.05 or not. 
+
+The x2 also might not be white noise given that relatively large spikes at lag 2 and lag 6 go over the CI but again, Box-LJung test is required to confirm this.
+
+The x3 looks to be white noise since all lags are within CI and no one or more large spikes are outside CIs. However, we can see that spike at large 20 is on the borderline so we are not 100% sure. Box-LJung test is required once again.
+
+However, it is 100% certain that all of these data do not have more than 5% of spikes going over the CIs which means the 2nd condition for being white noise is satisfied; but 1st condition which is about one or more large spike going over the CIs might not be identified visually so Box-LJung test is required to test validity of white noise to make sure if 1st condition is satisfied.
+
+
+# b. Why are the critical values at different distances from the mean of zero? Why are the autocorrelations different in each figure when they each refer to white noise?
+
+The critical values at different distances are from the mean of zero since we expect each autocorrelation to be close to zero for white noise series. If lag deviates from mean of zero and go over the CIs, it might indicate the data is autocorrelated (not white noise). 
+
+The autocorrelations are different in each figure since the size of the data for each figure is different. (in fact, the formula for CI is +-2/sqrt(N) given N = sample size) The bigger the N, sample size, the narrower the bounds. It looks like the fluctuation of spikes for each lag tends to become smaller as the size of the data increases.
+
+# 8.2. A classic example of a non-stationary series is the daily closing IBM stock price series (data set `ibmclose`). Use R to plot the daily closing prices for IBM stock and the ACF and PACF. Explain how each plot shows that the series is non-stationary and should be differenced.
+
+ggAcf shows that 2 conditions for being white noise are not satisfied. ggPacf shows that 1st condition is not satisfied, which is enough to say that data is not white noise (not stationary).
+```{r}
+autoplot(ibmclose) # + autolayer(ibmclose)
+ggAcf(ibmclose)
+ggPacf(ibmclose)
+
+
+Box.test(ibmclose, type = c("Ljung-Box"))
+
+```
+# 8.6. Use R to simulate and plot some data from simple ARIMA models.
+# a. Use the following R code to generate data from an AR(1) model with o1 = 0.6 and var = 1. The process starts with y1 = 0.
+
+Data sets are generated from following codes.
+```{r}
+y <- ts(numeric(100))
+e <- rnorm(100)
+for(i in 2:100)
+  y[i] <- 0.6*y[i-1] + e[i]
+
+y
+```
+# b. Produce a time plot for the series. How does the plot change as you change o1?
+
+Given that these conditions always hold for AR(1) model:
+1. When o1 = 0, yt is white noise
+2. 01 = 1 and c = 0, yt is random walk
+3. 01 = 1 and c != 0, yt is random walk with drift
+4. when 01 < 0, yt tends to oscillate around the mean
+
+Normally, we restrict AR(1) to stationary data:
+1. For AR(1): -1 < o1 < 1
+
+As you can see, as parameter approches to 0, yt tends to revolves around 0; yt is white noise. As parameter approaches to 1, yt tends become random walk.
+
+Mathematically, this is making sense. Intuitively, when o1 = 0, the equation becomes yt = e indicating yt is indeed white noise (error term is the only variable to predict yt). It is apparent from ggAcf(y2) and autoplot(y2) that the series has no particular seasonality or trend and all of spikes are within CIs.
+
+When o1 = 1, the equation becomes yt = yt-1 + e, hence, given that y't = yt - yt-1, it is true that y't = yt - yt-1 = e indicating that the first order differencing (the change between consecutive observations) is equal to error term, given that the differenced series is white noise (e). It is apparent from ggAcf(y3) and autoplot(y3) that the series has long periods of apparent trends up or down as well as sudden and unpredictable changes in direction. 
+```{r}
+# 0.6
+autoplot(y)
+
+# lower - 0.5
+y2 <- ts(numeric(100))
+e2 <- rnorm(100)
+for(i in 2:100)
+  y2[i] <- 0.5*y2[i-1] + e2[i]
+
+autoplot(y2)
+
+# 0.3
+for(i in 2:100)
+  y2[i] <- 0.3*y2[i-1] + e2[i]
+
+autoplot(y2)
+
+# 0
+for(i in 2:100)
+  y2[i] <- 0*y2[i-1] + e2[i]
+
+# param = 0 graphs
+autoplot(y2)
+ggAcf(y2)
+
+
+# higher - 0.7
+y3 <- ts(numeric(100))
+e3 <- rnorm(100)
+for(i in 2:100)
+  y3[i] <- 0.7*y3[i-1] + e3[i]
+
+autoplot(y3)
+
+# higher - 0.8
+for(i in 2:100)
+  y3[i] <- 0.8*y3[i-1] + e3[i]
+
+autoplot(y3)
+
+# higher - 1
+for(i in 2:100)
+  y3[i] <- 1*y3[i-1] + e3[i]
+
+# param = 1 graphs
+autoplot(y3)
+ggAcf(y3)
+```
+# c. Write your own code to generate data from an MA(1) model with theta_1 = 0.6 and var = 1.
+
+The plot below shows the timeseries graph.
+```{r}
+#ma.sim <- arima.sim(model=list(ma=c(0.6)),n=100)
+
+## list description for AR(1) model with small coef
+AR.pos <- list(order=c(1,0,0), ar=0.6, sd=1)
+ma.sim <- arima.sim(n=100, model=AR.pos)
+autoplot(ma.sim)
+```
+# d. Produce a time plot for the series. How does the plot change as you change theta_1?
+
+As theta_1 increases, the series becoming more and more non-stationary. I can see cleary trends in 0.95 compared to 0.05. 
+```{r}
+## set up plot region
+par(mfrow=c(3,3))
+## loop over orders of q
+for(q in c(0.05, 0.1,0.3,0.7,0.8, 0.95)) {
+  AR.pos <- list(order=c(1,0,0), ar=q, sd=1)
+  ma.sim <- arima.sim(n=100, model=AR.pos)
+  
+  plot.ts(ma.sim, ylab=paste("parameter(",q,")",sep=""))
+  acf(ma.sim)
+  pacf(ma.sim)
+}
+
+```
+# e. Generate data from an ARMA(1,1) model with para1 = 0.6, theta_1 = 0.6, var = 1
+
+The random data is generated.
+```{r}
+arma.pos <- list(order=c(1,0,1), ar=0.6, ma=0.6, sd=1)
+arma.sim <- arima.sim(n=100, model=arma.pos)
+Arima(arma.sim)
+
+Box.test(arma.sim, type = c("Ljung-Box"))
+```
+# f. Generate data from an AR(2) model with para1 = - 0.8, para2 = 0.3 and var = 1. (Note that these parameters will give a non-stationary series.)
+
+The data is generated.
+```{r}
+#ar.pos <- list(order=c(2,0,0), ar=c(-0.8, 0.3),  sd=1)
+#ar.sim <- arima.sim(n=100, model=ar.pos)
+#Arima(ar.sim )
+
+y <- ts(numeric(100))
+e <- rnorm(100)
+
+for(i in 3:100)
+  y[i] <- (-0.8*y[i-1] + 0.3*y[i-2] + e[i])
+
+head(y)
+```
+# g. Graph the latter two series and compare them.
+
+For ARMA(1,1), data keeps revolving around the mean till the end of the period (stationary) where as AR(2) shows that data tends to fluctuate with strong cyclic pattern near the end. (non-stationary) 
+```{r}
+autoplot(arma.sim)
+autoplot(y)
+```
+# 8.8. Consider `austa`, the total international visitors to Australia (in millions) for the period 1980-2015.
+# a. Use `auto.arima()` to find an appropriate ARIMA model. What model was selected. Check that the residuals look like white noise. Plot forecasts for the next 10 periods.
+
+ARIMa(0,1,1) with drift was selected. 
+
+Ljung-Box test suggests we fail to reject null hypothesis of residuals being white noise, (the residuals have constant variance). The residuals also look normally distributed. 
+
+Thus, we can conclude that our model can forecast reliably.
+
+The forecast plot shows that there will be upward trend in the next 10 periods.
+```{r}
+model <- auto.arima(austa)
+checkresiduals(model)
+pred <- forecast(model, h = 10)
+autoplot(pred)
+summary(pred)
+```
+# b. Plot forecasts from an ARIMA(0,1,1) model with no drift and compare these to part a. Remove the MA term and plot again.
+
+Ljung-Box test for both models suggests we fail to reject null hypothesis of residuals being white noise, (the residuals have constant variance). The residuals also look normally distributed. 
+
+Thus, we can conclude that our models can forecast reliably.
+
+The forecast plot in b. shows that there will be a flat trend in the next 10 periods, which is different from a. where there was increasing trend.
+```{r}
+model2 <- Arima(austa, order = c(0,1,1), include.drift = FALSE)
+checkresiduals(model2)
+pred2 <- forecast(model2, h = 10)
+autoplot(pred2)
+summary(pred2)
+
+model3 <- Arima(austa, order = c(0,1,0), include.drift = FALSE)
+checkresiduals(model3)
+pred3 <- forecast(model3, h = 10)
+autoplot(pred3)
+summary(pred3)
+```
+# c. Plot forecasts from an ARIMA(2,1,3) model with drift. Remove the constant and see what happens.
+
+Given that d > 0 already, constant is omitted from the beginning but I applied it anyway. Method needs to be changed to Maximum-likelihood or CSS. Otherwise, Arima() gives you an error message. 
+```{r}
+model4 <- Arima(austa, order = c(2,1,3), include.constant = FALSE, method = 'CSS')
+checkresiduals(model4)
+pred4 <- forecast(model4, h = 10)
+autoplot(pred4)
+summary(pred4)
+
+model4 <- Arima(austa, order = c(2,1,3), include.constant = FALSE, method = 'ML')
+checkresiduals(model4)
+pred4 <- forecast(model4, h = 10)
+autoplot(pred4)
+summary(pred4)
+```
+# d. Plot forecasts from an ARIMA(0,0,1) model with a constant. Remove the MA term and plot again.
+
+Note that both of them have residuals that does not resemble white noise series. Residuals do not have normally distributed shape. Both constant variance and nomarlity assumptions are not met and hence the models are not reliable in prediction. Note that in 0,0,0, point forecast starts in flat trend where as 0,0,1 becomes flat trend at h > 1.
+```{r}
+model5 <- Arima(austa, order = c(0,0,1), include.constant = TRUE)
+checkresiduals(model5)
+pred5 <- forecast(model5, h = 10)
+autoplot(pred5)
+summary(pred5)
+
+model6 <- Arima(austa, order = c(0,0,0), include.constant = TRUE)
+checkresiduals(model6)
+pred6 <- forecast(model6, h = 10)
+autoplot(pred6)
+summary(pred6)
+```
+# e. Plot forecasts from an ARIMA(0,2,1) model with no constant.
+
+Ljung-Box test confirms residuals are white noise and therefore, model is a reliable predictor. Note that for this model has an increasing trend in forecast.
+```{r}
+model7 <- Arima(austa, order = c(0,2,1), include.constant = FALSE)
+checkresiduals(model7)
+pred7 <- forecast(model7, h = 10)
+autoplot(pred7)
+summary(pred7)
+```

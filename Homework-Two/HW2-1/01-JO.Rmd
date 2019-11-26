@@ -1,0 +1,285 @@
+---
+title: "Homework Part Two"
+subtitle: "Assignment 1: KJ 6.3"
+author: "Jeremy O'Brien"
+date: "10/23/19"
+output: 
+  pdf_document
+---
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINESa
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Homework-Two/defaults.R')
+```
+
+```{r libraries, echo=T}
+# General
+library('easypackages')
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')
+
+# Manipulation and modeling libraries
+libraries('tidyverse', 'caret', 'RANN', 'mice', 'MASS')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+
+#Data libraries
+libraries('AppliedPredictiveModeling')
+```
+
+## (1) Kuhn & Johnson 6.3
+
+
+> A chemical manufacturing process for a pharmaceutical product was discussed in Sect.1.4. In this problem, the objective is to understand the relationship between biological measurements of the raw materials (predictors), measurements of the manufacturing process (predictors), and the response of product yield. Biological predictors cannot be changed but can be used to assess the quality of the raw material before processing. On the other hand, manufacturing process predictors can be changed in the manufacturing process. Improving product yield by 1% will boost revenue by approximately one hundred thousand dollars per batch:
+
+>> (a). Start R and use these commands to load the data:
+
+>> (b). A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8).
+
+```{r kj-6.3b}
+chem_data_NAs
+```
+
+Process 03, 11, and 10 are missing the most values.  We impute, but should check to see if that has any effects in summary statistics.
+
+```{r, eval=FALSE}
+chem_pred_imp
+```
+
+Using MICE to impute NAs minimally impacts contours of distribution for those predictors affected.
+
+>> (c). Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
+
+```{r kj-6.3c}
+chem_mod_elnet_bestperf
+```
+
+An elastic net model compromising between ridge and LASSO offers best performance as measured by RMSE with $\alpha = .55$ and $\lambda = .2145648$.
+
+>> (d). Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
+
+```{r kj-6.3d}
+str(chem_mod_elnet)
+
+chem_mod_elnet$bestTune$lambda
+chem_mod_elnet$bestTune$alpha
+
+chem_vals_elnet
+
+
+```
+
+Couldn't get code working in time.
+
+>> (e). Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
+
+```{r kj-6.3e}
+chem_varimp_plot
+```
+
+The most important predictors are those with the largest coefficients.  the `varImp` function returns a list of each feature's coefficient on an absolute vale scale of 1 to 0.  `Manufacturing Process 32` has the largest variable importance by far, followed by `17`, `09`, and `13`.  14 features have non-zerio variable importance; among them, `Biological Materials 06` and `03` are the only two biological materials features.
+
+
+>> (f). Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
+
+```{r kj-6.3f}
+# still troubleshooting code in appendix to generate multiple tables
+# code
+```
+
+This could help to identify which manufacturing processes are positively or negatively correlated with yield.  Decision-makers could then seek to improve those with negative correlations to minimize impact on yield, and would know to minimze effects on those with positive correlations.
+
+## Appendix
+
+```{r appendix, echo=TRUE, eval=FALSE}
+
+data(ChemicalManufacturingProcess)
+chem_data <- ChemicalManufacturingProcess
+
+# Calculcate and plot NAs by predictor
+chem_data_NAs <- chem_data %>% 
+  gather(key = 'key', value = 'value') %>% 
+  group_by(key) %>%
+  #summarize(count = sum(is.na(value)))
+  #arrange(desc(count))
+  dplyr::tally(is.na(value)) %>% 
+  filter(n > 0) %>% 
+  arrange(desc(n))
+
+
+chem_data_imppmm5 <- mice(chem_data, 
+                   m = 5,  # substantiate this
+                   maxit = 5,  # substantiate this
+                   method = 'pmm',  # using predictive mean matching to start
+                   printFlag = F,
+                   seed = 1234)
+
+chem_data_imp <- chem_data_imppmm5 %>% 
+  mice::complete()
+
+chem_pred_labels <- as.data.frame(c('ManufacturingProcess03',
+                                'ManufacturingProcess03 - Imputed',
+                                'ManufacturingProcess10',
+                                'ManufacturingProcess10 - Imputed',
+                                'ManufacturingProcess11',
+                                'ManufacturingProcess11 - Imputed')) %>% 
+  setNames(c('Predictor'))
+
+chem_pred_summaries <-
+  bind_rows(summary(chem_data$ManufacturingProcess03),
+            summary(chem_data_imp$ManufacturingProcess03),
+            summary(chem_data$ManufacturingProcess10),
+            summary(chem_data_imp$ManufacturingProcess10),
+            summary(chem_data$ManufacturingProcess11),
+            summary(chem_data_imp$ManufacturingProcess11))
+                                 
+
+chem_pred_imp <- 
+  bind_cols(chem_pred_labels, 
+            chem_pred_summaries) %>% 
+  kable()
+
+# Alternative approach to optimizing parameters
+# optim_result <- function(model_fit) {
+  # optimal <- which(rownames(model_fit$results) == rownames(model_fit$bestTune))
+  # optimal_result <- model_fit$results[optimal, ]
+  # rownames(optimal_result) = NULL
+  # optimal_result
+# }
+
+# Split test and train datasets
+trainIndex <- 
+  caret::createDataPartition(chem_data_imp$Yield,
+                             p = .75,
+                             list = FALSE,
+                             times = 1)
+chem_train <- chem_data_imp[trainIndex, ]
+chem_test <- chem_data_imp[-trainIndex, ]
+
+# Set cross-validation parameters
+chem_ctrl <- 
+  trainControl(method= 'cv',
+               number = 5)
+
+# Elastic net model
+chem_mod_elnet <- 
+  train(
+    Yield ~ ., 
+    data = chem_train,
+    method = 'glmnet',
+    preProcess = c('center', 'scale'),
+    trControl = chem_ctrl
+)
+
+chem_mod_elnet_bestperf <- 
+  chem_mod_elnet$results %>% 
+  as.data.frame() %>%
+  arrange(RMSE) %>% 
+  head(n = 1) %>% 
+  kable()
+
+
+# Elastic net model with tuned parameters
+# chem_mod_elnet <- 
+  # train(
+    # Yield ~ ., 
+    # data = chem_train,
+    # method = 'glmnet',
+    # preProcess = c('center', 'scale'),
+    # alpha = chem_mod_elnet$
+    # trControl = chem_ctrl
+# )
+
+# Elastic net prediction
+chem_pred_elnet <- 
+  predict(chem_mod_elnet, 
+          chem_test)  
+
+# Estimate test set performance
+chem_vals_elnet <- 
+  data.frame(obs = chem_data_imp$Yield, 
+                pred = chem_pred_elnet)
+
+caret::defaultSummary(chem_vals_elnet) %>% 
+  round(digits = 5) %>% 
+  kable()
+
+chem_varimp <- caret::varImp(chem_mod_elnet,
+                     scale = F,
+                     useModel = T)
+  
+chem_varimp_list <- chem_varimp$importance %>% 
+  rownames_to_column('Feature') %>%  # convert row index to separate column names 'Feature' 
+  as.data.frame() 
+
+chem_varimp_plot <- chem_varimp_list %>% 
+  ggplot(aes(x = reorder(Feature, Overall), y = Overall)) + 
+           geom_point() +
+           geom_segment(aes(x = Feature, 
+                            xend = Feature, 
+                            y = 0, 
+                            yend = Overall)) +
+           coord_flip()
+         
+
+# create filter list of top features in terms of variable importance
+chem_varimp_toplist <- chem_varimp_list %>% 
+  arrange(-Overall) %>% 
+  head(n = 14) %>%
+  dplyr::select(-Overall)
+
+# still working this out - needs par() and function troubleshooting
+chem_corr_plot <- function(feature_list) {
+  
+  # plot <- c()
+  
+  for(feature in feature_list) {
+    
+    chem_train %>% 
+      dplyr::select(!!(c('Yield', feature))) %>% 
+      ggplot(aes(x = BiologicalMaterial01, y = Yield)) +
+      geom_point() +
+      geom_smooth(method = 'loess', 
+                  se = FALSE)
+  
+  }
+
+  
+}
+
+chem_corr_plot(chem_varimp_toplist)
+
+```
+

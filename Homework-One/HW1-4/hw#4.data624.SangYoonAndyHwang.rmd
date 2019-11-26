@@ -1,0 +1,94 @@
+---
+  title: "hw#4.data624"
+  author: "Sang Yoon (Andy) Hwang"
+  date: "September 22, 2019"
+  output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+  
+# 7.8 Exercises
+  
+# 7.8.1. Consider the `pigs` series - the number of pigs slaughtered in Victoria each month.
+```{r, include=FALSE}
+library(fpp2)
+library(forecast)
+data(pigs)
+```
+
+# a. Use the ses() function in R to find the optimal values of alpha and l0 and generate forecasts for the next four months.
+
+From `summary(fc)`, we know that alpha = 0.2971 and l0 = 77260.06. For n the forcasts for the next 4 months, we see that it has a "flat" forecast of 98816.41.
+```{r}
+fc <- ses(pigs, h = 4)
+fc
+#fitted(fc)
+summary(fc)
+```
+
+# b. Compute a 95% prediction interval for the first forecast using  y_^±1.96s where s is the standard deviation of the residuals. Compare your interval with the interval produced by R.
+
+From manual calculation, we know Lo 95 = 78679.97 and Hi 95 = 118952.8 for Sep 1995.
+From ses output, we know Lo 95 = 78611.59 and Hi 95 = 119021.2 for Sep 1995.
+```{r}
+
+lo95 = fc$mean[1] - (sd(fc$residuals) * 1.96)
+hi95 = fc$mean[1] + (sd(fc$residuals) * 1.96)
+
+lo95
+hi95
+fc
+
+# plot the data with fitted values to forcast
+autoplot(fc) + autolayer(fc$fitted)
+```
+
+# 7.8.3 Modify your function from the previous exercise to return the sum of squared errors rather than the forecast of the next observation. Then use the `optim()` function to find the optimal values of alpha and l0. Do you get the same values as the `ses()` function?
+
+The results are almost the same but not exactly the same. I think this is due to the scale difference in alpha and l0 when it comes to calculation.
+```{r}
+# create ses function manually to test forecasted value
+ses_manual <- function(y, alpha, l0){
+  y_hat <- l0
+  for(index in 1:length(y)){
+   y_hat <- alpha*y[index] + (1 - alpha)*y_hat 
+  }
+  cat("Forecast result by ses_optim function: ",
+      as.character(y_hat),
+      sep = "\n")
+}
+
+# Let's compare the forecasting results from built-in SES function in R to manual function using optim
+a <- fc$model$par[1]
+l0 <- fc$model$par[2]
+
+# They are the same!
+ses_manual(pigs, alpha = a, l0 = l0)
+cat("Forecast result by built-in ses function: ", fc$mean[1], sep = "\n")
+
+# now, let's change the above function to get alpha and l0
+ses_param <- function(pars = c(alpha, l0), y){
+  error <- 0
+  SSE <- 0
+  alpha <- pars[1]
+  l0 <- pars[2]
+  y_hat <- l0
+  
+  for(index in 1:length(y)){
+    error <- y[index] - y_hat
+    SSE <- SSE + error^2
+    
+    y_hat <- alpha*y[index] + (1 - alpha)*y_hat 
+  }
+  
+  return(SSE)
+}
+
+# Let's compare the results for alphan and l0 from built-in SES function in R to manual function using optim
+optim_param <- optim(par = c(0.5, pigs[1]), y = pigs, fn = ses_param)
+
+# Almost same
+cat("Parameters estimate by manual ses_param function: ", optim_param$par[1], optim_param$par[2], sep = "\n")
+cat("Parameters estimate by built-in ses function: ", fc$model$par[1], fc$model$par[2])
+```

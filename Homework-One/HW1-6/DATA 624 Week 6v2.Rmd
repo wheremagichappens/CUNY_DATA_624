@@ -1,0 +1,414 @@
+---
+title: "DATA 624 Week 6"
+author: "Vinicio Haro"
+date: "October 9, 2019"
+output: html_document
+---
+
+#Week 6 HW
+
+#HA  8.1, 8.2, 8.6, 8.8
+
+## 8.1
+Figure 8.31 shows the ACFs for 36 random numbers, 360 random numbers and 1,000 random numbers
+
+* a) Explain the differences among these figures. Do they all indicate that the data are white noise?
+
+
+White noise can be identified by seeing if the correlations fall between the dotted lines. In this case, across all three figures, we see this occuring. We should also keep in mind that the graphs are showing the correlations among the different series types. We see correlations for differing lag periods, which in our case seem to increase. It should also be noted that the area between the dotted lines indicates significant critical values for ACF. 
+
+* b) Why are the critical values at different distances from the mean of zero? Why are the autocorrelations different in each figure when they each refer to white noise?
+
+We know that as sample size n increases, then critical value bounded region tends to become smaller. We should also keep in mind that the critical values are computed as follows: 
+
+$$
++\frac{1.96}{\sqrt(N)}\\
+or\\
+-\frac{1.96}{\sqrt(N)}
+$$
+
+## 8.2
+classic example of a non-stationary series is the daily closing IBM stock price series (data set ibmclose). Use R to plot the daily closing prices for IBM stock and the ACF and PACF. Explain how each plot shows that the series is non-stationary and should be differenced.
+
+```{r warning=FALSE, message=FALSE}
+library(fpp2)
+
+ggtsdisplay(ibmclose)
+```
+
+
+The first thing that comes to mind is the ACF plot. We can see that autocorrelations are well above the critical value space, but are decreasing steadily. We can also observe evidence of a trend in addition to seeing that the stock data is non-stationary. 
+
+The PACF plot reveals that the data could potentially be predicted using single lag units. Overall, from what we gathered, we see there is significant autocorrelation. We should impliment data differences to improve overall stability of time series mean before any sort of forecast/predictions are done. 
+
+
+## 8.6
+Use R to simulate and plot some data from simple ARIMA models.
+
+* a) Use the following R code to generate data from an AR(1) model (Take parameters given in text)
+
+```{r warning=FALSE, message=FALSE}
+y <- ts(numeric(100))
+e <- rnorm(100)
+for(i in 2:100)
+  y[i] <- 0.6*y[i-1] + e[i]
+
+autoplot(y) 
+```
+
+* b) Produce a time plot for the series. How does the plot change as you change phi ?
+
+```{r warning=FALSE, message=FALSE}
+
+ar1 <- function(phi, sd=1, n=100)
+  {
+  y <- ts(numeric(n))
+  
+  e <- rnorm(n, sd=sd)
+  
+  for(i in 2:n)
+    
+    y[i] <- phi*y[i-1] + e[i]
+  
+  return(y)
+  }
+```
+
+
+```{r warning=FALSE, message=FALSE}
+data <- list() #collect data 
+
+i <- 0 #initialize
+
+phi_values <- c(0.000003 ,0.0004, 0.005, 0.6)  #create a vector that tries several phi values
+
+for (phi in phi_values)
+  {
+  i <- i + 1
+  data[[i]] <- ar1(phi) #run against AR1
+  }
+
+data2 <- do.call(cbind, data)
+
+colnames(data2) <- paste('phi=', phi_values, sep = '')
+
+autoplot(data2) + ylab('Data')
+
+```
+
+It is difficult to see how exactly each value of phi alters the series. Lets break it up. 
+
+```{r warning=FALSE, message=FALSE}
+d1 <- list() #collect data 
+d2 <- list() #collect data 
+d3 <- list() #collect data 
+d4 <- list() #collect data 
+
+
+i <- 0 #initialize
+
+phi1 <- c(0.000003)
+phi2 <- c(0.0004)
+phi3 <- c(0.005)
+phi4 <- c(0.6)
+
+for (phi in phi1)
+  {
+  i <- i + 1
+  d1[[i]] <- ar1(phi) #run against AR1
+}
+
+for (phi in phi2)
+  {
+  i <- i + 1
+  d2[[i]] <- ar1(phi) #run against AR1
+}
+
+for (phi in phi3)
+  {
+  i <- i + 1
+  d3[[i]] <- ar1(phi) #run against AR1
+}
+
+for (phi in phi4)
+  {
+  i <- i + 1
+  d4[[i]] <- ar1(phi) #run against AR1
+  }
+
+
+data21 <- do.call(cbind, d1)
+data22 <- do.call(cbind, d2)
+data23 <- do.call(cbind, d3)
+data24 <- do.call(cbind, d4)
+
+#colnames(data21) <- paste('phi=', phi1, sep = '')
+#colnames(data22) <- paste('phi=', phi2, sep = '')
+#colnames(data23) <- paste('phi=', phi3, sep = '')
+#colnames(data24) <- paste('phi=', phi4, sep = '')
+
+autoplot(data21) + ylab('Data')+ggtitle("Phi 1")
+autoplot(data22) + ylab('Data')+ggtitle("Phi 2");
+autoplot(data23) + ylab('Data')+ ggtitle("Phi 3");
+autoplot(data24) + ylab('Data')+ ggtitle("Phi 4")
+```
+
+Phi1 is our smallest of phi values while phi4 is the largest of our phi values. When phi gets larger, we see much more variation when it comes to our y values. We should check some additional plots,specifically the ACF plots. 
+
+```{r warning=FALSE, message=FALSE}
+par(mfrow=c(1,3))
+acf(data21, main='Phi1');
+acf(data22, main='Phi2');
+acf(data23, main='Phi3');
+acf(data24, main='Phi4')
+```
+
+The ACF plots are much more revealing especially when we look at the ACF for our largest phi value. We clearly see the autocorrelations extending beyond the space where correlations are considered to be significant. 
+
+* c) Write your own code to generate data from an MA(1) model 
+ 
+We take the parameters give in the text. 
+
+```{r warning=FALSE, message=FALSE}
+y <- ts(numeric(100))
+
+e <- rnorm(10000)
+
+for(i in 2:100)
+  
+  y[i] <- 0.6*e[i-1] + e[i]
+
+autoplot(y)
+
+```
+
+* d) Produce a time plot for the series. How does the plot change as you change phi?
+
+```{r warning=FALSE, message=FALSE}
+
+ar2 <- function(phi, sd=1, n=100)
+  {
+  y <- ts(numeric(n))
+  
+  e <- rnorm(n, sd=sd)
+  
+  for(i in 2:n)
+    
+    y[i] <- phi*e[i-1] + e[i]
+  
+  return(y)
+  }
+```
+
+
+```{r warning=FALSE, message=FALSE}
+data <- list() #collect data 
+
+i <- 0 #initialize
+
+phi_values <- c(0.000003 ,0.0004, 0.005, 0.6)  #create a vector that tries several phi values
+
+for (phi in phi_values)
+  {
+  i <- i + 1
+  data[[i]] <- ar2(phi) #run against AR1
+  }
+
+data2 <- do.call(cbind, data)
+
+colnames(data2) <- paste('phi=', phi_values, sep = '')
+
+autoplot(data2) + ylab('Data')
+
+```
+
+As the previous parts, lets break down each plot one by one. 
+
+```{r warning=FALSE, message=FALSE}
+d1 <- list() #collect data 
+d2 <- list() #collect data 
+d3 <- list() #collect data 
+d4 <- list() #collect data 
+
+
+i <- 0 #initialize
+
+phi1 <- c(0.000003)
+phi2 <- c(0.0004)
+phi3 <- c(0.005)
+phi4 <- c(0.6)
+
+for (phi in phi1)
+  {
+  i <- i + 1
+  d1[[i]] <- ar2(phi) #run against AR1
+}
+
+for (phi in phi2)
+  {
+  i <- i + 1
+  d2[[i]] <- ar2(phi) #run against AR1
+}
+
+for (phi in phi3)
+  {
+  i <- i + 1
+  d3[[i]] <- ar2(phi) #run against AR1
+}
+
+for (phi in phi4)
+  {
+  i <- i + 1
+  d4[[i]] <- ar2(phi) #run against AR1
+  }
+
+
+data21 <- do.call(cbind, d1)
+data22 <- do.call(cbind, d2)
+data23 <- do.call(cbind, d3)
+data24 <- do.call(cbind, d4)
+
+#colnames(data21) <- paste('phi=', phi1, sep = '')
+#colnames(data22) <- paste('phi=', phi2, sep = '')
+#colnames(data23) <- paste('phi=', phi3, sep = '')
+#colnames(data24) <- paste('phi=', phi4, sep = '')
+
+autoplot(data21) + ylab('Data')+ggtitle("Phi 1")
+autoplot(data22) + ylab('Data')+ggtitle("Phi 2");
+autoplot(data23) + ylab('Data')+ ggtitle("Phi 3");
+autoplot(data24) + ylab('Data')+ ggtitle("Phi 4")
+```
+
+
+```{r warning=FALSE, message=FALSE}
+par(mfrow=c(1,3))
+acf(data21, main='Phi1');
+acf(data22, main='Phi2');
+acf(data23, main='Phi3');
+acf(data24, main='Phi4')
+```
+
+As with the previous example,when our phi gets smaller we see autocorrelations exceed the signifcant space on the first lag. 
+
+* e) Generate data from an ARMA(1,1) model 
+
+We use the parameters given in the text.
+
+```{r warning=FALSE, message=FALSE}
+
+y <- ts(numeric(100))
+
+e <- rnorm(10000)
+
+for(i in 2:100)
+  
+  y[i] <- 0.6*e[i-1] +0.6*y[i-1] +e[i]
+
+autoplot(y)
+```
+
+* f) Generate data from an AR(2) model 
+
+The parameters provided by the text will yield a non-stationary series
+
+```{r warning=FALSE, message=FALSE}
+
+y <- ts(numeric(100))
+
+e <- rnorm(10000)
+
+for(i in 3:100)
+  
+  y[i] <- -0.8*y[i-1] + 0.3*y[i-2] + e[i]
+
+autoplot(y) #looks awesome 
+```
+
+* g) Graph the latter two series and compare them.
+
+ Please refer to graphs in part e and f.
+ 
+ 
+ ## 8.8
+
+Consider austa, the total international visitors to Australia (in millions) for the period 1980-2015.
+
+
+```{r warning=FALSE, message=FALSE}
+ggtsdisplay(austourists)
+```
+ 
+* a) Use auto.arima() to find an appropriate ARIMA model. What model was selected. Check that the residuals look like white noise. Plot forecasts for the next 10 periods.
+
+```{r warning=FALSE, message=FALSE}
+autoplot(austa)
+
+auto_mod <- forecast(auto.arima(austa), h = 10)
+```
+
+Chossing the best model
+
+https://www.analyticsvidhya.com/blog/2018/08/auto-arima-time-series-modeling-python-r/
+
+```{r warning=FALSE}
+auto.arima(austa)
+```
+
+ARIMA(0, 1, 1) was picked with drift, meaning we need to take into account y at 0 lag, our series is stationary, and we need to take 1 error term1 in account. 
+
+
+Checking Residuals
+```{r warning=FALSE, message=FALSE}
+
+checkresiduals(auto_mod)
+
+autoplot(auto_mod)
+```
+
+We can see that autocorrelations are well within the significant space.This indicates that we have white noise within the series. 
+
+* b) Plot forecasts from an ARIMA(0,1,1) model with no drift and compare these to part a. Remove the MA term and plot again.
+
+```{r warning=FALSE, message=FALSE}
+
+auto_mod011 <- forecast(Arima(austa, order = c(0, 1, 1)), h = 10)
+
+autoplot(auto_mod011);
+
+auto_mod010 <- forecast(Arima(austa, order = c(0, 1, 0)), h = 10)
+
+autoplot(auto_mod010)
+```
+
+ I do not see much difference between 0,1,0 or 0,1,1 model. 
+ 
+There is still no major change with predictions aside from a marginally smaller prediction bounds. 
+
+* c) Plot forecasts from an ARIMA(2,1,3) model with drift. Remove the constant and see what happens
+
+```{r warning=FALSE, message=FALSE}
+auto_mod2<-Arima(austa, order=c(2,1,3), include.drift=TRUE)
+
+auto_mod20<-forecast(auto_mod2, h=10)
+
+autoplot(auto_mod20)
+
+```
+
+
+If I set include.drift=FALSE, the model will not run since due to a non stationary error. 
+
+* d) Plot forecasts from an ARIMA(0,0,1) model with a constant. Remove the MA term and plot again
+
+```{r warning=FALSE, message=FALSE}
+auto_mod3<-Arima(austa, order=c(0,0,1), include.constant=TRUE)
+
+auto_mod30<-forecast(auto_mod3,h=10)
+
+autoplot(auto_mod30)
+```
+
+
+* e)
+
+

@@ -1,0 +1,303 @@
+---
+title: "DATA 624 Week 5"
+author: "Vinicio Haro"
+date: "October 7, 2019"
+output: html_document
+---
+
+#Week 5 HW
+
+#HA 7.5 , 7.6  and 7.10
+
+## 7.5
+Data set books contains the daily sales of paperback and hardcover books at the same store. The task is to forecast the next four days’ sales for paperback and hardcover books.
+
+* a) Plot the series and discuss the main features of the data.
+
+```{r warning=FALSE, message=FALSE}
+
+library(fpp2)
+
+autoplot(books)
+
+```
+
+We are working with a bivariate time series that contains the number of book sales for paperback and hardcover books. Both book format sales are partioned with a daily time interval over the course of 30 days. 
+
+Our basic plot reveals that both hardcover and paperback books have an overall positive trend, however we see large fluctuations happening daily. We are unable to tell if there exists some sort of seasonal influence because we are limited to 30 days. 
+
+```{r warning=FALSE, message=FALSE}
+decompose <- ts(books, frequency=7)
+
+autoplot(decompose(decompose[,1]),main = "Paperback")
+
+autoplot(decompose(decompose[,2]), main = "Hardcover")
+
+```
+
+The decomposition confirms our assumption of a mostly increasing trend for hardcover sales but fluctuation with paperback sales. We could also seeevidence of seasonality every two or three days. As mentioned before, we can't see any longer term seasonality since we are restricted to 30 days. 
+
+* b) Use the ses() function to forecast each series, and plot the forecasts.
+
+We will consider the default alpha value and plot a forecase for 4 periods. We will leave out using optimal or toying with different values of alpha since it is not a problem requirement. 
+ 
+```{r warning=FALSE, message=FALSE}
+paperback <- ses(books[, 1], h = 4)
+
+hardcover <- ses(books[, 2], h = 4)
+
+autoplot(books[, 1], series = "Paperback") +   autolayer(paperback, series = "Paperback")+ ylab("Sales") +
+ggtitle("Paperback Sales");
+
+
+autoplot(books[, 2], series = "Hardcover") +   autolayer(hardcover, series = "Hardcover")+ ylab("Sales") +
+ggtitle("Hardcover Sales");
+
+summary(paperback);
+
+summary(hardcover)
+
+```
+
+Both forecasts are underperforming. We can see that the trend is both non-increasing and non-decreasing.   
+
+* c) Compute the RMSE values for the training data in each case
+
+Recall: https://www.statisticshowto.datasciencecentral.com/rmse/
+
+To summarize, the RMSE can be computed with the following formula: 
+
+$$
+RMSE=\sqrt(\frac{\sum_{i=1}^{N}{(Z_{fi}-Z_{sdi})^2}}{N})
+$$
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("Paperback RMSE: ",sqrt(mean(paperback$residuals^2))));
+
+print(paste0("Hardcover RMSE: ",sqrt(mean(hardcover$residuals^2))))
+```
+
+
+
+The RMSE is the standard deviation of prediction errors. We generally consider a smaller RmSE to be associated with a more accurate prediction or in our case forecast. IF we look at the numbers we obtained, the RMSE is less with the hardcover sales forecasts. If we examine our plots from part b, paperback book sales forecast tends to be flat. 
+
+## 7.6
+
+* a) Now apply Holt’s linear method to the paperback and hardback series and compute four-day forecasts in each case.
+
+```{r warning=FALSE, message=FALSE}
+hmodel_paperback <- holt(books[, 1], h = 4)
+
+hmodel_hardcover <- holt(books[, 2], h = 4)
+
+autoplot(books[, 1], series = "Paperback") +   autolayer(hmodel_paperback, series = "Paperback")+ ylab("Sales") +
+ggtitle("Paperback Sales via Holt's Method");
+
+
+autoplot(books[, 2], series = "Hardcover") +   autolayer(hmodel_hardcover, series = "Hardcover")+ ylab("Sales") +
+ggtitle("Hardcover Sales via Holt's Method");
+
+summary(hmodel_paperback);
+
+summary(hmodel_hardcover)
+
+```
+
+As opposed to the SES method, we can see a positive linear trend in the forecast for both paperback book sales and hardcover book sales. The positive trend forecast is even greater for the Hardcover paperback sales. 
+
+
+* b) Compare the RMSE measures of Holt’s method for the two series to those of simple exponential smoothing in the previous question. (Remember that Holt’s method is using one more parameter than SES.) Discuss the merits of the two forecasting methods for these data sets
+
+Lets Recall the RMSE we generated using SES then compare to RMSE via Holt's. 
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("Paperback RMSE from SES: ",sqrt(mean(paperback$residuals^2))));
+
+print(paste0("Hardcover RMSE from SES: ",sqrt(mean(hardcover$residuals^2))))
+```
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("Paperback RMSE from Holt's Method: ",sqrt(mean(hmodel_paperback$residuals^2))));
+
+print(paste0("Hardcover RMSE from Holt's Method: ",sqrt(mean(hmodel_hardcover$residuals^2))))
+```
+
+The RSME generated from the forecast via Holt's method overall is lower than when generated via SES. Hardcover sales forecast has the biggest decrease in RMSE. 
+
+* c) Compare the forecasts for the two series using both methods. Which do you think is best?
+
+Using both methods, hardcover sales forecast are better than paperback sales forecast. When we factor in the RMSE metric, Holt's method produces a better forecast. By definition of RMSE, lower valuesindicate a better fit. 
+
+* d) Calculate a 95% prediction interval for the first forecast for each series, using the RMSE values and assuming normal errors. Compare your intervals with those produced using ses and holt.
+
+Lets look at the intervals found using r.
+
+```{r warning=FALSE, message=FALSE}
+ses_paperback_one <- ses(books[, 1], h = 1)
+s1<-sd((ses(books[,1], h=1))$residuals)
+
+ses_hardcover_one <- ses(books[, 2], h = 1)
+s2<-sd((ses(books[,2], h=1))$residuals)
+
+holt_paperback_one<-holt(books[, 1], h = 1)
+h1<-sd((ses(books[,1], h=1))$residuals)
+
+holt_hardcover_one<-holt(books[, 2], h = 1)
+h2<-sd((ses(books[,2], h=1))$residuals)
+
+```
+
+
+```{r warning=FALSE, message=FALSE}
+print("SES Paperback: 1 Forecast ")
+summary(ses_paperback_one)
+```
+
+lower is 138.867 and higher is 275.3523. How does this compare to our own calculation? 
+```{r warning=FALSE, message=FALSE}
+print(paste0("lower Confidence Interval: ", ses(books[,1],h=1)$mean[1]-1.96*s1))
+print(paste0("upper Confidence Interval: ", ses(books[,1],h=1)$mean[1]+1.96*s1))
+```
+
+```{r warning=FALSE, message=FALSE}
+print("SES Hardcover: 1 Forecast ")
+summary(ses_hardcover_one)
+```
+
+The lower is 174.7799 and the upper is 304.3403. How does it compare to r our calculation?
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("lower Confidence Interval: ", ses(books[,2],h=1)$mean[1]-1.96*s2))
+print(paste0("upper Confidence Interval: ", ses(books[,2],h=1)$mean[1]+1.96*s2))
+```
+
+```{r warning=FALSE, message=FALSE}
+print("Holt Paperback: 1 Forecast ")
+summary(holt_paperback_one)
+```
+
+lower is 143.913 and upper is 275.0205. How does it compare to our own? 
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("lower Confidence Interval: ", holt(books[,1],h=1)$mean[1]-1.96*h1))
+print(paste0("upper Confidence Interval: ", holt(books[,1],h=1)$mean[1]+1.96*h1))
+```
+
+```{r warning=FALSE, message=FALSE}
+print("Holt Hardcover: 1 Forecast ")
+summary(holt_hardcover_one)
+```
+
+low is 192.9222 and high is 307.4256. How does it compare?
+
+```{r warning=FALSE, message=FALSE}
+print(paste0("lower Confidence Interval: ", holt(books[,2],h=1)$mean[1]-1.96*h2))
+print(paste0("upper Confidence Interval: ", holt(books[,2],h=1)$mean[1]+1.96*h2))
+```
+
+
+## 7.10
+For this exercise use data set ukcars, the quarterly UK passenger vehicle production data from 1977Q1–2005Q1
+
+* a) Plot the data and describe the main features of the series
+
+We are working with Quarterly UK passenger car production from 1977 to 2005. Our data is time partioned by year. 
+
+```{r warning=FALSE, message=FALSE}
+autoplot(ukcars)
+```
+
+We can observe evidence of seasonal effects within the series. We see a decreasing trend up until the 1980. 1980 is an inflection point since the trend begins to increase up until the sudden drop in 2000. 2000 is another inflection point since we observe production to begin increasing again. 
+
+* b) Decompose the series using STL and obtain the seasonally adjusted data.
+
+```{r warning=FALSE, message=FALSE}
+
+decompose <- stl(ukcars, s.window="periodic", robust=TRUE)
+
+seasonal <- decompose$time.series[,1]
+
+ukcars_adjusted <- ukcars - seasonal
+
+autoplot(ukcars_adjusted)
+```
+
+
+* c) Forecast the next two years of the series using an additive damped trend method applied to the seasonally adjusted data. (This can be done in one step using stlf() with arguments etsmodel="AAN", damped=TRUE.)
+
+```{r warning=FALSE, message=FALSE}
+
+mod1 <- stlf(ukcars, s.window = 13, robust = TRUE, etsmodel="AAN", damped=TRUE)
+
+mod1_forecast <- forecast(mod1, h = 8)
+
+autoplot(mod1_forecast) +  xlab("Quarter") + ylab("Passenger Car Production (thousands)") + ggtitle("STLF Forecast for UK Passenger Car Production")+   autolayer(mod1_forecast, series = "Car Production");
+
+summary(mod1)
+```
+
+* d) Forecast the next two years of the series using Holt’s linear method applied to the seasonally adjusted data (as before but with damped=FALSE).
+
+```{r warning=FALSE, message=FALSE}
+mod2 <- stlf(ukcars, s.window = 13, robust = TRUE, etsmodel="AAN", damped=FALSE)
+
+mod2_forecast <- forecast(mod2, h = 8)
+
+autoplot(mod2_forecast) +  xlab("Quarter") + ylab("Passenger Car Production (thousands)") + ggtitle("Holt's Linear Method for UK Passenger Car Production") + autolayer(mod2_forecast, series = "Car Production");
+
+summary(mod2)
+```
+
+* e) Now use ets() to choose a seasonal model for the data.
+
+```{r warning=FALSE, message=FALSE}
+mod3 <- ets(ukcars)
+
+mod3_forecast <- forecast(mod3, h = 8)
+
+autoplot(mod3_forecast) +  xlab("Quarter") + ylab("Passenger Car Production (thousands)") + ggtitle("ETS Method for UK Passenger Car Production") + autolayer(mod3_forecast, series = "Car Production");
+
+summary(mod3_forecast)
+```
+
+* e) Compare the RMSE of the ETS model with the RMSE of the models you obtained using STL decompositions. Which gives the better in-sample fits?
+
+```{r warning=FALSE, message=FALSE}
+print("Additive")
+accuracy(mod1_forecast);
+
+print("Holt")
+accuracy(mod2_forecast);
+
+print("ETS")
+accuracy(mod3_forecast)
+```
+
+Based on the RMSE scores from the three models, the additive model has the lowest RMSE. By definition, the lower the RMSE, the better the forecast. It should be noted that overall, there is no major difference between RMSE scores. It is more accurate to say that the additive model is marginally better than the Holts linear model or ETs model. 
+
+* g) Compare the forecasts from the three approaches? Which seems most reasonable?
+
+```{r}
+plot(mod1, main="Additive Model");
+
+plot(mod2, main="Holt Linear Model");
+
+plot(mod3_forecast, main="ETS Model")
+```
+
+Out of the three models we have fit, the additive model is still the better of the three, even if it is marginally better than the Holt linear method and ETS model. 
+
+* g) Check the residuals of your preferred model.
+
+```{r warning=FALSE, message=FALSE}
+
+selected_fit <- stlf(ukcars, s.window = 13, robust = TRUE, etsmodel="AAN", damped=TRUE)
+
+selected_forecast <- forecast(selected_fit, h = 8)
+
+checkresiduals(selected_forecast)
+
+```
+
+Aside from the residuals having a minor left skew, we can tell that the underlying assumption of residuals is met overall. There is certainly the potnetial for improvement, however we leave that as a suggestion. The rest of the output reveals that there is no clear and cut trend. 
+

@@ -1,0 +1,589 @@
+---
+title: "Team 2 - Homework Two"
+subtitle: "Assignment 2: KJ 7.2; KJ 7.5"
+author: "NAME"
+date: "DATE"
+output: 
+  pdf_document
+---
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA}
+# SOURCE DEFAULT SETTINGS
+source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Homework-Two/defaults.R')
+```
+
+```{r libraries, echo=T}
+# predictive modeling
+libraries('tidyverse', 'mlbench', 'caret', 'mice', 'kernlab', 'e1071')  # added kernlab and e1071 for SVM models
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'gridExtra', 'ggfortify', 'earth', 'ggcorrplot')  # added earth for MARS model, ggcorrplot for correlograms
+
+#Data libraries
+libraries('AppliedPredictiveModeling')
+```
+
+## (1) Kuhn & Johnson 7.2
+
+>  Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+
+**The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:** 
+
+```{r kj-7.2-ex1, echo=T}
+
+sim_seed <- 1234
+
+set.seed(sim_seed) 
+
+## Create a list with a vector y and a matrix of predictors x
+sim_train <- mlbench.friedman1(200, sd = 1)
+sim_train$x <- data.frame(sim_train$x)
+
+# Create a test set against which to predict
+sim_test <- mlbench.friedman1(5000, sd = 1)
+sim_test$x <- data.frame(sim_test$x)
+
+# Review the data distribution 
+featurePlot(sim_train$x, sim_train$y)
+
+```
+
+
+>> (a) Tune several models on these data. For example: 
+
+Model 1 (example): KNN model
+
+```{r kj-7.2-ex2, eval=F, echo=T}
+
+# Tuned KNN model fit
+sim_fit_knn
+
+# Plot of optimal KNN fit by k minimizing RMSE
+sim_plot_knn
+
+```
+
+We begin with a K Nearest Neighbors model.  Before fitting the model we preprocess the predictors, scaling and centering them.  To identify the optimal number of neighbors (k / mtry) for the model, we perform a grid search and evaluate RMSE for each grouping.  RMSE is lowest for a model with 8 neighbors, so we select that model.
+
+<br>
+
+Model 2: Neural Network
+
+```{r kj-7.2-1, echo=T, eval=F}
+
+# TURNED OFF THIS CHUNK FOR JO SO DOC COULD KNIT
+
+# Neural network implementation using model averaging and limiting features to those that see pairwise correlation < .75 %>% 
+sim_train$x %>% 
+  cor() %>%  # calculate correlation matrix
+  round(digits = 2) %>%  # round r to two digits
+  ggcorrplot(hc.order = TRUE,
+             type = "upper",
+             outline.color = "white")
+    
+# Tuned NN model fit
+sim_fit_avgnnet
+
+# Plot of optimal NN fit minimizing RMSE
+sim_plot_avgnnet
+
+```
+
+Next we build a neural network model employing an averaging approach.  Pairwise correlatiion between predictors has a very negative impact on NN models, so we begin by examining that - as correlation is minimal, there is no need to pre-filter the predictors.  After scaling and centering predictors, we fit the model.  A grid search of hyper-parameters reveals that weight decay (lambda) of .1 and 3 hidden units yields the lowest RMSE, so we select that model.
+
+<br>
+
+Model 3: Multivariate Adaptive Regression Splines
+```{r kj-7.2-2}
+
+# Tuned MARS model fit
+sim_fit_mars$bestTune
+sim_fit_mars$finalModel
+
+# Plot of optimal MARS fit minimizing RMSE
+sim_plot_mars
+
+```
+
+We continue by assembling a Multivariate Adaptive Regression Splines model.  MARS prunes features - and terms combining features - that do no contribute to predictive accuracy of the model based on the GCV statistic.  We perform a grid search on two hyper-parameters: degree, which allows for interactions between two features in terms; and nprune, which constrains the number of terms to retain between 2 and 38.  The MARS model minimizes RMSE when selecting 14 of 20 terms using the first five of 10 predictors (X4, X1, X2, X5, and X3).  We select this as our best model.
+
+<br>
+
+Model 4: Support Vector Machines
+```{r kj-7.2-3}
+
+sim_fit_svm$finalModel
+sim_fit_svm
+
+# Plot of optimal NN fit minimizing RMSE
+sim_plot_svm
+
+```
+
+Lastly, we build a Support Vectors Regression model using a radial basis function kernel.  We standardize (center / scale) predictors before modeling; cross-validation over 10 folds, we find best RMSE performance when cost (C) is 16 and sigma is .0734, for a hyperplane margin that is neither on the large nor small side.
+
+<br>
+
+>> (b) Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
+
+```{r kj-7.2-4}
+
+# Compare model performance on RMSE
+sim_model_compare
+
+# Confirm which predictors the MARS model prunes
+sim_fit_mars$finalModel
+
+```
+
+MARS delivers the best performance, with an RMSE of 1.19.  The MARs model does select the most informative five predictors - phew!
+
+<br>
+
+## (2) Kuhn & Johnson 7.5
+
+>  Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
+
+Using the same data, imputation, splits, pre-proceesing, and seed, we train three models: and SVM model with radial basis function kernel, a KNN model, and a MARS model.
+
+<br>
+
+>> (a) Which nonlinear regression model gives the optimal resampling and test set performance? 
+
+```{r kj-7.5a}
+
+chem_perf_table
+
+```
+
+Compared with the SVM and MARS models, the KNN model with five neighbors affords the best performance in terms of both RMSE and MAE.
+
+<br>
+
+>> (b) Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
+
+```{r kj-7.5b}
+
+chem_varimp_knn_plot
+
+```
+
+Ranked by magnitude, the first nineteen predictors are greater than zero; thereafter, predictors' importance is approximately zero.  The most important predictors are Biological Material 06, Manufacturing Process 09, Biological Material 12, and Biological Material 03.  Of the nineteen predictors with non-zero importance, eleven are Manufacturing and eight are Biological.  Given there is nearly a four-to-one ratio between Manufacturing and Biological predictors overall, Biological are comparatively over-represented.
+
+<br>
+
+>> (c) Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
+
+```{r kj-7.5c}
+
+# High variable importance predictors
+chem_corr_toppred('BiologicalMaterial06')
+chem_corr_toppred('ManufacturingProcess09')
+chem_corr_toppred('BiologicalMaterial12')
+chem_corr_toppred('BiologicalMaterial03')
+
+# Low variable importance predictors
+chem_corr_toppred('ManufacturingProcess09')
+chem_corr_toppred('BiologicalMaterial05')
+
+```
+
+To understand the general contour of the relationship between each of the important predictors and the response we plot them against one another, including a Locally Weighted Scatterplot Smoothing (LOESS) line to help depict the general tendency.  
+
+All four predictors have a positive slope.  When compared with a few predictors with low variable importance, the slope appears steeper, which accords with our intuition of a stronger relationship.
+
+Per the fitted KNN regression model, Biological Material 06 has the largest variable importance and Manufacturing Process 09 has the second largest.  When comparing LOESS curves the Manufacturing Process 09 appears to have the steepest slope, however that may be impacted by a number of leverage points on the left end of the range.
+
+<br>
+
+## R Code 
+
+```{r 02-code, eval=F,echo=T}
+
+# (7.2a)
+
+## K Nearest Neighbors model
+
+# Fit and tune KNN model
+sim_fit_knn  <- train(x = sim_train$x,
+                  y = sim_train$y, 
+                  preProc = c("center", "scale"),  # standardize features prior to modeling to avoid introducing bias in distance measures
+                  tuneLength = 10,
+                  importance = TRUE)  # investigate this hyperparameter more
+
+# Predict test data targets based on tuned KNN model
+sim_pred_knn <- predict(sim_fit_knn, 
+                        newdata = sim_test$x)
+
+# Assess KNN model's predictive performance against test set
+sim_perf_knn <- postResample(pred = sim_pred_knn, 
+                             obs = sim_test$y)
+
+# Plot KNN model performance
+sim_plot_knn <- ggplot(sim_fit_knn)
+
+
+## Neural Network model
+
+# Given minimal correlation, no need to filter out features based on correlation threshold
+# findCorrelation(cor(train_x), cutoff = .75)
+
+# Create grid for averaged neural net model approach
+sim_grid_avgnnet <- expand.grid(.decay = c(0, .01, .1),  # evaluate three different weight decay values (lamdba)
+                        .size = c(1:10),  # evaluate 1 through 10 hidden units
+                        .bag = FALSE)  # prevent bootstrap aggregation
+
+# Fit and tune NN model
+sim_fit_avgnnet <- train(x = sim_train$x,
+                     y = sim_train$y,
+                     method = 'avNNet',  # employ averaging 
+                     tuneGrid = sim_grid_avgnnet,  # grid search for optimal hyper-parameters
+                     preProc = c('center', 'scale'),  # standardize features prior to modeling
+                     linout = TRUE,  # linear output units
+                     trace = FALSE,  # reduce printed output
+                     MaxNWts = 10 * (ncol(sim_train$x) + 1) + 10 + 1,  # 
+                     maxit = 500,
+                     importance = TRUE)  # allow 
+
+# Predict test data targets based on tuned NN model
+sim_pred_avgnnet <- predict(sim_fit_avgnnet, 
+                            new_data = sim_test$x)
+
+# Assess NN model's predictive performance against test set
+sim_perf_avgnnet <- postResample(pred = sim_pred_avgnnet, 
+                                 obs = sim_test$y)
+
+# Plot NN model performance 
+sim_plot_avgnnet <- ggplot(sim_fit_avgnnet) +
+  scale_x_continuous(breaks = seq(from = 1,    # ensure hidden units on x-axis display as integrer breaks 
+                                  to = 10, 
+                                  by = 1))
+
+
+## Multivariate Adaptive Regression Splines model
+
+# Create grid for MARs model approach
+sim_grid_mars <- expand.grid(.degree = 1:2,  # allow no or one interaction between features
+                      .nprune = 2:38)  # set number of terms to retain
+
+# Specify the resampling scheme
+sim_ctrl_cv <- trainControl(method = 'cv')
+
+# Fit and tune MARS model
+sim_fit_mars <- train(x = sim_train$x, 
+                  y = sim_train$y, 
+                  method = 'earth',
+                  tuneGrid = sim_grid_mars,  # grid search for optimal hyper-parameters degree and prune
+                  trControl = sim_ctrl_cv
+                  # importance = TRUE # employ cross-validation - removed as threw 'unrecognized parameter' error
+                  )
+
+# Predict test data targets based on tuned MARS model
+sim_pred_mars <- predict(sim_fit_mars, 
+                         newdata = sim_test$x)
+
+# Assess MARS model's predictive performance against test set
+sim_perf_mars <- postResample(pre = sim_pred_mars, 
+                          obs = sim_test$y)
+
+# Plot MARS model performance 
+sim_plot_mars <- ggplot(sim_fit_mars)
+
+## Support Vector Machines model
+
+# Fit and tune SVM model
+sim_fit_svm <- train(x = sim_train$x,
+                 y = sim_train$y,
+                 method = 'svmRadial',  # use radial kernel (default)
+                 preProcess = c('center', 'scale'),  # standardize features prior to modeling
+                 tuneLength = 14,  # investigate this hyperparameter more
+                 trControl = sim_ctrl_cv,  # employ cross-validation
+                 importance = TRUE
+                 )
+
+# Predict test data targets based on tuned SVM model
+sim_pred_svm <- predict(sim_fit_svm, 
+                        newdata = sim_test$x)
+
+# Assess SVM model's predictive performance against test set
+sim_perf_svm <- postResample(pre = sim_pred_svm, 
+                             obs = sim_test$y)
+
+# Plot SVM model performance
+sim_plot_svm <- ggplot(sim_fit_svm)
+
+
+# (7.2b)
+
+sim_model_labels <- 
+  as.data.frame(c('K Nearest Neighbors',
+                 'Neural Network',
+                 'Multivariate Adaptive Regression Splines',
+                 'Support Vector Machine')
+                ) %>% 
+  setNames(c('Model'))
+
+sim_model_RMSE <-
+  matrix(c
+         (min(sim_fit_knn$results$RMSE), 
+           min(sim_fit_avgnnet$results$RMSE),
+           min(sim_fit_mars$results$RMSE),
+           min(sim_fit_svm$results$RMSE)
+           ), 
+         nrow = 4, ncol = 1, byrow = TRUE) %>% 
+  as.data.frame() %>% 
+  setNames(c('RMSE'))
+    
+sim_model_compare <- 
+  bind_cols(sim_model_labels, 
+            sim_model_RMSE) %>% 
+  arrange(RMSE) %>% 
+  kable()
+
+
+# (7.5)
+
+chem_seed <- 1492
+
+set.seed(chem_seed)
+
+# Call Chemical Manufacturing Process data
+data(ChemicalManufacturingProcess)
+chem_data <- ChemicalManufacturingProcess
+
+# Impute missing values using MICE 
+chem_data_imp <- mice(chem_data, 
+                   m = 5,  # substantiate this
+                   maxit = 5,  # substantiate this
+                   method = 'pmm',  # using predictive mean matching to start
+                   printFlag = F,
+                   seed = chem_seed) %>% 
+  mice::complete()
+
+# Split test and train datasets
+trainIndex <- 
+  caret::createDataPartition(chem_data_imp$Yield,
+                             p = .75,
+                             list = FALSE,
+                             times = 1)
+
+
+# Create training predictor set (filtering out variable with variance near zero) and target set
+chem_train <- chem_data_imp[trainIndex, ]
+chem_zerovarfeat <- colnames(chem_train)[nearZeroVar(chem_train)]
+chem_train <- chem_train %>%
+  dplyr::select(-chem_zerovarfeat)
+chem_train_x <- chem_train %>%
+  dplyr::select(-Yield)
+chem_train_y <- chem_train$Yield
+
+# Create test predictor set and target set
+chem_test <- chem_data_imp[-trainIndex, ]
+chem_test_x <- chem_test %>% 
+  dplyr::select(-chem_zerovarfeat, -Yield)
+chem_test_y <- chem_test %>% 
+  dplyr::select(Yield)
+chem_test_y2 <- chem_test$Yield
+
+
+# Set cross-validation parameters
+# cv_folds <- 
+  # createMultiFolds(chem_train$Yield,
+                   # k = 10,
+                   # times = 5)
+
+
+## Support Vectors Regression model with Radial Basis Function Kernel
+
+# Set seed and cross-validation
+set.seed(chem_seed)
+
+chem_ctrl_cv10 <- 
+  trainControl(method = 'cv',
+               number = 10,
+  )
+
+# Estimate sigma (AKA gamma, which determines reach of training instance) - high value means only closest points to decision boundary so more flex in boundary, low value means farther points considered so more linear
+chem_sigmarange <- kernlab::sigest(Yield ~ .,
+                                   data = chem_train)
+
+# Parameters for radial kernel include cost (C) and ... (sigma)
+chem_grid_svmrad <- expand.grid(C = c(5, 5.25, 5.5, 5.7, 5.75, 5.8, 6, 6.25, 6.5),
+                                sigma = chem_sigmarange[[2]])
+
+# Fit and tune radial kernel SVM model
+chem_fit_svmrad <- train(Yield ~ ., 
+                         data = chem_train,
+                         method = 'svmRadial',
+                         trControl = chem_ctrl_cv10,
+                         tuneGrid = chem_grid_svmrad,
+                         preProcess = c('center', 'scale'),
+                         importance = TRUE
+                         )
+
+# Predict test data targets based on tuned MARS model
+chem_pred_svmrad <- predict(chem_fit_svmrad, 
+                            newdata = chem_test_x)
+
+# Assess SVM  model's predictive performance against test set
+chem_perf_svmrad <- postResample(pre = chem_pred_svmrad, 
+                                 obs = chem_train_y)
+
+# Plot SVM model performance 
+chem_plot_svmrad <- ggplot(chem_fit_svmrad)
+
+
+## K Nearest Neighbors Regression model
+
+set.seed(chem_seed)
+
+# Fit and tune KNN model
+chem_fit_knn  <- train(y = chem_train_y,
+                  x = chem_train_x,  # remove predictors with very low variance
+                  method = 'knn',
+                  preProc = c("center", "scale"),  # standardize features prior to modeling to avoid introducing bias in distance measures
+                  tuneLength = 20,  # investigate this hyperparameter more
+                  importance = TRUE
+                  )
+
+varImp(chem_fit_knn)
+
+# Predict test data targets based on tuned KNN model
+chem_pred_knn <- predict(chem_fit_knn, 
+                        newdata = chem_test_x)
+
+# Assess KNN model's predictive performance against test set
+chem_perf_knn <- postResample(pred = chem_pred_knn, 
+                             obs = chem_test$Yield)
+
+# Plot KNN model performance
+chem_plot_knn <- ggplot(chem_fit_knn)
+
+
+## Multivariate Adaptive Regression Splines model
+
+set.seed(chem_seed)
+
+# Specify the resampling scheme
+chem_ctrl_cv <- 
+  trainControl(method = 'cv')
+
+chem_ctrl_cv10 <- 
+  trainControl(method = 'cv',
+               number = 10,
+  )
+
+# Create grid for MARs model approach
+chem_grid_mars <- expand.grid(.degree = 1:2,  # allow no or one interaction between features
+                      .nprune = 2:57)  # set number of terms to retain
+
+# Fit and tune MARS model
+chem_fit_mars <- train(y = chem_train_y, 
+                       x = chem_train_x,
+                       method = 'earth',
+                       tuneGrid = chem_grid_mars,  # grid search for optimal hyper-parameters degree and prune
+                       trControl = chem_ctrl_cv # employ cross-validation
+                       # importance = TRUE
+                       )
+
+# Predict test data targets based on tuned MARS model
+chem_pred_mars <- predict(chem_fit_mars, 
+                         newdata = chem_test_x)
+
+# Assess MARS model's predictive performance against test set
+chem_perf_mars <- postResample(pre = chem_pred_mars, 
+                          obs = chem_test_y)
+
+# Plot MARS model performance 
+chem_plot_mars <- ggplot(chem_fit_mars)
+
+
+# (7.5a)
+
+# Compare relative performance of models
+chem_modperf_labels <- as.data.frame(c('SVM Radial',
+                                       'KNN',
+                                       'MARS')) %>%
+  setNames(c('Model'))
+
+chem_modperf_summaries <-
+  bind_rows(chem_perf_svmrad,
+            chem_perf_knn,
+            chem_perf_mars)
+
+chem_perf_table <- 
+  bind_cols(chem_modperf_labels, 
+            chem_modperf_summaries) %>% 
+  kable()
+
+
+# (7.5b)
+
+# Create filter list of top KNN predictors in terms of variable importance
+chem_varimp_knn <- caret::varImp(chem_fit_knn)
+
+chem_varimp_knn_list <- chem_varimp_knn$importance %>% 
+  rownames_to_column('Feature') %>%  # convert row index to separate column names 'Feature' 
+  as.data.frame() 
+
+chem_varimp_knn_plot <- chem_varimp_knn_list %>% 
+  head(n=20) %>% 
+  ggplot(aes(x = reorder(Feature, Overall), y = Overall)) + 
+           geom_point() +
+           geom_segment(aes(x = Feature, 
+                            xend = Feature, 
+                            y = 0, 
+                            yend = Overall)) +
+           coord_flip()
+
+
+# (7.5c)
+
+# Draft custom function to return plot demonstrating predictor-response relationships for top predictors
+chem_corr_toppred <- function(feature) {
+  
+  plot <- 
+    chem_train %>% 
+    dplyr::select(Yield, feature) %>% 
+    ggplot(aes_string(x = feature, y = 'Yield')) +
+    geom_point() +
+    geom_smooth(method = 'loess', 
+                se = FALSE)
+  print(plot)
+  
+}
+
+```
+

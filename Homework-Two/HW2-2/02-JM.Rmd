@@ -53,14 +53,15 @@ knnModel <- train(x = trainingData$x,
                   tuneLength = 10) 
 knnPred <- predict(knnModel, newdata = testData$x) 
 knnPerf <- postResample(pred = knnPred, obs = testData$y)
-
+knnPlot <- ggplot(knnModel)+theme_bw()+theme()+labs(title="KNN Cross-Validated RMSE Profile")
 
 # Model 1
 lmModel <- train(x = trainingData$x,
-                  y = trainingData$y, 
-                  method = 'lm',
-                  preProc = 'pca', 
-                  trControl = trainControl(method = "repeatedcv", repeats = 5))
+                 y = trainingData$y, 
+                 method = 'lm',
+                 preProc = 'pca', 
+                 tuneLength=5,
+                 trControl = trainControl(method = "repeatedcv", repeats = 5))
 lmPred <- predict(lmModel, newdata = testData$x) 
 lmPerf <- postResample(pred = lmPred, obs = testData$y)
 
@@ -73,15 +74,18 @@ plsModel <- train(x = trainingData$x,
                   trControl = trainControl(method = "repeatedcv", repeats = 5))
 plsPred <- predict(plsModel, newdata = testData$x) 
 plsPerf <- postResample(pred = plsPred, obs = testData$y)
+plsplot<- ggplot(plsModel)+theme_bw()+theme()+labs(title="PLS Cross-Validated RMSE Profile")
 
 # Model 3
 marsModel <- train(x = trainingData$x,
                  y = trainingData$y, 
                  method = 'earth',
-                 tuneGrid = expand.grid(degree=1, nprune=10),
+                 metric='RMSE',
+                 tuneGrid = expand.grid(degree=1:3, nprune=10),
                  trControl = trainControl(method = "repeatedcv", repeats = 5))
 marsPred <- predict(marsModel, newdata = testData$x) 
 marsPerf <- postResample(pred = marsPred, obs = testData$y)
+marsplot<- ggplot(marsModel)+theme_bw()+theme()+labs(title="MARS Cross-Validated RMSE Profile")
 ```
 
 ### For example: 
@@ -98,6 +102,12 @@ knnModel
 knnPerf
 ```
 
+**RMSE Plot:**
+
+```{r}
+knnPlot
+```
+
 ### Model 1: 
 
 **Train set model & performance:**
@@ -112,6 +122,8 @@ lmModel
 lmPerf 
 ```
 
+This method has no tuning parameters to view in a cross validation plot. 
+
 ### Model 2: 
 
 **Train set model & performance:**
@@ -122,6 +134,12 @@ plsModel
 **Test set performance values:**
 ```{r kj-7.2-2b}
 plsPerf 
+```
+
+**RMSE Plot:**
+
+```{r}
+plsplot
 ```
 
 ### Model 3: 
@@ -136,12 +154,22 @@ marsModel
 marsPerf 
 ```
 
+**RMSE Plot:**
+
+```{r}
+marsplot
+```
+
 >> **(b) Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?**
 
 The MARS model has the lowest RMSE accuracy scores for both our training and test sets. This model appeared to give the best performance. 
 
-```{r kj-7.2-4a}
-performance_table <- rbind("knnTrain"=c("RMSE"=knnModel$results$RMSE[6],"RSquared"=knnModel$results$RMSE[6],"MAE"=knnModel$results$RMSE[6]),"knnTest"=knnPerf, "lmTrain"=c("RMSE"=lmModel$results$RMSE,"RSquared"=lmModel$results$Rsquared,"MAE"=lmModel$results$MAE), "lmTest"=lmPerf, "plsTrain"=c(plsModel$results$RMSE[2],plsModel$results$Rsquared[2],plsModel$results$MAE[2]),"plsTest"=plsPerf,"marsTrain"=c(marsModel$results$RMSE,marsModel$results$Rsquared,marsModel$results$MAE), "marsTest"=marsPerf) %>% kable(caption="Model Performance", digits=4) %>% kable_styling() %>% row_spec() %>% row_spec(row=7:8, background ="#d9f2e6")
+```{r kj-7.2b}
+performance_table <- rbind("knnTrain"=c("RMSE"=knnModel$results$RMSE[7],"RSquared"=knnModel$results$RMSE[7],"MAE"=knnModel$results$RMSE[7]),"knnTest"=knnPerf, "lmTrain"=c("RMSE"=lmModel$results$RMSE,"RSquared"=lmModel$results$Rsquared,"MAE"=lmModel$results$MAE), "lmTest"=lmPerf, "plsTrain"=c(plsModel$results$RMSE[2],plsModel$results$Rsquared[2],plsModel$results$MAE[2]),"plsTest"=plsPerf,"marsTrain"=c(marsModel$results$RMSE[3],marsModel$results$Rsquared[3],marsModel$results$MAE[3]), "marsTest"=marsPerf) %>% kable(caption="Model Performance", digits=4) %>% kable_styling() %>% row_spec() %>% row_spec(row=7:8, background ="#d9f2e6")
+
+marsImp <- varImp(marsModel)
+
+marsImptbl <- marsImp$importance %>% kable(caption="MARS Model - Variable Importance", digits=2) %>% kable_styling()
 
 performance_table
 ```
@@ -149,9 +177,7 @@ performance_table
 In addition, the MARS model selected the important indicator variables: X1-X5.
 
 ```{r kj-7.2-4b}
-marsImp <- varImp(marsModel)
-
-marsImp$importance %>% kable(caption="MARS Model - Variable Importance", digits=2) %>% kable_styling()
+marsImptbl 
 ```
 
 ## (2) Kuhn & Johnson 7.5
@@ -166,7 +192,7 @@ CMP_Impute <- mice(ChemicalManufacturingProcess, m=5, printFlag=F)
 CMP_DF <- mice::complete(CMP_Impute, 2)
 
 # Set random seed 
-set.seed(1)
+set.seed(5)
 
 # Create Partition for Train/Test Splits
 trainingRows <- createDataPartition(CMP_DF$Yield, p = .80, list= FALSE)
@@ -189,43 +215,116 @@ train <- CMP_DF_TF[trainingRows, ]
 test <- CMP_DF_TF[-trainingRows, ] 
 
 # Non-Linear Model 1: Support Vector Machines with Radial Basis Function Kernel
-svmModel <- train(Yield~., data=train, method = "svmRadial", preProcess="pca", trControl = trainControl(method = "cv", number = 5), tuneLength=5)
+svmModel <- train(Yield~., data=train, method = "svmRadial", preProcess="pca", trControl = trainControl(method = "cv", number = 10), tuneLength=5)
 svmPred <- predict(svmModel, newdata = test) 
 svmPerf <- postResample(pred = svmPred, obs = test$Yield)
+svmPlot<- ggplot(svmModel)+theme_bw()+theme()+labs(title="SVM Cross-Validated RMSE Profile")
 
 # Non-Linear Model 2: Bayesian Ridge Regression (Model Averaged) 
-bma_rrModel <- train(Yield~., data=train, method = 'blassoAveraged', trControl = trainControl(method = "cv", number = 5), tuneLength=5)
+bma_rrModel <- train(Yield~., data=train, method = 'blassoAveraged', trControl = trainControl(method = "cv", number = 10), tuneLength=5)
 bma_rrPred <- predict(bma_rrModel, newdata = test) 
 bma_rrPerf <- postResample(pred = bma_rrPred, obs = test$Yield)
 
 # Non-Linear Model 3: k-Nearest Neighbors (KNN)
-knnModel <- train(Yield~., data=train, method = 'knn',   trControl = trainControl(method = "cv", number = 5), tuneLength=5)
+knnModel <- train(Yield~., data=train, method = 'knn',   trControl = trainControl(method = "cv", number = 10), tuneLength=5)
 knnPred <- predict(knnModel, newdata = test) 
 knnPerf <- postResample(pred = knnPred, obs = test$Yield)
+knnPlot<- ggplot(knnModel)+theme_bw()+theme()+labs(title="KNN Cross-Validated RMSE Profile")
 
 # Non-Linear Model 4: Multivariate Adaptive Regression Spline (MARS)
-marsModel <- train(Yield~., data=train, method = 'earth', tuneGrid = expand.grid(degree=1, nprune=10), trControl = trainControl(method = "repeatedcv", repeats = 5))
+marsModel <- train(Yield~., data=train, method = 'earth', tuneGrid = expand.grid(degree=1:3, nprune=10), trControl = trainControl(method = "cv", number = 10), tuneLength=5)
 marsPred <- predict(marsModel, newdata = test) 
 marsPerf <- postResample(pred = marsPred, obs = test$Yield)
+marsPlot<- ggplot(marsModel)+theme_bw()+theme()+labs(title="MARS Cross-Validated RMSE Profile")
 ```
+
+### Model 1: 
+
+**Train set model & performance:**
+```{r kj-7.5-m1a}
+svmModel 
+```
+
+**Test set performance values:**
+```{r kj-7.5-m1b}
+svmPerf 
+```
+
+
+**RMSE Plot:**
+
+```{r kj-7.5-m1c}
+svmPlot
+```
+
+### Model 2: 
+
+**Train set model & performance:**
+```{r kj-7.5-m2a}
+bma_rrModel 
+```
+
+**Test set performance values:**
+```{r kj-7.5-m2b}
+bma_rrPerf 
+```
+
+This method has no tuning parameters to view in a cross validation plot. 
+
+### Model 3: 
+
+**Train set model & performance:**
+```{r kj-7.5-m3a}
+knnModel 
+```
+
+**Test set performance values:**
+```{r kj-7.5-m3b}
+knnPerf 
+```
+
+**RMSE Plot:**
+
+```{r kj-7.5-m3c}
+knnPlot
+```
+
+### Model 4: 
+
+**Train set model & performance:**
+```{r kj-7.5-m4a}
+marsModel 
+```
+
+**Test set performance values:**
+```{r kj-7.5-m4b}
+marsPerf 
+```
+
+**RMSE Plot:**
+
+```{r kj-7.5-m4c}
+marsplot
+```
+
 
 >> **(a) Which nonlinear regression model gives the optimal resampling and test set performance? **
 
 We trained four models on the chemical manufacturing process data: Support Vector Machines with Radial Basis Function Kernel (SVM), Bayesian Ridge Regression (Model Averaged), k-Nearest Neighbors (KNN), and Multivariate Adaptive Regression Spline (MARS). 
 
-We found that the SVM and Bayesian Ridge approach produced the lowest train accuracy score. However, he train accuracy for the Baysian Ridge was lower than the test accuracy, indicating that model may have been overfitted to the training data. MARS also produced similiarly low accuracy scores. MARS test RMSE was slightly lower than SVM's test accuracy measures, however SVM outperformed MARS with the training accuracy. There was a smaller difference between the train and test accuracy with the SVM method, thus we choose this as our optimal model for resampling and test set performance.
+We found that the SVM and Bayesian Ridge approach produced the lowest test accuracy score. However, the train accuracy for the Baysian Ridge was much higher than the test accuracy, indicating that model may have been overfitted to the training data. MARS also produced similiarly low accuracy scores with a slight degree of overfitting. While the MARS test RMSE was lower than SVM's test accuracy measures, SVM outperformed MARS with the training accuracy. There was a smaller difference between the train and test accuracy with the SVM method. As a result, we choose this as our optimal model for resampling and test set performance.
 
 ```{r kj-7.5a}
-performance_table2 <- rbind("svmTrain"=c(svmModel$results$RMSE[5],svmModel$results$Rsquared[5],svmModel$results$MAE[5]),"svmTest"=svmPerf,"knnTrain"=c("RMSE"=knnModel$results$RMSE[2],"RSquared"=knnModel$results$RMSE[2],"MAE"=knnModel$results$RMSE[2]),"knnTest"=knnPerf, "bma_rrTrain" = c("RMSE"=bma_rrModel$results$RMSE, "RSquared" = bma_rrModel$results$Rsquared, "MAE"=bma_rrModel$results$MAE), "bma_rrTest"=bma_rrPerf, "marsTrain" = c(marsModel$results$RMSE, marsModel$results$Rsquared, marsModel$results$MAE), "marsTest"=marsPerf) %>% kable(caption="Model Performance", digits = 4) %>% kable_styling() %>% row_spec() %>% row_spec(row=1:2, background ="#d9f2e6")
+performance_table2 <- rbind("svmTrain"=c(svmModel$results$RMSE[5],svmModel$results$Rsquared[5],svmModel$results$MAE[5]),"svmTest"=svmPerf,"knnTrain"=c("RMSE"=knnModel$results$RMSE[4],"RSquared"=knnModel$results$RMSE[4],"MAE"=knnModel$results$RMSE[4]),"knnTest"=knnPerf, "bma_rrTrain" = c("RMSE"=bma_rrModel$results$RMSE, "RSquared" = bma_rrModel$results$Rsquared, "MAE"=bma_rrModel$results$MAE), "bma_rrTest"=bma_rrPerf,"marsTrain" = c(marsModel$results$RMSE[1], marsModel$results$Rsquared[1], marsModel$results$MAE[1]), "marsTest"=marsPerf) %>% kable(caption="Model Performance", digits = 4) %>% kable_styling() %>% row_spec() %>% row_spec(row=1:2, background ="#d9f2e6")
 
 performance_table2
 ```
 
 >> **(b) Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? **
 
-The `caret` package does not allow the `varImp` function to work on SVM models, thus we used MARS to evaluate predictor importance of our optimal nonlinear regression models as these MARS ans SVM had similiar accuracy performance. 
+The `caret` package does not allow the `varImp` function to work on SVM models, so we instead used MARS to evaluate predictor importance of our optimal nonlinear regression models. We found this to be a suitable replacement because the MARS and SVM had similiar accuracy performance, albiet the MARS model may be slightly overfitted to the train data. 
 
-In our homework from Chapter 6, our PLS linear model identified mostly biological process variables as the important predictors. This differs from the non-linear important predictors identified in our MARS model. The MARS method calculated variable importance for 7 indicators, of which 6 were manufacturing variables.
+In our homework from Chapter 6, our PLS linear model identified mostly biological process variables as the important predictors. This differs from the non-linear important predictors identified in our MARS model. Conversely, the MARS method calculated variable importance for 7 indicators, of which 5 were manufacturing variables.
 
 ```{r kj-7.5b, fig.height=4}
 marsImp <- varImp(marsModel)
@@ -233,7 +332,7 @@ marsImp <- varImp(marsModel)
 
 mars_most_important <- as.data.frame(marsImp$importance) %>% rownames_to_column("Variable") %>% filter(Overall>0)  
 
-plot2 <- ggplot(mars_most_important, aes(x=reorder(Variable, Overall), y=Overall)) + geom_point() + geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + labs(title="Variable Importance", subtitle="SVM Model for CMP Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+plot2 <- ggplot(mars_most_important, aes(x=reorder(Variable, Overall), y=Overall)) + geom_point() + geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + labs(title="Variable Importance", subtitle="MARS Model for CMP Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
 
 plot2
 ```
@@ -241,18 +340,11 @@ plot2
 
 >> **(c) Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?**
 
-The following shows correlation between our top predictor and response variables using our MARS model.
-
-```{r kj-7.5c-1}
+```{r kj-7.5c}
 top<-mars_most_important$Variable
 cor<-cor(train[, top], train$Yield, method="pearson")
-cor %>% as.data.frame()%>%rownames_to_column("Variable")%>%rename("Correlation"=V1)%>%arrange(desc(Correlation))%>%kable(caption="Correlation") %>% kable_styling() 
-```
-
-We can use a scatterplot to further look at their relationship. The `manufacturingprocess09` indicator has a more linear relationship with yield, whereas the variables exibit a non-linear pattern when examined against yield.
-
-```{r kj-7.5c-2, fig.height=5}
-CMP_DF[, top] %>% cbind("Yield"=CMP_DF$Yield) %>% gather(key="Variable", value="Value", -Yield) %>%
+cor_tbl <- cor %>% as.data.frame()%>%rownames_to_column("Variable")%>%rename("Correlation"=V1)%>%arrange(desc(Correlation))%>%kable(caption="Correlation") %>% kable_styling() 
+plot3 <- CMP_DF[, top] %>% cbind("Yield"=CMP_DF$Yield) %>% gather(key="Variable", value="Value", -Yield) %>%
   ggplot(aes(Value, Yield, color=Variable)) +
   geom_point(color="grey") +
   geom_smooth(stat="smooth", color="black", method = "loess") +
@@ -260,6 +352,147 @@ CMP_DF[, top] %>% cbind("Yield"=CMP_DF$Yield) %>% gather(key="Variable", value="
   labs(title="Variable Importance Scatterplot",y="Yield Outcome", x="Raw Material Measurements")+
   theme_bw()+
   theme(legend.position = 'none', axis.text.x = element_text(angle = 45, hjust = 1)) 
-
 ```
 
+The following shows correlation between our top predictor and response variables using our MARS model.
+
+```{r kj-7.5c-1}
+cor_tbl
+```
+
+We can use a scatterplot to further look at their relationship. With the exception of `ManufacturingProcess09`, none of the variables exibit a strong linear pattern when examined against yield. This depiction could help explain why variable importance results from our selected linear model varied greatly from our non-linear model.
+
+```{r kj-7.5c-2, fig.height=5}
+plot3
+```
+
+## R Code 
+
+```{r 02-code, eval=F,echo=T}
+# (7.2 example)
+set.seed(200) 
+trainingData <- mlbench.friedman1(200, sd = 1)
+trainingData$x <- data.frame(trainingData$x) 
+featurePlot(trainingData$x, trainingData$y) 
+testData <- mlbench.friedman1(5000, sd = 1)
+testData$x <- data.frame(testData$x) 
+# Example 
+knnModel <- train(x = trainingData$x,
+                  y = trainingData$y, 
+                  method = "knn",
+                  preProc = c("center", "scale"), 
+                  tuneLength = 10) 
+knnPred <- predict(knnModel, newdata = testData$x) 
+knnPerf <- postResample(pred = knnPred, obs = testData$y)
+knnPlot <- ggplot(knnModel)+theme_bw()+theme()+labs(title="KNN Cross-Validated RMSE Profile")
+
+# Model 1
+lmModel <- train(x = trainingData$x,
+                  y = trainingData$y, 
+                  method = 'lm',
+                  preProc = 'pca', 
+                  trControl = trainControl(method = "repeatedcv", repeats = 5))
+lmPred <- predict(lmModel, newdata = testData$x) 
+lmPerf <- postResample(pred = lmPred, obs = testData$y)
+
+# Model 2
+plsModel <- train(x = trainingData$x,
+                  y = trainingData$y, 
+                  method = 'pls',
+                  preProc = 'pca', 
+                  tuneLength = 5,
+                  trControl = trainControl(method = "repeatedcv", repeats = 5))
+plsPred <- predict(plsModel, newdata = testData$x) 
+plsPerf <- postResample(pred = plsPred, obs = testData$y)
+plsplot<- ggplot(plsModel)+theme_bw()+theme()+labs(title="PLS Cross-Validated RMSE Profile")
+
+# Model 3
+marsModel <- train(x = trainingData$x,
+                 y = trainingData$y, 
+                 method = 'earth',
+                 metric='RMSE',
+                 tuneGrid = expand.grid(degree=1:3, nprune=10),
+                 trControl = trainControl(method = "repeatedcv", repeats = 5))
+marsPred <- predict(marsModel, newdata = testData$x) 
+marsPerf <- postResample(pred = marsPred, obs = testData$y)
+marsplot<- ggplot(marsModel)+theme_bw()+theme()+labs(title="MARS Cross-Validated RMSE Profile")
+
+# (7.2b)
+performance_table <- rbind("knnTrain"=c("RMSE"=knnModel$results$RMSE[6],"RSquared"=knnModel$results$RMSE[6],"MAE"=knnModel$results$RMSE[6]),"knnTest"=knnPerf, "lmTrain"=c("RMSE"=lmModel$results$RMSE,"RSquared"=lmModel$results$Rsquared,"MAE"=lmModel$results$MAE), "lmTest"=lmPerf, "plsTrain"=c(plsModel$results$RMSE[2],plsModel$results$Rsquared[2],plsModel$results$MAE[2]),"plsTest"=plsPerf,"marsTrain"=c(marsModel$results$RMSE,marsModel$results$Rsquared,marsModel$results$MAE), "marsTest"=marsPerf) %>% kable(caption="Model Performance", digits=4) %>% kable_styling() %>% row_spec() %>% row_spec(row=7:8, background ="#d9f2e6")
+
+marsImp <- varImp(marsModel)
+
+marsImptbl <- marsImp$importance %>% kable(caption="MARS Model - Variable Importance", digits=2) %>% kable_styling()
+
+
+# (7.5a)
+# Models
+# FOR FINAL HW SUBMISSION, DO NOT REPEAT STEPS: JUST CALL VARIABLES FROM PRIOR ASSIGNMENT.
+data(ChemicalManufacturingProcess)
+CMP_Impute <- mice(ChemicalManufacturingProcess, m=5, printFlag=F)
+CMP_DF <- mice::complete(CMP_Impute, 2)
+
+# Set random seed 
+set.seed(5)
+
+# Create Partition for Train/Test Splits
+trainingRows <- createDataPartition(CMP_DF$Yield, p = .80, list= FALSE)
+
+# Split Train/Test Data 
+train <- CMP_DF[trainingRows, ] 
+test <- CMP_DF[-trainingRows, ] 
+
+# Pre-Process Recipe 
+rec <- recipes::recipe(CMP_DF, Yield~.)
+rec <- rec %>% step_nzv( all_predictors(), options = list(freq_cut = 95/5, unique_cut = 10 ) )
+prep_rec = prep(rec, training = CMP_DF)
+CMP_DF_TF = bake( prep_rec, CMP_DF)
+
+# Create Partition for Train/Test Splits
+trainingRows <- createDataPartition(CMP_DF_TF$Yield, p = .80, list= FALSE)
+
+# Split Train/Test Data 
+train <- CMP_DF_TF[trainingRows, ] 
+test <- CMP_DF_TF[-trainingRows, ] 
+
+# Non-Linear Model 1: Support Vector Machines with Radial Basis Function Kernel
+svmModel <- train(Yield~., data=train, method = "svmRadial", preProcess="pca", trControl = trainControl(method = "cv", number = 10), tuneLength=5)
+svmPred <- predict(svmModel, newdata = test) 
+svmPerf <- postResample(pred = svmPred, obs = test$Yield)
+svmPlot<- ggplot(svmModel)+theme_bw()+theme()+labs(title="SVM Cross-Validated RMSE Profile")
+
+# Non-Linear Model 2: Bayesian Ridge Regression (Model Averaged) 
+bma_rrModel <- train(Yield~., data=train, method = 'blassoAveraged', trControl = trainControl(method = "cv", number = 10), tuneLength=5)
+bma_rrPred <- predict(bma_rrModel, newdata = test) 
+bma_rrPerf <- postResample(pred = bma_rrPred, obs = test$Yield)
+
+# Non-Linear Model 3: k-Nearest Neighbors (KNN)
+knnModel <- train(Yield~., data=train, method = 'knn',   trControl = trainControl(method = "cv", number = 10), tuneLength=5)
+knnPred <- predict(knnModel, newdata = test) 
+knnPerf <- postResample(pred = knnPred, obs = test$Yield)
+knnPlot<- ggplot(knnModel)+theme_bw()+theme()+labs(title="KNN Cross-Validated RMSE Profile")
+
+# Non-Linear Model 4: Multivariate Adaptive Regression Spline (MARS)
+marsModel <- train(Yield~., data=train, method = 'earth', tuneGrid = expand.grid(degree=1:3, nprune=10), trControl = trainControl(method = "cv", number = 10), tuneLength=5)
+marsPred <- predict(marsModel, newdata = test) 
+marsPerf <- postResample(pred = marsPred, obs = test$Yield)
+marsPlot<- ggplot(marsModel)+theme_bw()+theme()+labs(title="MARS Cross-Validated RMSE Profile")
+
+# Performance
+performance_table2 <- rbind("svmTrain"=c(svmModel$results$RMSE[5],svmModel$results$Rsquared[5],svmModel$results$MAE[5]),"svmTest"=svmPerf,"knnTrain"=c("RMSE"=knnModel$results$RMSE[2],"RSquared"=knnModel$results$RMSE[2],"MAE"=knnModel$results$RMSE[2]),"knnTest"=knnPerf, "bma_rrTrain" = c("RMSE"=bma_rrModel$results$RMSE, "RSquared" = bma_rrModel$results$Rsquared, "MAE"=bma_rrModel$results$MAE), "bma_rrTest"=bma_rrPerf, "marsTrain" = c(marsModel$results$RMSE, marsModel$results$Rsquared, marsModel$results$MAE), "marsTest"=marsPerf) %>% kable(caption="Model Performance", digits = 4) %>% kable_styling() %>% row_spec() %>% row_spec(row=1:2, background ="#d9f2e6")
+
+
+# (7.5b)
+marsImp <- varImp(marsModel)
+
+mars_most_important <- as.data.frame(marsImp$importance) %>% rownames_to_column("Variable") %>% filter(Overall>0)  
+
+plot2 <- ggplot(mars_most_important, aes(x=reorder(Variable, Overall), y=Overall)) + geom_point() + geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall)) + labs(title="Variable Importance", subtitle="MARS Model for CMP Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+
+# (7.5c)
+top<-mars_most_important$Variable
+cor<-cor(train[, top], train$Yield, method="pearson")
+cor_tbl <- cor %>% as.data.frame()%>%rownames_to_column("Variable")%>%rename("Correlation"=V1)%>%arrange(desc(Correlation))%>%kable(caption="Correlation") %>% kable_styling()
+plot3 <- CMP_DF[, top] %>% cbind("Yield"=CMP_DF$Yield) %>% gather(key="Variable", value="Value", -Yield) %>%
+  ggplot(aes(Value, Yield, color=Variable)) + geom_point(color="grey") + geom_smooth(stat="smooth", color="black", method = "loess") + facet_wrap(~Variable, scales='free_x', nrow=2) + labs(title="Variable Importance Scatterplot",y="Yield Outcome", x="Raw Material Measurements")+ theme_bw()+ theme(legend.position = 'none', axis.text.x = element_text(angle = 45, hjust = 1)) 
+```

@@ -1,0 +1,173 @@
+---
+title: "hw#2.data624"
+author: "Sang Yoon (Andy) Hwang"
+date: "September 9, 2019"
+output:
+  html_document: default
+  word_document: default
+---
+
+# 6.9 Exercises
+
+# 6.9.2. The plastics data set consists of the monthly sales (in thousands) of product A for a plastics manufacturer for five years.
+```{r, include=FALSE}
+library(fpp2)
+```
+
+# a. Plot the time series of sales of product A. Can you identify seasonal fluctuations and/or a trend-cycle?
+```{r}
+autoplot(plastics) + ggtitle("Monthly Sales of product A") + xlab("Year") + ylab("Monthly Sales")
+```
+
+An increasing trend is seen from autoplot - as year goes by, monthly sales for each year seem to be increasing MoM/YoY basis. 
+
+# b. Use a classical multiplicative decomposition to calculate the trend-cycle and seasonal indices.
+```{r}
+# multiplicative decomposition and seasonality adjusted plot
+
+plastics %>% decompose(type="multiplicative") %>%
+  autoplot() + xlab("Year") +
+  ggtitle("Classical multiplicative decomposition
+    of monthly sales of product A")
+
+# calculation of strength of trend-cycle and seasonality.
+var_r = var(decompose(plastics,type="multiplicative")$random, na.rm = TRUE)
+
+var_tr = var(decompose(plastics,type="multiplicative")$trend + decompose(plastics,type="multiplicative")$random, na.rm = TRUE)
+
+var_sr = var(decompose(plastics,type="multiplicative")$seasonal + decompose(plastics,type="multiplicative")$random, na.rm = TRUE)
+
+ft = max(0, 1 - var_r / (var_tr))
+fs = max(0, 1 - var_r / (var_sr))
+ft
+fs
+```
+
+Strength of trend is 0.999 and seasonality is 0.976. Indeed, there are strong trend-cycle and seasonality.
+
+# c. Do the results support the graphical interpretation from part a?
+
+Yes, as we have seen from autoplot result from a, the results in b support strong seasonality and trend-cycle which are seen from the plot in a.
+
+# d. Compute and plot the seasonally adjusted data.
+```{r}
+# multiplicative decomposition and seasonality adjusted plot
+dcp_m = decompose(plastics,type="multiplicative")
+#dcp_add = decompose(plastics)
+sadj_m = plastics / dcp_m$seasonal #seasadj(dcp_m)
+
+autoplot(plastics, series = "Data") + autolayer(sadj_m, series = "Seasonally Adj. - multiplicative") + labs(title = "Monthly sales of product A", x = "Year", y = "Monthly Sales") + scale_color_manual(values=c('grey','blue'))
+```
+
+Since multiplicative decomposition is used, seasonally adjusted figures are calculated as dividing `plastics` by `dcp_m$seasonal`. As you can see from the above plot, removing seasonality, the series contain only the random component and trend-cycle.
+
+# e. Change one observation to be an outlier (e.g., add 500 to one observation), and recompute the seasonally adjusted data. What is the effect of the outlier?
+```{r}
+# randomly select index and add 500 to one observation.
+plastics_ol <- plastics
+#index <- sample(1:length(plastics), 1)
+#plastics_ol[index] <- plastics_ol[index] + 500
+plastics_ol[8] <- plastics_ol[8] + 500
+
+# multiplicative decomposition and seasonality adjusted plot
+dcp_m = decompose(plastics_ol,type="multiplicative")
+#dcp_add = decompose(plastics)
+sadj_m = plastics_ol / dcp_m$seasonal #seasadj(dcp_m)
+
+autoplot(plastics_ol, series = "Data") + autolayer(sadj_m, series = "Seasonally Adj. - multiplicative") + labs(title = "Monthly sales of product A", x = "Year", y = "Monthly Sales") + scale_color_manual(values=c('grey','blue'))
+
+
+# calculation of strength of trend-cycle and seasonality with outlier
+var_r = var(decompose(plastics_ol,type="multiplicative")$random, na.rm = TRUE)
+
+var_tr = var(decompose(plastics_ol,type="multiplicative")$trend + decompose(plastics_ol,type="multiplicative")$random, na.rm = TRUE)
+
+var_sr = var(decompose(plastics_ol,type="multiplicative")$seasonal + decompose(plastics_ol,type="multiplicative")$random, na.rm = TRUE)
+
+ft = max(0, 1 - var_r / (var_tr))
+
+fs = max(0, 1 - var_r / (var_sr))
+
+# decomposition, ft and fs with outlier
+autoplot(dcp_m)
+ft
+fs
+```
+
+From the autoplot, it is apparent that there is a spike in observation 8. Not only that, you can see that one outlier affect the general overall shape of seasonal graph - it is now more "pointy" in every spike. The strength of trend-cycle and seasonality became weaker compared to the case where there was no outlier - with-outlier (random outlier) - 0.9999998 and 0.927, no-outlier - 0.99999999 and 0.9764368.
+
+# f. Does it make any difference if the outlier is near the end rather than in the middle of the time series?
+```{r}
+# near the end
+
+# select index near the end and add 500 to one observation.
+plastics_ne <- plastics
+plastics_ne[max(length(plastics))] <- plastics_ne[max(length(plastics))] + 500
+
+# multiplicative decomposition and seasonality adjusted plot
+dcp_m = decompose(plastics_ne,type="multiplicative")
+#dcp_add = decompose(plastics)
+sadj_m = plastics_ne / dcp_m$seasonal #seasadj(dcp_m)
+
+autoplot(plastics_ne, series = "Data") + autolayer(sadj_m, series = "Seasonally Adj. - multiplicative") + labs(title = "Monthly sales of product A", x = "Year", y = "Monthly Sales") + scale_color_manual(values=c('grey','blue'))
+
+# calculation of strength of trend-cycle and seasonality with outlier
+var_r = var(decompose(plastics_ne,type="multiplicative")$random, na.rm = TRUE)
+
+var_tr = var(decompose(plastics_ne,type="multiplicative")$trend + decompose(plastics_ne,type="multiplicative")$random, na.rm = TRUE)
+
+var_sr = var(decompose(plastics_ne,type="multiplicative")$seasonal + decompose(plastics_ne,type="multiplicative")$random, na.rm = TRUE)
+
+ft = max(0, 1 - var_r / (var_tr))
+fs = max(0, 1 - var_r / (var_sr))
+
+# decomposition, ft and fs with outlier
+autoplot(dcp_m)
+ft
+fs
+
+
+
+# in the middle
+
+# select index in the middle and add 500 to one observation.
+plastics_m <- plastics
+plastics_m[(length(plastics) / 2)] <- plastics_m[(length(plastics) / 2)] + 500
+
+# multiplicative decomposition and seasonality adjusted plot
+dcp_m = decompose(plastics_m,type="multiplicative")
+#dcp_add = decompose(plastics)
+sadj_m = plastics_m / dcp_m$seasonal #seasadj(dcp_m)
+
+autoplot(plastics_m, series = "Data") + autolayer(sadj_m, series = "Seasonally Adj. - multiplicative") + labs(title = "Monthly sales of product A", x = "Year", y = "Monthly Sales") + scale_color_manual(values=c('grey','blue'))
+
+
+# calculation of strength of trend-cycle and seasonality with outlier
+var_r = var(decompose(plastics_m,type="multiplicative")$random, na.rm = TRUE)
+
+var_tr = var(decompose(plastics_m,type="multiplicative")$trend + decompose(plastics_m,type="multiplicative")$random, na.rm = TRUE)
+
+var_sr = var(decompose(plastics_m,type="multiplicative")$seasonal + decompose(plastics_m,type="multiplicative")$random, na.rm = TRUE)
+
+ft = max(0, 1 - var_r / (var_tr))
+fs = max(0, 1 - var_r / (var_sr))
+
+# decomposition, ft and fs with outlier
+autoplot(dcp_m)
+ft
+fs
+```
+
+Let's compare the results of strength (trend-cycle and seasonality):
+
+with-outlier (8th index) - 0.9999998 and 0.927
+
+with-outlier (index in the middle) - 0.9999999 and 0.944728
+
+with-outlier (index in the end) - 1 and 0.9773742
+
+no-outlier - 0.99999999 and 0.9764368
+
+From above, we can see that outlier in the end actually improves both trend-cycle and seasonality strength, compared to no-outlier case. When outliers were in random index both trend-cycle and seasonality strength became weaker, compared to no-outlier case. When outliers were in index in the middle, trend-cycle strength was unchanged when seasonality strength became weaker, compared to no-outlier case.
+
+But keep in mind that the improvement (or weakening) is only marginal. Overall, what I can conclude is that the position of outliers does change the strength of both trend-cycle and seasonality and thus, it does marginally change the shapes of trend-cycle and seasonality.

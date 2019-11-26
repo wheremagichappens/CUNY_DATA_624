@@ -1,0 +1,74 @@
+--- 
+title: "Homework One"
+subtitle: Group Two
+author:
+- Vinicio Haro
+- Sang Yoon (Andy) Hwang
+- Julian McEachern
+- Jeremy O'Brien
+- Bethany Poulin
+date: "15 October 2019"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook."
+output: bookdown::pdf_book
+subparagraph: true
+classoption: openany
+---
+
+# Overview {-#overview}
+
+We created this together, each member doing all of the problems and then voting on what to include and what to leave out of our final submission. In most cases, we used the guts of one members work and supplemented it with plots, metrics and interpretations from some or all other team member answers.
+
+## Dependencies
+
+The following R packages were used in the completion of this work. Loading them all at the beggining should ensure that any code found in this document runs correctly.
+
+```{r dependencies, echo=TRUE, eval = FALSE, warning=FALSE, message=FALSE, comment=FALSE}
+
+#Textbook Packages
+library(fpp2)
+library(AppliedPredictiveModeling)
+library(mlbench)
+
+#Processing
+library(tidyverse)
+library(RCurl)
+library(readxl)
+
+#Graphing
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(lemon)
+
+#Math
+library(tsfeatures)
+library(caret)
+library(forecast)
+library(randomForest)
+library(seasonal)
+library(psych)
+library(corrplot)
+require(e1071)
+
+#Formatting
+library(knitr)
+require(default)
+library(kableExtra)
+library(magrittr)
+```
+
+## Data Files
+
+Where data is not included via an R package, and needs to be supplied , we referrenced a folder parallel to our code as such '/data/retail.xlsx'. In order for our code to read properly, you should create a parallel folder `data` to host such files.
+
+```{r bib, include=F}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```

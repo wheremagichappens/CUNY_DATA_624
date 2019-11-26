@@ -23,7 +23,7 @@
 }{}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
-            pdftitle={Data 624 - Group 2 Homework Part 2},
+            pdftitle={Homework Part 2},
             pdfauthor={Vinicio Haro; Sang Yoon (Andy) Hwang; Julian McEachern; Jeremy O'Brien; Bethany Poulin},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -104,17 +104,15 @@
 
 \setlength{\droptitle}{-2em}
 
-  \title{Data 624 - Group 2\\
-Homework Part 2}
+  \title{Homework Part 2}
     \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
     \author{Vinicio Haro \\ Sang Yoon (Andy) Hwang \\ Julian McEachern \\ Jeremy O'Brien \\ Bethany Poulin}
     \preauthor{\centering\large\emph}
   \postauthor{\par}
-      \predate{\centering\large\emph}
-  \postdate{\par}
-    \date{16 December 2019}
-
+    \date{}
+    \predate{}\postdate{}
+  
 % set plain style for page numbers
 \pagestyle{plain}
 \raggedbottom
@@ -125,33 +123,45 @@ Homework Part 2}
 
 % create color block quotes
 \usepackage[dvipsnames]{xcolor}
+\definecolor{navyblue}{RGB}{16, 52, 166}
+\definecolor{stealblue}{RGB}{72, 90, 122}
 \usepackage{tcolorbox}     
-\newtcolorbox{question}[1]{colback=white, colframe=Emerald ,fonttitle=\bfseries, title=#1}
+\newtcolorbox{question}[1]{colback=white, colframe=navyblue ,fonttitle=\bfseries, title=#1}
 
-\newtcolorbox{subquestion}[1]{colback=white,colframe=white, coltitle=Emerald!75!black, detach title, before upper={\tcbtitle\quad\hangindent7mm}, title={#1},fonttitle=\bfseries, fontupper=\bfseries}
+\newtcolorbox{subquestion}[1]{colback=white,colframe=white, coltitle=navyblue!75!black, detach title, before upper={\tcbtitle\quad\hangindent7mm}, title={#1},fonttitle=\bfseries, fontupper=\bfseries}
 
-% remove "chapter" from chapter title
-\usepackage{titlesec}
 
-\titleformat{\chapter}
-  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
-\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\usepackage{xcolor}
+\usepackage{sectsty}
+\usepackage{etoolbox}
+\usepackage{titling}
 
 \usepackage{titling}
-\pretitle{\begin{flushright}\LARGE}
-\posttitle{\par\end{flushright}\vskip 0.5em}
-\preauthor{\begin{flushright}\large \lineskip 0.5em}
+\pretitle{\begin{flushright}\Huge\color{navyblue}\textbf}
+\posttitle{\par\Large\color{gray}Data 624 - Predictive Analytics\linebreak 16 December 2019\end{flushright}}
+\preauthor{\begin{flushright}\large \lineskip 0.5em\textbf{Group Members:}\linebreak\textit}
 \postauthor{\par\end{flushright}}
 \predate{\begin{flushright}\large}
 \postdate{\par\end{flushright}}
 
 
-% wrap text
-\usepackage{geometry}[textwidth=6in]
+
+
+% remove "chapter" from chapter title
+\usepackage{titlesec}
+\titleformat{\chapter}
+  {\normalfont\color{navyblue}\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+
+% margins
+\usepackage[margin=1in]{geometry}
 
 % kable 
 \usepackage{tabu}
 \usepackage{float} 
+\usepackage{booktabs}
+\usepackage[font={color=navyblue,bf}]{caption}
 
 % multicolumn
 \usepackage{multicol}
@@ -191,15 +201,26 @@ Include details on our process in creating this document.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Predictive Modeling}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }
-    \StringTok{"randomForest"}\NormalTok{)}
+\CommentTok{# Data Wrangling}
+\KeywordTok{library}\NormalTok{(AppliedPredictiveModeling)}
+\KeywordTok{library}\NormalTok{(mice)}
+\KeywordTok{library}\NormalTok{(caret)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(pls)}
+\KeywordTok{library}\NormalTok{(caTools)}
+\KeywordTok{library}\NormalTok{(mlbench)}
+\KeywordTok{library}\NormalTok{(stringr)}
 
-\CommentTok{# Formatting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{)}
+\CommentTok{# Formatting}
+\KeywordTok{library}\NormalTok{(default)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
 
-\CommentTok{# Plotting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{)}
+\CommentTok{# Plotting}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(grid)}
+\KeywordTok{library}\NormalTok{(ggfortify)}
+\KeywordTok{library}\NormalTok{(gridExtra)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -222,20 +243,190 @@ Include details on our process in creating this document.
 \end{Highlighting}
 \end{Shaded}
 
+The matrix processPredictors contains the 57 predictors (12 describing
+the input biological material and 45 describing the process predictors)
+for the 176 manufacturing runs. yield contains the percent yield for
+each run. Using a histogram, we examined the distribution of
+\texttt{Yield} and found that the response variable appears unimodal
+with a normal distribution.
+
+\begin{center}\includegraphics{Homework-Two_files/figure-latex/kj-6.3a-plot-1} \end{center}
+
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
+
+\texttt{ManufacturingProcess03} has the largest volume of missing data
+followed by \texttt{ManufacturingProcess11}. Given that each variable
+has less than 25\% of data missing, we should introduce methods of
+imputation. For our purposes, we will use the MICE method. MICE is
+formally known as Multiple Imputation with Chained Equations. On a high
+level, MICE is built off a tehcnique known as the Gibbs sampler.
+
+The Gibbs sampler is a Markov chain based on Monte Carlo. MICE iterates
+drawing estimates of missing values and parameters related to the
+distribution of said variables. Chained equations are generally faster
+than the monte carlo based Gibbs sampler. MICE has 5 imputations listed
+as its default. predictive mean matching is also a default method for
+MICE. PMM does a better job at keeping non-linear relationships within
+individual variables.
+
+In addition to MICE, we drop variables that have near zero variance,
+however we point out that only one variable was dropped. We still
+include it as a process step to follow the literature's specifications.
+After completing MICE, we no longer had missing data in our set. We
+examined other imputation methods such as KNN but determined that there
+was no significant change in the summary statistics across different
+imputation methods.
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3b}Variables with Missing Values}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}{lr>{\bfseries\raggedright\arraybackslash}p{0.1cm}lr}
+\toprule
+\textbf{Predictor} & \textbf{n} & \textbf{ } & \textbf{Predictor} & \textbf{n}\\
+\midrule
+\rowcolor{gray!6}  ManufacturingProcess03 & 15 &  & ManufacturingProcess02 & 3\\
+ManufacturingProcess11 & 10 &  & ManufacturingProcess06 & 2\\
+\rowcolor{gray!6}  ManufacturingProcess10 & 9 &  & ManufacturingProcess01 & 1\\
+ManufacturingProcess25 & 5 &  & ManufacturingProcess04 & 1\\
+\rowcolor{gray!6}  ManufacturingProcess26 & 5 &  & ManufacturingProcess05 & 1\\
+\addlinespace
+ManufacturingProcess27 & 5 &  & ManufacturingProcess07 & 1\\
+\rowcolor{gray!6}  ManufacturingProcess28 & 5 &  & ManufacturingProcess08 & 1\\
+ManufacturingProcess29 & 5 &  & ManufacturingProcess12 & 1\\
+\rowcolor{gray!6}  ManufacturingProcess30 & 5 &  & ManufacturingProcess14 & 1\\
+ManufacturingProcess31 & 5 &  & ManufacturingProcess22 & 1\\
+\addlinespace
+\rowcolor{gray!6}  ManufacturingProcess33 & 5 &  & ManufacturingProcess23 & 1\\
+ManufacturingProcess34 & 5 &  & ManufacturingProcess24 & 1\\
+\rowcolor{gray!6}  ManufacturingProcess35 & 5 &  & ManufacturingProcess40 & 1\\
+ManufacturingProcess36 & 5 &  & ManufacturingProcess41 & 1\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 \end{subquestion}
 
+We will build a PLS model also known as partial least squares. PLS is a
+statistical method that fits a linear regression model by projecting the
+feature variables and response variable to some new space via a mapping
+function. Because of this projection mechanisim, for both predictors and
+the response, the method becomes bilinear or simply known as linear with
+respect to to each of the variable types. PLS also has certain
+advantages over other methods such as being more robust to dealing with
+issues arising from multicolinearity.
+
+For our PLS model, we partitioned the data by taking 80\% of the data as
+training and the remaining 20\% as testing subsets. We also apply center
+and scaling arguments set to true. We built a standard PLS model and
+evaluated the root mean summary areas to determine the optimal number of
+components to select. We generate performance metrics for our best tune
+below:
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3c}PLS Performance Metrics on Training Subset}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}{rrr}
+\toprule
+\textbf{RMSE} & \textbf{Rsquared} & \textbf{MAE}\\
+\midrule
+\rowcolor{gray!6}  1.5626 & 0.3953 & 1.1845\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Our Baseline PLS model generates a RMSE of 1.56. In addition, the model
+captures 39.53 \% of data variability. We include the visualizations
+pertaining to the train set cross-validation RMSE tunes and a plot
+comparing the observed and predicted outcome from our model.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3c2-1.pdf}
+
 \begin{subquestion}{(d).} Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
 \end{subquestion}
+
+We see a decreased R squared against the test data with 22\% of the data
+variability accounted for. We also see the RMSE decrease to 1.52 from
+our training results of 1.56. There is also a slight increase in the
+MAE.
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3d-1}PLS Performance Metrics on Test Subset}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}{rrr}
+\toprule
+\textbf{RMSE} & \textbf{Rsquared} & \textbf{MAE}\\
+\midrule
+\rowcolor{gray!6}  1.5222 & 0.2212 & 1.2885\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We also plotted the observed and predicted values from our test set
+against each other below. The deviation from the fitted line tells us
+that our selected linear model may not provide the best predictions for
+\texttt{Yield}.
+
+\begin{center}\includegraphics{Homework-Two_files/figure-latex/kj-6.3d-2-1} \end{center}
 
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
 
+VarImp allows us to identify the variables by name and compute their
+importance. \texttt{ManufacturingProcess32} was flagged as the most
+important predictor overall and within the group of other Manufacturing
+Process variables. \texttt{BiologicalMaterial06} ranked second and was
+the most important variable within the BiologicalMaterial group. The
+variable importance rankings are mixed with 8 variables belonging to
+Biology and 7 Manufacturing Process variables within the top 15
+predictors.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3e-1.pdf}
+
 \begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 \end{subquestion}
+
+We used a scatter plot to visualize the relationship between our top
+five important predictors against our response variable, \texttt{Yield}.
+All but \texttt{ManufacturingProcess32} show a moderate positive, linear
+relationship with yield.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-6.3f-1-1.pdf}
+
+We further examined this relationship by analyzing the correlation
+strength between our top five important response variables with the
+\texttt{Yield}. Out of which, \texttt{ManufacturingProcess32} showed the
+strongest, positive correlation with our response variable.
+
+From a business point of view, our aim is to increase yield since we
+know that yield ties into revenue. We do not have insight into what
+mechanics go into each manufacturing process but we can use this
+knowledge to adjust the processes to emulate the highest yield outputs.
+
+\begin{table}[H]
+
+\caption{\label{tab:kj-6.3f-2}Variable Correlation with Yield}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}{lr}
+\toprule
+\textbf{Variable} & \textbf{Yield}\\
+\midrule
+\rowcolor{gray!6}  ManufacturingProcess32 & 0.6083\\
+BiologicalMaterial02 & 0.4815\\
+\rowcolor{gray!6}  BiologicalMaterial06 & 0.4782\\
+BiologicalMaterial03 & 0.4451\\
+\rowcolor{gray!6}  ManufacturingProcess36 & -0.5014\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \hypertarget{AS-2}{%
 \chapter*{Assignment 2}\label{AS-2}}
@@ -243,14 +434,36 @@ Include details on our process in creating this document.
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 7.2}
 
-\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). \end{question}
+\begin{question}{Kuhn and Johnson 7.2}Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0\text{,} \sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+\newline
+The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data. We convert the 'x' data from a matrix to a data frame. One reason is that this will give the columns names. The `testData` code creates a list with a vector 'y' and a matrix of predictors 'x'. It also simulates a large test set to estimate the true error rate with good precision: \end{question}
 
-\includegraphics{Homework-Two_files/figure-latex/kj-7.2-ex1-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{200}\NormalTok{)}
+\NormalTok{trainingData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
+\NormalTok{trainingData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x)}
+\NormalTok{testData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{5000}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
+\NormalTok{testData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(testData}\OperatorTok{$}\NormalTok{x)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-ex3-1.pdf}
 
 \begin{subquestion}{(a).} Tune several models on these data. For example: 
 \end{subquestion}
 
-Model 1:
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }
+    \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{), }\DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{)}
+\NormalTok{knnModel}
+\NormalTok{knnPred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(knnModel, }\DataTypeTok{newdata =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{x)}
+\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ knnPred, }\DataTypeTok{obs =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#\#Model 1:
 
 Model 2:
 

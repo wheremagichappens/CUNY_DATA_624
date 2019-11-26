@@ -1,0 +1,197 @@
+---
+title: "DATA 624_Exercises_HA 2.1-2.3"
+author: "Jeremy O'Brien"
+date: "September 3, 2019"
+output: html_document
+---
+
+```{r, message = FALSE, warning = FALSE}
+
+if (!require('fpp2')) (install.packages('fpp2'))
+if (!require('magrittr')) (install.packages('magrittr'))
+if (!require('dplyr')) (install.packages('dplyr'))
+if (!require('readxl')) (install.packages('readxl'))
+if (!require('RCurl')) (install.packages('RCurl'))
+
+```
+
+
+###Exercise 2.10.1
+####Use the help function to explore what the series _gold_, _woolyrng_, and _gas_ represent.
+
+```{r, eval = FALSE}
+
+#help(gold)
+#help(woolyrnq)
+#help(gas)
+
+```
+
+<br>
+
+####a. Use _autoplot()_ to plot each of these in separate plots.
+
+```{r}
+
+# Set consistent formatting for plots
+formatting <- theme(plot.title = element_text(hjust = .5)) + 
+                      theme(text = element_text(size = 10))
+
+# Plot gold
+autoplot(gold, main = 'Daily morning gold prices') +
+  formatting
+
+# Plot woolyrnq
+autoplot(woolyrnq, main = 'Quarterly production of woollen yarn in Australia') +
+  formatting
+
+# Plot gas
+autoplot(gas, main = 'Australian monthly gas production') +
+  formatting
+
+```
+
+<br>
+
+####b. What is the frequency of each series?  Hint: apply the _frequency()_ function.
+
+```{r, eval = FALSE}
+
+frequency(gold)  # same as forecast::findfrequency()
+frequency(woolyrnq)
+frequency(gas)
+
+```
+
+####The frequency of gold is 1 (annual), that of woolyrnq is 4 (quarterly), and that of gas is 12 (monthly).
+
+<br>
+
+####c. Use _which.max()_ to splot the outlier in the _gold_ series.  Which observation was it?
+
+```{r}
+# Define [x, y] coordinates for highest gold price
+max_x = which.max(gold)
+max_y = gold[max_x]
+
+# Calculate the date of that price based on a 1/1/1985 start of the ts
+gold_max_date <- as.Date("1985-01-01") + max_x
+gold_max_dayofweek = strftime(gold_max_date,'%A')
+gold_max_caption <- sprintf('Observation %s, or %s (%s)', max_x, gold_max_date, gold_max_dayofweek)
+
+# Highlight highest price point and corresponding date on plot
+autoplot(gold, main = 'Daily morning gold prices') +
+  formatting +
+  ## geom_vline(xintercept = 770, color = 'red') +
+  geom_point(aes(x = max_x, y = max_y), size = 5, shape = 1, color = 'red') +
+  annotate(geom = 'text', x = max_x, y = max_y, label = gold_max_caption, color = 'red', hjust = 1.05, vjust = .25)
+
+```
+
+
+***
+
+<br>
+
+###Exercise 2.10.3
+####Download some monthly Australian retail data from the book website.  These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
+
+<br>
+
+####a. Read the data into R.
+
+```{r}
+
+temp.file <- paste(tempfile(), ".xlsx", sep = "")
+download.file('https://otexts.com/fpp2/extrafiles/retail.xlsx', temp.file, mode = 'wb')
+retaildata <- readxl::read_excel(path = temp.file, skip = 1)
+# str(retaildata)
+
+```
+
+<br>
+
+####b. Select one of the time series.
+
+```{r}
+
+myts <- ts(retaildata[,'A3349508C'], frequency = 12, start = c(1982,4))
+# frequency(myts)
+
+```
+
+<br>
+
+####c. Explore that time series using the following functions: _autoplot()_, _ggseasonplot()_, _ggsubseriesplot()_, _gglagplot()_, _ggAcf()_.  Can you spot any seasonality, cyclicity, and trend?  What do you learn about the series?
+
+```{r}
+
+autoplot(myts, main = 'A3349508C Series, 1982-2013') +
+  formatting
+
+```
+
+<br>
+
+####There is a clear long-term trend of growth in this monthly data series; during the 1980s it measured in the teens, while by the 2010s it ranged between 60 and 100.
+
+<br>
+
+```{r}
+
+ggseasonplot(myts, polar = TRUE, main = 'A3349508C Series, 1982-2013') +
+  formatting
+
+```
+
+<br>
+
+####There is evidence of a seasonal pattern in the ellipsoid shape of the polar plot, with December peaking above other months - presumably for the Christmas holiday.
+
+<br>
+
+```{r}
+
+ggsubseriesplot(myts, main = 'A3349508C Series, 1982-2013') +
+  formatting
+
+```
+
+<br>
+
+####The seasonal subseries plot highlights the peak in December in months.
+
+<br>
+
+```{r}
+
+gglagplot(myts, main = 'A3349508C Series, 1982-2013') +
+  formatting
+
+```
+
+<br>
+
+####The lag plot doesn't offer much in the way of insight for this series.
+
+<br>
+
+```{r}
+
+ggAcf(myts)
+
+```
+
+<br>
+
+####Consistent with long-term trend observed in the first plot, autocorrelations are large and positive, and gradually decrease as lags increase.  The impact of December peaks can also be observed but it is small.
+
+***
+
+<br>
+
+```{r, echo = FALSE}
+
+sessionInfo()
+
+```

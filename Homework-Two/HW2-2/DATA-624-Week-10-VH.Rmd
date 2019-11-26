@@ -1,0 +1,407 @@
+---
+title: "Team 2 - Homework Two"
+author: "Vinicio"
+date: "DATE"
+output:
+  html_document:
+    df_print: paged
+subtitle: 'Assignment 2: KJ 7.2; KJ 7.5'
+---
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+source('C:/Users/traveler/Documents/defaults.R')
+```
+
+```{r libraries, echo=T}
+# predictive modeling
+libraries('mlbench', 'caret', 'AppliedPredictiveModeling','impute')
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra', 'dplyr')
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+```
+
+## (1) Kuhn & Johnson 7.2
+
+>  Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+**The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:** 
+
+```{r kj-7.2-ex1, echo=T}
+set.seed(200) 
+trainingData <- mlbench.friedman1(200, sd = 1)
+## We convert the 'x' data from a matrix to a data frame 
+## One reason is that this will give the columns names.
+trainingData$x <- data.frame(trainingData$x) 
+## Look at the data using 
+featurePlot(trainingData$x, trainingData$y) 
+## or other methods. 
+## This creates a list with a vector 'y' and a matrix 
+## of predictors 'x'. Also simulate a large test set to 
+## estimate the true error rate with good precision: 
+testData <- mlbench.friedman1(5000, sd = 1)
+testData$x <- data.frame(testData$x) 
+```
+
+>> (a) Tune several models on these data. For example: 
+```{r kj-7.2-ex2, eval=F, echo=T}
+knnModel <- train(x = trainingData$x,
+                  y = trainingData$y, 
+                  method = "knn",
+                  preProc = c("center", "scale"), 
+                  tuneLength = 10) 
+knnModel 
+knnPred <- predict(knnModel, newdata = testData$x) 
+## The function 'postResample' can be used to get the test set performance values
+postResample(pred = knnPred, obs = testData$y)
+```
+
+Model 1: 
+MARS Regression: MARS, otherwise known as multivariate adapitive regression splines is a non parametric regression technique that automatically captures non-linearity and interaction between predictors. The basic MARS model has the following form:
+
+$$
+\overset { \wedge  }{ f } =\sum _{ i=1 }^{ k }{ { c }_{ i }{ B }_{ i }(x) } 
+$$
+
+The model computes the sum of basis functions B multiplied by constant coefficients c.The basis function can either be a constant, a hinge function, or a product of hinge functions. By definition, a hinge function is a piecewise function that converge at a point known as a knot. 
+
+```{r kj-7.2-1}
+#code
+set.seed(101)  
+marsGrid <- expand.grid(degree =1:2, nprune=seq(2,14,by=2))
+mars_mod <- train(x = trainingData$x, y = trainingData$y, method='earth', tuneGrid = marsGrid, trControl = trainControl(method = "cv"))
+mars_mod
+```
+
+Model 2: 
+
+SVM: SVM, also known as support vector machine is a method that can be applied to classification and regression tasks. On a high level, SVM creates a hyperplane in n dimensional space. This hyperplane acts like a classification boundary which can be linear or non linear. This boundary classifies information from a feature space.  
+
+```{r kj-7.2-2}
+#code
+set.seed(102)
+svm_mod <- train(x = trainingData$x, y = trainingData$y, method='svmRadial', tuneLength = 14, trControl = trainControl(method = "cv"))
+svm_mod$finalModel
+```
+
+Model 3: 
+
+KNN: This model is provided to use through the literature. KNn, also known as k-nearest neighbor is 
+a method that can be applied to classification and regression problems. At a high level, kNN is a using an applied version of the Euclidean distance. The technique classifies a feature based on the k measure of the nearest neighbor features. 
+
+
+```{r kj-7.2-3}
+#code
+knn_mod <- train(x = trainingData$x,
+                  y = trainingData$y, 
+                  method = "knn",
+                  preProc = c("center", "scale"), 
+                  tuneLength = 10) 
+knn_mod
+```
+
+>> (b) Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
+```{r kj-7.2-4}
+#code
+dt <- as.matrix(varImp(mars_mod)$importance)
+
+kable(dt)
+```
+
+Before we take on which model performed best, lets examine if the mars model contained predictors X1-X5. Using variable importance, we can generate a list of features ranked by importance. From our table of important features, we can confirm that mars model selected features X1-X5 with X1 being the most important. 
+
+We turn to address the problem of model performance. We built a MARS model and SVM model. We were provided with a KNN model by the literature. 
+
+```{r kj-7.2-5}
+knn_pred <- predict(knn_mod, newdata = testData$x)
+kp<-postResample(pred = knn_pred, obs = testData$y)
+
+mars_Pred <- predict (mars_mod, testData$x)
+mp<-postResample(pred = mars_Pred, obs = testData$y)
+
+svm_pred <- predict(svm_mod, newdata = testData$x)
+sp<-postResample(pred = svm_pred, obs = testData$y)
+
+kd<-as.matrix(kp)
+colnames(kd) <- c('KNN_metrics')
+md<-as.matrix(mp)
+colnames(md) <- c('MARS_metrics')
+sd<-as.matrix(sp)
+colnames(sd) <- c('SVM_metrics')
+
+kable(kd)
+```
+
+```{r kj-7.2-6}
+
+kable(md)
+```
+```{r kj-7.2-7}
+
+kable(sd)
+```
+
+It is clear that the MARS model is the best performing. It captures over 90 percent of the data variability in addition to having the lowest RMSE of the three models. 
+
+## (2) Kuhn & Johnson 7.5
+
+>  Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
+Manufactuing process 03 is missing 8.52 percent of entires. There are more predictors missing less than 3 percent of their entries. This is an ideal situation to impute variables. 
+The impute package is not available in CRAN. We need to install it directly from BiocManager. We utilize knn method to impute missing values across all variables with missing data. We essentially use k nearest neighbors toimpute the missing values. For each variable with missing data, we use Euclidean distance to identify the k nearest neighbors. If we are missing a coordinate to compute the distance, the package uses the average distance from the closest non missing coordinates. This package assumes that not all variables are missing data. 
+```{r kj-7.5}
+# Call code from 6.3
+data("ChemicalManufacturingProcess")
+cd<-ChemicalManufacturingProcess
+
+#Package to use knn imputing 
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+
+library(impute)
+cd2 <- impute.knn(as.matrix(cd))
+cd2 <- as.data.frame(cd2$data)
+
+#partition data into test and train 
+set.seed(20)
+train_row_partition <- createDataPartition(cd2$Yield, p=0.8, list=FALSE)
+X_train <- cd2[train_row_partition, -1]
+y_train <-cd2[train_row_partition, 1]
+X_test <- cd2[-train_row_partition, -1]
+y_test <- cd2[-train_row_partition, 1]
+```
+
+
+>> (a) Which nonlinear regression model gives the optimal resampling and test set performance? 
+MARS Model with performance metrics
+```{r kj-7.5a}
+# code
+mars_mod2 <- earth(X_train, y_train)
+mars_pred2 <- as.data.frame(predict(mars_mod2, newdata =X_test))
+
+act<-as.data.frame(y_test)
+
+colnames(mars_pred2) <- c("predicted")
+colnames(act)<-c("actual")
+
+mars_metric<-cbind(mars_pred2, act)
+meat1<-as.data.frame(postResample(mars_metric$actual, mars_metric$predicted))
+colnames(meat1)<-c("MARS_Metrics")
+
+kable(meat1)
+```
+
+SVMmodel with performance metrics
+```{r kj-7.5b}
+# code
+set.seed(102)
+svm_mod2 <- train(x = X_train, y = y_train, method='svmRadial', tuneLength = 14, trControl =trainControl(method = "cv"))
+
+svm_pred2 <- as.data.frame(predict(svm_mod2, newdata =X_test))
+
+act2<-as.data.frame(y_test)
+
+colnames(svm_pred2) <- c("predicted")
+colnames(act2)<-c("actual")
+
+svm_metric<-cbind(svm_pred2, act2)
+meat2<-as.data.frame(postResample(svm_metric$actual, svm_metric$predicted))
+colnames(meat2)<-c("SVM_Metrics")
+
+kable(meat2)
+```
+
+KNN model and performance metrics
+```{r kj-7.5c}
+# code
+knn_mod2 <- train(x = X_train,
+                  y = y_train, 
+                  method = "knn",
+                  preProc = c("center", "scale"), 
+                  tuneLength = 10) 
+
+knn_pred2 <- as.data.frame(predict(knn_mod2, newdata =X_test))
+
+act3<-as.data.frame(y_test)
+
+colnames(knn_pred2) <- c("predicted")
+colnames(act3)<-c("actual")
+
+knn_metric<-cbind(knn_pred2, act3)
+meat3<-as.data.frame(postResample(knn_metric$actual, knn_metric$predicted))
+colnames(meat3)<-c("SVM_Metrics")
+
+kable(meat3)
+
+```
+Radial SVM method proves to be the best model in our case. This model has the lower RMSE while not showing a major decrease in the percentage of data variabiity captured.
+
+>> (b) Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
+```{r kj-7.5ba}
+# code
+key_features <- varImp(svm_mod2)
+plot(key_features, top=10)
+```
+Manufacturing process 32 is the most important predictor in our model. Within the top 10 mostimportant predictors, Manufactuing predictors outnumber Biological Predictors. From the linear model, we had Manufacturing Process 36 as the most important predictor followed by BiologicalMaterial03. Overall, the linear process is still dominated by manufacturing process predictors. 
+>> (c) Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
+```{r kj-7.5ca}
+# code
+imp_train <- cd2 %>%select(Yield, ManufacturingProcess32,BiologicalMaterial06,ManufacturingProcess13, ManufacturingProcess09, ManufacturingProcess36,BiologicalMaterial03)
+cdt<-as.data.frame(cor(imp_train))
+
+kable(cdt)
+```
+ManufacturingProcess13	and ManufacturingProcess36 have the strongest inverse relationship with Yield. This could suggets that something needs to be done to these features since they seem to contribute more to decrease in Yield. If these features they have an adverse effect on yield, then that impacts revenue potential. ManufacturingProcess32 has the strongest positive effect on Yield. Perhaps ManufacturingProcess13	 can be used as a benchmark to suggest change in other manufacturing predictors. 
+## R Code 
+
+```{r 02-code, eval=F,echo=T}
+#insert all code here
+# (7.2a)
+set.seed(101)  
+marsGrid <- expand.grid(degree =1:2, nprune=seq(2,14,by=2))
+mars_mod <- train(x = trainingData$x, y = trainingData$y, method='earth', tuneGrid = marsGrid, trControl = trainControl(method = "cv"))
+
+set.seed(102)
+svm_mod <- train(x = trainingData$x, y = trainingData$y, method='svmRadial', tuneLength = 14, trControl = trainControl(method = "cv"))
+svm_mod$finalModel
+mars_mod
+# (7.2b)
+dt <- as.matrix(varImp(mars_mod)$importance)
+
+kable(dt)
+
+knn_pred <- predict(knn_mod, newdata = testData$x)
+kp<-postResample(pred = knn_pred, obs = testData$y)
+
+mars_Pred <- predict (mars_mod, testData$x)
+mp<-postResample(pred = mars_Pred, obs = testData$y)
+
+svm_pred <- predict(svm_mod, newdata = testData$x)
+sp<-postResample(pred = svm_pred, obs = testData$y)
+
+kd<-as.data.frame(as.matrix(kp))
+colnames(kd) <- c('KNN_metrics')
+md<-as.data.frame(as.matrix(mp))
+colnames(md) <- c('MARS_metrics')
+sd<-as.data.frame(as.matrix(sp))
+colnames(sd) <- c('SVM_metrics')
+
+kx<-kd$KNN_metrics
+mx<-kd$mars_metrics
+sx<-kd$SVM_metrics
+
+
+ 
+
+kable(kd)
+kable(md)
+kable(sd)
+# (7.5a)
+data("ChemicalManufacturingProcess")
+cd<-ChemicalManufacturingProcess
+
+#Package to use knn imputing 
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+
+library(impute)
+cd2 <- impute.knn(as.matrix(cd))
+cd2 <- as.data.frame(cd2$data)
+
+#partition data into test and train 
+set.seed(20)
+train_row_partition <- createDataPartition(cd2$Yield, p=0.8, list=FALSE)
+X_train <- cd2[train_row_partition, -1]
+y_train <-cd2[train_row_partition, 1]
+X_test <- cd2[-train_row_partition, -1]
+y_test <- cd2[-train_row_partition, 1]
+
+mars_mod2 <- earth(X_train, y_train)
+mars_pred2 <- as.data.frame(predict(mars_mod2, newdata =X_test))
+
+act<-as.data.frame(y_test)
+
+colnames(mars_pred2) <- c("predicted")
+colnames(act)<-c("actual")
+
+mars_metric<-cbind(mars_pred2, act)
+meat1<-as.data.frame(postResample(mars_metric$actual, mars_metric$predicted))
+colnames(meat1)<-c("MARS_Metrics")
+
+kable(meat1)
+
+# code
+set.seed(102)
+svm_mod2 <- train(x = X_train, y = y_train, method='svmRadial', tuneLength = 14, trControl =trainControl(method = "cv"))
+
+svm_pred2 <- as.data.frame(predict(svm_mod2, newdata =X_test))
+
+act2<-as.data.frame(y_test)
+
+colnames(svm_pred2) <- c("predicted")
+colnames(act2)<-c("actual")
+
+svm_metric<-cbind(svm_pred2, act2)
+meat2<-as.data.frame(postResample(svm_metric$actual, svm_metric$predicted))
+colnames(meat2)<-c("SVM_Metrics")
+
+kable(meat2)
+
+knn_mod2 <- train(x = X_train,
+                  y = y_train, 
+                  method = "knn",
+                  preProc = c("center", "scale"), 
+                  tuneLength = 10) 
+
+knn_pred2 <- as.data.frame(predict(knn_mod2, newdata =X_test))
+
+act3<-as.data.frame(y_test)
+
+colnames(knn_pred2) <- c("predicted")
+colnames(act3)<-c("actual")
+
+knn_metric<-cbind(knn_pred2, act3)
+meat3<-as.data.frame(postResample(knn_metric$actual, knn_metric$predicted))
+colnames(meat3)<-c("SVM_Metrics")
+
+kable(meat3)
+
+
+# (7.5b)
+#svm_mod2$finalModel$coefficients
+key_features <- varImp(svm_mod2)
+plot(key_features, top=20)
+# (7.5c)
+imp_train <- cd2 %>%select(Yield, ManufacturingProcess32,BiologicalMaterial06,ManufacturingProcess13, ManufacturingProcess09, ManufacturingProcess36,BiologicalMaterial03)
+cdt<-as.data.frame(cor(imp_train))
+
+kable(cdt)
+```

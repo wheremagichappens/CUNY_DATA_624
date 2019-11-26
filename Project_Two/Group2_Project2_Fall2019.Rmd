@@ -1,0 +1,13 @@
+---
+title: 'DATA 624: Project 2'
+author:
+- Vinicio Haro
+- Sang Yoon (Andy) Hwang
+- Julian McEachern
+- Jeremy O'Brien
+- Bethany Poulin
+date: 'December 10, 2019'
+output: pdf_document
+---
+
+File for final submission of Project 2. 

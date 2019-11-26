@@ -1,0 +1,200 @@
+# Assignment Two 
+
+*  Hyndman 6.2 
+
+```{r library-02, echo=FALSE, warning=FALSE, message=FALSE, comment=FALSE}
+library(fpp2)
+library(magrittr)
+library(dplyr)
+library(readxl)
+library(RCurl)
+library(tsfeatures)
+
+#Formatting
+require(default)
+```
+
+```{r settings-02, echo=F}
+# Set default augments for code chunks
+knitr::opts_chunk$set(echo = T, message=F, warning=F, error=F, comment=F, fig.width=10, fig.height = 3)
+
+# Set default for ggplot theme
+default(theme) <- list(axis.title.x = element_blank(),
+                       axis.title.y = element_blank(),
+                       plot.title = element_text(color="#3d248a", size=10, face="bold"),
+                       plot.subtitle = (element_text(size=8, color="#000000")),
+                       legend.title = (element_text(size=10, color="#000000", face="bold")),
+                       strip.background = element_rect(color="#000000", 
+                                                       fill="#D3D3D3", size=1, linetype="solid"),
+                       strip.text.x = element_text(size = 8, color = "#000000", face="bold"))
+
+# wrap text
+if(!knitr:::is_latex_output())
+{
+  options("width"=45)
+  knitr::opts_chunk$set(tidy.opts=list(width.cutoff=45, indent = 2), tidy = TRUE)
+  knitr::opts_chunk$set(fig.pos = 'H')
+}
+```
+
+
+
+## Hyndman 6.2 
+
+> The `plastics` dataset consists of the monthly sales (in thousands) of product A for a plastics manufacturer for five years.
+
+```{r ha6.2, eval = FALSE}
+help(plastics)
+str(plastics)
+```
+
+### a. Plot the time series of sales of product A.  Can you identify seasonal fluctuations and/or a trend-cycle? 
+
+```{r ha6.2a}
+autoplot(plastics, 
+         main = 'Plastics Product A, Monthly Sales (Five Years)', 
+         series = 'Product A', size = .8) +
+  autolayer(ma(plastics, order = 3), series = '3-MA', size = .7) +
+  autolayer(ma(plastics, order = 5), series = '5-MA', size = .7) +
+  autolayer(ma(plastics, order = 7), series = '7-MA', size = .7) +
+  autolayer(ma(plastics, order = 9), series = '9-MA', size = .7) +
+  autolayer(ma(plastics, order = 11), series = '11-MA', size = .7) +
+  autolayer(ma(plastics, order = 13), series = '13-MA', size = .7) +
+  ylab(label = '') +
+  ylim(0, max(plastics)) +
+  scale_color_manual(values = c('Product A' = 'black', 
+                                '3-MA' = 'red', 
+                                '5-MA' = 'rosybrown', 
+                                '7-MA' = 'goldenrod3', 
+                                '9-MA' = 'olivedrab', 
+                                '11-MA' = 'royalblue4',
+                                '13-MA' = 'midnightblue'),
+                     breaks = c('Product A', '3-MA', '5-MA', '7-MA', '9-MA', '11-MA','13-MA'))+theme_bw()+theme()
+```
+
+For this question, we plotted the monthly plastics time series together with moving averages of order 3, 5, 7, 9, 11, and 13. There's a clear seasonal fluctuation, exhibiting troughs at the beginning of each year and peaks over August through October.  Additionally, there's a consistent upward trend.
+
+### b. Use a classical multiplicative decomposition to calculate the trend cycle and seasonal indices.
+
+```{r ha6.2b, fig.height=4}
+# Produce multiplicative decomposition of time series
+plastics_decomp <- plastics %>% 
+  decompose(type = 'multiplicative')
+
+# Plot 
+plastics%>%
+  decompose( type="multiplicative")%>%
+  autoplot() +
+  xlab('Month') +
+  ylab('Sales')+
+  theme_bw()+
+  theme()
+
+# Output the trend strength and seasonal strength metrics 
+plastics %>% 
+  tsfeatures() %>%  
+  select(trend, seasonal_strength) %>% 
+  rename(trend_str = trend, season_str = seasonal_strength)
+
+# The tsfeatures package provides statistics on strength of trend and seasonality, which doesn't seem to be a built-in feature of the forecast or other time series packages: https://rdrr.io/github/robjhyndman/tsfeatures/man/stl_features.html
+
+# Output the seasonal index
+(function(x) print(paste(min(x), max(x))) ) (plastics_decomp$figure)
+
+```
+
+The multiplicative decomposition, with $F_S$ of .963 (close to the maximum of 1), substantiates the strong seasonal trend observed in the data.  The seaonsal index ranges between .71 and 1.23.  The trend is also strong, with $F_T$ of .92 (also close to the maximum of 1), which supports our answer for $c.$.
+
+### c. Do the results support the graphical interpretations from part a? 
+
+Yes, when decomposed, the trend becomes very clearly upward, while a rather unvarying seasonal component emerges. The one very interesting component is the random, component, it does seem to imply an unexpained mechanism (with some variability over time).
+
+
+### d. Compute and plot the seasonally adjusted data. 
+
+
+```{r ha6.2d}
+# Compute the seasonally adjusted monthly plastics time series
+plastics_seasadj <- plastics / plastics_decomp$seasonal
+
+# Plot the seasonally adjusted monthly plastics time series
+autoplot(plastics_seasadj, 
+         main = 'Plastics Product A, Seasonally Adjusted Monthly Sales (Five Years)', 
+         series = 'Product A (Seasonally Adjusted)', 
+         size = .7, 
+         color = 'black') +
+  theme_bw()+theme()+
+  ylab(label = '') +
+  ylim(0, max(plastics_seasadj))
+```
+
+### e. Change one observation to be an outlier and recompute the seasonally adjusted data.  What is the effect of the outlier? 
+
+```{r ha6.2e}
+
+# Artifically change single observation to create outlier between 1.5x IQR in middle of time series
+plastics_2 <- plastics
+plastics_2[25] <- quantile(plastics_2)[4] * 1.5
+plastics_2_decomp <- decompose(plastics_2, type = 'multiplicative')
+plastics_2_seasadj <- plastics_2 / plastics_2_decomp$seasonal
+
+# Plot the seasonally adjusted monthly plastics time series
+autoplot(plastics_2_seasadj, 
+         main = 'Plastics Product A, Seasonally Adjusted Monthly Sales With Artificial Outlier (Five Years)', 
+         series = 'Product A (Seasonally Adjusted)', 
+         size = .7, 
+         color = 'black') +
+  theme_bw()+theme() +
+  ylab(label = '') +
+  ylim(0, max(plastics_2_seasadj))
+
+```
+
+The effect is to deflate the corresponding month in other years in the seasonally adjusted data.  In this case, the first month (January) of Year 3 was artifically inflated to approximately 2,111, which is 1.5 times larger than the upper bound of the inter-quartile range (the minimum value for an outlier).  The second months of years 1-2 and 4-5 have all fallen to compensate together for this outlier and now represent troughs.
+
+### f. Does it make any difference if the outlier is near the end rather than in the middle of the time series? 
+
+```{r ha6.2f}
+# Create outliers at beginning and end of respective time series
+plastics_3 <- plastics
+plastics_3[46] <- quantile(plastics_3)[4] * 1.5
+plastics_3_decomp <- decompose(plastics_3, type = 'multiplicative')
+plastics_3_seasadj <- plastics_3 / plastics_3_decomp$seasonal
+
+plastics_4 <- plastics
+plastics_4[3] <- quantile(plastics_4)[4] * 1.5
+plastics_4_decomp <- decompose(plastics_4, type = 'multiplicative')
+plastics_4_seasadj <- plastics_4 / plastics_4_decomp$seasonal
+
+# autoplot(plastics_4_seasadj)
+
+# Plot different outlier time series for comparison
+autoplot(plastics_2_seasadj, 
+         main = 'Plastics Product A, Seasonally Adjusted Monthly Sales (Five Years)', 
+         series = 'SeasAdj w/ Outlier: Yr3 Jan', 
+         size = .75) +
+  autolayer(plastics_3_seasadj, 
+            series = 'SeasAdj w/ Outlier: Yr5 Aug', 
+            size = .75) +
+  autolayer(plastics_4_seasadj, 
+            series = 'SeasAdj w/ Outlier: Yr1 Mar', 
+            size = .75) +
+  theme_bw()+theme() + 
+  ylab(label = '') +
+  ylim(0, max(c(
+    max(plastics_seasadj),
+    max(plastics_2_seasadj),
+    max(plastics_3_seasadj), 
+    max(plastics_4_seasadj)))) +
+  scale_color_manual(values = c('SeasAdj' = 'black',
+                                'SeasAdj w/ Outlier: Yr1 Mar' = 'red',
+                                'SeasAdj w/ Outlier: Yr3 Jan' = 'goldenrod3',
+                                'SeasAdj w/ Outlier: Yr5 Aug' = 'royalblue4'),
+                     breaks = c('SeasAdj',
+                                'SeasAdj w/ Outlier: Yr1 Mar',
+                                'SeasAdj w/ Outlier: Yr3 Jan',
+                                'SeasAdj w/ Outlier: Yr5 Aug'
+                                )
+  )
+
+```

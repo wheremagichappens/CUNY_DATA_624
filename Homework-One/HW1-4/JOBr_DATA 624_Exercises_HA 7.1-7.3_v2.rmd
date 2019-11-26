@@ -1,0 +1,168 @@
+---
+title: "DATA 624_Exercises_HA 7.1-7.3"
+author: "Jeremy O'Brien"
+date: "September 23, 2019"
+output: html_document
+---
+
+```{r, message = FALSE, warning = FALSE}
+
+if (!require('fpp2')) (install.packages('fpp2'))
+if (!require('forecast')) (install.packages('forecast'))
+if (!require('dplyr')) (install.packages('dplyr'))
+if (!require('tidyr')) (install.packages('tidyr'))
+if (!require('magrittr')) (install.packages('magrittr'))
+if (!require('scales')) (install.packages('scales'))
+
+```
+
+
+### Exercise 7.1
+#### Consider the `pigs` series - the number of pigs slaughtered in Victoria each month.
+
+```{r, echo = FALSE}
+
+data(pigs)
+
+```
+
+<br>
+
+#### (a) Use the `ses()` function in R to find the optimal values of $\alpha$ and $\ell_{0}$, and generate a forecast for the next four months.
+
+```{r, warning = FALSE}
+
+# Fit SES for 4 periods ahead
+pigs_fc <- pigs %>% 
+  ses(h = 4) 
+
+# Point forecast, alpha, and l0 based on `ses()`
+cat('\n SES forecast = ', pigs_fc[[2]][1], 
+    '\n SES alpha = ', pigs_fc$model$par[['alpha']], 
+    '\n SES l0 = ', pigs_fc$model$par[['l']])
+# pigs_fcsumm %>% purrr::pluck('Smoothing parameters') %>% first()
+
+# Chart forecasting next four months
+pigs_fc %>% 
+  autoplot()
+
+```
+
+#### Given that we're implementing simple exponential smoothing, values for the next four months are flat at approximately 98,816.  Smoothing parameter $\alpha$ is .2971, and initial state $\ell_{0}$ is 77,260.
+
+<br>
+
+#### (b) Compute a 95% predictor interval for the first forecast using $\hat{y}$ $\pm$1.95*s* where *s* is the standard deviation of the residuals.  Compare your interval with the interval produced by R.
+
+```{r, warning = FALSE}
+
+# Call mean prediction of SES and compute upper and lower values of interval
+pigs_fc_mean <- c((pigs_fc$mean[1] - sd(pigs_fc$residuals) * 1.96),
+             (pigs_fc$mean[1] + sd(pigs_fc$residuals) * 1.96))
+
+cat('\n SES low forecast = ', scales::comma(pigs_fc$lower[5]), 
+    '\n manual low forecast = ', scales::comma(pigs_fc_mean[1]),
+    '\n',
+    '\n SES high forecast = ', scales::comma(pigs_fc$upper[5]), 
+    '\n manual high forecast = ', scales::comma(pigs_fc_mean[2]))
+
+```
+
+#### The interval yielded by the `ses()` function is slightly wider than interval calculated manually; the lower value is smaller, and the upper value,larger.
+
+<br>
+
+***
+
+### Exercise 7.2 & 7.3
+#### Write your own function to implement simple exponential smoothing.  The function should take arguments $y$ (the time series), alpha (the smoothing parameter $\alpha$) and l_0 (the initial level $\ell_{0}$).  It should return the forecast of the next obvservation in the series.  Does it give the same forecast as `ses()`?
+
+#### Modify your function from the previous exerise to return the sum of squared errors rather than the forecast of the net observation.  Then use the `optim()` function to find the optimal values of $\alpha$ and $\ell_{0}$.  Do you get the same values as the `ses()`?
+
+
+```{r}
+
+# Complete the preceding exercise as building block, coding a custom function that takes y, a, and l_0 and returns a forecast for the next period, y_hat
+
+# Define function
+custom_ses_pred <- function(y, a, l0) {
+ 
+  # If there's time, use trycatch() to confirm y is time series
+  
+  # Initalize y_hat as l_0
+  y_hat <- l0
+  
+  # Loop over time series y, iterating value of y_hat
+  for(j in 1:length(y)) { 
+    
+    y_hat <- (a * y[j]) + ((1 - a) * y_hat)  # using component form
+    
+    }
+  
+  return(y_hat)
+  
+}
+
+# Test custom function with alpha and l_0 values outputted by SES function
+pigs_fc_a <- pigs_fc$model$par[['alpha']]
+pigs_fc_l0 <- pigs_fc$model$par[['l']]
+custom_ses_pred(y = pigs, 
+                a = pigs_fc_a, 
+                l0 = pigs_fc_l0) %>% 
+  invisible()
+
+```
+
+
+```{r}
+
+# Code custom function that takes optimizes parameters alpha and l_0 based based on SSE 
+custom_ses_sse <- function(y, par = c(a, l0)) {
+  
+  # Initialize error and sum of squared errors at 0
+  e <- 0
+  sse <- 0
+  
+  # Initialize alpha and l_0 as custom function arguments a and l0
+  a <- par[1]
+  l0 <- par[2]
+  
+  # Initalize y_hat as l_0
+  y_hat <- l0
+  
+  # Loop over time series y, accumulating and summing squared error
+  for (i in 1:length(y)) {
+    
+    e <- y[i] - y_hat  # Calculate error between y and predicted y_hat
+    sse <- e^2 + sse  # Accumulate squared error
+    y_hat <- (a * y[i]) + ((1 - a) * y_hat)  # Predict next y_hat
+    
+    }
+    
+  return(sse)
+  
+}
+
+
+# Use SSE to minimize
+custom_ses_sse_min <- optim(y = pigs, 
+                              par = c(.5, pigs[1]), 
+                              fn = custom_ses_sse)
+
+cat('\n SES alpha = ', custom_ses_sse_min$par[1], 
+'\n manual SSE-minimizing alpha = ', pigs_fc_a,
+'\n',
+'\n SES l_0 = ', custom_ses_sse_min$par[2],
+'\n manual SSE-minimizing l_0 = ', pigs_fc_l0)
+
+```
+
+#### The $\alpha$ value yielded by the `ses()` function is slightly larger than that calculated manually.  The $\ell_{0}$ value yielded by the `ses()` function is slightly smaller than that calculated manually.  If I had to speculate, I imagine the implementation of the optimization algorithm differs slightly.
+
+<br>
+
+```{r, echo = FALSE}
+
+sessionInfo()
+
+```

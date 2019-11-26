@@ -9,18 +9,19 @@
 *  Only call plotting and formatting libraries as needed in the RMD to compile assignment 
 
 ## FORMATTING:
-*  UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
-*  UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE CAN COMPILE DOCUMENT ON THEIR MACHINE
-*  EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
-*  EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
-*  DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+#### GENERAL:
+*  Update homework YAML with name and date completed only 
+*  Universal latex formatting will be applied to the final submission to ensure everyone can compile document on their machine
+*  Each document should be knitted to a pdf for each group member to review.
+*  Everyone is individually responsible for ensuring the file knits properly. 
+*  Default formatting has been set within each template.  
 
 #### TABLES: 
 *  All table outputs should be wrapped using the default knitr and kable_styling settings: `%>% kable() %>% kable_styling() %>% row_spec()`
 *  Add captions to table where appropriate: `kable(caption="CAPTION")`
 
 #### PLOTS:
-*  fig.height` in code chunk options should be adjusted to larger size when needed (default=3)
+*  `fig.height` in code chunk options should be adjusted to larger size when needed (default=3)
 *  All plots should be done using ggplots 
 *  Lables should be used to appropriately when not included default graph: `+labs(title="", subtitle="", x="", y="")`
 *  All plots should call `+theme_bw()+theme()` to apply default settings

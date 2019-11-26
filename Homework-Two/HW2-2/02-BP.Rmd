@@ -1,0 +1,525 @@
+---
+title: "Team 2 - Homework Two"
+author: "Bethany Poulin"
+date: "November 1, 2019"
+output:
+  pdf_document: default
+  word_document: default
+  html_document:
+    df_print: paged
+subtitle: 'Assignment 2: KJ 7.2; KJ 7.5'
+---
+```{r global_options}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = NA)
+
+```  
+
+```{r instructions, echo=F, fig.height=3}
+# README: GROUP TWO GUIDELINES
+
+# MEAT&POTATOES:
+    # Submissions should be completed in a timely manner, within group internal deadlines. 
+    # Thoughtful feedback to all homework submissions must be provided in order to compile work. 
+    # Responses to all questions should be answered thoroughly with explanations. 
+    # Responses should be proofed and spell checked (F7 shortcut in R) upon completion. 
+    # Insert all R libraries used in the library code chunk.
+    # Only call plotting and formatting libraries as needed in the RMD to compile assignment 
+
+# FORMATTING
+    # UPDATE HOMEWORK YAML WITH NAME AND DATE COMPLETED ONLY 
+    # UNIVERSAL LATEX FORMATTING WILL BE APPLIED TO THE FINAL SUBMISSION TO ENSURE EVERYONE                               CAN COMPILE DOCUMENT ON THEIR MACHINE
+    # EACH DOCUMENT SHOULD BE KNITTED TO A PDF FOR EACH GROUP MEMBER TO REVIEW.
+    # EVERYONE IS INDIVIDUALLY RESPONSIBLE FOR ENSURING THE FILE KNITS PROPERLY. 
+    # DEFAULT FORMATTING HAS BEEN SET WITHIN EACH TEMPLATE.  
+    # TABLES: 
+        # All table outputs should be wrapped using the default knitr and kable_styling settings:                             `%>% kable() %>% kable_styling() %>% row_spec()`
+        # Add captions to table where appropriate: `kable(caption="CAPTION")`
+    # PLOTS:
+        # `fig.height` in code chunk options (see above) should be adjusted to larger size when needed (default=3)
+        #  All plots should be done using ggplots 
+            # Lables should be used to appropriately when not included default graph:                                             `+labs(title="", subtitle="", x="", y="")`
+            # All plots should call `+theme_bw()+theme()` to apply default settings
+```
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+require(AppliedPredictiveModeling)
+require(tidyverse)
+require(impute)
+require(caTools)
+require(pls)
+require(kableExtra)
+require(ggplot2)
+require(stargazer)
+require(caret)
+require(tidyverse)
+require(gridExtra)
+require(easypackages)
+require(earth)
+require(kernlab)
+require(nnet)
+require(mlbench)
+options(scipen = 999)
+
+```
+
+```{r libraries, echo=T}
+# predictive modeling
+libraries('mlbench', 'caret')
+
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra')
+
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify')
+```
+
+## Kuhn & Johnson 7.2
+
+>  Friedman (1991) introduced several benchmark data sets create by simulation. One of these simulations used the following nonlinear equation to create data: $y = 10\text{sin}(\pi x_1 x_2)+20(x_3-0.5)^2+10x_4+5x_5+N(0,\sigma^2)$; where the $x$ values are random variables uniformly distributed between $[0, 1]$ (there are also 5 other non-informative variables also created in the simulation). 
+
+**The package `mlbench` contains a function called `mlbench.friedman1` that simulates these data:** 
+
+```{r kj-7.2-ex1, echo=T, cache=TRUE}
+
+set.seed(200) 
+trainingData <- mlbench.friedman1(200, sd = 1)
+
+## We convert the 'x' data from a matrix to a data frame 
+## One reason is that this will give the columns names.
+
+trainingData$x <- data.frame(trainingData$x) 
+
+## Look at the data using 
+featurePlot(trainingData$x, trainingData$y) 
+## or other methods. 
+
+## This creates a list with a vector 'y' and a matrix 
+## of predictors 'x'. Also simulate a large test set to 
+## estimate the true error rate with good precision: 
+
+testData <- mlbench.friedman1(5000, sd = 1)
+testData$x <- data.frame(testData$x) 
+```
+
+>> (a) Tune several models on these data. For example: 
+
+
+### KNN  
+
+```{r kj-7.2-ex2-1, eval=TRUE, echo=T}
+knnTuned_72 <- train(x = trainingData$x,
+                     y = trainingData$y, 
+                     method = "knn",
+                     preProc = c("center", "scale"), 
+                     tuneLength = 10) 
+knnTuned_72
+```
+
+
+```{r kj-7.2a, eval=T, echo=T}
+knnPred_72 <- predict(knnTuned_72, newdata = testData$x) 
+postResample(pred = knnPred_72, obs = testData$y)
+```
+
+```{r kj-7.2a-imp, eval=T, echo=T}
+varImp(knnTuned_72)
+```  
+
+
+### Neural Net
+```{r kj-7.2a-1, cache = TRUE, echo = TRUE}
+
+
+
+nnetGrid_72 <- expand.grid(.decay = c(0, 0.01, .1),
+                        .size = c(1:10),
+                        .bag = FALSE)
+set.seed(100)
+nnetTune_72 <- train(trainingData$x,  trainingData$y,
+                 method = "avNNet",
+                 tuneGrid = nnetGrid_72,
+                 preProc = c("center", "scale"),
+                 linout = TRUE,
+                 trace = FALSE,
+                 MaxNWts = 10 * (ncol(trainingData$x) + 1) + 5 + 1,
+                 maxit = 500)
+
+
+plot(nnetTune_72)
+```
+
+Minimum RMSE from Grid:  `r min(nnetTune_72$results$RMSE, na.rm = TRUE)`
+
+```{r kj-7.2a-2.2, cache = TRUE, echo = TRUE}
+print(nnetTune_72)
+```  
+ 
+ 
+```{r kj-7.2a-2, cache = TRUE, echo = TRUE}
+nnetFit_72 <- nnet(trainingData$x,
+                trainingData$y,
+                size = 3,
+                decay = 0.1,
+                linout = TRUE,
+                trace = FALSE,
+                maxit = 500,
+                MaxNWts = 5 * (ncol(trainingData$x) + 1) + 5 + 1)
+
+nnetPred_72 <- predict(nnetFit_72, newdata = testData$x)
+postResample(pred = nnetPred_72, obs = testData$y)
+
+```  
+
+
+```{r kj-7.2a-2-imp, cache = TRUE, echo = TRUE}
+varImp(nnetTune_72)
+```  
+
+
+### MARS  
+
+
+```{r kj-7.2a-3, cache = TRUE, echo = TRUE}
+marsGrid_72 <- expand.grid(.degree = 1:2, .nprune = 2:38)
+# Fix the seed so that the results can be reproduced
+set.seed(100)
+marsTuned_72 <- train(trainingData$x,
+                   trainingData$y,
+                   method = "earth",
+                   tuneGrid = marsGrid_72,
+                   trControl = trainControl(method = "cv"))
+
+plot(marsTuned_72)
+
+marsTuned_72
+```
+
+Minimum RMSE:  `r min(marsTuned_72$results$RMSE, na.rm = TRUE) # 1.181011`
+
+
+```{r kj-7.2a-4, cache = TRUE, echo = TRUE}
+marsPred_72 <- predict(marsTuned_72, newdata = testData$x)
+postResample(pred = marsPred_72, obs = testData$y)
+
+varImp(marsTuned_72)
+```  
+
+### Support Vector Machine   
+
+```{r kj-7.2 -a-4, cache = TRUE, echo = TRUE}
+
+
+
+svmRTuned_72 <- train(trainingData$x,
+                   trainingData$y,
+                   method = "svmRadial",
+                   preProc = c("center", "scale"),
+                   tuneLength = 14,
+                   trControl = trainControl(method = "cv"))
+
+svmRTuned_72
+svmRTuned_72$finalModel
+svmPred_72 <- predict(svmRTuned_72, newdata = testData$x)
+postResample(pred = svmPred_72, obs = testData$y)
+##  RMSE  Rsquared       MAE
+##  2.0421971 0.8424968 1.5994147
+varImp(svmRTuned_72)
+```  
+
+
+> (b) Which models appear to give the best performance? 
+
+### Model Analysis
+
+#### KKN
+```{r cache = TRUE, echo = TRUE}
+postResample(pred = knnPred_72, obs = testData$y)
+```
+
+
+
+#### Neural Network
+```{r cache = TRUE, echo = TRUE}
+postResample(pred = nnetPred_72, obs = testData$y)
+``` 
+
+
+#### MARS
+```{r cache = TRUE, echo = TRUE}
+postResample(pred = marsPred_72, obs = testData$y)
+```  
+
+#### SVM
+```{r cache = TRUE, echo = TRUE}
+postResample(pred = svmPred_72, obs = testData$y)
+``` 
+
+Based on the RMSE and R-Squared, the Multiple Adaptive Regression Splines is the best with the RMSE almost have as small as the next best model,  the Support Vector Machine Regression and the r-squared is about 95% suggesting that the MARS model explains a fair bit more of the outcome variable.  
+
+
+> b. Does MARS select the informative predictors (those named X1-X5)?
+
+#### MARS importance:
+```{r cache = TRUE, echo = TRUE}
+varImp(marsTuned_72)
+```  
+
+As well as this being the most predictive of the optimized and tuned models, the MARS also ranks `X1-X5` the most important ordered, with `X6-X10` not contributing at all to the variable importance. 
+
+It is very likely that lack of contribution alloted to the `X6-X10` variables which bolster the R-Squared and RMSE performance and noise from these variables did not reduce the predictive strength of this model as it does in small quantities in the other three models.  
+
+
+## 7.5   
+
+```{r 7.5 imputations, cache = TRUE, echo = TRUE}
+data('ChemicalManufacturingProcess')
+# Total NA Values
+na_table<- table(is.na(ChemicalManufacturingProcess))
+total_na<-sapply(ChemicalManufacturingProcess[2:57], function(x) sum(is.na(x)))
+na_table<-sapply(ChemicalManufacturingProcess, function(x) table(is.na(x)))
+total_na<- data.frame(sort(total_na, decreasing = TRUE))
+total_na<- cbind(Variable = rownames(total_na), total_na)
+rownames(total_na) <- 1:nrow(total_na)
+colnames(total_na)<-  c("Variable", "Count")
+total_na<-cbind(total_na[1:28,],total_na[29:56,])
+hist_yield <-ggplot(ChemicalManufacturingProcess, aes(x = Yield))+
+    geom_histogram(colour ='black', fill = 'violetred4') +
+    ggtitle('Distribution of Yield Chemical Manufacturing Process Data')
+imputed_data = data.frame(impute.knn(as.matrix(ChemicalManufacturingProcess),
+                                     k =10,
+                                     rowmax =.30,
+                                     colmax =.85,
+                                     rng.seed =1942)$data)
+head(imputed_data)
+```
+
+
+
+
+>> (a) Which nonlinear regression model gives the optimal resampling and test set performance? 
+
+#### KNN  
+
+```{r kj-7.5a-1, cache = TRUE, echo = TRUE}
+set.seed(1492)   #  set seed to ensure you always have same random numbers generated
+sample = sample.split(imputed_data, SplitRatio = 0.80) # splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE
+trainingData =subset(imputed_data,sample ==TRUE) # creates a training dataset named train1 with rows which are marked as TRUE
+testData=subset(imputed_data, sample==FALSE)
+x_train <-trainingData[,2:58]
+x_test <- testData[,2:58]
+knnFit_75 <- train(x = x_train,
+                  y = trainingData$Yield,
+                  method = "knn",
+                  preProc = c("center", "scale"),
+                  tuneLength = 10)
+
+knnFit_75
+knnPred_75 <- predict(knnFit_75, newdata = x_test)
+postResample(pred = knnPred_75, obs = testData$Yield)
+varImp(knnFit_75)
+```
+
+#### Neural Network
+
+```{r kj-7.5a-2, cache = TRUE, echo = TRUE}
+nnetGrid_75 <- expand.grid(.decay = c(0, 0.01, .1),
+                        .size = c(1:10),
+                        .bag = FALSE)
+set.seed(100)
+nnetTune_75 <- train(x = x_train,  trainingData$Yield,
+                  method = "avNNet",
+                  tuneGrid = nnetGrid_75,
+                  preProc = c("center", "scale"),
+                  linout = TRUE,
+                  trace = FALSE,
+                  MaxNWts = 10 * (ncol(x_train) + 1) + 5 + 1,
+                  maxit = 500)
+plot(nnetTune_75)
+min(nnetTune_75$results$RMSE, na.rm = TRUE)
+#        decay  size  RMSE      Rsquared   MAE
+# Chosen  0.10    3    2.332714  0.7655842  1.808308
+
+
+
+nnetFit_75 <- nnet(x = x_train,
+                trainingData$Yield,
+                size = 3,
+                decay = 0.1,
+                linout = TRUE,
+                trace = FALSE,
+                maxit = 500,
+                MaxNWts = 5 * (ncol(x_train) + 1) + 5 + 1)
+nnetFit_75
+
+nnetPred_75 <- predict(nnetFit_75, newdata = x_test)
+postResample(pred = nnetPred_75, obs = testData$Yield)
+
+varImp(nnetFit_75)
+```
+#### MARS Model  
+
+```{r kj-7.5a-3, cache = TRUE, echo = TRUE}
+
+# Define the candidate models to test
+marsGrid_75 <- expand.grid(.degree = 1:2, .nprune = 2:38)
+# Fix the seed so that the results can be reproduced
+set.seed(100)
+marsTuned_75 <- train(x = x_train,
+                   trainingData$Yield,
+                   method = "earth",
+                   tuneGrid = marsGrid_75,
+                   trControl = trainControl(method = "cv"))
+```  
+
+```{r kj-7.5a-3-2, cache = TRUE, echo = TRUE}
+plot(marsTuned_75)
+```  
+
+```{r kj-7.5a-3-3, cache = TRUE, echo = TRUE}
+min(marsTuned_75$results$RMSE, na.rm = TRUE) # 1.181011
+##  degree  nprune  RMSE      Rsquared   MAE
+##   2       14      1.181011  0.9428116  0.9653660
+marsPred_75 <- predict(marsTuned_75, newdata = x_test)
+postResample(pred = marsPred_75, obs = testData$Yield)
+
+varImp(marsTuned_75)
+```  
+
+
+### SVM
+
+
+```{r kj-7.5a-4, cache = TRUE, echo = TRUE}
+svmRTuned_75 <- train(x = x_train,
+                   trainingData$Yield,
+                   method = "svmRadial",
+                   preProc = c("center", "scale"),
+                   tuneLength = 14,
+                   trControl = trainControl(method = "cv"))
+
+svmRTuned_75
+svmRTuned_75$finalModel
+svmPred_75 <- predict(svmRTuned_75, newdata = x_test)
+postResample(pred = svmPred_75, obs = testData$Yield)
+##  RMSE  Rsquared       MAE
+##  2.0421971 0.8424968 1.5994147
+varImp(svmRTuned_75)
+
+plot(svmRTuned_75)
+```
+
+```{r kj-7.5a-5, cache = TRUE, echo = TRUE}
+postResample(pred = knnPred_75, obs = testData$Yield)
+```
+
+```{r kj-7.5a-6, cache = TRUE, echo = TRUE}
+postResample(pred = marsPred_75, obs = testData$Yield)
+```
+
+```{r kj-7.5a-7, cache = TRUE, echo = TRUE}
+postResample(pred = nnetPred_75, obs = testData$Yield)
+```
+
+
+```{r kj-7.5a-8, cache = TRUE, echo = TRUE}
+postResample(pred = svmPred_75, obs = testData$Yield)
+```
+
+
+The most effecitive model with this data is the Support Vector Machine Regression model. with an RMSE of .98 and an R-Squared of around .675. Although the R-Squared is not supremely impressive with the Biolgoical and Process variables explaining approximately 67% of the `Yeild`, that rSqured is 4% higher than the KNN, and MARS model, and about 41% heigher than the Neural Net model.
+
+> (b) Which predictors are most important in the optimal nonlinear regression model? 
+
+```{r kj-7.5a-9, cache = TRUE, echo = TRUE}
+varImp(svmRTuned_75)
+```  
+
+#### The Five Most Predictive Variables for this model were 
+
+ManufacturingProcess32  
+ManufacturingProcess13   
+BiologicalMaterial06     
+ManufacturingProcess17   
+BiologicalMaterial03     
+
+> (b)Do either the biological or process variables dominate the list? 
+
+ `ManufacturingProcess` Variables make ups six of the top ten variables are and three of the top four. Although they are only slightly more represented in the top 10, they definitely have greater overall contributions to this SVM model.
+
+
+
+> (b)How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
+
+#### Partial Least Squares Model  
+
+```{r}
+fit_41 <- plsr(Yield~., data=trainingData, method = 'kernelpls',
+            scale = TRUE,
+            center = TRUE,
+            ncomp =41)
+
+
+test_pred_41 <- predict(fit_41, testData, ncomp=41)
+postResample(pred = test_pred_41, obs = testData$Yield)
+```  
+
+#### Variable Least Squares Importance
+
+```{r}
+varImp(fit_41)
+```  
+
+For the 41-variable partial least squares model the 10 most important variables were all `BiologicalMaterials`, where as in this more predictive SVM model, the top three are `ManufacturingProcess` variables and the blend of variables are more complex than in the partial least squares model.
+
+As you can see from the importance values in the lists, the most imporant PLS variables are less important than the least important from the non-linear regression models in chapter seven.
+
+
+>> (c) Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
+
+
+```{r kj-7.5b, cache = TRUE, echo = TRUE, fig.height=12}
+
+variables <-c( 'Yield',
+'ManufacturingProcess32',
+'ManufacturingProcess13' ,
+'BiologicalMaterial06' ,
+'ManufacturingProcess17',
+'BiologicalMaterial03' ,
+'ManufacturingProcess36',
+'ManufacturingProcess09',
+'BiologicalMaterial02',
+'BiologicalMaterial12',
+'ManufacturingProcess31' )
+
+importants<-varImp(svmRTuned_75)
+important <- importants$importance %>%
+  rownames_to_column() %>%
+  arrange(desc(Overall)) %>%
+  head(10)
+
+cols_importants <- imputed_data[,important$rowname]
+cols_importants$Yield <- imputed_data$Yield
+library(gridExtra)
+
+plot_chems <- function(col){
+  ggplot(cols_importants) + 
+  geom_point(aes_string(x = col, y='Yield'), color = 'darkgreen') +
+    geom_smooth(aes_string(x = col, y = "Yield"), color = 'orange')+
+  theme_bw()
+}
+
+
+plots <-lapply(colnames(cols_importants)[1:length(cols_importants) - 1], plot_chems)
+
+
+grid.arrange(grobs = plots, ncol = 2, nrow = 6)
+```
+
+In looking at the top 12 most influential variables of the non-linear models, there are some pretty clear differences in the data which might explain both the overall poor performance of the linear models as well as the improved significance of Process-Based variables in the non-linear models.
+
+Of the `ManfuacturingProcess` variables, only 32 & 09 were even remotely linear, and 09 could arguably b considered a cluster with a few outliers that leverage it to seem linear. the rest are either tight clusters or discrete values which predict an array of possible Yields, which is directly opposed the the definition of linearly separable data.
+
+On the other hand, the biological variable are more continuous and some approximate linear distributions when plotted against the `Yield`. However, when you look closely at these plots, you can see that the smoothed line for each of them is curved, often sinusoidal or semi-sinusoidal. This likely explains the weakness of even this variables in the importance analysis, as only `BiolgocialMaterial02` (from the non-linear model) shows a full linear relationship and it is the second most predictive variable in linear model. I would assume that the most important `BiologicalMaterial01` would also be generally linear to `Yield`.

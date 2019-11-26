@@ -1,0 +1,231 @@
+---
+title: 'DATA 624: Group 2 Homework'
+author: 'Juliann McEachern'
+output: 
+  html_document:
+    theme: yeti
+    highlight: pygments
+    toc: true
+    toc_float: true
+    df_print: paged
+    code_folding: hide
+---
+
+# Assignment 3
+
+Assignment 3 includes problem 3.1 and 3.2 from the KJ text. The following R packages have been used for completion of all homework assignments to date:
+
+```{r dependencies, echo=T, warning=F, message=F, comment=F}
+#Textbook Packages
+library(fpp2)
+library(AppliedPredictiveModeling)
+library(mlbench)
+
+#Processing
+library(tidyverse)
+
+#Graphing
+library(ggplot2)
+library(gridExtra)
+
+#Math
+library(caret)
+library(randomForest)
+library(seasonal)
+library(psych)
+library(corrplot)
+
+#Formatting
+library(knitr)
+library(kableExtra)
+```
+
+
+
+
+# 3.1  
+
+**The UC Irvine Machine Learning Repository contains a data set related to glass identification. The data consist of 214 glass samples labeled as one of seven class categories. There are nine predictors, including the refractive index and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe. The data can be accessed via:**
+
+
+```{r kj-3.1, comment=F, warning=F}
+data(Glass)
+str(Glass)
+```
+
+## (a). Using visualizations, explore the predictor variables to understand their distributions as well as the relationships between predictors.  {.tabset}
+
+### Summary Statistics
+
+We can quickly evaluate the predictor variables using summary statistics. 
+
+```{r kj-3.1a1}
+Glass%>%keep(is.numeric)%>% describe() -> Glass_desc
+Glass_desc %>% kable(caption="Summary Statistics of Glass data") %>% kable_styling(c("striped", "hover"))
+```
+
+### Distribution
+
+The histograms below help us understand the distribution of each of our predicted variables. We can visualize the skewness from the summary statistics in these plots. Mg and Si are both skewed to the left, whereas the other variables have means greater than the median value, which skews their plots to the right. 
+
+The plots for RI, Na, Al, and Si are relatively symmetric, suggesting normal distributions. The remainder show asymmetric distributions with either unimodal or bimodal peaks. 
+
+```{r kj-3.1a2}
+Glass %>%
+  keep(is.numeric)%>%
+  gather() %>% 
+  ggplot(aes(value)) +
+  geom_histogram(fill="steelblue") +
+  facet_wrap(~ key, scales = "free") +
+  labs(title = "Distribution of Glass Predictor Variables")
+```
+
+### Relationship
+
+We can evaluate the relationship between our predictor variables through examination of their correlation with one another. The plot below indicates the strongest positive relationship between Ca and RI and strongest negative relationship between Si and RI. 
+
+```{r kj-3.1a3}
+Glass_cor <- Glass %>% keep(is.numeric) %>% cor(method = 'pearson')
+corrplot(Glass_cor)
+```
+
+
+## (b).  Do there appear to be any outliers in the data? Are any predictors skewed?  {.tabset}
+
+### Outliers
+
+We can use boxplots to indicate whether or not our data contains any outliers. All but Mg show values outside the expected interquartile range. The plot for Ba shows the largest amount of outliers compared to the other predictor variables. 
+
+```{r kj-3.1b1}
+Glass %>%
+  keep(is.numeric)%>%
+  gather() %>% 
+  ggplot(aes(key, value))+
+  stat_boxplot(geom ="errorbar") + 
+  geom_boxplot(outlier.colour = "orange", fill="grey") +
+  facet_wrap(~ key, scales = "free") + coord_flip()
+```
+
+### Skewness
+
+The size of our dataset may influence the skewness observed in the data as there are only 214 observations for each variable. As referenced earlier on, Mg and Si are skewed left whereas all other variables are skewed right. The degree of skewness can be viewed in the chart below: 
+
+```{r kj-3.1b2}
+Glass_desc$var <- rownames(Glass_desc)
+Glass_skew <- Glass_desc %>% select(var,skew)  
+Glass_skew %>% arrange(skew) %>% kable() %>% kable_styling(c("striped", "hover"), full_width = F)
+```
+
+
+## (c). Are there any relevant transformations of one or more predictors that might improve the classification model?  {.tabset}
+
+### Box-Cox Transformation
+
+
+We can apply a Box-Cox transformation to our entire dataset to reduce skewness, using the `forecast` package. The Box-Cox method uses a maximum likelihood estimation to determine the transformation parameter $\lambda$. This can be used to improve the overall classification model.  There are additional methods that could also be applied to reduce outliers (ie. spatial sign) if we find that our predictive models is not resistant to their effect. However, given our small sample size, we need more information regarding our sample to understand the outlying data points. 
+
+```{r kj-3.1c1, warning=F, comment=F, error=F, message=F}
+Glass2 <- Glass %>% select(-Type)
+transform <- function(x){
+  x <- BoxCox(x, lambda = BoxCox.lambda(x, lower=0))
+}
+
+Glass2 <- as.data.frame(sapply(Glass2, transform))
+```
+
+### Visualize Transformation
+
+```{r kj-3.1c2}
+Glass2 %>%
+  gather() %>% 
+  ggplot(aes(value)) +
+  geom_histogram(fill="navyblue") +
+  facet_wrap(~ key, scales = "free") +
+  labs(title = "Distribution of Glass Predictor Variables with Box-Cox Transformation")
+```
+
+### Skew Evaluation
+
+The table below shows the degree in which the skewness of variables was changed as a result of applying the box-cox transformation. 
+
+```{r kj-3.1c3}
+Glass_desc2<-describe(Glass2)
+Glass_desc2$var <- rownames(Glass_desc2)
+Glass_skew2 <- Glass_desc2 %>% select(var,skew) 
+
+Glass_skew %>% inner_join(Glass_skew2, by="var") %>% 
+  mutate(Change = round(skew.x - skew.y, 4)) %>% 
+  rename("Variable"="var","Pre-T Skew"="skew.x", "Post-T Skew"="skew.y") %>% 
+  kable(caption = "Comparision of Skewness in Glass Variables: Pre and Post Transformation") %>% 
+  kable_styling(c("striped", "hover"))
+
+```
+
+
+# 3.2 
+
+**The soybean data can also be found at the UC Irvine Machine Learning Repository. Data were collected to predict disease in 683 soybeans. The 35 predictors are mostly categorical and include information on the environmental conditions (e.g., temperature, precipitation) and plant conditions (e.g., left spots, mold growth). The outcome labels consist of 19 distinct classes. The data can be loaded via:**
+
+```{r kj-3.2, comment=F, warning=F}
+data(Soybean)
+```
+
+## (a). Investigate the frequency distributions for the categorical predictors. Are any of the distributions degenerate in the ways discussed earlier in this chapter? 
+
+The histograms below help us identify categorical predictors with degenerate distributions. A number of variables have what the text describes as a "handful of unique values that occur with very low frequencies." These occurances can be problematic for certain types of models ie., linear regression as it effects the overall calculations within the model. In instances, such as ext.decay, we could convert the 3 factor levels to a binary indicator to offset the observed imbalance. Other indicators, like sclerotia and mycelium, could be completely dropped, as these factors contain overwhelmingly singular observations with only a few missing data points observed. 
+
+```{r kj-3.2a, warning=F, comment=F, message=F}
+Soybean %>%
+  select(-Class)%>%
+  gather() %>% 
+  ggplot(aes(value)) +
+  geom_bar()+
+  facet_wrap(~ key) +
+  labs(title = "Distribution of Soybean Categorical Predictor Variables")
+```
+
+
+## (b). Roughly 18% of the data are missing. Are there particular predictors that are more likely to be missing? Is the pattern of missing data related to the classes?
+
+Only four variables do not contain missing data: Date, area.dam, class, and leaves. More than 10% of information for leaves (halo, marg, size, malf, mild, shread) are missing. This is also true for fruit (bodies, spots, pods), seed (size, seed, discolor, tmt), and other factors of plant and environmental condition as outlined in the chart below:
+
+```{r kj-3.2b1}
+SoybeanNA <- sapply(Soybean, function(y) sum(length(which(is.na(y))))) %>% as.data.frame() 
+colnames(SoybeanNA) <- "Count"
+SoybeanNA$Variable <- rownames(SoybeanNA)
+SoybeanNA %>% select(Variable, Count) %>% 
+  arrange(desc(Count)) %>%
+  mutate("Perct. Missing" = round(Count/nrow(Soybean),2)*100) %>% 
+  kable(caption="Soybean: Missing Data Analysis") %>% kable_styling(full_width = F)
+```
+
+This chart helps us see that there is a strong imbalance between complete cases and missing data. We can see that only 5 of our 19 classes contain any missing data. The proportion of these classes compared to the rest of the data is broken down below:
+
+```{r kj-3.2b2}
+Soybean %>%
+  group_by(Class) %>% 
+  mutate(Count = n(), Proportion=round(Count/nrow(Soybean),2)) %>%
+  ungroup() %>%
+  filter(!complete.cases(.)) %>%
+  select(Class, Count, Proportion) %>% unique() %>%
+  kable(caption="Classes with Missing Data in Proportion to All Classes") %>%
+  kable_styling(full_width = F)
+```
+
+
+We can further observe the percetage of NA values on a microlevel by looking at proportion of missing data by predictor within the five classes with missing data. 
+
+```{r kj-3.2b3}
+SoybeanNA2 <- Soybean %>% 
+  group_by(Class) %>% 
+  summarise_each(funs(round(100*mean(is.na(.)),2)))
+
+SoybeanNA2 %>% filter_at(vars(-Class), any_vars(.>0)) 
+```
+
+
+## (c). Develop a strategy for handling missing data, either by eliminating predictors or imputation.
+
+Because missing data is limited to only five classes, it is important for us to understand why the data is missing. If the missing observations are do to structural reasons, the NA values should be retained. For example, these specific classes might not bear fruit, which would account for NA observations for fruit bodies, pods, and seeds. Imputing these observations, especially with 100% of data not accounted for, could severely bias our model without understanding the rational behind this clear pattern of NA values. Due to the size of our data, elimination of predictors would not be ideal. Each variable has less than 18% of data missing, which could be handled by KNN or mode imputation approach. However, I would only recommend that type of imputation the date and area.dam variables as they are only missing up to 6.25% in individual classes. 
+
+The other variables contain much higher proportions of missing data per class type that ranges from 40 to 100 percent. For this reason, I would recommend using a tree-based modeling approach, as these models are able to handle missing data, unlike other types of regression models. 
