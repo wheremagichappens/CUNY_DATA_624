@@ -608,12 +608,12 @@ The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is
 IncNodePurity. Unlike \texttt{PLS}, \texttt{Random\ Forest} can produce
 2 different variable importance plots.
 
-The first graph shows that if a variable is assigned values by random
-permutation by how much will the MSE increase. The second plot is based
-on \texttt{node\ purity} which is measured by \texttt{Gini\ Index} and
-it is the the difference between RSS before and after the split on that
-variable. In short, each graph shows how much MSE or Impurity increases
-when each variable is randomly permuted.
+The first graph shows how much MSE would increase if a variable is
+assigned with values by random permutation. The second plot is based on
+\texttt{node\ purity} which is measured by the difference between RSS
+before and after the split on that variable (\texttt{Gini\ Index}). In
+short, each graph shows how much MSE or Impurity increases when each
+variable is randomly permuted.
 
 \chapter{Evaluation}\label{evaluation}
 
@@ -938,7 +938,8 @@ model) on \texttt{StudentEvaluation} as CSV file.
 \NormalTok{s}\OperatorTok{%>%}\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Summary - RF with original data set"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T)}\OperatorTok{%>%}\KeywordTok{kable_styling}\NormalTok{()}\OperatorTok{%>%}\KeywordTok{row_spec}\NormalTok{()}
 
 \CommentTok{# plot varImp}
-\KeywordTok{varImpPlot}\NormalTok{(rf_model2)}
+\NormalTok{Random_Forest_Variance_Importance <-}\StringTok{ }\NormalTok{rf_model2}
+\KeywordTok{varImpPlot}\NormalTok{(Random_Forest_Variance_Importance)}
 
 \CommentTok{# Evaluation}
 
