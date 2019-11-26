@@ -243,7 +243,7 @@ After reviewing a few methods of multiple imputation techniques, Multiple Imputa
 
 We will also remove zero variance Predictors using `nearZeroVar`. It diagnoses predictors that have one unique value or predictors that have both of the following characteristics: 1. they have very few unique values relative to the number of samples and 2. the ratio of the frequency of the most common value to the frequency of the second most common value is large.
 
-For outlier handling, we will use `BACON`, short for 'Blocked Adaptive Computationally-Efficient Outlier Nominators'. It is a somewhat robust algorithm (set), with an implementation for regression or multivariate covariance estimation. The function produces index with `FALSE` to identify rows with outliers. This index will be used as `subset` to fit outlier-free train `subset` in the process of hyper-parameter tuning in `train` function and re-train the final model using full train set (with no outliers) with best tuned hyperparameters.  
+For outlier handling, we will use `BACON`, short for 'Blocked Adaptive Computationally-Efficient Outlier Nominators'. It is a somewhat robust algorithm (set), with an implementation for regression or multivariate covariance estimation. The function produces index with `FALSE` to identify rows with outliers. This index will be used as `subset` to fit outlier-free train `subset` in the process of hyper-parameter tuning in `train` function and re-train the final model with best tuned hyperparameters.  
 
 ```{r, cache=T, results = 'hide', warning=F, message=F, echo=F}
 # set seed for split to allow for reproducibility
