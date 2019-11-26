@@ -377,13 +377,13 @@ MAPE = Metrics::mape(df_train$PH, train_rf_pred2) )
 s%>%kable(caption="Model Summary - RF with original data set", booktabs=T)%>%kable_styling()%>%row_spec()
 
 # plot varImp
-varImpPlot(rf_model2)
+Random_Forest_Variance_Importance <- rf_model2
+varImpPlot(Random_Forest_Variance_Importance)
 ```
 
 The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is `r s$MAPE` where as top 3 important predictors are `MnfFlow`, `BrandCode` and `PressureVacuum` for %incMSE and `MnfFlow`, `BrandCode` and `OxygenFiller` for IncNodePurity. Unlike `PLS`, `Random Forest` can produce 2 different variable importance plots. 
 
-The first graph shows that if a variable is assigned values by random permutation by how much will the MSE increase. The second plot is based on `node purity` which is measured by `Gini Index` and it is the the difference between RSS before and after the split on that variable.
-In short, each graph shows how much MSE or Impurity increases when each variable is randomly permuted.
+The first graph shows how much MSE would increase if a variable is assigned with values by random permutation. The second plot is based on `node purity` which is measured by the difference between RSS before and after the split on that variable (`Gini Index`). In short, each graph shows how much MSE or Impurity increases when each variable is randomly permuted.
 
 # Evaluation
 
@@ -758,7 +758,8 @@ s <- data.frame(
 s%>%kable(caption="Model Summary - RF with original data set", booktabs=T)%>%kable_styling()%>%row_spec()
 
 # plot varImp
-varImpPlot(rf_model2)
+Random_Forest_Variance_Importance <- rf_model2
+varImpPlot(Random_Forest_Variance_Importance)
 
 # Evaluation
 
