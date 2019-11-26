@@ -307,7 +307,7 @@ bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree wit
 # plot varImp
 plot(varImp(bagged_model))
 ```
-MAPE is `r bagged_model$results$MAPE` where as top 3 important predictors are `CarbRel`, `OxygenFiler` and `Usuagecont`. Since `Bagged Tree` uses all features for splitting a node Unlike `Random Forest`, which uses only a subset of features at random out of the total for splitting each node in a tree, the order of feature importances between two models can be quite different.
+MAPE is `r bagged_model$results$MAPE` where as top 3 important predictors are `CarbRel`, `OxygenFiler` and `Usuagecont`. Since `Bagged Tree` uses all features for splitting a node unlike `Random Forest` which uses only a subset of features at random out of the total for splitting each node in a tree, the order of feature importances between two models can be quite different.
 
 ## Model 2: PLS with BACON
 
