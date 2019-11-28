@@ -400,7 +400,7 @@ With the help of visualization, it is easier to navigate how much each
 variable is missing. Note that \texttt{MFR} has the most number of
 missing values.
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-6-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 \subsection{Univariate distributions}\label{univariate-distributions}
 
@@ -408,7 +408,7 @@ We notice that there are some variables such as \texttt{Temperature} and
 \texttt{Oxygen\ Filler} that are highly positively skewed. There are
 potentials of presence of outliers for skewed variables.
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-7-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-7-1} \end{center}
 
 As we expected, there are many outliers in \texttt{Temperature} and
 \texttt{Oxygen\ Filler}. Note that \texttt{MFR} greatly suffers from the
@@ -417,22 +417,29 @@ presence of outliers.
 From the presence of multiple outliers, we then have to explain
 why/what/how we decided to add \texttt{Random\ Forest} as an additional
 model and apply necessary pre-processing before modeling \texttt{PLS}
-and \texttt{Bagged\ Tree}.
+and \texttt{Bagged\ Tree}, if needed. If number of outlier
 
-Ensembled model such as \texttt{Random\ Forest} is robust to outliers
-since only a subset of features are selected at random out of the total
-and the best split feature from the subset is used to split each node in
-a tree, unlike in bagging where all features are considered for
-splitting a node and this makes \texttt{Random\ Forest} a good
-altrenative for \texttt{Bagged\ Tree}.
+Althought tree-based models, including\texttt{Bagged\ Tree}, are
+generally robust to outliers and multicollinearity, it does not
+necessarily mean Model A in tree-based is always equally good as another
+model in tree-based. Ensembled model such as \texttt{Random\ Forest} is
+potentially even more robust to outliers and multicollinearity than
+\texttt{Bagged\ Tree} since only a subset of features are selected at
+random out of the total and the best split feature from the subset is
+used to split each node in a tree, unlike in bagging where all features
+are considered for splitting a node. This makes \texttt{Random\ Forest}
+a potentially good alternative for \texttt{Bagged\ Tree}.
 
 Partial least squares regression (PLS regression) is used as an
 alternative for ordinary least squares regression in the presence of
-multicollinearity. This does not mean, however, \texttt{PLS} is robust
-to outliers. Thus, we will use Blocked Adaptive
-Computationally-Efficient Outlier Nominators (\texttt{BACON}) before
-modeling relatively outlier sensitive models such as \texttt{PLS} and
-\texttt{Bagged\ Tree}.
+multicollinearity. Although \texttt{PLS} is quite sensitive to outliers,
+like in \texttt{OLS}, small number of outliers will not necessarily
+worsen the predictive ability. In fact, depending on the situations,
+removing outlier will rather decrease \texttt{MAPE} on test set. Since
+the benefit of removing outlier cannot be predicted in our case, we will
+compare \texttt{MAPE} on test set between \texttt{PLS} model without
+outliers and \texttt{PLS} model without handling outliers to select the
+best model.
 
 Reference:
 
@@ -444,7 +451,7 @@ using a robust estimation for the variance-covariance matrix. Kondylis
 and Hadi {[}8{]} used the BACON algorithm to eliminate outliers,
 resulting in a robust linear PLS.'' )
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-8-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-8-1} \end{center}
 
 \subsection{Bivariate relationships}\label{bivariate-relationships}
 
@@ -454,7 +461,7 @@ weak negative relationship with \texttt{PH}. All of the predictors have
 really weak relationship with \texttt{PH} suggesting that linear models
 might not work well.
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-9-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
 \subsection{Correlation Matrix}\label{correlation-matrix}
 
@@ -462,17 +469,17 @@ We confirmed that there are several highly correlated predictors. This
 is another reason why \texttt{Random\ Forest} would be more preferred to
 \texttt{Bagged\ Tree} model. In fact, \texttt{Random\ Forest} is more
 robust to strong correlation than \texttt{Bagged\ Tree}. Although
-multicollinearity is not a big problem for for \texttt{PLS} and
-\texttt{Random\ Forest}, it can cause some problem when it comes to
-inferring the importance of certain predictors in tree model.
-Multicollinearity means that some predictors are shown as highly
-correlated with other combincations of predictors in variable
-importance. According to the reference, it may mislead business audience
-to think that some features are not more important than others
-vice-versa. However, we really do not know whether the reader of this
-paper would treat highly correlated variable such as
-\texttt{HydPressure3} and \texttt{HydPressure2} differently or not.
-Therefore, we will just keep the variables as they are.
+multicollinearity is not a big problem for tree-based models and
+\texttt{PLS}, it can cause some problem when it comes to inferring the
+importance of certain predictors in tree model. Multicollinearity means
+that some predictors are shown as highly correlated with other
+combincations of predictors in variable importance. According to the
+reference, it may mislead business audience to think that some features
+are not more important than others vice-versa. However, we really do not
+know whether the reader of this paper would treat highly correlated
+variable such as \texttt{HydPressure3} and \texttt{HydPressure2}
+differently or not. Therefore, we will just keep the variables as they
+are.
 
 Reference:
 
@@ -489,7 +496,7 @@ importance value. Instead, including both surface area predictors in the
 data causes their importance to have only moderate values.'' Page 181 of
 Applied Predictive Modeling - Max KJ)
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-10-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-10-1} \end{center}
 
 \chapter{Data preparation}\label{data-preparation}
 
@@ -511,39 +518,41 @@ It diagnoses predictors that have one unique value or predictors that
 have both of the following characteristics: 1. they have very few unique
 values relative to the number of samples and 2. the ratio of the
 frequency of the most common value to the frequency of the second most
-common value is large.
+common value is large. We confirmed that \texttt{HydPressure1} is
+dropped as a result.
 
 For outlier handling, we will use \texttt{BACON}, short for `Blocked
-Adaptive Computationally-Efficient Outlier Nominators'. It is a somewhat
-robust algorithm (set), with an implementation for regression or
-multivariate covariance estimation. The function produces index with
-\texttt{FALSE} to identify rows with outliers. This index will be used
-as \texttt{subset} to fit outlier-free train \texttt{subset} in the
-process of hyper-parameter tuning in \texttt{train} function and
-re-train the final model with best tuned hyperparameters.
+Adaptive Computationally-Efficient Outlier Nominators'. It is a robust
+algorithm (set), with an implementation for regression or multivariate
+covariance estimation. The function produces index with \texttt{FALSE}
+to identify rows with outliers. This index will be used as
+\texttt{subset} to fit outlier-free train \texttt{subset} in the process
+of hyper-parameter tuning in \texttt{train} function and re-train the
+final model with best tuned hyperparameters. The result of
+\texttt{BACON} confirmed that only about 0.9\% or 19 of train set are
+detected as outliers. Note that we have total 2058 of rows in tran set.
 
 \chapter{Modeling}\label{modeling}
 
-\section{Model 1: Bagged Tree with
-BACON}\label{model-1-bagged-tree-with-bacon}
+\section{Model 1: Bagged Tree}\label{model-1-bagged-tree}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-12}Model Summary - Bagged Tree with BACON}
+\caption{\label{tab:unnamed-chunk-12}Model Summary - Bagged Tree}
 \centering
 \fontsize{8}{10}\selectfont
 \begin{tabular}[t]{rrr}
 \toprule
 \textbf{RMSE} & \textbf{Rsquared} & \textbf{MAPE}\\
 \midrule
-\rowcolor{gray!6}  0.1198618 & 0.4922456 & 0.0106783\\
+\rowcolor{gray!6}  0.1206346 & 0.5193537 & 0.010415\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-12-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-12-1} \end{center}
 
-MAPE is 0.0106783 where as top 3 important predictors are
+MAPE is 0.010415 where as top 3 important predictors are
 \texttt{CarbRel}, \texttt{OxygenFiler} and \texttt{Usuagecont}. Since
 \texttt{Bagged\ Tree} uses all features for splitting a node unlike
 \texttt{Random\ Forest} which uses only a subset of features at random
@@ -566,27 +575,48 @@ importances between two models can be quite different.
 \end{tabular}
 \end{table}
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-13-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-13-1} \end{center}
 
-The final value used for the model was ncomp = 10. MAPE is 0.0123968
-where as top 3 important predictors are \texttt{MnfFlow},
-\texttt{Usuagecont} and \texttt{BowlSetpoint}. The order of variable
-importance, again, is quite different from \texttt{Bagged\ Tree} as
-\texttt{PLS} is not a tree-based model. Note that PLS is a dimension
-reduction technique with some similarity to principal component
-analysis. The predictor variables are mapped to a smaller set of
-variables and within that smaller space we perform a regression against
-the outcome variable. In contrast to principal component analysis where
-the dimension reduction ignores the outcome variable, the \texttt{PLS}
-procedure aims to choose new mapped variables that maximally explain the
-outcome variable.
+\section{Model 2-2:PLS}\label{model-2-2pls}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-14}Model Summary - PLS}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{lrrr}
+\toprule
+\textbf{ } & \textbf{RMSE} & \textbf{Rsquared} & \textbf{MAPE}\\
+\midrule
+\rowcolor{gray!6}  10 & 0.1351874 & 0.3869645 & 0.0121429\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-14-1} \end{center}
+
+The final value used for both was ncomp = 10. MAPE for
+\texttt{PLS-BACON} is 0.0123968 and for \texttt{PLS} it is 0.0121429.
+Top 3 important predictors for \texttt{PLS-BACON} are \texttt{MnfFlow},
+\texttt{Usuagecont} and \texttt{BowlSetpoint} and for \texttt{PLS} they
+are \texttt{MnfFlow}, \texttt{BrandCodeC} and \texttt{Usuagecont}. The
+order of variable importance, again, is quite different from
+\texttt{Bagged\ Tree} as \texttt{PLS} model is not a tree-based model.
+
+Note that PLS is a dimension reduction technique with some similarity to
+principal component analysis. The predictor variables are mapped to a
+smaller set of variables and within that smaller space we perform a
+regression against the outcome variable. In contrast to principal
+component analysis where the dimension reduction ignores the outcome
+variable, the \texttt{PLS} procedure aims to choose new mapped variables
+that maximally explain the outcome variable.
 
 \section{Model 3: Random Forest with original data
 set}\label{model-3-random-forest-with-original-data-set}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-15}Model Summary - RF with original data set}
+\caption{\label{tab:unnamed-chunk-16}Model Summary - RF with original data set}
 \centering
 \fontsize{8}{10}\selectfont
 \begin{tabular}[t]{rrr}
@@ -598,7 +628,7 @@ set}\label{model-3-random-forest-with-original-data-set}
 \end{tabular}
 \end{table}
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-15-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-16-1} \end{center}
 
 The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is
 0.0081279 where as top 3 important predictors are \texttt{MnfFlow},
@@ -618,36 +648,42 @@ variable is randomly permuted.
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-16}Evaluation Summary on test set}
+\caption{\label{tab:unnamed-chunk-17}Evaluation Summary on test set}
 \centering
 \fontsize{8}{10}\selectfont
 \begin{tabular}[t]{lrrr}
 \toprule
 \textbf{MODEL} & \textbf{RMSE} & \textbf{Rsquare} & \textbf{MAPE}\\
 \midrule
-\rowcolor{gray!6}  Bagged Tree & 0.1235554 & 0.5047507 & 0.0111408\\
+\rowcolor{gray!6}  Bagged Tree & 0.1117219 & 0.5921901 & 0.0100767\\
 PLS - BACON & 0.1358493 & 0.3862047 & 0.0122273\\
-\rowcolor{gray!6}  RF & 0.0883145 & 0.7449339 & 0.0075050\\
+\rowcolor{gray!6}  PLS & 0.1302540 & 0.4322064 & 0.0119971\\
+RF & 0.0883145 & 0.7449339 & 0.0075050\\
 \bottomrule
 \end{tabular}
 \end{table}
 
 From the table, we confirmed that \texttt{Random\ Forest} is a clear
-winner with the lowest MAPE on test set.
+winner with the lowest MAPE on test set. Also, note that \texttt{PLS}
+without removing outlier is better model than \texttt{PLS-BACON}. This
+is not a surprising result since the number of outliers was very small
+(19 out of 2058) and hence removing outlier is unnecessary process for
+our case.
 
 \section{Insight \& Conclusion}\label{insight-conclusion}
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-17-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-1} \end{center}
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-17-2} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-2} \end{center}
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-17-3} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-3} \end{center}
 
-\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-17-4} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-4} \end{center}
 
-We graphed top 4 most important variables from \texttt{varImp} of MSE
-and NodePurity. Given that \texttt{Brand\ Code} is categorical, we
-grouped 3 continous variables into \texttt{Brand\ Code}.
+We graphed top 4 most important variables from Random Forest's
+\texttt{varImp} of MSE and NodePurity. Given that \texttt{Brand\ Code}
+is categorical, we grouped 3 continous variables into
+\texttt{Brand\ Code}.
 
 The first feature plot shows that 3 continous variables have very weak
 relationship with \texttt{PH}. \texttt{MnfFlow} has slight negative
@@ -858,19 +894,19 @@ model) on \texttt{StudentEvaluation} as CSV file.
 
 \CommentTok{# Modeling}
 
-\NormalTok{## Model 1: Bagged Tree with BACON}
+\NormalTok{## Model 1: Bagged Tree}
 
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)}
-\NormalTok{bagged_model <-}\StringTok{ }\KeywordTok{train}\NormalTok{( PH}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ df_train2, }\DataTypeTok{method=}\StringTok{"treebag"}\NormalTok{,}
+\NormalTok{bagged_model <-}\StringTok{ }\KeywordTok{train}\NormalTok{( PH}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ df_train, }\DataTypeTok{method=}\StringTok{"treebag"}\NormalTok{,}
                        \DataTypeTok{tuneLength=}\DecValTok{10}\NormalTok{, }
-                       \DataTypeTok{subset =}\NormalTok{ bacon_fit}\OperatorTok{$}\NormalTok{subset,}
+                  \CommentTok{#     subset = bacon_fit$subset,}
                        \DataTypeTok{trControl=}\KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method=}\StringTok{"cv"}\NormalTok{,}\DataTypeTok{number=}\DecValTok{5}\NormalTok{) )}
 
 \CommentTok{# create MAPE table}
 \NormalTok{train_bag_pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(bagged_model)}
-\NormalTok{bagged_model}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAPE <-}\StringTok{ }\NormalTok{Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(df_train2}\OperatorTok{$}\NormalTok{PH, train_bag_pred)}
+\NormalTok{bagged_model}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAPE <-}\StringTok{ }\NormalTok{Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(df_train}\OperatorTok{$}\NormalTok{PH, train_bag_pred)}
 
-\NormalTok{bagged_model}\OperatorTok{$}\NormalTok{results[,}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{8}\NormalTok{)]}\OperatorTok{%>%}\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Summary - Bagged Tree with BACON"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T)}\OperatorTok{%>%}\KeywordTok{kable_styling}\NormalTok{()}\OperatorTok{%>%}\KeywordTok{row_spec}\NormalTok{()}
+\NormalTok{bagged_model}\OperatorTok{$}\NormalTok{results[,}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{8}\NormalTok{)]}\OperatorTok{%>%}\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Summary - Bagged Tree"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T)}\OperatorTok{%>%}\KeywordTok{kable_styling}\NormalTok{()}\OperatorTok{%>%}\KeywordTok{row_spec}\NormalTok{()}
 
 \CommentTok{# plot varImp}
 \KeywordTok{plot}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(bagged_model))}
@@ -893,6 +929,24 @@ model) on \texttt{StudentEvaluation} as CSV file.
 
 \CommentTok{# plot varImp}
 \KeywordTok{plot}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(pls_model))}
+
+\NormalTok{## Model 2-2:PLS}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)}
+\CommentTok{#df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)}
+
+\NormalTok{pls_model2 <-}\StringTok{ }\KeywordTok{train}\NormalTok{( PH}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ df_train, }\DataTypeTok{method=}\StringTok{"pls"}\NormalTok{,}
+                   \DataTypeTok{tuneLength=}\DecValTok{10}\NormalTok{, }
+                \CommentTok{#   subset = bacon_fit$subset,}
+                   \DataTypeTok{preProcess=}\KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{,}\StringTok{"scale"}\NormalTok{), }\DataTypeTok{trControl=}\KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method=}\StringTok{"cv"}\NormalTok{,}\DataTypeTok{number=}\DecValTok{5}\NormalTok{) )}
+
+\CommentTok{# create MAPE table}
+\NormalTok{train_pls_pred2 <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(pls_model2)}
+\NormalTok{pls_model2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAPE <-}\StringTok{ }\NormalTok{Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(df_train}\OperatorTok{$}\NormalTok{PH, train_pls_pred2)}
+
+\NormalTok{pls_model2}\OperatorTok{$}\NormalTok{results[}\DecValTok{10}\NormalTok{,}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{8}\NormalTok{)]}\OperatorTok{%>%}\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Summary - PLS"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T)}\OperatorTok{%>%}\KeywordTok{kable_styling}\NormalTok{()}\OperatorTok{%>%}\KeywordTok{row_spec}\NormalTok{()}
+
+\CommentTok{# plot varImp}
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(pls_model2))}
 
 \NormalTok{## Model 3-1: Random Forest with BACON}
 
@@ -923,7 +977,7 @@ model) on \texttt{StudentEvaluation} as CSV file.
 
 \NormalTok{##mtry <- ( (ncol(df_train) -1) / 3 ) or sqrt(ncol(df_train) - 1) # By default, # of predictors / 3 for regression, sqrt(# of predictors) for classification https://www.hackerearth.com/practice/machine-learning/machine-learning-algorithms/tutorial-random-forest-parameter-tuning-r/tutorial/}
 
-\CommentTok{# from above result, we got mtry= 27 and ntree=2500 as optimal parameters}
+\CommentTok{# from above result, we got mtry= 31 and ntree=2500 as optimal parameters}
 \NormalTok{rf_model2 <-}\StringTok{ }\KeywordTok{randomForest}\NormalTok{(PH}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data=}\NormalTok{df_train, }\DataTypeTok{method=}\StringTok{"rf"}\NormalTok{, }\DataTypeTok{mtry=} \DecValTok{31}\NormalTok{, }\DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{ntree =} \DecValTok{2500}\NormalTok{)}
 
 \CommentTok{# create MAPE table}
@@ -943,23 +997,28 @@ model) on \texttt{StudentEvaluation} as CSV file.
 \CommentTok{# Evaluation}
 
 \CommentTok{# Make predictions}
-\NormalTok{p1 <-}\StringTok{ }\NormalTok{bagged_model }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(df_test2)}
+\NormalTok{p1 <-}\StringTok{ }\NormalTok{bagged_model }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(df_test)}
 \NormalTok{p2 <-}\StringTok{ }\NormalTok{pls_model }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(df_test2)}
+\NormalTok{p22 <-}\StringTok{ }\NormalTok{pls_model }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(df_test)}
 \NormalTok{p3 <-}\StringTok{ }\NormalTok{rf_model2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(df_test)}
 
 \CommentTok{# Model performance metrics}
 \NormalTok{sum_t <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}
   \DataTypeTok{MODEL =} \KeywordTok{c}\NormalTok{(}\StringTok{'Bagged Tree'}\NormalTok{,}
             \StringTok{'PLS - BACON'}\NormalTok{,}
+            \StringTok{'PLS'}\NormalTok{,}
             \StringTok{'RF'}\NormalTok{),}
-  \DataTypeTok{RMSE =} \KeywordTok{c}\NormalTok{(caret}\OperatorTok{::}\KeywordTok{RMSE}\NormalTok{(p1, df_test2}\OperatorTok{$}\NormalTok{PH),}
+  \DataTypeTok{RMSE =} \KeywordTok{c}\NormalTok{(caret}\OperatorTok{::}\KeywordTok{RMSE}\NormalTok{(p1, df_test}\OperatorTok{$}\NormalTok{PH),}
 \NormalTok{           caret}\OperatorTok{::}\KeywordTok{RMSE}\NormalTok{(p2, df_test2}\OperatorTok{$}\NormalTok{PH),}
+\NormalTok{           caret}\OperatorTok{::}\KeywordTok{RMSE}\NormalTok{(p22, df_test}\OperatorTok{$}\NormalTok{PH),}
 \NormalTok{           caret}\OperatorTok{::}\KeywordTok{RMSE}\NormalTok{(p3, df_test}\OperatorTok{$}\NormalTok{PH) ),}
-  \DataTypeTok{Rsquare =} \KeywordTok{c}\NormalTok{(caret}\OperatorTok{::}\KeywordTok{R2}\NormalTok{(p1, df_test2}\OperatorTok{$}\NormalTok{PH),}
+  \DataTypeTok{Rsquare =} \KeywordTok{c}\NormalTok{(caret}\OperatorTok{::}\KeywordTok{R2}\NormalTok{(p1, df_test}\OperatorTok{$}\NormalTok{PH),}
 \NormalTok{              caret}\OperatorTok{::}\KeywordTok{R2}\NormalTok{(p2, df_test2}\OperatorTok{$}\NormalTok{PH),}
+\NormalTok{              caret}\OperatorTok{::}\KeywordTok{R2}\NormalTok{(p22, df_test}\OperatorTok{$}\NormalTok{PH),}
 \NormalTok{              caret}\OperatorTok{::}\KeywordTok{R2}\NormalTok{(p3, df_test}\OperatorTok{$}\NormalTok{PH)),}
-  \DataTypeTok{MAPE =} \KeywordTok{c}\NormalTok{(Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(p1, df_test2}\OperatorTok{$}\NormalTok{PH),}
+  \DataTypeTok{MAPE =} \KeywordTok{c}\NormalTok{(Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(p1, df_test}\OperatorTok{$}\NormalTok{PH),}
 \NormalTok{           Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(p2, df_test2}\OperatorTok{$}\NormalTok{PH),}
+\NormalTok{           Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(p22, df_test}\OperatorTok{$}\NormalTok{PH),}
 \NormalTok{           Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(p3, df_test}\OperatorTok{$}\NormalTok{PH))}
 \NormalTok{)}
 

@@ -1,7 +1,7 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.26)  26 NOV 2019 13:01
+This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.26)  28 NOV 2019 14:12
 entering extended mode
-**./Proj2-AndyHwang.tex
-(Proj2-AndyHwang.tex
+**./Proj2-AndyHwang.revised.tex
+(Proj2-AndyHwang.revised.tex
 LaTeX2e <2019-10-01> patch level 1
 ("C:\Users\ahwang\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\report.cls"
 Document Class: report 2019/08/27 v1.4j Standard LaTeX document class
@@ -1424,8 +1424,8 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen319
 \c@nlinenum=\count347
 \TeXr@lab=\toks48
-) (Proj2-AndyHwang.aux)
-\openout1 = `Proj2-AndyHwang.aux'.
+) (Proj2-AndyHwang.revised.aux)
+\openout1 = `Proj2-AndyHwang.revised.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 216.
 LaTeX Font Info:    ... okay on input line 216.
@@ -1511,9 +1511,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 216.
 LaTeX Info: Redefining \pageref on input line 216.
 LaTeX Info: Redefining \nameref on input line 216.
-(Proj2-AndyHwang.out) (Proj2-AndyHwang.out)
+(Proj2-AndyHwang.revised.out) (Proj2-AndyHwang.revised.out)
 \@outlinefile=\write7
-\openout7 = `Proj2-AndyHwang.out'.
+\openout7 = `Proj2-AndyHwang.revised.out'.
 
 ABD: EveryShipout initializing macros
 Package caption Info: Begin \AtBeginDocument code.
@@ -1554,7 +1554,7 @@ LaTeX Font Info:    Font shape `TU/Arial(0)/m/it' will be
 ]
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
 (Font)              scaled to size 14.36246pt on input line 221.
-(Proj2-AndyHwang.toc
+(Proj2-AndyHwang.revised.toc
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
 (Font)              scaled to size 8.31161pt on input line 1.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 3
@@ -1605,7 +1605,7 @@ cfg"
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ))
 \tf@toc=\write8
-\openout8 = `Proj2-AndyHwang.toc'.
+\openout8 = `Proj2-AndyHwang.revised.toc'.
 
 [1]
 Chapter 1.
@@ -1630,191 +1630,214 @@ LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
 [1
 
 ] [2]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-6-1".pdf Graphic file
- (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-6-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-6-1".pdf Grap
+hic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-6-1".pdf>
 [3]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-7-1".pdf Graphic file
- (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-7-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-7-1".pdf Grap
+hic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-7-1".pdf>
 [4]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-8-1".pdf Graphic file
- (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-8-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-8-1".pdf Grap
+hic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-8-1".pdf>
 [5] [6]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-9-1".pdf Graphic file
- (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-9-1".pdf>
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-10-1".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-10-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-9-1".pdf Grap
+hic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-9-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-10-1".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-10-1".pdf>
 [7]
 Chapter 2.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 500.
+(hyperref)                be the same. Added a new anchor on input line 507.
 
 Chapter 3.
+[8]
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 528.
+(hyperref)                be the same. Added a new anchor on input line 537.
 
-[8]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-12-1".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-12-1".pdf>
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-13-1".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-13-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-12-1".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-12-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-13-1".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-13-1".pdf>
 [9]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-15-1".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-15-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-14-1".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-14-1".pdf>
 [10]
-Chapter 4.
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-1".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-1".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-16-1".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-16-1".pdf>
 [11]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-2".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-2".pdf>
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-3".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-3".pdf>
+Chapter 4.
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-1".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-1".pdf>
 [12]
-File: "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-4".pdf Graphic fil
-e (type pdf)
-<use "Proj2-AndyHwang_files/figure-latex/""unnamed-chunk-17-4".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-2".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-2".pdf>
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-3".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-3".pdf>
 [13]
-
-Package xcolor Warning: Incompatible color definition on input line 677.
-
-LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 679.
-
-Package xcolor Warning: Incompatible color definition on input line 1033.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1033.
-
-
-Package xcolor Warning: Incompatible color definition on input line 1033.
-
+File: "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-4".pdf Gra
+phic file (type pdf)
+<use "Proj2-AndyHwang.revised_files/figure-latex/""unnamed-chunk-18-4".pdf>
 [14]
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 713.
+
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 715.
+
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Underfull \vbox (badness 10000) detected at line 1033
- []
-
-
-Underfull \vbox (badness 10000) detected at line 1033
- []
-
-
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 [15]
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 [16]
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 [17]
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 [18]
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1033
+Underfull \vbox (badness 10000) detected at line 1092
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 [19]
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 
-Package xcolor Warning: Incompatible color definition on input line 1033.
+Package xcolor Warning: Incompatible color definition on input line 1092.
+
+
+Underfull \vbox (badness 10000) detected at line 1092
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1092
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 1092.
 
 [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1036.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1036.
-(Proj2-AndyHwang.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1036.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1036.
 
-Package rerunfilecheck Info: File `Proj2-AndyHwang.out' has not changed.
-(rerunfilecheck)             Checksum: FE7C3C73E26E483A9A0336C29CB59D66.
+Package xcolor Warning: Incompatible color definition on input line 1092.
+
+
+Package xcolor Warning: Incompatible color definition on input line 1092.
+
+
+Underfull \vbox (badness 10000) detected at line 1092
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1092
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 1092.
+
+[21]
+
+Package xcolor Warning: Incompatible color definition on input line 1092.
+
+
+Package xcolor Warning: Incompatible color definition on input line 1092.
+
+[22]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1095.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1095.
+(Proj2-AndyHwang.revised.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1095.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1095.
+
+Package rerunfilecheck Info: File `Proj2-AndyHwang.revised.out' has not changed
+.
+(rerunfilecheck)             Checksum: CD0A3223C9D778632C54808DDBEABF75.
  ) 
 Here is how much of TeX's memory you used:
- 38195 strings out of 427243
- 723973 string characters out of 3141308
- 927012 words of memory out of 3000000
- 42197 multiletter control sequences out of 15000+200000
+ 38203 strings out of 427243
+ 725025 string characters out of 3141308
+ 932649 words of memory out of 3000000
+ 42204 multiletter control sequences out of 15000+200000
  553310 words of font info for 81 fonts, out of 3000000 for 9000
  1348 hyphenation exceptions out of 8191
- 59i,12n,116p,1206b,528s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 59i,12n,116p,1214b,528s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on Proj2-AndyHwang.pdf (22 pages).
+Output written on Proj2-AndyHwang.revised.pdf (24 pages).

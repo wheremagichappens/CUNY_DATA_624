@@ -162,11 +162,11 @@ df %>%
 
 As we expected, there are many outliers in `Temperature` and `Oxygen Filler`. Note that `MFR` greatly suffers from the presence of outliers.
 
-From the presence of multiple outliers, we then have to explain why/what/how we decided to add `Random Forest` as an additional model and apply necessary pre-processing before modeling `PLS` and `Bagged Tree`.
+From the presence of multiple outliers, we then have to explain why/what/how we decided to add `Random Forest` as an additional model and apply necessary pre-processing before modeling `PLS` and `Bagged Tree`, if needed. If number of outlier
 
-Ensembled model such as `Random Forest` is robust to outliers since only a subset of features are selected at random out of the total and the best split feature from the subset is used to split each node in a tree, unlike in bagging where all features are considered for splitting a node and this makes `Random Forest` a good altrenative for `Bagged Tree`.
+Althought tree-based models, including`Bagged Tree`, are generally robust to outliers and multicollinearity, it does not necessarily mean Model A in tree-based is always equally good as another model in tree-based. Ensembled model such as `Random Forest` is potentially even more robust to outliers and multicollinearity than `Bagged Tree` since only a subset of features are selected at random out of the total and the best split feature from the subset is used to split each node in a tree, unlike in bagging where all features are considered for splitting a node. This makes `Random Forest` a potentially good alternative for `Bagged Tree`. 
 
-Partial least squares regression (PLS regression) is used as an alternative for ordinary least squares regression in the presence of multicollinearity. This does not mean, however, `PLS` is robust to outliers. Thus, we will use Blocked Adaptive Computationally-Efficient Outlier Nominators (`BACON`) before modeling relatively outlier sensitive models such as `PLS` and `Bagged Tree`.
+Partial least squares regression (PLS regression) is used as an alternative for ordinary least squares regression in the presence of multicollinearity. Although `PLS` is quite sensitive to outliers, like in `OLS`, small number of outliers will not necessarily worsen the predictive ability. In fact, depending on the situations, removing outlier will rather decrease `MAPE` on test set. Since the benefit of removing outlier cannot be predicted in our case, we will compare `MAPE` on test set between `PLS` model without outliers and `PLS` model without handling outliers to select the best model.
 
 Reference:
 
@@ -209,7 +209,7 @@ df %>%
 
 ### Correlation Matrix
 
-We confirmed that there are several highly correlated predictors. This is another reason why `Random Forest` would be more preferred to `Bagged Tree` model. In fact, `Random Forest` is more robust to strong correlation than `Bagged Tree`. Although multicollinearity is not a big problem for for `PLS` and `Random Forest`, it can cause some problem when it comes to inferring the importance of certain predictors in tree model. Multicollinearity means that some predictors are shown as highly correlated with other combincations of predictors in variable importance. According to the reference, it may mislead business audience to think that some features are not more important than others vice-versa. However, we really do not know whether the reader of this paper would treat highly correlated variable such as `HydPressure3` and `HydPressure2` differently or not. Therefore, we will just keep the variables as they are.
+We confirmed that there are several highly correlated predictors. This is another reason why `Random Forest` would be more preferred to `Bagged Tree` model. In fact, `Random Forest` is more robust to strong correlation than `Bagged Tree`. Although multicollinearity is not a big problem for tree-based models and `PLS`, it can cause some problem when it comes to inferring the importance of certain predictors in tree model. Multicollinearity means that some predictors are shown as highly correlated with other combincations of predictors in variable importance. According to the reference, it may mislead business audience to think that some features are not more important than others vice-versa. However, we really do not know whether the reader of this paper would treat highly correlated variable such as `HydPressure3` and `HydPressure2` differently or not. Therefore, we will just keep the variables as they are.
 
 Reference:
 
@@ -242,8 +242,9 @@ Before modeling can be done, the issues identified during the data exploration, 
 After reviewing a few methods of multiple imputation techniques, Multiple Imputation Chained Equations (MICE) was selected for its strength in handling imputation for observations with more than one predictor missing. For categorical variable such as `Brand Code` will be imputed by mode. For `BACON` to work, we will also convert `Brand Code` to numeric.
 
 We will also remove zero variance Predictors using `nearZeroVar`. It diagnoses predictors that have one unique value or predictors that have both of the following characteristics: 1. they have very few unique values relative to the number of samples and 2. the ratio of the frequency of the most common value to the frequency of the second most common value is large.
+We confirmed that `HydPressure1` is dropped as a result.
 
-For outlier handling, we will use `BACON`, short for 'Blocked Adaptive Computationally-Efficient Outlier Nominators'. It is a somewhat robust algorithm (set), with an implementation for regression or multivariate covariance estimation. The function produces index with `FALSE` to identify rows with outliers. This index will be used as `subset` to fit outlier-free train `subset` in the process of hyper-parameter tuning in `train` function and re-train the final model with best tuned hyperparameters.  
+For outlier handling, we will use `BACON`, short for 'Blocked Adaptive Computationally-Efficient Outlier Nominators'. It is a robust algorithm (set), with an implementation for regression or multivariate covariance estimation. The function produces index with `FALSE` to identify rows with outliers. This index will be used as `subset` to fit outlier-free train `subset` in the process of hyper-parameter tuning in `train` function and re-train the final model with best tuned hyperparameters. The result of `BACON` confirmed that only about 0.9%  or 19 of train set are detected as outliers. Note that we have total 2058 of rows in tran set.
 
 ```{r, cache=T, results = 'hide', warning=F, message=F, echo=F}
 # set seed for split to allow for reproducibility
@@ -289,20 +290,20 @@ bacon_fit <- BACON(x = x, y = y)
 
 # Modeling
 
-## Model 1: Bagged Tree with BACON
+## Model 1: Bagged Tree
 
 ```{r, fig.align='center', warning=FALSE, fig.height=6, cache=T, echo=F}
 set.seed(58677)
-bagged_model <- train( PH~., data = df_train2, method="treebag",
+bagged_model <- train( PH~., data = df_train, method="treebag",
                    tuneLength=10, 
-                   subset = bacon_fit$subset,
+                #   subset = bacon_fit$subset,
                     trControl=trainControl(method="cv",number=5) )
 
 # create MAPE table
 train_bag_pred <- predict(bagged_model)
-bagged_model$results$MAPE <- Metrics::mape(df_train2$PH, train_bag_pred)
+bagged_model$results$MAPE <- Metrics::mape(df_train$PH, train_bag_pred)
 
-bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree with BACON", booktabs=T)%>%kable_styling()%>%row_spec()
+bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree", booktabs=T)%>%kable_styling()%>%row_spec()
 
 # plot varImp
 plot(varImp(bagged_model))
@@ -329,8 +330,29 @@ pls_model$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS with BACON",
 # plot varImp
 plot(varImp(pls_model))
 ```
+## Model 2-2:PLS
+```{r, cache=T, fig.align='center', warning=FALSE, fig.height=6, echo=F}
+set.seed(58677)
+#df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
 
-The final value used for the model was ncomp = 10. MAPE is `r pls_model$results$MAPE[10]` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. The order of variable importance, again, is quite different from `Bagged Tree` as `PLS` is not a tree-based model. Note that PLS is a dimension reduction technique with some similarity to principal component analysis. The predictor variables are mapped to a smaller set of variables and within that smaller space we perform a regression against the outcome variable.  In contrast to principal component analysis where the dimension reduction ignores the outcome variable, the `PLS` procedure aims to choose new mapped variables that maximally explain the outcome variable. 
+pls_model2 <- train( PH~., data = df_train, method="pls",
+                   tuneLength=10, 
+                #   subset = bacon_fit$subset,
+                   preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_pls_pred2 <- predict(pls_model2)
+pls_model2$results$MAPE <- Metrics::mape(df_train$PH, train_pls_pred2)
+
+pls_model2$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(pls_model2))
+```
+
+The final value used for both was ncomp = 10. MAPE for `PLS-BACON` is `r pls_model$results$MAPE[10]` and for `PLS` it is `r pls_model2$results$MAPE[10]`. Top 3 important predictors for `PLS-BACON` are `MnfFlow`, `Usuagecont` and `BowlSetpoint` and for `PLS` they are `MnfFlow`, `BrandCodeC` and `Usuagecont`. The order of variable importance, again, is quite different from `Bagged Tree` as `PLS` model is not a tree-based model.
+
+Note that PLS is a dimension reduction technique with some similarity to principal component analysis. The predictor variables are mapped to a smaller set of variables and within that smaller space we perform a regression against the outcome variable. In contrast to principal component analysis where the dimension reduction ignores the outcome variable, the `PLS` procedure aims to choose new mapped variables that maximally explain the outcome variable. 
 
 ```{r, cache=T, echo=F}
 ## Model 3-1: Random Forest with BACON
@@ -389,30 +411,35 @@ The first graph shows how much MSE would increase if a variable is assigned with
 
 ```{r, echo=F}
 # Make predictions
-p1 <- bagged_model %>% predict(df_test2)
+p1 <- bagged_model %>% predict(df_test)
 p2 <- pls_model %>% predict(df_test2)
+p22 <- pls_model2 %>% predict(df_test)
 p3 <- rf_model2 %>% predict(df_test)
 
 # Model performance metrics
 sum_t <- data.frame(
   MODEL = c('Bagged Tree',
             'PLS - BACON',
+            'PLS',
             'RF'),
-  RMSE = c(caret::RMSE(p1, df_test2$PH),
+  RMSE = c(caret::RMSE(p1, df_test$PH),
            caret::RMSE(p2, df_test2$PH),
+           caret::RMSE(p22, df_test$PH),
            caret::RMSE(p3, df_test$PH) ),
-  Rsquare = c(caret::R2(p1, df_test2$PH),
+  Rsquare = c(caret::R2(p1, df_test$PH),
               caret::R2(p2, df_test2$PH),
+              caret::R2(p22, df_test$PH),
               caret::R2(p3, df_test$PH)),
-  MAPE = c(Metrics::mape(p1, df_test2$PH),
+  MAPE = c(Metrics::mape(p1, df_test$PH),
              Metrics::mape(p2, df_test2$PH),
+             Metrics::mape(p22, df_test$PH),
              Metrics::mape(p3, df_test$PH))
             )
 
 sum_t%>%kable(caption="Evaluation Summary on test set", booktabs=T)%>%kable_styling()%>%row_spec()
 ```
 
-From the table, we confirmed that `Random Forest` is a clear winner with the lowest MAPE on test set. 
+From the table, we confirmed that `Random Forest` is a clear winner with the lowest MAPE on test set. Also, note that `PLS` without removing outlier is better model than `PLS-BACON`. This is not a surprising result since the number of outliers was very small (19 out of 2058) and hence removing outlier is unnecessary process for our case.
 
 ## Insight & Conclusion
 
@@ -456,7 +483,7 @@ ggplot(df_train, aes(x=OxygenFiller, y=PH, color=BrandCode, shape=BrandCode)) +
   theme_bw()+theme()
 ```
 
-We graphed top 4 most important variables from `varImp` of MSE and NodePurity. Given that `Brand Code` is categorical, we grouped 3 continous variables into `Brand Code`. 
+We graphed top 4 most important variables from Random Forest's `varImp` of MSE and NodePurity. Given that `Brand Code` is categorical, we grouped 3 continous variables into `Brand Code`. 
 
 The first feature plot shows that 3 continous variables have very weak relationship with `PH`. `MnfFlow` has slight negative relationship where as `PressureVacuum` and `OxygenFiller` have slight positive relationship.
 
@@ -679,19 +706,19 @@ bacon_fit <- BACON(x = x, y = y)
 
 # Modeling
 
-## Model 1: Bagged Tree with BACON
+## Model 1: Bagged Tree
 
 set.seed(58677)
-bagged_model <- train( PH~., data = df_train2, method="treebag",
+bagged_model <- train( PH~., data = df_train, method="treebag",
                        tuneLength=10, 
-                       subset = bacon_fit$subset,
+                  #     subset = bacon_fit$subset,
                        trControl=trainControl(method="cv",number=5) )
 
 # create MAPE table
 train_bag_pred <- predict(bagged_model)
-bagged_model$results$MAPE <- Metrics::mape(df_train2$PH, train_bag_pred)
+bagged_model$results$MAPE <- Metrics::mape(df_train$PH, train_bag_pred)
 
-bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree with BACON", booktabs=T)%>%kable_styling()%>%row_spec()
+bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree", booktabs=T)%>%kable_styling()%>%row_spec()
 
 # plot varImp
 plot(varImp(bagged_model))
@@ -714,6 +741,24 @@ pls_model$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS with BACON",
 
 # plot varImp
 plot(varImp(pls_model))
+
+## Model 2-2:PLS
+set.seed(58677)
+#df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
+
+pls_model2 <- train( PH~., data = df_train, method="pls",
+                   tuneLength=10, 
+                #   subset = bacon_fit$subset,
+                   preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_pls_pred2 <- predict(pls_model2)
+pls_model2$results$MAPE <- Metrics::mape(df_train$PH, train_pls_pred2)
+
+pls_model2$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(pls_model2))
 
 ## Model 3-1: Random Forest with BACON
 
@@ -744,7 +789,7 @@ set.seed(58677)
 
 ##mtry <- ( (ncol(df_train) -1) / 3 ) or sqrt(ncol(df_train) - 1) # By default, # of predictors / 3 for regression, sqrt(# of predictors) for classification https://www.hackerearth.com/practice/machine-learning/machine-learning-algorithms/tutorial-random-forest-parameter-tuning-r/tutorial/
 
-# from above result, we got mtry= 27 and ntree=2500 as optimal parameters
+# from above result, we got mtry= 31 and ntree=2500 as optimal parameters
 rf_model2 <- randomForest(PH~., data=df_train, method="rf", mtry= 31, importance = TRUE, ntree = 2500)
 
 # create MAPE table
@@ -764,23 +809,28 @@ varImpPlot(Random_Forest_Variance_Importance)
 # Evaluation
 
 # Make predictions
-p1 <- bagged_model %>% predict(df_test2)
+p1 <- bagged_model %>% predict(df_test)
 p2 <- pls_model %>% predict(df_test2)
+p22 <- pls_model %>% predict(df_test)
 p3 <- rf_model2 %>% predict(df_test)
 
 # Model performance metrics
 sum_t <- data.frame(
   MODEL = c('Bagged Tree',
             'PLS - BACON',
+            'PLS',
             'RF'),
-  RMSE = c(caret::RMSE(p1, df_test2$PH),
+  RMSE = c(caret::RMSE(p1, df_test$PH),
            caret::RMSE(p2, df_test2$PH),
+           caret::RMSE(p22, df_test$PH),
            caret::RMSE(p3, df_test$PH) ),
-  Rsquare = c(caret::R2(p1, df_test2$PH),
+  Rsquare = c(caret::R2(p1, df_test$PH),
               caret::R2(p2, df_test2$PH),
+              caret::R2(p22, df_test$PH),
               caret::R2(p3, df_test$PH)),
-  MAPE = c(Metrics::mape(p1, df_test2$PH),
+  MAPE = c(Metrics::mape(p1, df_test$PH),
            Metrics::mape(p2, df_test2$PH),
+           Metrics::mape(p22, df_test$PH),
            Metrics::mape(p3, df_test$PH))
 )
 
