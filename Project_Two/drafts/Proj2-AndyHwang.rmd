@@ -376,7 +376,7 @@ Note that PLS is a dimension reduction technique with some similarity to princip
 # 
 # Although `BACON` is not needed for `Random Forest`, it would not bother using it anyway. We will expermient the effect of `BACON` in `Random Forest`. The final value used for the model was ncomp = 10. MAPE is `r rf_model$results$MAPE` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. 
 ```
-## Model 3: Random Forest with original data set
+## Model 3: Random Forest
 
 ```{r, cache=T, fig.align='center', warning=FALSE, fig.height=6, echo=F}
 set.seed(58677)
@@ -781,7 +781,7 @@ plot(varImp(pls_model2))
 # 
 # Although `BACON` is not needed for `Random Forest`, it would not bother using it anyway. We will expermient the effect of `BACON` in `Random Forest`. The final value used for the model was ncomp = 10. MAPE is `r rf_model$results$MAPE` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. 
 
-## Model 3: Random Forest with original data set
+## Model 3: Random Forest
 
 set.seed(58677)
 
