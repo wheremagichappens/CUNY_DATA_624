@@ -330,7 +330,8 @@ pls_model$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS with BACON",
 # plot varImp
 plot(varImp(pls_model))
 ```
-## Model 2-2:PLS
+## Model 2-2: PLS
+
 ```{r, cache=T, fig.align='center', warning=FALSE, fig.height=6, echo=F}
 set.seed(58677)
 #df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
@@ -742,7 +743,7 @@ pls_model$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS with BACON",
 # plot varImp
 plot(varImp(pls_model))
 
-## Model 2-2:PLS
+## Model 2-2: PLS
 set.seed(58677)
 #df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
 
