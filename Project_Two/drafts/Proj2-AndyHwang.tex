@@ -611,8 +611,7 @@ component analysis where the dimension reduction ignores the outcome
 variable, the \texttt{PLS} procedure aims to choose new mapped variables
 that maximally explain the outcome variable.
 
-\section{Model 3: Random Forest with original data
-set}\label{model-3-random-forest-with-original-data-set}
+\section{Model 3: Random Forest}\label{model-3-random-forest}
 
 \begin{table}[H]
 
@@ -968,7 +967,7 @@ model) on \texttt{StudentEvaluation} as CSV file.
 \CommentTok{# }
 \CommentTok{# Although `BACON` is not needed for `Random Forest`, it would not bother using it anyway. We will expermient the effect of `BACON` in `Random Forest`. The final value used for the model was ncomp = 10. MAPE is `r rf_model$results$MAPE` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. }
 
-\NormalTok{## Model 3: Random Forest with original data set}
+\NormalTok{## Model 3: Random Forest}
 
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)}
 
