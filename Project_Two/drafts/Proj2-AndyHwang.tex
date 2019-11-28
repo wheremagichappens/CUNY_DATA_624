@@ -400,7 +400,7 @@ With the help of visualization, it is easier to navigate how much each
 variable is missing. Note that \texttt{MFR} has the most number of
 missing values.
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-6-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 \subsection{Univariate distributions}\label{univariate-distributions}
 
@@ -408,7 +408,7 @@ We notice that there are some variables such as \texttt{Temperature} and
 \texttt{Oxygen\ Filler} that are highly positively skewed. There are
 potentials of presence of outliers for skewed variables.
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-7-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-7-1} \end{center}
 
 As we expected, there are many outliers in \texttt{Temperature} and
 \texttt{Oxygen\ Filler}. Note that \texttt{MFR} greatly suffers from the
@@ -451,7 +451,7 @@ using a robust estimation for the variance-covariance matrix. Kondylis
 and Hadi {[}8{]} used the BACON algorithm to eliminate outliers,
 resulting in a robust linear PLS.'' )
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-8-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-8-1} \end{center}
 
 \subsection{Bivariate relationships}\label{bivariate-relationships}
 
@@ -461,7 +461,7 @@ weak negative relationship with \texttt{PH}. All of the predictors have
 really weak relationship with \texttt{PH} suggesting that linear models
 might not work well.
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-9-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
 \subsection{Correlation Matrix}\label{correlation-matrix}
 
@@ -496,7 +496,7 @@ importance value. Instead, including both surface area predictors in the
 data causes their importance to have only moderate values.'' Page 181 of
 Applied Predictive Modeling - Max KJ)
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-10-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-10-1} \end{center}
 
 \chapter{Data preparation}\label{data-preparation}
 
@@ -550,7 +550,7 @@ detected as outliers. Note that we have total 2058 of rows in tran set.
 \end{tabular}
 \end{table}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-12-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-12-1} \end{center}
 
 MAPE is 0.010415 where as top 3 important predictors are
 \texttt{CarbRel}, \texttt{OxygenFiler} and \texttt{Usuagecont}. Since
@@ -575,9 +575,9 @@ importances between two models can be quite different.
 \end{tabular}
 \end{table}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-13-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-13-1} \end{center}
 
-\section{Model 2-2:PLS}\label{model-2-2pls}
+\section{Model 2-2: PLS}\label{model-2-2-pls}
 
 \begin{table}[H]
 
@@ -593,7 +593,7 @@ importances between two models can be quite different.
 \end{tabular}
 \end{table}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-14-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-14-1} \end{center}
 
 The final value used for both was ncomp = 10. MAPE for
 \texttt{PLS-BACON} is 0.0123968 and for \texttt{PLS} it is 0.0121429.
@@ -628,7 +628,7 @@ set}\label{model-3-random-forest-with-original-data-set}
 \end{tabular}
 \end{table}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-16-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-16-1} \end{center}
 
 The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is
 0.0081279 where as top 3 important predictors are \texttt{MnfFlow},
@@ -672,13 +672,13 @@ our case.
 
 \section{Insight \& Conclusion}\label{insight-conclusion}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-1} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-18-1} \end{center}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-2} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-18-2} \end{center}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-3} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-18-3} \end{center}
 
-\begin{center}\includegraphics{Proj2-AndyHwang.revised_files/figure-latex/unnamed-chunk-18-4} \end{center}
+\begin{center}\includegraphics{Proj2-AndyHwang_files/figure-latex/unnamed-chunk-18-4} \end{center}
 
 We graphed top 4 most important variables from Random Forest's
 \texttt{varImp} of MSE and NodePurity. Given that \texttt{Brand\ Code}
@@ -930,7 +930,7 @@ model) on \texttt{StudentEvaluation} as CSV file.
 \CommentTok{# plot varImp}
 \KeywordTok{plot}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(pls_model))}
 
-\NormalTok{## Model 2-2:PLS}
+\NormalTok{## Model 2-2: PLS}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)}
 \CommentTok{#df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)}
 
