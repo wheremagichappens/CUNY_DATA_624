@@ -615,7 +615,7 @@ that maximally explain the outcome variable.
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-16}Model Summary - RF with original data set}
+\caption{\label{tab:unnamed-chunk-16}Model Summary - RF}
 \centering
 \fontsize{8}{10}\selectfont
 \begin{tabular}[t]{rrr}
@@ -987,7 +987,7 @@ model) on \texttt{StudentEvaluation} as CSV file.
   \DataTypeTok{Rsquared =}\NormalTok{ caret}\OperatorTok{::}\KeywordTok{R2}\NormalTok{(df_train}\OperatorTok{$}\NormalTok{PH, train_rf_pred2),}
   \DataTypeTok{MAPE =}\NormalTok{ Metrics}\OperatorTok{::}\KeywordTok{mape}\NormalTok{(df_train}\OperatorTok{$}\NormalTok{PH, train_rf_pred2) )}
 
-\NormalTok{s}\OperatorTok{%>%}\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Summary - RF with original data set"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T)}\OperatorTok{%>%}\KeywordTok{kable_styling}\NormalTok{()}\OperatorTok{%>%}\KeywordTok{row_spec}\NormalTok{()}
+\NormalTok{s}\OperatorTok{%>%}\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Summary - RF"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T)}\OperatorTok{%>%}\KeywordTok{kable_styling}\NormalTok{()}\OperatorTok{%>%}\KeywordTok{row_spec}\NormalTok{()}
 
 \CommentTok{# plot varImp}
 \NormalTok{Random_Forest_Variance_Importance <-}\StringTok{ }\NormalTok{rf_model2}

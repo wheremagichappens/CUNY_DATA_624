@@ -397,7 +397,7 @@ RMSE = Metrics::rmse(df_train$PH, train_rf_pred2),
 Rsquared = caret::R2(df_train$PH, train_rf_pred2),
 MAPE = Metrics::mape(df_train$PH, train_rf_pred2) )
 
-s%>%kable(caption="Model Summary - RF with original data set", booktabs=T)%>%kable_styling()%>%row_spec()
+s%>%kable(caption="Model Summary - RF", booktabs=T)%>%kable_styling()%>%row_spec()
 
 # plot varImp
 Random_Forest_Variance_Importance <- rf_model2
@@ -801,7 +801,7 @@ s <- data.frame(
   Rsquared = caret::R2(df_train$PH, train_rf_pred2),
   MAPE = Metrics::mape(df_train$PH, train_rf_pred2) )
 
-s%>%kable(caption="Model Summary - RF with original data set", booktabs=T)%>%kable_styling()%>%row_spec()
+s%>%kable(caption="Model Summary - RF", booktabs=T)%>%kable_styling()%>%row_spec()
 
 # plot varImp
 Random_Forest_Variance_Importance <- rf_model2
