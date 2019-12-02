@@ -27,23 +27,19 @@ options(tinytex.verbose = TRUE)
 # Predicitve Modeling
 libraries('AppliedPredictiveModeling', 'mice','caret', 'tidyverse','impute','pls','caTools','mlbench','car','olsrr','neuralnet','nnet','earth')
 # Formatting Libraries
-libraries('default', 'knitr', 'kableExtra','readxl','sqldf','sjPlot','sjmisc','sjlabelled','MASS')
+libraries('default', 'knitr', 'kableExtra','readxl','sqldf','sjPlot','sjmisc','sjlabelled','MASS','sjPlot','broom')
 # Plotting Libraries
 libraries('ggplot2', 'grid', 'ggfortify', 'DataExplorer','ggcorrplot')
 
 ```
 
 
-
-
-\newpage
-
 # Project 2 {-#AS-1}
 
-\begin{question}{Project #2 - Requirement}You are given a simple data set from a beverage manufacturing company.  It consists of 2,571 rows/cases of data and 33 columns / variables. Your goal is to use this data to predict PH (a column in the set).  PH is a measure of acidity/alkalinity, it must conform in a critical range and therefore it is important to understand its influence and predict its values.   This is production data.  PH is a KPI, Key Performance Indicator. 
+You are given a simple data set from a beverage manufacturing company.  It consists of 2,571 rows/cases of data and 33 columns / variables. Your goal is to use this data to predict PH (a column in the set).  PH is a measure of acidity/alkalinity, it must conform in a critical range and therefore it is important to understand its influence and predict its values.   This is production data.  PH is a KPI, Key Performance Indicator. 
 
 You are also given a scoring set (267 cases).  All variables other than the dependent or target.  You will use this data to score your model with your best predictions. 
-:\end{question}
+
 
 
 ```{r project2a, echo=F}
@@ -58,15 +54,11 @@ colnames(df) <- gsub(" ","",colnames(df))
 ```
 
 
-\newpage
-\clearpage
-\pagenumbering{arabic} 
-
-# Introduction {-#intro}
+# Introduction
 
 The goal of this project is to predict `PH`, a measure of acidity/alkalinity, using train data set from a beverage company which consists of 2571 rows of data and 33 variables. After creating models based on training data, we will test on scoring set of 267 rows with 32 variables (excluding target variable which is `PH` in our training set)
 
-As a group project, each member of the group is responsible for creating their own models of choice. For instance, my own selections were `Linear model` and `NNet`. However, the choice of models can be altered after careful review of data exploration - it may require different type of model in case data suffers from outliers or any other data related issues.  
+As a group project, each member of the group is responsible for creating their own models of choice. For instance, my own selections were `Linear model` and `NNet`. Depending on the performance of the listed models, we might add in an additional third model. However, the choice of models can be altered after careful review of data exploration - it may require different type of model in case data suffers from outliers or any other data related issues.  
 
 Explaining why some necessary steps were applied before modeling and model A was preferred to Model B is often a topic in academic papers which is a meaningful topic that helps audience learn the concept of bagged regression and least square method better. 
 
@@ -74,7 +66,7 @@ The final version of report will contain all of our approaches with results of `
 
 NNet, linear model, and one of your choice 
 
-\newpage
+
 
 # Data Exploration 
 
@@ -190,7 +182,8 @@ vif(lm1) %>% kable(caption="Linear Model 1 Variance Inflation Numbers")%>% kable
 We also want to see if outliers had any significant effect on our model by performing a significance test using Bonferroni statistics. According to our test, the low p value suggests that outliers are not significant and we should not go through the effort to treat outliers. 
 
 ```{r project2a8, echo=F}
-outlierTest(lm1)
+outlierTest(lm1) 
+#%>% kable(caption="Linear Model 1 Variance Inflation Numbers")%>% kable_styling(full_width = F, position = "center")%>% row_spec()
 ```
 
 We fit a new LM with features showing high VIF removed. 
@@ -222,7 +215,17 @@ par(mfrow = c(2,2))
 
 lm3 <- lm(PH ~ .-BallingLvl-AlchRel-Balling-BrandCode-CarbTemp-CarbPressure-PSCCO2-FillerSpeed-MFR-PressureVacuum, data = df_train)
 
-tab_model(lm1, lm2,lm3)
+#tab_model(lm1);
+#tab_model(lm2);
+#tab_model(lm3)
+#sjPlot::sjt.lm(lm1, lm2, lm3)
+out1<- tidy(lm1)
+out2 <- tidy(lm2)
+out3 <- tidy(lm3)
+
+out1%>% kable(caption="Linear Model 1") %>% kable_styling() %>% row_spec();
+out2%>% kable(caption="Linear Model 2") %>% kable_styling() %>% row_spec();
+out3%>% kable(caption="Linear Model 3") %>% kable_styling() %>% row_spec()
 ```
 
 Across all three models, our adjusted R squared remains unchanged yet we were able to simplify the model. Using lm3, we will now check if the linear regression assumptions are satisfied. 
@@ -252,7 +255,7 @@ nn_param <- expand.grid(.size = c(1:10), .decay = c(0, 0.01, .1))
 
 nn1 <- train(PH ~ ., data=df_train, method="nnet", maxit=1000, tuneGrid=nn_param, trace=F)
  
-print(nn1)
+#print(nn1)
 ```
 
 What were the most imporant features in our nnet model?
@@ -262,10 +265,21 @@ nn1_imp <- varImp(nn1, scale = TRUE)
 
 nn1_imp2<-as.data.frame(as.matrix(nn1_imp$importance))
 
-#nn1_imp2%>% kable(caption="Linear Model 2 Variable Importance") %>% kable_styling() %>% row_spec()
+nn1_imp2%>% kable(caption="Linear Model 2 Variable Importance") %>% kable_styling() %>% row_spec()
 
-plot(nn1_imp)
+#plot(nn1_imp)
 ```
+
+```{r project2a142, include=FALSE}
+fitControl <- trainControl(method = "cv")
+
+nnetGrid <-  expand.grid(size = seq(from = 1, to = 10, by = 1),
+                        decay = seq(from = 0.1, to = 0.5, by = 0.1))
+
+nn2 <- train(PH~., data = df_train, method = "nnet", metric = "Rsquared", trControl = fitControl,tuneGrid = nnetGrid,verbose = FALSE,linout = 1)
+```
+
+
 
 ### MARS regression 
 
@@ -306,7 +320,7 @@ print(mars2)
 ```{r project2a18, echo=F}
 # Make predictions
 p1 <- lm3 %>% predict(df_test)
-p2 <- nn1 %>% predict(df_test)
+p2 <- nn2 %>% predict(df_test)
 p3 <- mars2 %>% predict(df_test)
 
 # Model performance metrics
@@ -459,6 +473,14 @@ nn1_imp2<-as.data.frame(as.matrix(nn1_imp$importance))
 
 plot(nn1_imp)
 
+##nn2
+fitControl <- trainControl(method = "cv")
+
+nnetGrid <-  expand.grid(size = seq(from = 1, to = 10, by = 1),
+                        decay = seq(from = 0.1, to = 0.5, by = 0.1))
+
+nn2 <- train(PH~., data = df_train, method = "nnet", metric = "Rsquared", trControl = fitControl,tuneGrid = nnetGrid,verbose = FALSE,linout = 1)
+
 #  Mars
 
 # hyperparameter tuning for MARS
@@ -536,4 +558,3 @@ write.csv(pred_eval, 'prediction.csv')
 
 
 
-````
