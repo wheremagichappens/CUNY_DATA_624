@@ -1,0 +1,357 @@
+---
+title: "Project 2"
+subtitle: "Draft"
+author: "Group 2"
+date: "12/10/2019"
+output: 
+  pdf_document
+---
+
+# Getting Started {-#Overview}
+
+## Overview
+
+Include details on our process in creating this document. 
+
+## Dependencies 
+
+```{r, echo = F, message=F, warning=F, error=F, comment=NA, self.contained = F}
+# SOURCE DEFAULT SETTINGS
+source('~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R')
+
+options(tinytex.verbose = TRUE)
+```
+
+
+```{r libraries, echo=T}
+# Predicitve Modeling
+libraries('AppliedPredictiveModeling', 'mice','caret', 'tidyverse','impute','pls','caTools','mlbench','car','olsrr','neuralnet','nnet','earth')
+# Formatting Libraries
+libraries('default', 'knitr', 'kableExtra','readxl','sqldf','sjPlot','sjmisc','sjlabelled','MASS')
+# Plotting Libraries
+libraries('ggplot2', 'grid', 'ggfortify', 'DataExplorer','ggcorrplot')
+
+```
+
+
+
+
+\newpage
+
+# Project 2 {-#AS-1}
+
+\begin{question}{Project #2 - Requirement}You are given a simple data set from a beverage manufacturing company.  It consists of 2,571 rows/cases of data and 33 columns / variables. Your goal is to use this data to predict PH (a column in the set).  PH is a measure of acidity/alkalinity, it must conform in a critical range and therefore it is important to understand its influence and predict its values.   This is production data.  PH is a KPI, Key Performance Indicator. 
+
+You are also given a scoring set (267 cases).  All variables other than the dependent or target.  You will use this data to score your model with your best predictions. 
+:\end{question}
+
+
+```{r project2a, echo=T}
+df <- read_excel('C:/Users/traveler/Documents/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx')
+#df <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx')
+df_eval <- read_excel('C:/Users/traveler/Documents/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx')
+#df_eval <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx')
+dict <- read_excel('C:/Users/traveler/Documents/GitHub/CUNY_DATA_624/Project_Two/data/DataDictionary.xlsx')
+#dict <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/DataDictionary.xlsx')
+# remove space in-between variable names
+colnames(df) <- gsub(" ","",colnames(df))
+```
+
+
+\newpage
+\clearpage
+\pagenumbering{arabic} 
+
+# Introduction {-#intro}
+
+The goal of this project is to predict `PH`, a measure of acidity/alkalinity, using train data set from a beverage company which consists of 2571 rows of data and 33 variables. After creating models based on training data, we will test on scoring set of 267 rows with 32 variables (excluding target variable which is `PH` in our training set)
+
+As a group project, each member of the group is responsible for creating their own models of choice. For instance, my own selections were `Linear model` and `NNet`. However, the choice of models can be altered after careful review of data exploration - it may require different type of model in case data suffers from outliers or any other data related issues.  
+
+Explaining why some necessary steps were applied before modeling and model A was preferred to Model B is often a topic in academic papers which is a meaningful topic that helps audience learn the concept of bagged regression and least square method better. 
+
+The final version of report will contain all of our approaches with results of `MAPE` for each model with detailed explanation of why/what/how each model of choice was chosen.
+
+NNet, linear model, and one of your choice 
+
+\newpage
+
+# Data Exploration 
+
+## Data dictionary
+
+The table below describes the variables in the train data set.
+
+```{r project2a1, echo=T}
+kable(dict, caption="Data dictionary", booktabs=T)%>%kable_styling()%>%row_spec()
+```
+
+
+\newpage
+ 
+
+Before we begin to try models against our data, we need to get an understanding of what our data looks like. We want to know what variables contain missing data. We also want to see the distributions of our target variable in addition to predictors. We need to establish a direction when it comes to pre-processing methods such as imputation, variable removal, and transformations. As a first step, we want to see the percentage of missing data per variable. 
+
+```{r project2a2, echo=T}
+#code
+round((apply(df, 2, function(col)sum(is.na(col))/length(col)))*100,2) %>% kable(caption="Distribution of Missing data in Beverage Manufacturing Company Data")%>% kable_styling(full_width = F, position = "center")%>% row_spec()
+```
+
+MFR is missing 8.25% of its data followed by BrandCode,which is missing a little under 5% of its data. Brandcode isa categorical variable. The rest of our predictors are missing less than 3% of their data if not missing any at all. We can deal with these variables using a method of imputation. From our previous experience, we have used MICE succesfully as an imputation method. We have previously found that there does not seem to be major changes in the summary statistics across different imputation methods such as KNN or mean/mode. We also see that we are missing a small amount of data in the target variable (PH). PH is our ground truth, therefore it is better to remove rows where ground truth is missing without major data loss. We next examine the distribution of our response and predictor variables. 
+
+```{r project2a3, echo=T}
+#drop rows where PH is missing 
+df<-sqldf("select
+*
+from df
+where PH is not null
+      ")
+
+
+df %>%
+  ggplot(aes(PH)) + 
+  geom_histogram(bins=30) +
+  theme_bw() +
+  theme(legend.position='center') +
+  labs(y='Count', title='Distribution of PH')
+```
+
+```{r project2a4, echo=T}
+plot_histogram(df)
+```
+
+We observe evidence of outliers in addition to skew such as in the varibales Temperature. Based on the information we have gathered from our EDA, we can move into the data processing phase where we will address our findings. We will not know the true effect of outliers until we build and diagnose our models. We aniticipate linear model to perform worse than NNET.  
+
+
+\newpage
+
+
+## Data Preperation 
+
+We will use the MICE method to impute missing variables. We will also evaluate the which predictors have near zero variance. This will help us identify pedictors that need to  be dropped from the data frame all together.We will hold off on removing predictors that have strong pairwise correlation until after we see how it affects our models. Andy has written code that nicely completes the data processing steps. 
+
+```{r project2a5, echo=T}
+# set seed for split to allow for reproducibility
+set.seed(58677)
+# use mice w/ default settings to impute missing data
+miceImput <- mice(df, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice <- mice::complete(miceImput)
+df_mice$BrandCode[is.na(df_mice$BrandCode)] <- 'B'
+
+zero_cols <- nearZeroVar( df_mice )
+df_final <- df_mice[,-zero_cols] # drop these zero variance columns 
+df_final$BrandCode <- as.factor(df_final$BrandCode)
+
+# convert categorical factor into numeric
+M <- df_final
+must_convert<-sapply(M,is.factor) # logical vector telling if a variable needs to be displayed as numeric
+BrandNumeric <- sapply(M[,must_convert],unclass)    # data.frame of all categorical variables now displayed as numeric
+df_final2<-cbind(M[,!must_convert],BrandNumeric)        # complete data.frame with all variables put together
+
+# split data train/test
+training <- df_final$PH %>%createDataPartition(p = 0.8, list = FALSE)
+df_train <- df_final[training, ]
+df_test <- df_final[-training, ]
+
+```
+
+## Modeling 
+
+### Linear Models
+
+Linear Model:
+The first model we will be building is the classical linear model. The linear model represents the taret variable as a function of its predictor variables. Beta represents the linear parameter estimate and epsilon represents the error term. 
+$y={ \beta  }_{ 0 }+\sum { { \beta  }_{ i }{ X }_{ i }+{ \epsilon  }_{ i } }$
+
+
+There are some assumptions that need to be followed regarding linear regression. The first is that the residuals need to follow a near normal distribution and the second is that variance has to be constant. We have some diagnostic tests that can help us determine if these assumptions are satisfied or not. These assumptions need to be checked before we even consider taking into account how the model fits. 
+
+```{r project2a6, echo=T}
+par(mfrow = c(2,2))
+
+lm1 <- lm(PH ~ ., data = df_train)
+
+#tab_model(lm1)
+
+#summary(lm1)
+
+#plot(lm1)
+```
+
+Lets examine some metrics against this model. The first is to compute VIF numbers, also known as variance inflation numbers. The VIF numbers will also provide direction into which variables to remove from future iterations of the linear model. We typically remove predictors with a VIF bigger than 4. In this case, we remove CarbPressurem CarbTemp, Balling, AlchRel, and BallingLvl.
+https://www.researchgate.net/post/Multicollinearity_issues_is_a_value_less_than_10_acceptable_for_VIF
+
+```{r project2a7, echo=T}
+vif(lm1) %>% kable(caption="Linear Model 1 Variance Inflation Numbers")%>% kable_styling(full_width = F, position = "center")%>% row_spec()
+```
+
+We also want to see if outliers had any significant effect on our model by performing a significance test using Bonferroni statistics. According to our test, the low p value suggests that outliers are not significant and we should not go through the effort to treat outliers. 
+
+```{r project2a8, echo=T}
+outlierTest(lm1)
+```
+
+We fit a new LM with features showing high VIF removed. 
+
+```{r project2a9, echo=T}
+par(mfrow = c(2,2))
+
+lm2 <- lm(PH ~ .-BallingLvl-AlchRel-Balling	-CarbTemp-CarbPressure, data = df_train)
+
+#tab_model(lm2)
+
+
+```
+
+The adjusted r squared without the high VIF numbers remains unchanged,hence we were able to simplify our model without a change in data variability capture. We can furthur remove predictors by calculating variable importance. 
+
+```{r project2a10, echo=T}
+lm2_imp <- varImp(lm2, scale = TRUE)
+
+lm2_imp%>% kable(caption="Linear Model 2 Variable Importance") %>% kable_styling() %>% row_spec()
+
+#plot(lm2_imp)
+```
+
+BrandCode, PSCCO2, FillerSpeed, MFR,and PressureVacuum are flagged as the least important variables. We will remove these from the overall linear model and then compare how each of the three linear models does against each other. 
+
+```{r project2a11, echo=T}
+par(mfrow = c(2,2))
+
+lm3 <- lm(PH ~ .-BallingLvl-AlchRel-Balling-BrandCode-CarbTemp-CarbPressure-PSCCO2-FillerSpeed-MFR-PressureVacuum, data = df_train)
+
+tab_model(lm1, lm2,lm3)
+```
+
+Across all three models, our adjusted R squared remains unchanged yet we were able to simplify the model. Using lm3, we will now check if the linear regression assumptions are satisfied. 
+
+```{r project2a12, echo=T}
+hist(lm3$residuals);
+qqnorm(lm3$residuals)
+qqline(lm3$residuals);
+plot(fitted(lm3), resid(lm3), col = "dodgerblue",
+     pch = 20, cex = 1.5, xlab = "Fitted", ylab = "Residuals")
+abline(h = 0, lty = 2, col = "darkorange", lwd = 2)
+```
+
+Our final LM seems to have near normal residuals and constant variance as can be seen in the provided visualizations. We will stick to this model to compare performance vs our NNEt model when we move into the prediciton phase. 
+
+### Model 2: NNET 
+
+```{r project2a13, echo=T }
+set.seed(58677)
+
+#nn1<-nnet(PH~., data=df_train,size=2,linout=T)
+
+#library(devtools)
+#source_url('https://gist.githubusercontent.com/fawda123/7471137/raw/466c1474d0a505ff044412703516c34f1a4684a5/nnet#_plot_update.r')
+
+nn_param <- expand.grid(.size = c(1:10), .decay = c(0, 0.01, .1))
+
+nn1 <- train(PH ~ ., data=df_train, method="nnet", maxit=1000, tuneGrid=nn_param, trace=F)
+ 
+print(nn1)
+```
+
+What were the most imporant features in our nnet model?
+
+```{r project2a14, echo=T}
+nn1_imp <- varImp(nn1, scale = TRUE)
+
+nn1_imp2<-as.data.frame(as.matrix(nn1_imp$importance))
+
+#nn1_imp2%>% kable(caption="Linear Model 2 Variable Importance") %>% kable_styling() %>% row_spec()
+
+plot(nn1_imp)
+```
+
+### MARS regression 
+
+By experience, MARS has been one of the better performing models. We should not spend too much time on trying to pick the best nnet model and pick MARS as our third. We anticipate MARS to outperform LM and NNET. 
+
+```{r project2a15, echo=T}
+
+# hyperparameter tuning for MARS
+mars1 <- earth(PH ~ .,  data = df_train)
+
+print(mars1)
+```
+
+Baseline MARS model performed better than any of our NNET models or best linear models. 
+
+```{r project2a16, echo=T}
+mars_imp <- varImp(mars1, scale = TRUE)
+
+#mars_imp2<-as.data.frame(as.matrix(mars_imp$importance))
+
+mars_imp%>% kable(caption="Linear Model 2 Variable Importance") %>% kable_styling()# %>% row_spec()
+
+#plot(mars_imp2)
+```
+
+
+
+```{r project2a17, echo=T}
+# hyperparameter tuning for MARS
+mars2 <- earth(PH~BrandCode+PressureVacuum+AlchRel+Balling+Temperature+Usagecont+CarbPressure1+BowlSetpoint+HydPressure3+Density,  data = df_train)
+
+print(mars2)
+```
+
+
+## Evaluation
+
+```{r project2a18, echo=T}
+# Make predictions
+p1 <- lm3 %>% predict(df_test)
+p2 <- nn1 %>% predict(df_test)
+p3 <- mars2 %>% predict(df_test)
+
+# Model performance metrics
+sum_t <- data.frame(
+  MODEL = c('LinearModel',
+            'NNET',
+            'Mars'),
+  RMSE = c(caret::RMSE(p1, df_test$PH),
+           caret::RMSE(p2, df_test$PH),
+           caret::RMSE(p3, df_test$PH)),
+      
+  Rsquare = c(caret::R2(p1, df_test$PH),
+              caret::R2(p2, df_test$PH),
+              caret::R2(p3, df_test$PH)),
+           
+  MAPE = c(Metrics::mape(p1, df_test$PH),
+             Metrics::mape(p2, df_test$PH),
+             Metrics::mape(p3, df_test$PH)))
+  
+sum_t%>%kable(caption="Evaluation Summary on test set", booktabs=T)%>%kable_styling()%>%row_spec()
+```
+
+
+As predicted MARS is the best of our three models. 
+
+
+## Prediction
+
+```{r project2a19, echo=T}
+# remove space in-between variable names
+colnames(df_eval) <- gsub(" ","",colnames(df_eval))
+# remove column with zero-variance
+set.seed(58677)
+# use mice w/ default settings to impute missing data
+miceImput2 <- mice(df_eval, printFlag = FALSE)
+# add imputed data to original data set
+df_mice2 <- mice::complete(miceImput2)
+#table(df_eval$BrandCode, useNA = 'ifany')
+df_mice2$BrandCode[is.na(df_mice2$BrandCode)] <- 'B'
+#table(df_mice$BrandCode, useNA = "ifany")
+# Look for any features with no variance:
+#zero_cols <- nearZeroVar( df_mice2 )
+df_final22 <- df_mice2[,-zero_cols] # drop these zero variance columns 
+df_final22$BrandCode <- as.factor(df_final22$BrandCode)
+df_eval2 <- subset(df_eval, select = -PH)
+pred_eval <- predict(mars2, subset(df_final22))
+write.csv(pred_eval, 'prediction.csv')
+```
