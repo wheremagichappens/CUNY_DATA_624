@@ -386,7 +386,7 @@ set.seed(58677)
 
 ##mtry <- ( (ncol(df_train) -1) / 3 ) or sqrt(ncol(df_train) - 1) # By default, # of predictors / 3 for regression, sqrt(# of predictors) for classification https://www.hackerearth.com/practice/machine-learning/machine-learning-algorithms/tutorial-random-forest-parameter-tuning-r/tutorial/
 
-# from above result, we got mtry= 27 and ntree=2500 as optimal parameters
+# from above result, we got mtry= 31 and ntree=2500 as optimal parameters
 rf_model2 <- randomForest(PH~., data=df_train, method="rf", mtry= 31, importance = TRUE, ntree = 2500)
 
 # create MAPE table
