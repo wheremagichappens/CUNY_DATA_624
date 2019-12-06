@@ -10,6 +10,12 @@ require(caret)
 require(tidyverse)
 require(gridExtra)
 options(scipen = 999)
+
+reset.seed <- function()
+{
+  rm(.Random.seed, envir=globalenv())
+  set.seed(1492)
+}
 # a.
 data("ChemicalManufacturingProcess")
 
@@ -52,42 +58,52 @@ test=subset(imputed_data, sample==FALSE)
 
 
 # 
+reset.seed()
 fit <- plsr(Yield~., data=train,
             method = 'kernelpls',
             scale = TRUE,
             center = TRUE)
 
 
-# plot(fit)
-# abline(0, 1, col="red")
+plot(fit_41)
+abline(0, 1, col="red")
 # #
-# validationplot(fit, val.type="RMSEP")
+validationplot(fit, val.type="RMSEP")
 # #
 # #
-# rmse_pls <- RMSEP(fit)
+rmse_pls <- RMSEP(fit)
 
 
-# best_comps <- which.min(rmse_pls$val)
-# points(best_comps, min(rmse_pls$val), pch=1, col="red", cex=1.5)
+best_comps <- which.min(rmse_pls$val)
+points(best_comps, min(rmse_pls$val), pch=1, col="red", cex=1.5)
 # 57 is the best lowest number of components
 
-# Best Train
-
+#Best Train
+reset.seed()
 fit_41 <- plsr(Yield~., data=train,
             method = 'kernelpls',
             scale = TRUE,
             center = TRUE,
+            nzv = TRUE,
             ncomp =41)
 
 #  Train Metrics
-train_eval=data.frame('obs' = train$Yield, 'pred' =fit$fitted.values)
+train_eval=data.frame('obs' = train$Yield, 'pred' =fit_41$fitted.values)
 colnames(train_eval) <- c('obs', 'pred')
 caret::defaultSummary(train_eval)
+train_eval=data.frame('obs' = train$Yield, 'pred' =train_eval$pred)
+colnames(train_eval) <- c('obs', 'pred')
+caret::defaultSummary(train_eval)
+
 #     RMSE  Rsquared       MAE
 # 1.3757981 0.4598005 1.1110483
 # 
 # # d.
-# 
+train_pred_41 <- predict(fit_41, train, ncomp=41)
+train_eval=data.frame('obs' = train$Yield, 'pred' =train_pred_41)
+colnames(train_eval) <- c('obs', 'pred')
+caret::defaultSummary(train_eval)
+
 # #Test Predictions & Metrics
 test_pred_41 <- predict(fit_41, test, ncomp=41)
 test_eval_41=data.frame('obs' = test$Yield, 'pred' =test_pred_41)
@@ -123,3 +139,26 @@ p2 <-qplot(ManufacturingProcess13,Yield,   data =ChemicalManufacturingProcess)+
     geom_smooth(method = "loess", se =FALSE, colour ='violetred4')
 p3 <-qplot( ManufacturingProcess17, Yield, data =ChemicalManufacturingProcess)+ 
     geom_smooth(method = "loess", se =FALSE, colour ='violetred4')
+
+
+######experiment
+reset.seed()
+fits <- plsr(Yield~., data=train,
+               method = 'kernelpls',
+               scale = TRUE,
+               center = TRUE, 
+             nzv = TRUE,
+             ncomp=41)
+
+#  Train Metrics
+train_eval=data.frame('obs' = train$Yield, 'pred' =fits$fitted.values)
+colnames(train_eval) <- c('obs', 'pred')
+caret::defaultSummary(train_eval)
+train_eval=data.frame('obs' = train$Yield, 'pred' =train_eval$pred)
+colnames(train_eval) <- c('obs', 'pred')
+caret::defaultSummary(train_eval)
+
+train_fits<- predict(fits, train)
+train_eval=data.frame('obs' = train$Yield, 'pred' =train_fits)
+colnames(train_eval) <- c('obs', 'pred')
+caret::defaultSummary(train_eval)

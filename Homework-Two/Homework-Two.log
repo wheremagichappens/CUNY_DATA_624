@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.20)  6 DEC 2019 10:12
+=======
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.10.14)  25 NOV 2019 13:27
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 entering extended mode
 **./Homework-Two.tex
 (Homework-Two.tex
@@ -679,10 +683,15 @@ ge=DFLT;mapping=tex-text;"
 (fontspec)             <->s*[0.8311558380414313]"Arial/BI/OT:script=latn;langua
 ge=DFLT;+smcp;mapping=tex-text;"
 
-LaTeX Info: Redefining \rmfamily on input line 125.
+LaTeX Info: Redefining \rmfamily on input line 123.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
+<<<<<<< HEAD
 (Font)              scaled to size 8.31161pt on input line 125.
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/xcolor\xcolor.sty
+=======
+(Font)              scaled to size 8.31161pt on input line 123.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 ("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-cfg\color.cfg"
 File: color.cfg 2016/01/02 v1.6 sample color configuration
@@ -979,8 +988,28 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 \tcb@temp=\box64
 \tcb@out=\write5
 \tcb@record@out=\write6
+<<<<<<< HEAD
 ) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/titlesec\titlesec.sty
 Package: titlesec 2019/10/16 v2.13 Sectioning titles
+=======
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/sectsty/sectsty.st
+y
+Package: sectsty 2002/02/25 v2.0.2 Commands to change all sectional heading sty
+les
+
+LaTeX Warning: Command \underbar  has changed.
+               Check if current package is valid.
+
+
+LaTeX Warning: Command \underline  has changed.
+               Check if current package is valid.
+
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/titlesec.
+sty
+Package: titlesec 2019/09/09 v2.12 Sectioning titles
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \ttl@box=\box65
 \beforetitleunit=\skip57
 \aftertitleunit=\skip58
@@ -1052,6 +1081,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box73
 \@float@everytoks=\toks41
 \@floatcapt=\box74
+<<<<<<< HEAD
 ) ("C:\Program Files\MiKTeX 2.9\tex/latex/tools\multicol.sty"
 Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
 \c@tracingmulticols=\count317
@@ -1066,11 +1096,74 @@ Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
 \page@free=\dimen281
 \premulticols=\dimen282
 \postmulticols=\dimen283
+=======
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.
+sty
+Package: booktabs 2019/10/08 v1.6180339 publication quality tables
+\heavyrulewidth=\dimen278
+\lightrulewidth=\dimen279
+\cmidrulewidth=\dimen280
+\belowrulesep=\dimen281
+\belowbottomsep=\dimen282
+\aboverulesep=\dimen283
+\abovetopsep=\dimen284
+\cmidrulesep=\dimen285
+\cmidrulekern=\dimen286
+\defaultaddspace=\dimen287
+\@cmidla=\count315
+\@cmidlb=\count316
+\@aboverulesep=\dimen288
+\@belowrulesep=\dimen289
+\@thisruleclass=\count317
+\@lastruleclass=\count318
+\@thisrulewidth=\dimen290
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.st
+y
+Package: caption 2019/09/01 v3.3d Customizing captions (AR)
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.s
+ty
+Package: caption3 2019/09/01 v1.8d caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
+\captionmargin=\dimen291
+\captionmargin@=\dimen292
+\captionwidth=\dimen293
+\caption@tempdima=\dimen294
+\caption@indent=\dimen295
+\caption@parindent=\dimen296
+\caption@hangindent=\dimen297
+)
+\c@caption@flags=\count319
+\c@ContinuedFloat=\count320
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
+\c@tracingmulticols=\count321
+\mult@box=\box75
+\multicol@leftmargin=\dimen298
+\c@unbalance=\count322
+\c@collectmore=\count323
+\doublecol@number=\count324
+\multicoltolerance=\count325
+\multicolpretolerance=\count326
+\full@width=\dimen299
+\page@free=\dimen300
+\premulticols=\dimen301
+\postmulticols=\dimen302
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \multicolsep=\skip62
 \multicolbaselineskip=\skip63
 \partial@page=\box76
 \last@line=\box77
+<<<<<<< HEAD
 \maxbalancingoverflow=\dimen284
+=======
+\maxbalancingoverflow=\dimen303
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \mult@rightbox=\box78
 \mult@grightbox=\box79
 \mult@gfirstbox=\box80
@@ -1092,6 +1185,7 @@ Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
 \@tempa=\box96
 \@tempa=\box97
 \@tempa=\box98
+<<<<<<< HEAD
 \c@minrows=\count323
 \c@columnbadness=\count324
 \c@finalcolumnbadness=\count325
@@ -1121,13 +1215,31 @@ Package: booktabs 2019/10/08 v1.6180339 publication quality tables
 \@lastruleclass=\count330
 \@thisrulewidth=\dimen300
 ) ("C:\Program Files\MiKTeX 2.9\tex/latex/tools\longtable.sty"
+=======
+\c@minrows=\count327
+\c@columnbadness=\count328
+\c@finalcolumnbadness=\count329
+\last@try=\dimen304
+\multicolovershoot=\dimen305
+\multicolundershoot=\dimen306
+\mult@nat@firstbox=\box99
+\colbreak@box=\box100
+\mc@col@check@num=\count330
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.st
+y
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
 \LTleft=\skip64
 \LTright=\skip65
 \LTpre=\skip66
 \LTpost=\skip67
 \LTchunksize=\count331
+<<<<<<< HEAD
 \LTcapwidth=\dimen301
+=======
+\LTcapwidth=\dimen307
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \LT@head=\box101
 \LT@firsthead=\box102
 \LT@foot=\box103
@@ -1136,16 +1248,32 @@ Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
 \LT@rows=\count333
 \c@LT@tables=\count334
 \c@LT@chunks=\count335
+<<<<<<< HEAD
 \LT@p@ftn=\toks42
 ) ("C:\Program Files\MiKTeX 2.9\tex/latex/multirow\multirow.sty"
+=======
+\LT@p@ftn=\toks41
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.
+sty
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
 \multirow@colwidth=\skip68
 \multirow@cntb=\count336
 \multirow@dima=\skip69
+<<<<<<< HEAD
 \bigstrutjot=\dimen302
 ) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/wrapfig\wrapfig.sty
 \wrapoverhang=\dimen303
 \WF@size=\dimen304
+=======
+\bigstrutjot=\dimen308
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.st
+y
+\wrapoverhang=\dimen309
+\WF@size=\dimen310
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \c@WF@wrappedlines=\count337
 \WF@box=\box105
 \WF@everypar=\toks43
@@ -1175,6 +1303,7 @@ Package: threeparttablex 2013/07/23 v0.3 by daleif
 \UL@box=\box107
 \UL@hyphenbox=\box108
 \UL@skip=\skip72
+<<<<<<< HEAD
 \UL@hook=\toks45
 \UL@height=\dimen305
 \UL@pe=\count338
@@ -1195,24 +1324,42 @@ LaTeX Warning: Label `tab:unnamed-chunk-1' multiply defined.
 LaTeX Warning: Label `tab:unnamed-chunk-1' multiply defined.
 
 )
+=======
+\UL@hook=\toks44
+\UL@height=\dimen311
+\UL@pe=\count338
+\UL@pixel=\dimen312
+\ULC@box=\box109
+Package: ulem 2012/05/18
+\ULdepth=\dimen313
+)
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/makecell/makecell.
+sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen314
+\c@nlinenum=\count339
+\TeXr@lab=\toks45
+) (./Homework-Two.aux)
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \openout1 = `Homework-Two.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 173.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 183.
 LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
+<<<<<<< HEAD
 73.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/base\ts1cmr.fd"
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
@@ -1235,16 +1382,39 @@ Package microtype Info: Loading generic protrusion settings for font family
 \AtBeginShipoutBox=\box110
 Package hyperref Info: Link coloring OFF on input line 173.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
+=======
+83.
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 183.
+LaTeX Font Info:    ... okay on input line 183.
+\AtBeginShipoutBox=\box110
+Package hyperref Info: Link coloring OFF on input line 183.
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
+ty
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 ("C:\Program Files\MiKTeX 2.9\tex/generic/oberdiek\gettitlestring.sty"
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count340
 )
+<<<<<<< HEAD
 LaTeX Info: Redefining \ref on input line 173.
 LaTeX Info: Redefining \pageref on input line 173.
 LaTeX Info: Redefining \nameref on input line 173.
 (Homework-Two.out) (Homework-Two.out)
+=======
+LaTeX Info: Redefining \ref on input line 183.
+LaTeX Info: Redefining \pageref on input line 183.
+LaTeX Info: Redefining \nameref on input line 183.
+(./Homework-Two.out) (./Homework-Two.out)
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \@outlinefile=\write7
 \openout7 = `Homework-Two.out'.
 
@@ -1256,15 +1426,15 @@ ABD: EveryShipout initializing macros
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(92.14519pt, 430.00462pt, 92.14519pt)
-* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
+* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
-* \textwidth=430.00462pt
-* \textheight=556.47656pt
-* \oddsidemargin=19.8752pt
-* \evensidemargin=19.8752pt
-* \topmargin=-13.87262pt
+* \textwidth=469.75502pt
+* \textheight=650.43001pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-37.0pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=10.0pt
@@ -1282,16 +1452,41 @@ ABD: EveryShipout initializing macros
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: longtable package is loaded.
+
+(c:/Users/15082/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.
+sty
+Package: ltcaption 2018/08/26 v1.4a longtable captions (AR)
+)
+Package caption Info: threeparttable package is loaded.
+Package caption Info: wrapfig package is loaded.
+Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 14.36246pt on input line 174.
+(Font)              scaled to size 20.67929pt on input line 184.
+LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
+(Font)              scaled to size 20.67929pt on input line 184.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 9.97394pt on input line 174.
+(Font)              scaled to size 11.96872pt on input line 184.
+LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
+(Font)              scaled to size 9.97394pt on input line 184.
+LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
+(Font)              scaled to size 9.97394pt on input line 184.
+LaTeX Font Info:    Font shape `TU/Arial(0)/m/it' will be
+(Font)              scaled to size 9.97394pt on input line 184.
 [1
 
 ]
+LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
+(Font)              scaled to size 14.36246pt on input line 188.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
+<<<<<<< HEAD
 (Font)              scaled to size 14.36246pt on input line 178.
 (Homework-Two.toc
+=======
+(Font)              scaled to size 14.36246pt on input line 188.
+(./Homework-Two.toc
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
 (Font)              scaled to size 8.31161pt on input line 1.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
@@ -1343,30 +1538,36 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 [1
 
 ]
-LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 11.96872pt on input line 185.
 LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 11.96872pt on input line 185.
+(Font)              scaled to size 11.96872pt on input line 195.
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 185.
+(hyperref)                be the same. Added a new anchor on input line 195.
 
 
-Package xcolor Warning: Incompatible color definition on input line 192.
+Package xcolor Warning: Incompatible color definition on input line 202.
 
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 195.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 205.
 
+<<<<<<< HEAD
 Package xcolor Warning: Incompatible color definition on input line 203.
 
 
 Package xcolor Warning: Incompatible color definition on input line 203.
+=======
+Package xcolor Warning: Incompatible color definition on input line 225.
+
+
+Package xcolor Warning: Incompatible color definition on input line 225.
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 
 [2
 
 ]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
+<<<<<<< HEAD
 (hyperref)                than one, level fixed on input line 211.
 
 
@@ -1381,38 +1582,55 @@ Package xcolor Warning: Incompatible color definition on input line 227.
 
 
 Package xcolor Warning: Incompatible color definition on input line 227.
+=======
+(hyperref)                than one, level fixed on input line 233.
 
-File: "Homework-Two_files/figure-latex/""unnamed-chunk-2-1".pdf Graphic file (t
-ype pdf)
-<use "Homework-Two_files/figure-latex/""unnamed-chunk-2-1".pdf>
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 233.
+
+
+Package xcolor Warning: Incompatible color definition on input line 240.
+
+
+Package xcolor Warning: Incompatible color definition on input line 244.
+
+
+Package xcolor Warning: Incompatible color definition on input line 244.
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
+
+File: "Homework-Two_files/figure-latex/""kj-6.3a-plot-1".pdf Graphic file (type
+ pdf)
+<use "Homework-Two_files/figure-latex/""kj-6.3a-plot-1".pdf>
+LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
+(Font)              scaled to size 6.64929pt on input line 285.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 286.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 286.
+LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
+(Font)              scaled to size 6.64929pt on input line 288.
 [3
 
-] [4]
+]
 File: "Homework-Two_files/figure-latex/""kj-6.3c2-1".pdf Graphic file (type pdf
 )
 <use "Homework-Two_files/figure-latex/""kj-6.3c2-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3c2-2".pdf Graphic file (type pdf
-)
-<use "Homework-Two_files/figure-latex/""kj-6.3c2-2".pdf>
-[5]
-File: "Homework-Two_files/figure-latex/""kj-6.3d-1".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3d-1".pdf>
+[4]
+File: "Homework-Two_files/figure-latex/""kj-6.3d-2-1".pdf Graphic file (type pd
+f)
+<use "Homework-Two_files/figure-latex/""kj-6.3d-2-1".pdf>
 File: "Homework-Two_files/figure-latex/""kj-6.3e-1".pdf Graphic file (type pdf)
 
 <use "Homework-Two_files/figure-latex/""kj-6.3e-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3f-1".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3f-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3f-2".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3f-2".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3f-3".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3f-3".pdf>
-[6] [7] [8]
+[5]
+File: "Homework-Two_files/figure-latex/""kj-6.3f-1-1".pdf Graphic file (type pd
+f)
+<use "Homework-Two_files/figure-latex/""kj-6.3f-1-1".pdf>
+[6]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
+<<<<<<< HEAD
 (hyperref)                than one, level fixed on input line 457.
 
 
@@ -1491,3 +1709,77 @@ Output written on Homework-Two.pdf (18 pages).
 
 ! xelatex: warning: running with administrator privileges
 ! miktex-dvipdfmx: warning: running with administrator privileges
+=======
+(hyperref)                than one, level fixed on input line 435.
+
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 435.
+
+LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
+(Font)              scaled to size 5.81813pt on input line 437.
+LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
+(Font)              scaled to size 4.1558pt on input line 437.
+
+Package xcolor Warning: Incompatible color definition on input line 441.
+
+
+Package xcolor Warning: Incompatible color definition on input line 449.
+
+
+Package xcolor Warning: Incompatible color definition on input line 449.
+
+File: "Homework-Two_files/figure-latex/""kj-7.2-ex3-1".pdf Graphic file (type p
+df)
+<use "Homework-Two_files/figure-latex/""kj-7.2-ex3-1".pdf>
+
+Package xcolor Warning: Incompatible color definition on input line 456.
+
+
+Package xcolor Warning: Incompatible color definition on input line 464.
+
+
+Package xcolor Warning: Incompatible color definition on input line 464.
+
+[7
+
+] [8]
+
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 498.
+
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 498.
+
+[9
+
+] [10]
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 541.
+
+[11
+
+] [12
+
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 548.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 548.
+(./Homework-Two.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 548.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 548.
+Package rerunfilecheck Info: File `Homework-Two.out' has not changed.
+(rerunfilecheck)             Checksum: C05BA7425D31F6676F8488E5BD5F280D.
+ ) 
+Here is how much of TeX's memory you used:
+ 36203 strings out of 494468
+ 700963 string characters out of 6172222
+ 802924 words of memory out of 5000000
+ 40044 multiletter control sequences out of 15000+600000
+ 553318 words of font info for 82 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 59i,11n,116p,809b,491s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on Homework-Two.pdf (13 pages).
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa

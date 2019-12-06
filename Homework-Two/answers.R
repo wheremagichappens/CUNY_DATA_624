@@ -1,9 +1,9 @@
-## MERGE HW QUESTIONS HERE:
 
 ## Ensure constistent variable naming convention per question
 ## Look out for duplicate variable names between questions
 
 # DEPENDENCIES
+<<<<<<< HEAD
 
 # Predicitve Modeling
 libraries('AppliedPredictiveModeling', 'mice','caret', 'tidyverse','impute','pls','caTools','mlbench')
@@ -12,6 +12,21 @@ libraries('default', 'knitr', 'kableExtra','gridExtra','sqldf')
 # Plotting Libraries
 libraries('ggplot2', 'grid', 'ggfortify')
 
+=======
+# Data Wrangling 
+library(AppliedPredictiveModeling); library(mice); library(caret); library(tidyverse); library(pls); library(caTools); library(mlbench); library(stringr);
+# Formatting
+library(default); library(knitr); library(kableExtra); 
+# Plotting
+library(ggplot2); library(grid); library(ggfortify)
+
+# THEME COLORS
+dark_gold <- "#745010"
+medium_gold <- "#cbbda5"
+light_gold <- "#dcd3c3"
+
+# SET SEED
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 set.seed(58677)
 
 # ASSIGNMENT 1 
@@ -19,41 +34,27 @@ set.seed(58677)
 data("ChemicalManufacturingProcess")
 
 # (6.3a) 
-yield_plot<-ggplot(ChemicalManufacturingProcess, aes(x = Yield))+
-  geom_histogram(colour ='black', fill = 'violetred4')+
-  labs(title="Distribution of Yield",
-       subtitle="Chemical Manufacturing Data Set ")
+Plt_CMP.Yield <-ggplot(ChemicalManufacturingProcess, aes(x = Yield))+
+  geom_histogram(color=dark_gold, fill = light_gold)+
+  scale_x_continuous(labels = scales::number_format(accuracy = .1))+
+  labs(title="Distribution of Yield") +
+  theme_bw()+theme(plot.title = element_text(color="#745010", size=10, face="bold"), axis.title.y = element_blank())
 
 # (6.3b) 
-#code
+
 # Total NA Values
 #na_table<- table(is.na(ChemicalManufacturingProcess))
-total_na<-sapply(ChemicalManufacturingProcess[2:57], function(x) sum(is.na(x)))
-na_table<-sapply(ChemicalManufacturingProcess, function(x) table(is.na(x)))
-total_na<- data.frame(sort(total_na, decreasing = TRUE))
-total_na<- cbind(Variable = rownames(total_na), total_na)
-rownames(total_na) <- 1:nrow(total_na)
-colnames(total_na)<-  c("Variable", "Count")
-total_na<-cbind(total_na[1:28,],total_na[29:56,])
-
-#code
-# save df
-df <- ChemicalManufacturingProcess
-
-# set seed for split to allow for reproducibility
-set.seed(58677)
+CMP_na <- ChemicalManufacturingProcess %>% select(-Yield) %>% summarise_all(funs(sum(is.na(.)))) %>% t() %>% as.data.frame() %>% rownames_to_column("Predictor") %>% filter(V1 > 0) %>% arrange(desc(V1)) %>% rename(n=V1)
+CMP_na_left <-CMP_na %>% slice(1:14); CMP_na_right <- CMP_na %>% slice(15:28); CMP.total_na <- cbind(CMP_na_left, ` `=" ", CMP_na_right)
 
 # use mice w/ default settings to impute missing data
-miceImput <- mice(df, printFlag = FALSE)
+miceImp <- mice(ChemicalManufacturingProcess, printFlag = FALSE)
 
 # add imputed data to original data set 
-df_mice <-mice::complete(miceImput)
-
-# Look for any features with no variance:
-zero_cols <- nearZeroVar( df_mice )
-df_final <- df_mice[,-zero_cols] # drop these zero variance columns 
+CMP_DF <-mice::complete(miceImp)
 
 # (6.3c)
+<<<<<<< HEAD
 #code
 set.seed(58677)   #  set seed to ensure you always have same random numbers generated
 
@@ -99,46 +100,75 @@ eval_plot <- ggplot(pls2test_eval, aes(obs, pred)) +
        subtitle="Partial Least Squares Model")+ 
   geom_point()+
   coord_flip()+
+=======
+CMP.sample = sample.split(CMP_DF, SplitRatio = 0.80) # splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE
+CMP.train = subset(CMP_DF, CMP.sample ==TRUE) # creates a training dataset named train1 with rows which are marked as TRUE
+CMP.test = subset(CMP_DF, CMP.sample==FALSE)
+
+# Train model 
+CMP.pls.fit <- train(Yield~., data=CMP.train, method = 'pls', preProcess=c('zv', 'nzv', 'center', 'scale'),trControl = trainControl(method = "cv", number = 5, savePredictions = T), tuneLength=10)
+CMP.pls.fit.obs_vs_pred <- cbind(Observed = CMP.pls.fit$finalModel$model$.outcome, Predicted = CMP.pls.fit$finalModel$fitted.values) %>% as.data.frame() 
+Plt_CMP.fit.obs_vs_pred <- ggplot(CMP.pls.fit.obs_vs_pred, aes(Observed, Predicted)) + 
+  geom_point(color=medium_gold) + 
+  geom_smooth(method="lm", color=dark_gold, fill=light_gold)+
+  scale_x_continuous(labels = scales::number_format(accuracy = 1))+
+  scale_y_continuous(labels = scales::number_format(accuracy = 1))+
+  labs(title="Train Set: Observed vs. Predicted Values")+ 
   theme_bw()+
   theme()
 
+#  Train Metrics
+CMP.pls.train.perf <- CMP.pls.fit$results %>% as.data.frame() %>% filter(RMSE==min(RMSE)) %>% select(RMSE, Rsquared, MAE)
+Plt_CMP.RMSE <- ggplot(CMP.pls.fit) + geom_line(color=dark_gold) + geom_point(color=medium_gold)+ theme_bw()+theme()+labs(title="PLS Cross-Validation", y="RMSE", x="Components")+scale_x_continuous(labels = scales::number_format(accuracy = 1))
+
+# (6.3d)
+## Test Predictions & Metrics
+CMP.pls.pred <- predict(CMP.pls.fit, CMP.test)
+CMP.pls.test.perf <- postResample(pred = CMP.pls.pred, obs = CMP.test$Yield) %>% t() %>% as.data.frame() 
+CMP.pls.test.obs_vs_pred <- cbind(Predicted = CMP.pls.pred, Observed = CMP.test$Yield) %>% as.data.frame() 
+Plt_CMP.test.obs_vs_pred <- ggplot(CMP.pls.test.obs_vs_pred, aes(Observed, Predicted)) + 
+  geom_point(color=medium_gold) + 
+  geom_smooth(method="lm", color=dark_gold, fill=light_gold)+
+  labs(title="Test Set: Observed vs. Predicted Values")+ 
+  scale_x_continuous(labels = scales::number_format(accuracy = 1))+
+  scale_y_continuous(labels = scales::number_format(accuracy = 1))+
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
+  theme_bw()+
+  theme(plot.title = element_text(color="#745010", size=10, face="bold"))
+
 # (6.3e) 
-#code
-importance <- caret::varImp(pls_model2, scale=FALSE)
-importance<-importance%>%
-    mutate(Variable = row.names(importance))%>%
-    remove_rownames()%>%
-    select(Variable, Overall)%>%
+CMP.pls.imp <- caret::varImp(CMP.pls.fit, scale=T)
+
+CMP.pls.imp.df <- CMP.pls.imp$importance %>% as.data.frame() %>%
+    rownames_to_column("Variable")%>%
     arrange(desc(Overall))
     
-imp_plot <- ggplot(head(importance, 15), aes(x=reorder(Variable, Overall), y=Overall)) + 
-    geom_point(colour = 'violetred4') + 
-    geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall),colour = 'violetred4') + 
-    labs(title="Variable Importance", 
-         subtitle="PSL Model for Chemical Manufacturing Process Data Set", x="Variable", y="Importance")+ 
-    coord_flip()+
+Plt_CMP.pls.imp <- CMP.pls.imp.df %>% top_n(15, Overall) %>% ggplot(aes(x=reorder(Variable, Overall), y=Overall)) + 
+    geom_point(colour = medium_gold) + 
+    geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall),colour = dark_gold) + 
+    labs(title="Variable Importance", subtitle="Top 15 Predictors", x="Variable", y="Scaled Importance")+ 
+  scale_y_continuous(labels = function(x) paste0(x, "%"))+
+  coord_flip()+
     theme_bw()+
-    theme()
+    theme(axis.title.y = element_blank())
 
 # (6.3f)
-#code
-# F Comparison
-p1 <-qplot(ManufacturingProcess32,Yield,  data =ChemicalManufacturingProcess)+ 
-  geom_smooth(method = "loess", se =FALSE)+
-    labs(title="Manufacturing process 32 vs Yield")
+# Scatter Plot Comparison
+CMP.varImp.top5 <- CMP.pls.imp.df %>% top_n(5, Overall) 
+CMP_DF.gather <- CMP_DF %>% gather(Variable, Value, -Yield) 
+Plt_CMP.Scatter <- CMP_DF.gather %>% filter(Variable %in% CMP.varImp.top5$Variable) %>% 
+  ggplot(aes(x=Value, y=Yield)) +
+  geom_point(color=medium_gold)+
+  geom_smooth(method = "lm", color=dark_gold, fill=light_gold)+
+  labs(title="Scatter Plots of Top 5 Predictors Against Yield")+
+  facet_wrap(~Variable, scales = "free_x", nrow = 1)+
+  theme_bw()+
+  theme()
 
-p2 <-qplot(ManufacturingProcess13,Yield,   data =ChemicalManufacturingProcess)+ 
-  geom_smooth(method = "loess", se =FALSE)+
-   labs(title="Manufacturing process 13 vs Yield")
-
-p3 <-qplot( ManufacturingProcess17, Yield, data =ChemicalManufacturingProcess)+ 
-  geom_smooth(method = "loess", se =FALSE)+
-   labs(title="Manufacturing process 17 vs Yield")
-
- #code
-imp_train <- df_final %>%select(Yield, ManufacturingProcess32,ManufacturingProcess17, ManufacturingProcess13, ManufacturingProcess36, ManufacturingProcess09 )
-cor_df<-as.data.frame(as.matrix(cor(imp_train)))
-
+# Correlation
+CMP_DF.subset <- CMP_DF[(names(CMP_DF) %in% c(CMP.varImp.top5$Variable, "Yield"))]
+CMP_DF.corr <-as.data.frame(as.matrix(cor(CMP_DF.subset)))
+CMP_DF.corr.tbl <- CMP_DF.corr %>% select(Yield) %>% rownames_to_column('Variable') %>% filter(Variable!="Yield")%>%arrange(desc(Yield))
 
 # ASSIGNMENT 2
 # KJ 7.2; KJ 7.5
@@ -172,6 +202,22 @@ knnModel
 knnPred <- predict(knnModel, newdata = testData$x) 
 ## The function 'postResample' can be used to get the test set performance values
 postResample(pred = knnPred, obs = testData$y)
+
+# instructions from text 
+set.seed(200) 
+trainingData <- mlbench.friedman1(200, sd = 1)
+trainingData$x <- data.frame(trainingData$x) 
+testData <- mlbench.friedman1(5000, sd = 1)
+testData$x <- data.frame(testData$x) 
+#featurePlot(trainingData$x, trainingData$y) 
+
+# created ggplot instead of featurePlot()
+ 
+Sim.featurePlot <- trainingData %>% as.data.frame() %>% gather(x, value, -y) %>% mutate(x = str_replace(x, "x.","")) %>% arrange(desc(x)) %>% mutate(x = as.factor(x)) 
+Sim.featurePlot$x <- factor(Sim.featurePlot$x, levels = c("X1","X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10"))
+Plt_Sim.featurePlot <- ggplot(Sim.featurePlot, aes(value, y)) + geom_point(color=dark_gold, alpha=.5)+facet_wrap(~ x, nrow=2, scales = "fixed")+theme_bw()+theme()+labs(title="XY Scatter Plots of Simulated Data")
+# revert seed back to our set group number: 
+set.seed(58677)
 
 # (7.2a)
 #mars
