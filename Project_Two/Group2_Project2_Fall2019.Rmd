@@ -6,8 +6,58 @@ author:
 - Julian McEachern
 - Jeremy O'Brien
 - Bethany Poulin
-date: 'December 10, 2019'
-output: pdf_document
+date: '10 December 2019'
+output: 
+  pdf_document:
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    keep_tex: yes
+    toc: true
+    number_sections: no
+documentclass: report
+subparagraph: yes
 ---
 
 File for final submission of Project 2. 
+
+```{r formatting, echo = F, message=F, warning=F, error=F, comment=NA}
+source('~/GitHub/CUNY_DATA_624/Project_Two/defaults.R')
+```
+
+```{r load-source, echo = F, message=F, warning=F, error=F, comment=NA, results='hide'}
+source('~/GitHub/CUNY_DATA_624/Project_Two/script.R')
+```
+
+
+# Model Performance 
+
+*  Set1 = Caret: bagImputed; no additional pre-processing  
+*  Set2 = Caret: bagImputed; PreP `method=c('center', 'scale', 'nzv', 'BoxCox')`
+
+#### Train Performance:
+
+```{r}
+tbl.perf.train1 %>% 
+  kable(caption="Train1 Performance", booktabs=T, digits=4) %>% 
+  kable_styling() 
+
+tbl.perf.train2 %>% 
+  kable(caption="Train2 Performance", booktabs=T, digits=4) %>% 
+  kable_styling() 
+```
+
+#### Test Accuracy:
+
+```{r}
+tbl.perf.test1 %>% 
+  kable(caption="Test1 Performance", booktabs=T, digits=4) %>% 
+  kable_styling() 
+
+tbl.perf.test2 %>% 
+  kable(caption="Test2 Performance", booktabs=T, digits=4) %>% 
+  kable_styling() 
+
+```
+
+
