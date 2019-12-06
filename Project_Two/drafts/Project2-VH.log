@@ -1,7 +1,7 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.20)  6 DEC 2019 10:12
+This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.7200 64-bit) (preloaded format=xelatex 2019.11.20)  1 DEC 2019 09:59
 entering extended mode
-**./Homework-Two.tex
-(Homework-Two.tex
+**./Project2-VH.tex
+(Project2-VH.tex
 LaTeX2e <2019-10-01> patch level 1
 ("C:\Program Files\MiKTeX 2.9\tex/latex/base\report.cls"
 Document Class: report 2019/08/27 v1.4j Standard LaTeX document class
@@ -618,7 +618,42 @@ Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmarkwidth=\skip54
 \thanksmargin=\skip55
 \droptitle=\skip56
+) ("C:\Program Files\MiKTeX 2.9\tex/latex/geometry\geometry.sty"
+Package: geometry 2018/04/16 v5.8 Page Geometry
+\Gm@cnth=\count290
+\Gm@cntv=\count291
+\c@Gm@tempcnt=\count292
+\Gm@bindingoffset=\dimen158
+\Gm@wd@mp=\dimen159
+\Gm@odd@mp=\dimen160
+\Gm@even@mp=\dimen161
+\Gm@layoutwidth=\dimen162
+\Gm@layoutheight=\dimen163
+\Gm@layouthoffset=\dimen164
+\Gm@layoutvoffset=\dimen165
+\Gm@dimlist=\toks23
+("C:\Program Files\MiKTeX 2.9\tex/xelatex/xetexconfig\geometry.cfg")) (C:\Users
+\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/fancyhdr\fancyhdr.sty
+Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
+s
+\f@nch@headwidth=\skip57
+\f@nch@O@elh=\skip58
+\f@nch@O@erh=\skip59
+\f@nch@O@olh=\skip60
+\f@nch@O@orh=\skip61
+\f@nch@O@elf=\skip62
+\f@nch@O@erf=\skip63
+\f@nch@O@olf=\skip64
+\f@nch@O@orf=\skip65
 )
+
+Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
+less on input line 122.
+
+
+Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
+less on input line 123.
+
 
 Package fontspec Info: Arial scale = 0.8311558380414313.
 
@@ -679,9 +714,9 @@ ge=DFLT;mapping=tex-text;"
 (fontspec)             <->s*[0.8311558380414313]"Arial/BI/OT:script=latn;langua
 ge=DFLT;+smcp;mapping=tex-text;"
 
-LaTeX Info: Redefining \rmfamily on input line 125.
+LaTeX Info: Redefining \rmfamily on input line 130.
 LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 8.31161pt on input line 125.
+(Font)              scaled to size 8.31161pt on input line 130.
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/xcolor\xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 ("C:\Program Files\MiKTeX 2.9\tex/latex/graphics-cfg\color.cfg"
@@ -697,9 +732,29 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-("C:\Program Files\MiKTeX 2.9\tex/latex/graphics\dvipsnam.def"
-File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
-))
+) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/sectsty\sectsty.sty
+Package: sectsty 2002/02/25 v2.0.2 Commands to change all sectional heading sty
+les
+
+LaTeX Warning: Command \underbar  has changed.
+               Check if current package is valid.
+
+
+LaTeX Warning: Command \underline  has changed.
+               Check if current package is valid.
+
+) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/titlesec\titlesec.sty
+Package: titlesec 2019/10/16 v2.13 Sectioning titles
+\ttl@box=\box50
+\beforetitleunit=\skip66
+\aftertitleunit=\skip67
+\ttl@plus=\dimen166
+\ttl@minus=\dimen167
+\ttl@toksa=\toks24
+\titlewidth=\dimen168
+\titlewidthlast=\dimen169
+\titlewidthfirst=\dimen170
+)
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/tcolorbox\tcolorbox.sty
 Package: tcolorbox 2019/11/15 version 4.22 text color boxes
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/pgf/basiclayer\pgf.sty
@@ -707,15 +762,15 @@ Package: tcolorbox 2019/11/15 version 4.22 text color boxes
 y
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/utilities\pgfutil
 -common.tex
-\pgfutil@everybye=\toks23
-\pgfutil@tempdima=\dimen158
-\pgfutil@tempdimb=\dimen159
+\pgfutil@everybye=\toks25
+\pgfutil@tempdima=\dimen171
+\pgfutil@tempdimb=\dimen172
 
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/utilities\pgfutil
 -common-lists.tex))
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/utilities\pgfutil
 -latex.def
-\pgfutil@abb=\box50
+\pgfutil@abb=\box51
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/ms\everyshi.sty
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
 ))
@@ -736,33 +791,33 @@ Package: pgfsys 2019/08/03 v3.1.4b (3.1.4b)
 
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/utilities\pgfkeys
 .code.tex
-\pgfkeys@pathtoks=\toks24
-\pgfkeys@temptoks=\toks25
+\pgfkeys@pathtoks=\toks26
+\pgfkeys@temptoks=\toks27
 
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/utilities\pgfkeys
 filtered.code.tex
-\pgfkeys@tmptoks=\toks26
+\pgfkeys@tmptoks=\toks28
 ))
-\pgf@x=\dimen160
-\pgf@y=\dimen161
-\pgf@xa=\dimen162
-\pgf@ya=\dimen163
-\pgf@xb=\dimen164
-\pgf@yb=\dimen165
-\pgf@xc=\dimen166
-\pgf@yc=\dimen167
-\pgf@xd=\dimen168
-\pgf@yd=\dimen169
+\pgf@x=\dimen173
+\pgf@y=\dimen174
+\pgf@xa=\dimen175
+\pgf@ya=\dimen176
+\pgf@xb=\dimen177
+\pgf@yb=\dimen178
+\pgf@xc=\dimen179
+\pgf@yc=\dimen180
+\pgf@xd=\dimen181
+\pgf@yd=\dimen182
 \w@pgf@writea=\write4
 \r@pgf@reada=\read3
-\c@pgf@counta=\count290
-\c@pgf@countb=\count291
-\c@pgf@countc=\count292
-\c@pgf@countd=\count293
-\t@pgf@toka=\toks27
-\t@pgf@tokb=\toks28
-\t@pgf@tokc=\toks29
-\pgf@sys@id@count=\count294
+\c@pgf@counta=\count293
+\c@pgf@countb=\count294
+\c@pgf@countc=\count295
+\c@pgf@countd=\count296
+\t@pgf@toka=\toks29
+\t@pgf@tokb=\toks30
+\t@pgf@tokc=\toks31
+\pgf@sys@id@count=\count297
 
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/systemlayer\pgf.c
 fg
@@ -782,13 +837,13 @@ File: pgfsys-dvipdfmx.def 2019/08/03 v3.1.4b (3.1.4b)
 s-common-pdf.def
 File: pgfsys-common-pdf.def 2019/08/03 v3.1.4b (3.1.4b)
 )
-\pgfsys@objnum=\count295
+\pgfsys@objnum=\count298
 )))
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/systemlayer\pgfsy
 ssoftpath.code.tex
 File: pgfsyssoftpath.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgfsyssoftpath@smallbuffer@items=\count296
-\pgfsyssoftpath@bigbuffer@items=\count297
+\pgfsyssoftpath@smallbuffer@items=\count299
+\pgfsyssoftpath@bigbuffer@items=\count300
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/systemlayer\pgfsy
 sprotocol.code.tex
@@ -806,12 +861,12 @@ code.tex
 code.tex)
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/math\pgfmathparse
 r.code.tex
-\pgfmath@dimen=\dimen170
-\pgfmath@count=\count298
-\pgfmath@box=\box51
-\pgfmath@toks=\toks30
-\pgfmath@stack@operand=\toks31
-\pgfmath@stack@operation=\toks32
+\pgfmath@dimen=\dimen183
+\pgfmath@count=\count301
+\pgfmath@box=\box52
+\pgfmath@toks=\toks32
+\pgfmath@stack@operand=\toks33
+\pgfmath@stack@operation=\toks34
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/math\pgfmathfunct
 ions.code.tex
@@ -833,59 +888,59 @@ ions.misc.code.tex)
 ions.integerarithmetics.code.tex)))
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/math\pgfmathfloat
 .code.tex
-\c@pgfmathroundto@lastzeros=\count299
+\c@pgfmathroundto@lastzeros=\count302
 ))
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/math\pgfint.code.
 tex)
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 epoints.code.tex
 File: pgfcorepoints.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgf@picminx=\dimen171
-\pgf@picmaxx=\dimen172
-\pgf@picminy=\dimen173
-\pgf@picmaxy=\dimen174
-\pgf@pathminx=\dimen175
-\pgf@pathmaxx=\dimen176
-\pgf@pathminy=\dimen177
-\pgf@pathmaxy=\dimen178
-\pgf@xx=\dimen179
-\pgf@xy=\dimen180
-\pgf@yx=\dimen181
-\pgf@yy=\dimen182
-\pgf@zx=\dimen183
-\pgf@zy=\dimen184
+\pgf@picminx=\dimen184
+\pgf@picmaxx=\dimen185
+\pgf@picminy=\dimen186
+\pgf@picmaxy=\dimen187
+\pgf@pathminx=\dimen188
+\pgf@pathmaxx=\dimen189
+\pgf@pathminy=\dimen190
+\pgf@pathmaxy=\dimen191
+\pgf@xx=\dimen192
+\pgf@xy=\dimen193
+\pgf@yx=\dimen194
+\pgf@yy=\dimen195
+\pgf@zx=\dimen196
+\pgf@zy=\dimen197
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 epathconstruct.code.tex
 File: pgfcorepathconstruct.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgf@path@lastx=\dimen185
-\pgf@path@lasty=\dimen186
+\pgf@path@lastx=\dimen198
+\pgf@path@lasty=\dimen199
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 epathusage.code.tex
 File: pgfcorepathusage.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgf@shorten@end@additional=\dimen187
-\pgf@shorten@start@additional=\dimen188
+\pgf@shorten@end@additional=\dimen256
+\pgf@shorten@start@additional=\dimen257
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 escopes.code.tex
 File: pgfcorescopes.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgfpic=\box52
-\pgf@hbox=\box53
-\pgf@layerbox@main=\box54
-\pgf@picture@serial@count=\count300
+\pgfpic=\box53
+\pgf@hbox=\box54
+\pgf@layerbox@main=\box55
+\pgf@picture@serial@count=\count303
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 egraphicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgflinewidth=\dimen189
+\pgflinewidth=\dimen258
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 etransformations.code.tex
 File: pgfcoretransformations.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgf@pt@x=\dimen190
-\pgf@pt@y=\dimen191
-\pgf@pt@temp=\dimen192
+\pgf@pt@x=\dimen259
+\pgf@pt@y=\dimen260
+\pgf@pt@temp=\dimen261
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 equick.code.tex
@@ -902,14 +957,14 @@ File: pgfcorepathprocessing.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 earrows.code.tex
 File: pgfcorearrows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgfarrowsep=\dimen193
+\pgfarrowsep=\dimen262
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 eshade.code.tex
 File: pgfcoreshade.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgf@max=\dimen194
-\pgf@sys@shading@range@num=\count301
-\pgf@shadingcount=\count302
+\pgf@max=\dimen263
+\pgf@sys@shading@range@num=\count304
+\pgf@shadingcount=\count305
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 eimage.code.tex
@@ -918,7 +973,7 @@ File: pgfcoreimage.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 eexternal.code.tex
 File: pgfcoreexternal.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgfexternal@startupbox=\box55
+\pgfexternal@startupbox=\box56
 ))
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/basiclayer\pgfcor
 elayers.code.tex
@@ -939,7 +994,7 @@ File: pgfcorerdf.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/modules\pgfmodule
 shapes.code.tex
 File: pgfmoduleshapes.code.tex 2019/08/03 v3.1.4b (3.1.4b)
-\pgfnodeparttextbox=\box56
+\pgfnodeparttextbox=\box57
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/generic/pgf/modules\pgfmodule
 plot.code.tex
@@ -948,16 +1003,16 @@ File: pgfmoduleplot.code.tex 2019/08/03 v3.1.4b (3.1.4b)
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/pgf/compatibility\pgfco
 mp-version-0-65.sty
 Package: pgfcomp-version-0-65 2019/08/03 v3.1.4b (3.1.4b)
-\pgf@nodesepstart=\dimen195
-\pgf@nodesepend=\dimen196
+\pgf@nodesepstart=\dimen264
+\pgf@nodesepend=\dimen265
 )
 (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/pgf/compatibility\pgfco
 mp-version-1-18.sty
 Package: pgfcomp-version-1-18 2019/08/03 v3.1.4b (3.1.4b)
 )) ("C:\Program Files\MiKTeX 2.9\tex/latex/tools\verbatim.sty"
 Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
-\every@verbatim=\toks33
-\verbatim@line=\toks34
+\every@verbatim=\toks35
+\verbatim@line=\toks36
 \verbatim@in@stream=\read4
 ) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/environ\environ.sty
 Package: environ 2014/05/04 v0.3 A new way to define environments
@@ -966,46 +1021,20 @@ Package: environ 2014/05/04 v0.3 A new way to define environments
 ty
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ))
-\tcb@titlebox=\box57
-\tcb@upperbox=\box58
-\tcb@lowerbox=\box59
-\tcb@phantombox=\box60
-\c@tcbbreakpart=\count303
-\c@tcblayer=\count304
-\tcolorbox@number=\count305
-\tcb@temp=\box61
+\tcb@titlebox=\box58
+\tcb@upperbox=\box59
+\tcb@lowerbox=\box60
+\tcb@phantombox=\box61
+\c@tcbbreakpart=\count306
+\c@tcblayer=\count307
+\tcolorbox@number=\count308
 \tcb@temp=\box62
 \tcb@temp=\box63
 \tcb@temp=\box64
+\tcb@temp=\box65
 \tcb@out=\write5
 \tcb@record@out=\write6
-) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/titlesec\titlesec.sty
-Package: titlesec 2019/10/16 v2.13 Sectioning titles
-\ttl@box=\box65
-\beforetitleunit=\skip57
-\aftertitleunit=\skip58
-\ttl@plus=\dimen197
-\ttl@minus=\dimen198
-\ttl@toksa=\toks35
-\titlewidth=\dimen199
-\titlewidthlast=\dimen256
-\titlewidthfirst=\dimen257
-) ("C:\Program Files\MiKTeX 2.9\tex/latex/geometry\geometry.sty"
-Package: geometry 2018/04/16 v5.8 Page Geometry
-\Gm@cnth=\count306
-\Gm@cntv=\count307
-\c@Gm@tempcnt=\count308
-\Gm@bindingoffset=\dimen258
-\Gm@wd@mp=\dimen259
-\Gm@odd@mp=\dimen260
-\Gm@even@mp=\dimen261
-\Gm@layoutwidth=\dimen262
-\Gm@layoutheight=\dimen263
-\Gm@layouthoffset=\dimen264
-\Gm@layoutvoffset=\dimen265
-\Gm@dimlist=\toks36
-("C:\Program Files\MiKTeX 2.9\tex/xelatex/xetexconfig\geometry.cfg")) (C:\Users
-\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/tabu\tabu.sty
+) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/tabu\tabu.sty
 Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
 ("C:\Program Files\MiKTeX 2.9\tex/latex/tools\array.sty"
 Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
@@ -1013,8 +1042,8 @@ Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 \ar@mcellbox=\box66
 \extrarowheight=\dimen267
 \NC@list=\toks37
-\extratabsurround=\skip59
-\backup@length=\skip60
+\extratabsurround=\skip68
+\backup@length=\skip69
 \ar@cellbox=\box67
 ) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/varwidth\varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
@@ -1044,37 +1073,32 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \tabu@arstrutbox=\box70
 \tabu@hleads=\box71
 \tabu@vleads=\box72
-\tabu@cellskip=\skip61
-) ("C:\Program Files\MiKTeX 2.9\tex/latex/float\float.sty"
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count316
-\float@exts=\toks40
-\float@box=\box73
-\@float@everytoks=\toks41
-\@floatcapt=\box74
+\tabu@cellskip=\skip70
 ) ("C:\Program Files\MiKTeX 2.9\tex/latex/tools\multicol.sty"
 Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
-\c@tracingmulticols=\count317
-\mult@box=\box75
+\c@tracingmulticols=\count316
+\mult@box=\box73
 \multicol@leftmargin=\dimen279
-\c@unbalance=\count318
-\c@collectmore=\count319
-\doublecol@number=\count320
-\multicoltolerance=\count321
-\multicolpretolerance=\count322
+\c@unbalance=\count317
+\c@collectmore=\count318
+\doublecol@number=\count319
+\multicoltolerance=\count320
+\multicolpretolerance=\count321
 \full@width=\dimen280
 \page@free=\dimen281
 \premulticols=\dimen282
 \postmulticols=\dimen283
-\multicolsep=\skip62
-\multicolbaselineskip=\skip63
-\partial@page=\box76
-\last@line=\box77
+\multicolsep=\skip71
+\multicolbaselineskip=\skip72
+\partial@page=\box74
+\last@line=\box75
 \maxbalancingoverflow=\dimen284
-\mult@rightbox=\box78
-\mult@grightbox=\box79
-\mult@gfirstbox=\box80
-\mult@firstbox=\box81
+\mult@rightbox=\box76
+\mult@grightbox=\box77
+\mult@gfirstbox=\box78
+\mult@firstbox=\box79
+\@tempa=\box80
+\@tempa=\box81
 \@tempa=\box82
 \@tempa=\box83
 \@tempa=\box84
@@ -1090,404 +1114,84 @@ Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
 \@tempa=\box94
 \@tempa=\box95
 \@tempa=\box96
-\@tempa=\box97
-\@tempa=\box98
-\c@minrows=\count323
-\c@columnbadness=\count324
-\c@finalcolumnbadness=\count325
+\c@minrows=\count322
+\c@columnbadness=\count323
+\c@finalcolumnbadness=\count324
 \last@try=\dimen285
 \multicolovershoot=\dimen286
 \multicolundershoot=\dimen287
-\mult@nat@firstbox=\box99
-\colbreak@box=\box100
-\mc@col@check@num=\count326
+\mult@nat@firstbox=\box97
+\colbreak@box=\box98
+\mc@col@check@num=\count325
+) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/paralist\paralist.sty
+Package: paralist 2017/01/22 v2.7 Extended list environments
+\pltopsep=\skip73
+\plpartopsep=\skip74
+\plitemsep=\skip75
+\plparsep=\skip76
+\pl@lab=\toks40
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 187.
+(C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/wrapfig\wrapfig.sty
+\wrapoverhang=\dimen288
+\WF@size=\dimen289
+\c@WF@wrappedlines=\count326
+\WF@box=\box99
+\WF@everypar=\toks41
+Package: wrapfig 2003/01/31  v 3.6
 ) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/booktabs\booktabs.sty
 Package: booktabs 2019/10/08 v1.6180339 publication quality tables
-\heavyrulewidth=\dimen288
-\lightrulewidth=\dimen289
-\cmidrulewidth=\dimen290
-\belowrulesep=\dimen291
-\belowbottomsep=\dimen292
-\aboverulesep=\dimen293
-\abovetopsep=\dimen294
-\cmidrulesep=\dimen295
-\cmidrulekern=\dimen296
-\defaultaddspace=\dimen297
+\heavyrulewidth=\dimen290
+\lightrulewidth=\dimen291
+\cmidrulewidth=\dimen292
+\belowrulesep=\dimen293
+\belowbottomsep=\dimen294
+\aboverulesep=\dimen295
+\abovetopsep=\dimen296
+\cmidrulesep=\dimen297
+\cmidrulekern=\dimen298
+\defaultaddspace=\dimen299
 \@cmidla=\count327
 \@cmidlb=\count328
-\@aboverulesep=\dimen298
-\@belowrulesep=\dimen299
+\@aboverulesep=\dimen300
+\@belowrulesep=\dimen301
 \@thisruleclass=\count329
 \@lastruleclass=\count330
-\@thisrulewidth=\dimen300
-) ("C:\Program Files\MiKTeX 2.9\tex/latex/tools\longtable.sty"
-Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
-\LTleft=\skip64
-\LTright=\skip65
-\LTpre=\skip66
-\LTpost=\skip67
-\LTchunksize=\count331
-\LTcapwidth=\dimen301
-\LT@head=\box101
-\LT@firsthead=\box102
-\LT@foot=\box103
-\LT@lastfoot=\box104
-\LT@cols=\count332
-\LT@rows=\count333
-\c@LT@tables=\count334
-\c@LT@chunks=\count335
-\LT@p@ftn=\toks42
-) ("C:\Program Files\MiKTeX 2.9\tex/latex/multirow\multirow.sty"
-Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
-\multirow@colwidth=\skip68
-\multirow@cntb=\count336
-\multirow@dima=\skip69
-\bigstrutjot=\dimen302
-) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/wrapfig\wrapfig.sty
-\wrapoverhang=\dimen303
-\WF@size=\dimen304
-\c@WF@wrappedlines=\count337
-\WF@box=\box105
-\WF@everypar=\toks43
-Package: wrapfig 2003/01/31  v 3.6
-) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/colortbl\colortbl.sty
-Package: colortbl 2018/12/12 v1.0d Color table columns (DPC)
-\everycr=\toks44
-\minrowclearance=\skip70
-) ("C:\Program Files\MiKTeX 2.9\tex/latex/oberdiek\pdflscape.sty"
-Package: pdflscape 2016/05/14 v0.11 Display of landscape pages in PDF (HO)
-("C:\Program Files\MiKTeX 2.9\tex/latex/graphics\lscape.sty"
-Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
+\@thisrulewidth=\dimen302
+) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/caption\caption.sty
+Package: caption 2019/10/18 v3.4a Customizing captions (AR)
+(C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/caption\caption3.sty
+Package: caption3 2019/09/09 v1.8e caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
+\captionmargin=\dimen303
+\captionmargin@=\dimen304
+\captionwidth=\dimen305
+\caption@tempdima=\dimen306
+\caption@indent=\dimen307
+\caption@parindent=\dimen308
+\caption@hangindent=\dimen309
+Package caption Info: Standard document class detected.
 )
-Package pdflscape Info: Auto-detected driver: dvipdfm (xetex) on input line 99.
+Package caption Info: We need package `newfloat' on input line 304.
 
-)
-(C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/threeparttable\threepar
-ttable.sty
-Package: threeparttable 2003/06/13  v 3.0
-\@tempboxb=\box106
-)
-(C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/threeparttablex\threepa
-rttablex.sty
-Package: threeparttablex 2013/07/23 v0.3 by daleif
-\TPTL@width=\skip71
-) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/ulem\ulem.sty
-\UL@box=\box107
-\UL@hyphenbox=\box108
-\UL@skip=\skip72
-\UL@hook=\toks45
-\UL@height=\dimen305
-\UL@pe=\count338
-\UL@pixel=\dimen306
-\ULC@box=\box109
-Package: ulem 2012/05/18
-\ULdepth=\dimen307
-) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/makecell\makecell.sty
-Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
-\rotheadsize=\dimen308
-\c@nlinenum=\count339
-\TeXr@lab=\toks46
-) (Homework-Two.aux
+! LaTeX Error: File `newfloat.sty' not found.
 
-LaTeX Warning: Label `tab:unnamed-chunk-1' multiply defined.
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
 
-
-LaTeX Warning: Label `tab:unnamed-chunk-1' multiply defined.
-
-)
-\openout1 = `Homework-Two.aux'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 173.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
-73.
-("C:\Program Files\MiKTeX 2.9\tex/latex/base\ts1cmr.fd"
-File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 173.
-LaTeX Font Info:    ... okay on input line 173.
-LaTeX Info: Redefining \microtypecontext on input line 173.
-Package microtype Info: Character protrusion enabled (level 2).
-Package microtype Info: Using protrusion set `basicmath'.
-Package microtype Info: No adjustment of tracking.
-Package microtype Info: No adjustment of spacing.
-Package microtype Info: No adjustment of kerning.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `Arial' (encoding: TU).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-\AtBeginShipoutBox=\box110
-Package hyperref Info: Link coloring OFF on input line 173.
-("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
-Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
-("C:\Program Files\MiKTeX 2.9\tex/generic/oberdiek\gettitlestring.sty"
-Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
-)
-\c@section@level=\count340
-)
-LaTeX Info: Redefining \ref on input line 173.
-LaTeX Info: Redefining \pageref on input line 173.
-LaTeX Info: Redefining \nameref on input line 173.
-(Homework-Two.out) (Homework-Two.out)
-\@outlinefile=\write7
-\openout7 = `Homework-Two.out'.
-
-ABD: EveryShipout initializing macros
-*geometry* detected driver: pdftex
-*geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
-* paper: <default>
-* layout: <same size as paper>
-* layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
-* h-part:(L,W,R)=(92.14519pt, 430.00462pt, 92.14519pt)
-* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
-* \paperwidth=614.295pt
-* \paperheight=794.96999pt
-* \textwidth=430.00462pt
-* \textheight=556.47656pt
-* \oddsidemargin=19.8752pt
-* \evensidemargin=19.8752pt
-* \topmargin=-13.87262pt
-* \headheight=12.0pt
-* \headsep=25.0pt
-* \topskip=10.0pt
-* \footskip=30.0pt
-* \marginparwidth=65.0pt
-* \marginparsep=11.0pt
-* \columnsep=10.0pt
-* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
-* \hoffset=0.0pt
-* \voffset=0.0pt
-* \mag=1000
-* \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
-* \@reversemarginfalse
-* (1in=72.27pt=25.4mm, 1cm=28.453pt)
-
-LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 14.36246pt on input line 174.
-LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 9.97394pt on input line 174.
-[1
-
-]
-LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 14.36246pt on input line 178.
-(Homework-Two.toc
-LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 8.31161pt on input line 1.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
-.
-("C:\Program Files\MiKTeX 2.9\tex/latex/lm\ot1lmr.fd"
-File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-(C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/microtype\mt-LatinModer
-nRoman.cfg
-File: mt-LatinModernRoman.cfg 2013/03/13 v1.0 microtype config. file: Latin Mod
-ern Roman (RS)
-)
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
-.
-("C:\Program Files\MiKTeX 2.9\tex/latex/lm\omllmm.fd"
-File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-2.
-("C:\Program Files\MiKTeX 2.9\tex/latex/lm\omslmsy.fd"
-File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-2.
-("C:\Program Files\MiKTeX 2.9\tex/latex/lm\omxlmex.fd"
-File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 2.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 2.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 2.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 2.
-("C:\Program Files\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/microtype\mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 2.
-("C:\Program Files\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (C:\Users\traveler\AppData\Roaming\MiKTeX\2.9\tex/latex/microtype\mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-))
-\tf@toc=\write8
-\openout8 = `Homework-Two.toc'.
-
-[1
-
-]
-LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 11.96872pt on input line 185.
-LaTeX Font Info:    Font shape `TU/Arial(0)/bx/n' will be
-(Font)              scaled to size 11.96872pt on input line 185.
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 185.
-
-
-Package xcolor Warning: Incompatible color definition on input line 192.
-
-LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 195.
-
-Package xcolor Warning: Incompatible color definition on input line 203.
-
-
-Package xcolor Warning: Incompatible color definition on input line 203.
-
-[2
-
-]
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 211.
-
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 211.
-
-
-Package xcolor Warning: Incompatible color definition on input line 223.
-
-
-Package xcolor Warning: Incompatible color definition on input line 227.
-
-
-Package xcolor Warning: Incompatible color definition on input line 227.
-
-File: "Homework-Two_files/figure-latex/""unnamed-chunk-2-1".pdf Graphic file (t
-ype pdf)
-<use "Homework-Two_files/figure-latex/""unnamed-chunk-2-1".pdf>
-[3
-
-] [4]
-File: "Homework-Two_files/figure-latex/""kj-6.3c2-1".pdf Graphic file (type pdf
-)
-<use "Homework-Two_files/figure-latex/""kj-6.3c2-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3c2-2".pdf Graphic file (type pdf
-)
-<use "Homework-Two_files/figure-latex/""kj-6.3c2-2".pdf>
-[5]
-File: "Homework-Two_files/figure-latex/""kj-6.3d-1".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3d-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3e-1".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3e-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3f-1".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3f-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3f-2".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3f-2".pdf>
-File: "Homework-Two_files/figure-latex/""kj-6.3f-3".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-6.3f-3".pdf>
-[6] [7] [8]
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 457.
-
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 457.
-
-LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 5.81813pt on input line 459.
-LaTeX Font Info:    Font shape `TU/Arial(0)/m/n' will be
-(Font)              scaled to size 4.1558pt on input line 459.
-File: "Homework-Two_files/figure-latex/""kj-7.2-ex1-1".pdf Graphic file (type p
-df)
-<use "Homework-Two_files/figure-latex/""kj-7.2-ex1-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-7.2-1-1".pdf Graphic file (type pdf
-)
-<use "Homework-Two_files/figure-latex/""kj-7.2-1-1".pdf>
-[9
-
-]
-File: "Homework-Two_files/figure-latex/""kj-7.2-2-1".pdf Graphic file (type pdf
-)
-<use "Homework-Two_files/figure-latex/""kj-7.2-2-1".pdf>
-File: "Homework-Two_files/figure-latex/""kj-7.2-3-1".pdf Graphic file (type pdf
-)
-<use "Homework-Two_files/figure-latex/""kj-7.2-3-1".pdf>
-[10]
-File: "Homework-Two_files/figure-latex/""kj-7.2-4b-1".pdf Graphic file (type pd
-f)
-<use "Homework-Two_files/figure-latex/""kj-7.2-4b-1".pdf>
-[11]
-File: "Homework-Two_files/figure-latex/""kj-7.5b-1".pdf Graphic file (type pdf)
-
-<use "Homework-Two_files/figure-latex/""kj-7.5b-1".pdf>
-[12] [13]
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 655.
-
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 655.
-
-[14
-
-] [15]
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 698.
-
-[16
-
-] [17
-
-]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 705.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 705.
-(Homework-Two.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 705.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 705.
-Package rerunfilecheck Info: File `Homework-Two.out' has not changed.
-(rerunfilecheck)             Checksum: 838D1C9DFE89811342E15D082D2126EF.
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+Enter file name: 
+! Emergency stop.
+<read *> 
+         
+l.304 \caption@ProcessOptions*{caption}
+                                       ^^M 
 Here is how much of TeX's memory you used:
- 36282 strings out of 427243
- 690403 string characters out of 3145774
- 843636 words of memory out of 3000000
- 40318 multiletter control sequences out of 15000+200000
- 545251 words of font info for 66 fonts, out of 3000000 for 9000
+ 36112 strings out of 427243
+ 685943 string characters out of 3145774
+ 822544 words of memory out of 3000000
+ 40269 multiletter control sequences out of 15000+200000
+ 532802 words of font info for 38 fonts, out of 3000000 for 9000
  1348 hyphenation exceptions out of 8191
- 59i,10n,116p,1203b,501s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 59i,0n,116p,810b,429s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on Homework-Two.pdf (18 pages).
-
-! xelatex: warning: running with administrator privileges
-! miktex-dvipdfmx: warning: running with administrator privileges
+No pages of output.

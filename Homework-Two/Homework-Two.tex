@@ -195,7 +195,8 @@ Include details on our process in creating this document.
 \KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mice"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }\StringTok{"tidyverse"}\NormalTok{, }
     \StringTok{"impute"}\NormalTok{, }\StringTok{"pls"}\NormalTok{, }\StringTok{"caTools"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{)}
 \CommentTok{# Formatting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{, }\StringTok{"gridExtra"}\NormalTok{, }\StringTok{"sqldf"}\NormalTok{, }
+    \StringTok{"tibble"}\NormalTok{)}
 \CommentTok{# Plotting Libraries}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{)}
 \end{Highlighting}
@@ -256,7 +257,7 @@ imputation methods.
 
 \caption{\label{tab:kj-6.3b}Distribution of Missing data in Chemical Manufacturing Process}
 \centering
-\begin{tabular}{l|r|l|r}
+\begin{tabular}[t]{l|r|l|r}
 \hline
 Variable & Count & Variable & Count\\
 \hline
@@ -344,15 +345,15 @@ baseline PLS model with all components.
 
 \caption{\label{tab:kj-6.3c}PLS Performance Metrics on Training Subset}
 \centering
-\begin{tabular}{l|r}
+\begin{tabular}[t]{l|r}
 \hline
   & x\\
 \hline
-\rowcolor{gray!6}  RMSE & 1.3067750\\
+\rowcolor{gray!6}  RMSE & 1.3116314\\
 \hline
-Rsquared & 0.4934303\\
+Rsquared & 0.4896581\\
 \hline
-\rowcolor{gray!6}  MAE & 1.0546925\\
+\rowcolor{gray!6}  MAE & 1.0584889\\
 \hline
 \end{tabular}
 \end{table}
@@ -372,15 +373,15 @@ the RMSEP flattens.
 
 \caption{\label{tab:kj-6.3d}PLS Performance Metrics on Test Subset}
 \centering
-\begin{tabular}{l|r}
+\begin{tabular}[t]{l|r}
 \hline
   & x\\
 \hline
-\rowcolor{gray!6}  RMSE & 1.2586244\\
+\rowcolor{gray!6}  RMSE & 1.222201\\
 \hline
-Rsquared & 0.5653015\\
+Rsquared & 0.579859\\
 \hline
-\rowcolor{gray!6}  MAE & 0.9959796\\
+\rowcolor{gray!6}  MAE & 0.988292\\
 \hline
 \end{tabular}
 \end{table}
@@ -417,7 +418,7 @@ the top 15 predictors.
 
 \caption{\label{tab:kj-6.3f}Correlation of top 5 Important Variables vs Yield}
 \centering
-\begin{tabular}{l|r}
+\begin{tabular}[t]{l|r}
 \hline
   & Yield\\
 \hline
@@ -429,7 +430,7 @@ ManufacturingProcess32 & 0.6083321\\
 \hline
 ManufacturingProcess13 & -0.5036797\\
 \hline
-\rowcolor{gray!6}  ManufacturingProcess36 & -0.5013575\\
+\rowcolor{gray!6}  ManufacturingProcess36 & -0.4907962\\
 \hline
 ManufacturingProcess09 & 0.5034705\\
 \hline
@@ -462,15 +463,92 @@ manufacturing process 32.
 \begin{subquestion}{(a).} Tune several models on these data. For example: 
 \end{subquestion}
 
-Model 1:
+Model 1 MARS Regression: MARS, otherwise known as multivariate adapitive
+regression splines is a non parametric regression technique that
+automatically captures non-linearity and interaction between predictors.
+The basic MARS model has the following form:
 
-Model 2:
+\[
+\overset { \wedge  }{ f } =\sum _{ i=1 }^{ k }{ { c }_{ i }{ B }_{ i }(x) } 
+\]
 
-Model 3:
+The model computes the sum of basis functions B multiplied by constant
+coefficients c.The basis function can either be a constant, a hinge
+function, or a product of hinge functions. By definition, a hinge
+function is a piecewise function that converges at a point known as a
+knot.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-1-1.pdf}
+
+Model 2 SVM: SVM, also known as support vector machine is a method that
+can be applied to classification and regression tasks. On a high level,
+SVM creates a hyperplane in n dimensional space. This hyperplane acts
+like a classification boundary which can be linear or non linear. This
+boundary classifies information from a feature space.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-2-1.pdf}
+
+Model 3 NNET:
+
+NNEt otherwise known as a Neural Network, is a method inspired by a
+biological neuron system. It uses a system of nodes that are parallel to
+the way neurons work. It is ideal for capturing non-linear relationships
+that would otherwise be complicated in a multiple linear regression
+model. NNET evolves internally based on the calculated weights of each
+input. The basic structure is shown below:
+
+\[
+Y=\sum { (weight\quad *\quad input)\quad +\quad bias } 
+\]
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-3-1.pdf}
 
 \begin{subquestion}{(b).}
 Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
 \end{subquestion}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-1}Model Performance}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+\textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
+\hline
+\rowcolor{gray!6}  knnTrain & 3.6521 & 3.6521 & 3.6521\\
+\hline
+knnTest & 3.2041 & 0.6820 & 2.5683\\
+\hline
+\rowcolor{gray!6}  MARSTrain & 4.4548 & 0.9389 & 3.7461\\
+\hline
+MARSTest & 1.1723 & 0.9449 & 0.9325\\
+\hline
+\rowcolor{gray!6}  SVMTrain & 2.4940 & 0.8561 & 1.9931\\
+\hline
+SVMTest & 2.0699 & 0.8263 & 1.5723\\
+\hline
+\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{NNETTrain} & \textbf{13.7411} & \textbf{0.8021} & \textbf{5.5596}\\
+\hline
+\rowcolor[HTML]{d9f2e6}  \textbf{NNETTest} & \textbf{2.5669} & \textbf{0.7427} & \textbf{1.9506}\\
+\hline
+\end{tabular}
+\end{table}
+
+MARS appears to give the best performance based on RMSE, R squared and
+MAE on test set. The above table shows how our other selected models
+stack up against the best performing MARS model. We now evaluate the
+variable importance for our best performing model.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-4b-1.pdf}
+
+The variable importance table for MARS indicates that variables X1
+through X5 were picked as the most important. Out of our collection of
+important variables used in MARS, X1 is the most important.
+
+It is very likely that the lack of contribution allotted to the X6-X10
+variables which bolster the R Squared and RMSE performance and noise
+from these variables did not reduce the predictive strength of this
+model as it does in small quantities in the other three models.
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 7.5}
 
@@ -478,17 +556,97 @@ Which models appear to give the best performance? Does MARS select the informati
 Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
 \end{question}
 
+We pulled in the data processing method from 6.3. This includes
+imputation and removal of zero processing. Please refer to 6.3 for a
+more detailed look at the EDA involved with this data set. We tunned a
+KNN model, NNET model, MARS, and SVM model using specifications from the
+literature.
+
 \begin{subquestion}{(a).}
 Which nonlinear regression model gives the optimal resampling and test set performance? 
 \end{subquestion}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-1}Model Performance on ChemicalManufacturing Data}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+\textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
+\hline
+\rowcolor{gray!6}  knnTrain & 1.4835 & 0.4245 & 1.1746\\
+\hline
+knnTest & 1.4078 & 0.4477 & 1.1041\\
+\hline
+\rowcolor{gray!6}  MARSTrain & 1.6367 & 0.6488 & 1.1614\\
+\hline
+MARSTest & 1.3726 & 0.4682 & 1.1300\\
+\hline
+\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{SVMTrain} & \textbf{1.4142} & \textbf{0.7144} & \textbf{1.1448}\\
+\hline
+\rowcolor[HTML]{d9f2e6}  \textbf{SVMTest} & \textbf{1.2061} & \textbf{0.5715} & \textbf{0.9833}\\
+\hline
+\rowcolor{gray!6}  NNETTrain & 9.9082 & 0.3704 & 6.2548\\
+\hline
+NNETTest & 1.4683 & 0.3987 & 1.1936\\
+\hline
+\end{tabular}
+\end{table}
+
+Radial SVM outperformed the other models across all key KPI's. The next
+best model was MARS. In part b, we will address what variables are
+dominant in our SVM model.
 
 \begin{subquestion}{(b).}
 Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
 \end{subquestion}
 
+\includegraphics{Homework-Two_files/figure-latex/kj-7.5b-1.pdf}
+
+\texttt{ManufacturingProcess} Variables dominate the ranking of
+important variables with ManufacturingProcess14 at the top.
+ManufacturingProcess32 was at the top of the important variables list
+when it came to our linear model with some Biological Process within the
+top 10.
+
 \begin{subquestion}{(c).}
 Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
 \end{subquestion}
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-1}Correlation}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{l|r}
+\hline
+VALUE & Yield\\
+\hline
+Yield & 1.0000000\\
+\hline
+ManufacturingProcess14 & -0.0099574\\
+\hline
+ManufacturingProcess38 & -0.0864593\\
+\hline
+ManufacturingProcess03 & -0.1189520\\
+\hline
+ManufacturingProcess37 & -0.1593141\\
+\hline
+ManufacturingProcess02 & -0.1953977\\
+\hline
+\end{tabular}}
+\end{table}
+
+We examined the top 5 predictors that were flagged as being the most
+important before the importance measure dropped.There are some pretty
+clear differences in the data which might explain both the overall poor
+performance of the linear models as well as the improved significance of
+Process-Based variables in the non-linear models.
+
+Of the \texttt{ManfuacturingProcess} variables, they appear to be either
+tight clusters or discrete values which predict an array of possible
+Yields, which is directly opposed the the definition of linearly
+separable data base on earlier examination of correlation plots.
 
 \hypertarget{AS-3}{%
 \chapter*{Assignment 3}\label{AS-3}}
