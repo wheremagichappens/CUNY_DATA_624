@@ -28,6 +28,46 @@
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -266,6 +306,80 @@ MAPE & RMSE & Rsquared & MAE & Method\\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\hypertarget{new-model-rpart}{%
+\chapter{New Model : RPART}\label{new-model-rpart}}
+
+Cool graph if we add this or replace RF with it --\textgreater{}
+
+\textbf{Metrics}
+
+Train with transformation:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(party)}
+\KeywordTok{library}\NormalTok{(partykit)}
+\KeywordTok{library}\NormalTok{(caret)}
+\KeywordTok{library}\NormalTok{(MLmetrics)}
+\CommentTok{# install.packages('rattle')}
+\KeywordTok{library}\NormalTok{(rattle)}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)}
+
+\NormalTok{grid_rpart <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{maxdepth =} \DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{)}
+\NormalTok{fit.rpart <-}\StringTok{ }\KeywordTok{train}\NormalTok{(PH }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ train_trans, }\DataTypeTok{metric =} \StringTok{"RMSE"}\NormalTok{, }
+ \DataTypeTok{method =} \StringTok{"rpart2"}\NormalTok{, }\DataTypeTok{tuneGrid =}\NormalTok{ grid_rpart, }\DataTypeTok{tuneLength =}\NormalTok{ tl, }
+ \DataTypeTok{trControl =}\NormalTok{ trC)}
+
+\NormalTok{rp.PERF <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{getTrainPerf}\NormalTok{(fit.rpart))}
+\NormalTok{rp.MAPE <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\DataTypeTok{MAPE =} \KeywordTok{MAPE}\NormalTok{(fit.rpart}\OperatorTok{$}\NormalTok{pred}\OperatorTok{$}\NormalTok{pred, fit.rpart}\OperatorTok{$}\NormalTok{pred}\OperatorTok{$}\NormalTok{obs))}
+\NormalTok{rp.ACC <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(rp.MAPE, rp.PERF)}
+
+
+
+
+\NormalTok{fit.rpart2 <-}\StringTok{ }\KeywordTok{train}\NormalTok{(PH }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ train_trans, }\DataTypeTok{metric =} \StringTok{"RMSE"}\NormalTok{, }
+ \DataTypeTok{method =} \StringTok{"rpart"}\NormalTok{, }\DataTypeTok{tuneLength =}\NormalTok{ tl, }\DataTypeTok{trControl =}\NormalTok{ trC)}
+
+\NormalTok{rp.PERF2 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{getTrainPerf}\NormalTok{(fit.rpart2))}
+\NormalTok{rp.MAPE2 <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\DataTypeTok{MAPE =} \KeywordTok{MAPE}\NormalTok{(fit.rpart2}\OperatorTok{$}\NormalTok{pred}\OperatorTok{$}\NormalTok{pred, fit.rpart2}\OperatorTok{$}\NormalTok{pred}\OperatorTok{$}\NormalTok{obs))}
+\NormalTok{rp.ACC2 <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(rp.MAPE2, rp.PERF2)}
+
+
+\KeywordTok{rbind}\NormalTok{(rp.ACC, rp.ACC2) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\centering\begingroup\fontsize{8}{10}\selectfont
+
+\begin{tabular}{r|r|r|r|l}
+\hline
+MAPE & TrainRMSE & TrainRsquared & TrainMAE & method\\
+\hline
+\rowcolor{gray!6}  0.0116967 & 0.1296730 & 0.4422622 & 0.0996211 & rpart2\\
+\hline
+0.0129475 & 0.1404728 & 0.3433799 & 0.1102129 & rpart\\
+\hline
+\end{tabular}
+\endgroup{}
+\end{table}
+
+\textbf{Tune Grid}
+
+\includegraphics{Group2_Project2_Fall2019_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\textbf{Cool Plot}
+
+\includegraphics{Group2_Project2_Fall2019_files/figure-latex/unnamed-chunk-5-1.pdf}
+\includegraphics{Group2_Project2_Fall2019_files/figure-latex/unnamed-chunk-5-2.pdf}
+
+\textbf{ALT PLOT}
+
+Do not recomment. Seems much more difficult to customize.
+
+\includegraphics{Group2_Project2_Fall2019_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Group2_Project2_Fall2019_files/figure-latex/unnamed-chunk-6-2.pdf}
 
 
 \end{document}

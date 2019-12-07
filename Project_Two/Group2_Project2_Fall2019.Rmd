@@ -60,4 +60,82 @@ tbl.perf.test2 %>%
 
 ```
 
+# New Model : RPART
+
+Cool graph if we add this or replace RF with it -->
+
+**Metrics**
+
+Train with transformation:
+
+```{r, echo=T}
+library(party)
+library(partykit)
+library(caret)
+library(MLmetrics)
+#install.packages("rattle")
+library(rattle)
+set.seed(58677)
+
+grid_rpart <- expand.grid(maxdepth = 1:20)
+fit.rpart <- train(PH~., data=train_trans, metric="RMSE", method = "rpart2", tuneGrid = grid_rpart, tuneLength=tl, trControl=trC)
+
+rp.PERF <- rbind(getTrainPerf(fit.rpart))
+rp.MAPE <- cbind(MAPE = MAPE(fit.rpart$pred$pred, fit.rpart$pred$obs))
+rp.ACC <- cbind(rp.MAPE, rp.PERF)
+
+
+
+
+fit.rpart2 <- train(PH~., data=train_trans, metric="RMSE", method = "rpart", tuneLength=tl, trControl=trC)
+
+rp.PERF2 <- rbind(getTrainPerf(fit.rpart2))
+rp.MAPE2 <- cbind(MAPE = MAPE(fit.rpart2$pred$pred, fit.rpart2$pred$obs))
+rp.ACC2 <- cbind(rp.MAPE2, rp.PERF2)
+
+
+rbind(rp.ACC, rp.ACC2) %>% kable() %>% kable_styling()
+```
+
+**Tune Grid**
+
+```{r}
+p1<-ggplot(fit.rpart) + theme_bw() + theme() + labs(title = "Cart1 CV TUNE GRID")
+
+p2<-ggplot(fit.rpart2) + theme_bw() + theme() + labs(title = "Cart2 CV TUNE GRID")
+
+gridExtra::grid.arrange(p1, p2, nrow=1)
+
+```
+
+**Cool Plot**
+
+```{r, fig.height=4}
+fancyRpartPlot(fit.rpart$finalModel,
+               main = NA,
+               sub = "Visualization of Cart1 Trees Influence on pH",
+               caption = NA,
+               palettes = "PuBuGn",
+               type = 2) 
+
+
+fancyRpartPlot(fit.rpart2$finalModel,
+               main = NA,
+               sub = "Visualization of Cart2 Trees Influence on pH",
+               caption = NA,
+               palettes = "Purples",
+               type = 2) 
+```
+
+**ALT PLOT**
+
+Do not recomment. Seems much more difficult to customize.
+
+```{r, fig.height=4}
+rpartY <- as.party.rpart(fit.rpart$finalModel)
+plot.party(rpartY)
+
+rpartY <- as.party.rpart(fit.rpart2$finalModel)
+plot.party(rpartY)
+```
 
