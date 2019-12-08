@@ -201,16 +201,16 @@ Include details on our process in creating this document.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-<<<<<<< HEAD
 \CommentTok{# Predicitve Modeling}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mice"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }\StringTok{"tidyverse"}\NormalTok{, }
-    \StringTok{"impute"}\NormalTok{, }\StringTok{"pls"}\NormalTok{, }\StringTok{"caTools"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{)}
+    \StringTok{"impute"}\NormalTok{, }\StringTok{"pls"}\NormalTok{, }\StringTok{"caTools"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{, }\StringTok{"randomForest"}\NormalTok{, }\StringTok{"party"}\NormalTok{, }
+    \StringTok{"gbm"}\NormalTok{, }\StringTok{"Cubist"}\NormalTok{, }\StringTok{"rpart"}\NormalTok{)}
 \CommentTok{# Formatting Libraries}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{, }\StringTok{"gridExtra"}\NormalTok{, }\StringTok{"sqldf"}\NormalTok{, }
     \StringTok{"tibble"}\NormalTok{)}
 \CommentTok{# Plotting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{)}
-=======
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{, }\StringTok{"rpart.plot"}\NormalTok{)}
+
 \CommentTok{# Data Wrangling}
 \KeywordTok{library}\NormalTok{(AppliedPredictiveModeling)}
 \KeywordTok{library}\NormalTok{(mice)}
@@ -231,7 +231,6 @@ Include details on our process in creating this document.
 \KeywordTok{library}\NormalTok{(grid)}
 \KeywordTok{library}\NormalTok{(ggfortify)}
 \KeywordTok{library}\NormalTok{(gridExtra)}
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{Highlighting}
 \end{Shaded}
 
@@ -254,10 +253,10 @@ Include details on our process in creating this document.
 \end{Highlighting}
 \end{Shaded}
 
-The matrix processPredictors contains the 57 predictors (12 describing
-the input biological material and 45 describing the process predictors)
-for the 176 manufacturing runs. yield contains the percent yield for
-each run. Using a histogram, we examined the distribution of
+The matrix \texttt{processPredictors} contains the 57 predictors (12
+describing the input biological material and 45 describing the process
+predictors) for the 176 manufacturing runs. Yield contains the percent
+yield for each run. Using a histogram, we examined the distribution of
 \texttt{Yield} and found that the response variable appears unimodal
 with a normal distribution.
 
@@ -271,13 +270,13 @@ followed by \texttt{ManufacturingProcess11}. Given that each variable
 has less than 25\% of data missing, we should introduce methods of
 imputation. For our purposes, we will use the MICE method. MICE is
 formally known as Multiple Imputation with Chained Equations. On a high
-level, MICE is built off a tehcnique known as the Gibbs sampler.
+level, MICE is built off a technique known as the Gibbs sampler.
 
 The Gibbs sampler is a Markov chain based on Monte Carlo. MICE iterates
 drawing estimates of missing values and parameters related to the
 distribution of said variables. Chained equations are generally faster
-than the monte carlo based Gibbs sampler. MICE has 5 imputations listed
-as its default. predictive mean matching is also a default method for
+than the Monte Carlo based Gibbs sampler. MICE has 5 imputations listed
+as its default. Predictive mean matching is also a default method for
 MICE. PMM does a better job at keeping non-linear relationships within
 individual variables.
 
@@ -293,70 +292,8 @@ imputation methods.
 
 \caption{\label{tab:kj-6.3b}Variables with Missing Values}
 \centering
-<<<<<<< HEAD
-\begin{tabular}[t]{l|r|l|r}
-\hline
-Variable & Count & Variable & Count\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess03 & 15 & BiologicalMaterial01 & 0\\
-\hline
-ManufacturingProcess11 & 10 & BiologicalMaterial02 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess10 & 9 & BiologicalMaterial03 & 0\\
-\hline
-ManufacturingProcess25 & 5 & BiologicalMaterial04 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess26 & 5 & BiologicalMaterial05 & 0\\
-\hline
-ManufacturingProcess27 & 5 & BiologicalMaterial06 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess28 & 5 & BiologicalMaterial07 & 0\\
-\hline
-ManufacturingProcess29 & 5 & BiologicalMaterial08 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess30 & 5 & BiologicalMaterial09 & 0\\
-\hline
-ManufacturingProcess31 & 5 & BiologicalMaterial10 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess33 & 5 & BiologicalMaterial11 & 0\\
-\hline
-ManufacturingProcess34 & 5 & BiologicalMaterial12 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess35 & 5 & ManufacturingProcess09 & 0\\
-\hline
-ManufacturingProcess36 & 5 & ManufacturingProcess13 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess02 & 3 & ManufacturingProcess15 & 0\\
-\hline
-ManufacturingProcess06 & 2 & ManufacturingProcess16 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess01 & 1 & ManufacturingProcess17 & 0\\
-\hline
-ManufacturingProcess04 & 1 & ManufacturingProcess18 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess05 & 1 & ManufacturingProcess19 & 0\\
-\hline
-ManufacturingProcess07 & 1 & ManufacturingProcess20 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess08 & 1 & ManufacturingProcess21 & 0\\
-\hline
-ManufacturingProcess12 & 1 & ManufacturingProcess32 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess14 & 1 & ManufacturingProcess37 & 0\\
-\hline
-ManufacturingProcess22 & 1 & ManufacturingProcess38 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess23 & 1 & ManufacturingProcess39 & 0\\
-\hline
-ManufacturingProcess24 & 1 & ManufacturingProcess42 & 0\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess40 & 1 & ManufacturingProcess43 & 0\\
-\hline
-ManufacturingProcess41 & 1 & ManufacturingProcess44 & 0\\
-\hline
-=======
 \fontsize{8}{10}\selectfont
-\begin{tabular}{lr>{\bfseries\raggedright\arraybackslash}p{0.1cm}lr}
+\begin{tabular}[t]{lr>{\bfseries\raggedright\arraybackslash}p{0.1cm}lr}
 \toprule
 \textbf{Predictor} & \textbf{n} & \textbf{ } & \textbf{Predictor} & \textbf{n}\\
 \midrule
@@ -377,7 +314,6 @@ ManufacturingProcess34 & 5 &  & ManufacturingProcess24 & 1\\
 \rowcolor{gray!6}  ManufacturingProcess35 & 5 &  & ManufacturingProcess40 & 1\\
 ManufacturingProcess36 & 5 &  & ManufacturingProcess41 & 1\\
 \bottomrule
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
@@ -387,11 +323,11 @@ ManufacturingProcess36 & 5 &  & ManufacturingProcess41 & 1\\
 We will build a PLS model also known as partial least squares. PLS is a
 statistical method that fits a linear regression model by projecting the
 feature variables and response variable to some new space via a mapping
-function. Because of this projection mechanisim, for both predictors and
+function. Because of this projection mechanism, for both predictors and
 the response, the method becomes bilinear or simply known as linear with
-respect to to each of the variable types. PLS also has certain
-advantages over other methods such as being more robust to dealing with
-issues arising from multicolinearity.
+respect to each of the variable types. PLS also has certain advantages
+over other methods such as being more robust to dealing with issues
+arising from multicollinearity.
 
 For our PLS model, we partitioned the data by taking 80\% of the data as
 training and the remaining 20\% as testing subsets. We also apply center
@@ -404,31 +340,18 @@ below:
 
 \caption{\label{tab:kj-6.3c}PLS Performance Metrics on Training Subset}
 \centering
-<<<<<<< HEAD
-\begin{tabular}[t]{l|r}
-\hline
-  & x\\
-\hline
-\rowcolor{gray!6}  RMSE & 1.3116314\\
-\hline
-Rsquared & 0.4896581\\
-\hline
-\rowcolor{gray!6}  MAE & 1.0584889\\
-\hline
-=======
 \fontsize{8}{10}\selectfont
-\begin{tabular}{rrr}
+\begin{tabular}[t]{rrr}
 \toprule
 \textbf{RMSE} & \textbf{Rsquared} & \textbf{MAE}\\
 \midrule
-\rowcolor{gray!6}  1.5626 & 0.3953 & 1.1845\\
+\rowcolor{gray!6}  1.571 & 0.3735 & 1.1723\\
 \bottomrule
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
-Our Baseline PLS model generates a RMSE of 1.56. In addition, the model
-captures 39.53 \% of data variability. We include the visualizations
+Our Baseline PLS model generates a RMSE of 1.57. In addition, the model
+captures 37.35 \% of data variability. We include the visualizations
 pertaining to the train set cross-validation RMSE tunes and a plot
 comparing the observed and predicted outcome from our model.
 
@@ -437,35 +360,22 @@ comparing the observed and predicted outcome from our model.
 \begin{subquestion}{(d).} Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
 \end{subquestion}
 
-We see a decreased R squared against the test data with 22\% of the data
-variability accounted for. We also see the RMSE decrease to 1.52 from
-our training results of 1.56. There is also a slight increase in the
+We see a decreased R squared against the test data with 44\% of the data
+variability accounted for. We also see the RMSE decrease to 1.55 from
+our training results of 1.57. There is also a slight increase in the
 MAE.
 
 \begin{table}[H]
 
 \caption{\label{tab:kj-6.3d-1}PLS Performance Metrics on Test Subset}
 \centering
-<<<<<<< HEAD
-\begin{tabular}[t]{l|r}
-\hline
-  & x\\
-\hline
-\rowcolor{gray!6}  RMSE & 1.222201\\
-\hline
-Rsquared & 0.579859\\
-\hline
-\rowcolor{gray!6}  MAE & 0.988292\\
-\hline
-=======
 \fontsize{8}{10}\selectfont
-\begin{tabular}{rrr}
+\begin{tabular}[t]{rrr}
 \toprule
 \textbf{RMSE} & \textbf{Rsquared} & \textbf{MAE}\\
 \midrule
-\rowcolor{gray!6}  1.5222 & 0.2212 & 1.2885\\
+\rowcolor{gray!6}  1.5506 & 0.4426 & 1.3058\\
 \bottomrule
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
@@ -484,8 +394,8 @@ importance. \texttt{ManufacturingProcess32} was flagged as the most
 important predictor overall and within the group of other Manufacturing
 Process variables. \texttt{BiologicalMaterial06} ranked second and was
 the most important variable within the BiologicalMaterial group. The
-variable importance rankings are mixed with 8 variables belonging to
-Biology and 7 Manufacturing Process variables within the top 15
+variable importance rankings are mixed with 7 variables belonging to
+Biology and 8 Manufacturing Process variables within the top 15
 predictors.
 
 \includegraphics{Homework-Two_files/figure-latex/kj-6.3e-1.pdf}
@@ -514,36 +424,17 @@ knowledge to adjust the processes to emulate the highest yield outputs.
 
 \caption{\label{tab:kj-6.3f-2}Variable Correlation with Yield}
 \centering
-<<<<<<< HEAD
-\begin{tabular}[t]{l|r}
-\hline
-  & Yield\\
-\hline
-\rowcolor{gray!6}  Yield & 1.0000000\\
-\hline
-ManufacturingProcess32 & 0.6083321\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess17 & -0.4258069\\
-\hline
-ManufacturingProcess13 & -0.5036797\\
-\hline
-\rowcolor{gray!6}  ManufacturingProcess36 & -0.4907962\\
-\hline
-ManufacturingProcess09 & 0.5034705\\
-\hline
-=======
 \fontsize{8}{10}\selectfont
-\begin{tabular}{lr}
+\begin{tabular}[t]{lr}
 \toprule
 \textbf{Variable} & \textbf{Yield}\\
 \midrule
 \rowcolor{gray!6}  ManufacturingProcess32 & 0.6083\\
-BiologicalMaterial02 & 0.4815\\
-\rowcolor{gray!6}  BiologicalMaterial06 & 0.4782\\
-BiologicalMaterial03 & 0.4451\\
-\rowcolor{gray!6}  ManufacturingProcess36 & -0.5014\\
+ManufacturingProcess09 & 0.5035\\
+\rowcolor{gray!6}  BiologicalMaterial02 & 0.4815\\
+BiologicalMaterial06 & 0.4782\\
+\rowcolor{gray!6}  ManufacturingProcess13 & -0.5037\\
 \bottomrule
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
@@ -561,6 +452,10 @@ The package `mlbench` contains a function called `mlbench.friedman1` that simula
 \begin{Highlighting}[]
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{200}\NormalTok{)}
 \NormalTok{trainingData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
+
+\CommentTok{## We convert the 'x' data from a matrix to a data frame One}
+\CommentTok{## reason is that this will give the columns names.}
+
 \NormalTok{trainingData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x)}
 \NormalTok{testData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{5000}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
 \NormalTok{testData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(testData}\OperatorTok{$}\NormalTok{x)}
@@ -572,12 +467,6 @@ The package `mlbench` contains a function called `mlbench.friedman1` that simula
 \begin{subquestion}{(a).} Tune several models on these data. For example: 
 \end{subquestion}
 
-<<<<<<< HEAD
-Model 1 MARS Regression: MARS, otherwise known as multivariate adapitive
-regression splines is a non parametric regression technique that
-automatically captures non-linearity and interaction between predictors.
-The basic MARS model has the following form:
-=======
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }
@@ -588,36 +477,42 @@ The basic MARS model has the following form:
 \end{Highlighting}
 \end{Shaded}
 
-\#\#\#Model 1:
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
+\#\#\#Model 1-MARS Regression:
+
+MARS, otherwise known as multivariate adaptive regression splines is a
+non-parametric regression technique that automatically captures
+non-linearity and interaction between predictors. The basic MARS model
+has the following form:
 
 \[
 \overset { \wedge  }{ f } =\sum _{ i=1 }^{ k }{ { c }_{ i }{ B }_{ i }(x) } 
 \]
 
 The model computes the sum of basis functions B multiplied by constant
-coefficients c.The basis function can either be a constant, a hinge
+coefficients C.The basis function can either be a constant, a hinge
 function, or a product of hinge functions. By definition, a hinge
 function is a piecewise function that converges at a point known as a
 knot.
 
 \includegraphics{Homework-Two_files/figure-latex/kj-7.2-1-1.pdf}
 
-Model 2 SVM: SVM, also known as support vector machine is a method that
-can be applied to classification and regression tasks. On a high level,
-SVM creates a hyperplane in n dimensional space. This hyperplane acts
-like a classification boundary which can be linear or non linear. This
-boundary classifies information from a feature space.
+\#\#\#Model 2 SVM:
+
+SVM, also known as support vector machine is a method that can be
+applied to classification and regression tasks. On a high level, SVM
+creates a hyperplane in n dimensional space. This hyperplane acts like a
+classification boundary which can be linear or nonlinear. This boundary
+classifies information from a feature space.
 
 \includegraphics{Homework-Two_files/figure-latex/kj-7.2-2-1.pdf}
 
-Model 3 NNET:
+\#\#\#Model 3 NNET:
 
 NNEt otherwise known as a Neural Network, is a method inspired by a
 biological neuron system. It uses a system of nodes that are parallel to
 the way neurons work. It is ideal for capturing non-linear relationships
-that would otherwise be complicated in a multiple linear regression
-model. NNET evolves internally based on the calculated weights of each
+that would otherwise be complicated in most multiple linear regression
+models. NNET evolves internally based on the calculated weights of each
 input. The basic structure is shown below:
 
 \[
@@ -634,6 +529,7 @@ Which models appear to give the best performance? Does MARS select the informati
 
 \caption{\label{tab:unnamed-chunk-1}Model Performance}
 \centering
+\fontsize{8}{10}\selectfont
 \begin{tabular}[t]{l|r|r|r}
 \hline
 \textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
@@ -642,17 +538,17 @@ Which models appear to give the best performance? Does MARS select the informati
 \hline
 knnTest & 3.2041 & 0.6820 & 2.5683\\
 \hline
-\rowcolor{gray!6}  MARSTrain & 4.4548 & 0.9389 & 3.7461\\
+\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{MARSTrain} & \textbf{4.3290} & \textbf{0.9416} & \textbf{3.5906}\\
 \hline
-MARSTest & 1.1723 & 0.9449 & 0.9325\\
+\rowcolor[HTML]{d9f2e6}  \textbf{MARSTest} & \textbf{1.1723} & \textbf{0.9449} & \textbf{0.9325}\\
 \hline
-\rowcolor{gray!6}  SVMTrain & 2.4940 & 0.8561 & 1.9931\\
+\rowcolor{gray!6}  SVMTrain & 2.4814 & 0.8614 & 1.9813\\
 \hline
-SVMTest & 2.0699 & 0.8263 & 1.5723\\
+SVMTest & 2.0425 & 0.8309 & 1.5491\\
 \hline
-\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{NNETTrain} & \textbf{13.7411} & \textbf{0.8021} & \textbf{5.5596}\\
+\rowcolor{gray!6}  NNETTrain & 6.8166 & 0.7991 & 3.5714\\
 \hline
-\rowcolor[HTML]{d9f2e6}  \textbf{NNETTest} & \textbf{2.5669} & \textbf{0.7427} & \textbf{1.9506}\\
+NNETTest & 2.9888 & 0.6526 & 2.2931\\
 \hline
 \end{tabular}
 \end{table}
@@ -680,10 +576,10 @@ Exercise 6.3 describes data for a chemical manufacturing process. Use the same d
 \end{question}
 
 We pulled in the data processing method from 6.3. This includes
-imputation and removal of zero processing. Please refer to 6.3 for a
-more detailed look at the EDA involved with this data set. We tunned a
-KNN model, NNET model, MARS, and SVM model using specifications from the
-literature.
+imputation and removal of near zero variance features as processing
+steps. Please refer to 6.3 for a more detailed look at the EDA involved
+with this data set. We tuned a KNN model, NNET model, MARS, and SVM
+model using specifications from the literature
 
 \begin{subquestion}{(a).}
 Which nonlinear regression model gives the optimal resampling and test set performance? 
@@ -693,32 +589,34 @@ Which nonlinear regression model gives the optimal resampling and test set perfo
 
 \caption{\label{tab:unnamed-chunk-1}Model Performance on ChemicalManufacturing Data}
 \centering
+\fontsize{8}{10}\selectfont
 \begin{tabular}[t]{l|r|r|r}
 \hline
 \textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
 \hline
-\rowcolor{gray!6}  knnTrain & 1.4835 & 0.4245 & 1.1746\\
+\rowcolor{gray!6}  knnTrain & 1.4554 & 0.4344 & 1.1559\\
 \hline
-knnTest & 1.4078 & 0.4477 & 1.1041\\
+knnTest & 1.5151 & 0.4482 & 1.2684\\
 \hline
-\rowcolor{gray!6}  MARSTrain & 1.6367 & 0.6488 & 1.1614\\
+\rowcolor{gray!6}  MARSTrain & 1.3809 & 0.6307 & 1.0786\\
 \hline
-MARSTest & 1.3726 & 0.4682 & 1.1300\\
+MARSTest & 1.1999 & 0.6236 & 0.9192\\
 \hline
-\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{SVMTrain} & \textbf{1.4142} & \textbf{0.7144} & \textbf{1.1448}\\
+\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{SVMTrain} & \textbf{1.3678} & \textbf{0.6546} & \textbf{1.1134}\\
 \hline
-\rowcolor[HTML]{d9f2e6}  \textbf{SVMTest} & \textbf{1.2061} & \textbf{0.5715} & \textbf{0.9833}\\
+\rowcolor[HTML]{d9f2e6}  \textbf{SVMTest} & \textbf{1.2855} & \textbf{0.6030} & \textbf{0.9768}\\
 \hline
-\rowcolor{gray!6}  NNETTrain & 9.9082 & 0.3704 & 6.2548\\
+\rowcolor{gray!6}  NNETTrain & 9.2718 & 0.3335 & 5.9237\\
 \hline
-NNETTest & 1.4683 & 0.3987 & 1.1936\\
+NNETTest & 1.4996 & 0.4505 & 1.2194\\
 \hline
 \end{tabular}
 \end{table}
 
-Radial SVM outperformed the other models across all key KPI's. The next
-best model was MARS. In part b, we will address what variables are
-dominant in our SVM model.
+Radial SVM outperformed the other models across all key KPIs. Radial SVM
+is generally a more flexible basis function kernel than the base linear
+kernel. The next best model was MARS regression. In part b, we will
+address what variables are dominant in our SVM model.
 
 \begin{subquestion}{(b).}
 Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
@@ -736,40 +634,40 @@ top 10.
 Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
 \end{subquestion}
 
-\begin{table}
+\begin{table}[H]
 
 \caption{\label{tab:unnamed-chunk-1}Correlation}
 \centering
-\resizebox{\linewidth}{!}{
+\fontsize{8}{10}\selectfont
 \begin{tabular}[t]{l|r}
 \hline
 VALUE & Yield\\
 \hline
-Yield & 1.0000000\\
+\rowcolor{gray!6}  Yield & 1.0000\\
 \hline
-ManufacturingProcess14 & -0.0099574\\
+ManufacturingProcess14 & -0.0100\\
 \hline
-ManufacturingProcess38 & -0.0864593\\
+\rowcolor{gray!6}  ManufacturingProcess38 & -0.0865\\
 \hline
-ManufacturingProcess03 & -0.1189520\\
+ManufacturingProcess03 & -0.1190\\
 \hline
-ManufacturingProcess37 & -0.1593141\\
+\rowcolor{gray!6}  ManufacturingProcess37 & -0.1593\\
 \hline
-ManufacturingProcess02 & -0.1953977\\
+ManufacturingProcess02 & -0.1954\\
 \hline
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 We examined the top 5 predictors that were flagged as being the most
-important before the importance measure dropped.There are some pretty
+important before the importance measure dropped. There are some pretty
 clear differences in the data which might explain both the overall poor
 performance of the linear models as well as the improved significance of
 Process-Based variables in the non-linear models.
 
 Of the \texttt{ManfuacturingProcess} variables, they appear to be either
 tight clusters or discrete values which predict an array of possible
-Yields, which is directly opposed the the definition of linearly
-separable data base on earlier examination of correlation plots.
+Yields, which is directly opposed the definition of linearly separable
+data base on earlier examination of correlation plots.
 
 \hypertarget{AS-3}{%
 \chapter*{Assignment 3}\label{AS-3}}
@@ -781,15 +679,200 @@ separable data base on earlier examination of correlation plots.
 
 \begin{subquestion}{(a).} Fit a random forest model to all of the predictors, then estimate the variable importance scores. Did the random forest model significantly use the uninformative predictors (V6-V10)?\end{subquestion}
 
+The code to the RF model has been provided to us through the literature.
+
+What is the code actually doing? We should dive into the theory. The
+importance is calculated with the following formula:
+
+\[
+ni_j=W_{left(j)}C_{left(j)}-W_{right(j)}C_{right(j)}
+\]
+
+Let's deconstruct the theory. \(ni_j\) stands for node importance.
+\(w_j\) is the weighted number of samples reaching node j. \(c_j\) is
+the impurity value of node j. Left(j) is the child node from left split
+on node j and right(j) is the child node from right split on node j.
+Once \(ni_j\) is calculated, the importance for each variable on a
+decision tree is calculated with formula I. Formula I is then normalized
+as shown as formula II. The final feature importance is the average over
+all trees. We simply find the sum of the features importance value and
+then divide by all trees T, shown in formula III.
+
+\[
+I) \  fi_j \ =\frac{ (\sum_{j \ node \ split \ on \ i}) ni_j }{ ( \sum_{all \ nodes}) ni_k}\\
+\]
+
+\[
+II) \  \parallel  fi_j  \parallel = \frac{(fi_j)}{\sum_{all \ features}fi_j} \\
+\]
+
+\[
+III) \ RFfi_j= \frac{ ( \sum_{all \ trees})\parallel  fi_j \parallel}{T}
+\]
+
+\includegraphics{Homework-Two_files/figure-latex/kj-8.1a-1.pdf}
+
+Variables V6 to V10 were some of the least important variables, all with
+a measure less than 1. Variables V1 through V5 were the most important
+with variable V1 coming in at the top spot.
+
 \begin{subquestion}{(b).} Now add an additional predictor that is highly correlated with one of the informative predictors. Fit another random forest model to these data. Did the importance score for V1 change? What happens when you add another predictor that is also highly correlated with V1? For example:\end{subquestion}
+
+We add a feature that has a strong correlation of .93 with existing
+feature V1. We will call this new feature \texttt{duplicate\ 1}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-8.1b-1.pdf}
+
+Note that \texttt{V1} decreased importance by roughly 2 measures. V4 is
+now the most important predictor. It looks like the importance score for
+\texttt{V1} was partly absorbed by new predictor which underestimates
+true importance of \texttt{V1} - the score sum of \texttt{V1} and
+\texttt{duplicate1} are similar to the V1 score in (a). It makes sense
+as \texttt{duplicate1} contains almost the same information as
+\texttt{V1}.
 
 \begin{subquestion}{(c).} Use the `cforest` function in the party package to fit a random forest model using conditional inference trees. The party package function `varimp` can calculate predictor importance. The `conditional` argument of that function toggles between the traditional importance measure and the modified version described in Strobl et al. (2007). Do these importances show the same pattern as the traditional random forest model?\end{subquestion}
 
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-1}Conditional vs Unconditional CForest Model: Variable Importance}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{l|r|r|r|r|r|r}
+\hline
+\textbf{features} & \textbf{RF} & \textbf{CF} & \textbf{RF.cor} & \textbf{CF.cor} & \textbf{CF.cond} & \textbf{CF.cor.cond}\\
+\hline
+\rowcolor{gray!6}  duplicate1 & NA & NA & 4.2213 & 4.5798 & NA & 0.7636\\
+\hline
+V1 & 8.7065 & 10.0936 & 6.4252 & 4.9738 & 3.3655 & 0.7965\\
+\hline
+\rowcolor{gray!6}  V2 & 6.6871 & 7.5519 & 6.0433 & 7.2556 & 4.6869 & 4.2718\\
+\hline
+V3 & 0.8648 & 0.0516 & 0.5894 & 0.0020 & 0.0283 & 0.0062\\
+\hline
+\rowcolor{gray!6}  V4 & 7.7190 & 10.3981 & 7.0444 & 10.1938 & 5.8775 & 5.8944\\
+\hline
+V5 & 2.1172 & 2.2712 & 2.2531 & 2.2822 & 0.7146 & 0.8100\\
+\hline
+\rowcolor{gray!6}  V6 & 0.1072 & -0.0036 & 0.1589 & -0.0363 & 0.0099 & 0.0032\\
+\hline
+V7 & 0.0465 & 0.0576 & 0.0042 & 0.0276 & 0.0335 & 0.0006\\
+\hline
+\rowcolor{gray!6}  V8 & -0.0588 & -0.0496 & -0.1113 & -0.0431 & -0.0017 & -0.0062\\
+\hline
+V9 & -0.0717 & -0.0388 & -0.0242 & -0.0326 & -0.0043 & -0.0092\\
+\hline
+\rowcolor{gray!6}  V10 & 0.0822 & 0.0045 & 0.0062 & 0.0012 & 0.0112 & 0.0189\\
+\hline
+\end{tabular}
+\end{table}
+
+We performed both \texttt{varimp(,\ conditional\ =\ T)} and
+\texttt{varimp(,\ conditional\ =\ F)} to compare \texttt{varimp} of
+\texttt{cforest} in terms of permutation importance and conditional
+permutation importance.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  RF vs CF Given that no correlated term is added, the importance
+  pattern is similar except for the fact that V4 is now the most
+  important feature in CF.
+\item
+  RF vs CF (with correlated term added) Given that correlated term is
+  added, the importance score for \texttt{duplicate1} is much smaller in
+  CF. This is the pin point difference between importance based on Gini
+  coefficient (decision tree) and permutation test using p-value
+  (conditional inference tree).
+\item
+  CF conditional vs CF with correlated term added and conditional When
+  \texttt{conditional\ =\ T}, we perform conditional permutation test
+  for measuring feature importance instead. Note that
+  \texttt{duplicate1} has even smaller importance in
+  \texttt{CF.cor.cond} than in \texttt{CF.cor}. For
+  \texttt{CF.cor.cond}, notice \texttt{V1} became 3rd most important
+  feature when it was 2nd most important for \texttt{CF.cor}. This is
+  because conditional permutation helps uncovering the spurious
+  correlation between \texttt{V1} and \texttt{duplicate1}.
+\end{enumerate}
+
+In summary, we learned that \texttt{CF} model surpresses the importance
+score of \texttt{duplicate1} which helps maintain the importance of
+\texttt{V1}. When \texttt{conditional\ =\ TRUE} in \texttt{varimp} for
+\texttt{CF} model, the importance score of \texttt{duplicate1} is even
+smaller.
+
 \begin{subquestion}{(d).} Repeat this process with different tree models, such as boosted trees and Cubist. Does the same pattern occur?\end{subquestion}
+
+Extracting the relative importance from a BGM object requires the use of
+the native model summary.
+
+\hypertarget{gbm-without-duplicate}{%
+\subsubsection{GBM Without Duplicate}\label{gbm-without-duplicate}}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-8.1d-1.pdf}
+
+\begin{verbatim}
+    var   rel.inf
+V4   V4 26.909998
+V1   V1 22.717232
+V2   V2 19.562270
+V5   V5 10.691070
+V3   V3  8.971001
+V7   V7  3.408567
+V6   V6  2.549782
+V8   V8  2.130803
+V9   V9  1.729656
+V10 V10  1.329621
+\end{verbatim}
+
+\hypertarget{gbm-with-duplicate}{%
+\subsubsection{GBM With Duplicate}\label{gbm-with-duplicate}}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-8.1da-1.pdf}
+
+\begin{verbatim}
+                  var   rel.inf
+V4                 V4 26.036164
+V1                 V1 21.799842
+V2                 V2 19.150149
+V3                 V3  9.923707
+V5                 V5  9.586174
+V6                 V6  2.756297
+duplicate1 duplicate1  2.729742
+V7                 V7  2.656304
+V10               V10  1.922812
+V9                 V9  1.780691
+V8                 V8  1.658119
+\end{verbatim}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-8.1db-1.pdf}
+\includegraphics{Homework-Two_files/figure-latex/kj-8.1db-2.pdf}
+
+The summary returns the variable name along with a measure of influence
+on the target variable. From our GBM tree, we can see v4 is the most
+influential. V1 and correlated duplicate1 are also much more
+influential. V6-V10 does not break the top half of our list of
+influential variables.
+
+The next model we want to try is the cubist model. The cubist model is a
+rather unique variation on trees. Each leaf in the tree contains a
+linear regression model. Every layer in the tree alters the predicitons
+used within each leaf contained model. In other words, the selection of
+predictors in leaf n is based on the previous splis. It should be noted
+that each intermediate step between leafs also contain a linear model.
+Predictions are made via linear models on the on the terminal node.
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 8.2}
 
 \begin{question}{Kuhn and Johnson 8.2}Use a simulation to show tree bias with different granularities.\end{question}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-8.2-1.pdf}
+
+Basic regression trees split predictor variables into small groups based
+on response variable. According to the literature, ``predictors with a
+higher number of distinct values are favored over more granular
+predictors.''
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 8.3}
 
@@ -797,9 +880,71 @@ separable data base on earlier examination of correlation plots.
 
 \begin{subquestion}{(a).} Why does the model on the right focus its importance on just the first few of predictors, whereas the model on the left spreads importance across more predictors? \end{subquestion}
 
+Because the model on the right has hig learning rate and high bagging
+fractions, it is doing two things, using 90\% of the variables in each
+tree and using 90\% of the error for a given model. Imagine there were
+ten variables in this model, if you used a bagging fraction of .9, the
+every tree would have 9 of the ten trees in it, only one variable would
+be different from the set of 9 trees in the first model each time. The
+means that most of the possbile break-points in the trees would be the
+same from tree to tree, only offering new opportunities for initial
+splits when the most dominating variabl is removed. Because of this, you
+would very likely find the model making the same first few decisions
+each time. And with a learning rate of .9, 90\% of the error is added in
+from each tree,this means that in addition to consistently choosing from
+one or a few initial splits, you are also maximizing their contributions
+to the models.
+
+Because of these two factors, the trees contributing to the Stockastic
+Boosted Tree in this example will make very few decisions (maening they
+will make the same decisions repeately). That lack of variation in
+initial choices means that the number of paths the learning can take is
+limited, and with a high learning rate, a core set of variables is
+selected early on from the trees built very similarly. In essence, the
+model never has the opportunity to evaluate other possible variables
+because the greediness of the model makes the same first few choices
+every time(
+
 \begin{subquestion}{(b).} Which model do you think would be more predictive of other samples?\end{subquestion}
 
+The .9, .9 model would likely be overfit to the training data, because
+the variation in values within those most important variables may not be
+reflective of the general population. So, this model will be tuned to
+choose from sample members following the samples distribution of values
+in those most important features at the expense of recognizing
+potiential splits in other variables which might be more common in the
+poolation that the sample.
+
+With a learning rate of .1 and a bagging fraction of .1, the left model
+is more likely to build truly weak predictors, from smallers sets of
+variables, consider more distinct breaking points, and therefore extend
+better to wild data not fully described by the first few variables in
+the importance summarise\_layers
+
 \begin{subquestion}{(c).} How would increasing interaction depth affect the slope of predictor importance for either model in Fig.8.24?\end{subquestion}
+
+Increasing the tree depth would affect both models, but differently. The
+model with bagging fraction and learning rate equal to .1, increasing
+the number of nodes in the tree would likely increase the importance of
+the lower variables, creating a less polynomial slope. this is because
+making more decisions, means giving weight the variables and values
+where those decisions are made. This would give importance to those
+variables.
+
+For the model with bagging fraction and learning rate equal to .9,
+increasing the depth would likely not change the slope of the lower
+variables much at all just ad new variable or two to the top. The
+difference is that in this model, with the high fraction and learning
+rate, we again will still be making most of the same decisions, from
+tree to tree, so the only increases in importance come from the added
+nodes, which will be downstream, and they too are highly likely to be
+the same from tree to tree, such that you will add a importance low on
+the scale to those variables upon which the new nodes break (or upper
+variables with a second or third break will grow in importance). So you
+might see a reshuffling of upper nodes and the slight increase of a one
+or two less important variables. However, the overall slope, of quickly
+going to zero will be contrained by the high bagging fraction and
+learning rate.
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 8.7}
 
@@ -809,9 +954,62 @@ Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. 
 
 \begin{subquestion}{(a).} Which tree-based regression model gives the optimal resampling and test set performance? \end{subquestion}
 
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-1}Tree Model Performance on ChemicalManufacturing Data}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{l|r|r|r}
+\hline
+\textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
+\hline
+\rowcolor{gray!6}  GBM & 1.4978 & 0.6302 & 1.1941\\
+\hline
+GBMTest & 1.2073 & 0.6372 & 0.9550\\
+\hline
+\rowcolor{gray!6}  RFTrain & 1.2292 & 0.5546 & 0.9343\\
+\hline
+RFTest & 1.1859 & 0.6702 & 0.9286\\
+\hline
+\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{CubistTrain} & \textbf{1.0567} & \textbf{0.7246} & \textbf{0.8118}\\
+\hline
+\rowcolor[HTML]{d9f2e6}  \textbf{CubistTest} & \textbf{1.0630} & \textbf{0.7183} & \textbf{0.8187}\\
+\hline
+\end{tabular}
+\end{table}
+
+The cubist model is the most optimal based on the r squared value.
+Cubist both on the train and test data has a lower \texttt{RMSE} across
+the different tree models we selected.
+
 \begin{subquestion}{(b).} Which predictors are most important in the optimal tree-based regression model? Do either the biological or process variables dominate the list? How do the top 10 important predictors compare to the top 10 predictors from the optimal linear and nonlinear models?\end{subquestion}
 
+\includegraphics{Homework-Two_files/figure-latex/kj-8.7b-1.pdf}
+
+In all the models the Manufacturing processes dominate the list, with
+slight differences on where in the list and how much influence each has.
+
+Comparing the top 10 variables in each model reveals some strong
+differences. the Boosted tree follows a rather linear drop-off of
+importance through a list of exclusively process-based variables. The
+random forest falls off slower in the first five variables but becomes
+rapidly linear. All but the last variable in this list are also process
+based, the last is a biological material variable. The cubist tree,
+however takes on a very different depreciation, as the values are
+discrete, with the next six process variables all at exactly thre and
+the last three variables at 2. Other than the first and last variables
+all of the cubists top 10 are manufacturing process variable names.
+
 \begin{subquestion}{(c).} Plot the optimal single tree with the distribution of yield in the terminal nodes. Does this view of the data provide additional knowledge about the biological or process predictors and their relationship with yield?\end{subquestion}
+
+\includegraphics{Homework-Two_files/figure-latex/kj-8.7c-1.pdf}
+
+Based on this regression tree, the differences between process and
+matrial is that process variables differentiate more observations at
+each break, which is why the break first, they increase the purity most
+quickly. However, the final decisions seem to be based rather wholly on
+biological material variables, such that only looking at Process or
+prunning too soon, might lead to overfitting.
 
 \hypertarget{AS-4}{%
 \chapter*{Assignment 4}\label{AS-4}}
