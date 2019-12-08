@@ -86,7 +86,7 @@ mars_fit3 <- train(PH~., data=train, method = 'earth', preProcess = c("nzv","zv"
 
 mars_test_pred1 <- predict(mars_fit1, newdata = test); 
 mars_test_pred2 <- predict(mars_fit2, newdata = test);
-mars_test_pred3 <- predict(mars_fit2, newdata = test) 
+mars_test_pred3 <- predict(mars_fit3, newdata = test) 
 
 ## eNET
 enet_grid <- expand.grid(lambda=c(0,0.05,.1), fraction=seq(0.05,1, length=20))
@@ -96,7 +96,7 @@ enet_fit3 <- train(PH~., data=train, method = "enet", preProcess = c("nzv","zv",
 
 enet_test_pred1 <- predict(enet_fit1, newdata = test); 
 enet_test_pred2 <- predict(enet_fit2, newdata = test);
-enet_test_pred3 <- predict(enet_fit2, newdata = test)
+enet_test_pred3 <- predict(enet_fit3, newdata = test)
 
 ## GBM
 #gbmGrid <- expand.grid(n.trees=1000, interaction.depth=c(2,4,6), shrinkage=c(.01, .05), n.minobsinnode=seq(2,10, by=2))
