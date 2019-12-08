@@ -201,6 +201,16 @@ Include details on our process in creating this document.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+<<<<<<< HEAD
+\CommentTok{# Predicitve Modeling}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mice"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }\StringTok{"tidyverse"}\NormalTok{, }
+    \StringTok{"impute"}\NormalTok{, }\StringTok{"pls"}\NormalTok{, }\StringTok{"caTools"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{)}
+\CommentTok{# Formatting Libraries}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{, }\StringTok{"gridExtra"}\NormalTok{, }\StringTok{"sqldf"}\NormalTok{, }
+    \StringTok{"tibble"}\NormalTok{)}
+\CommentTok{# Plotting Libraries}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{)}
+=======
 \CommentTok{# Data Wrangling}
 \KeywordTok{library}\NormalTok{(AppliedPredictiveModeling)}
 \KeywordTok{library}\NormalTok{(mice)}
@@ -221,6 +231,7 @@ Include details on our process in creating this document.
 \KeywordTok{library}\NormalTok{(grid)}
 \KeywordTok{library}\NormalTok{(ggfortify)}
 \KeywordTok{library}\NormalTok{(gridExtra)}
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{Highlighting}
 \end{Shaded}
 
@@ -282,6 +293,68 @@ imputation methods.
 
 \caption{\label{tab:kj-6.3b}Variables with Missing Values}
 \centering
+<<<<<<< HEAD
+\begin{tabular}[t]{l|r|l|r}
+\hline
+Variable & Count & Variable & Count\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess03 & 15 & BiologicalMaterial01 & 0\\
+\hline
+ManufacturingProcess11 & 10 & BiologicalMaterial02 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess10 & 9 & BiologicalMaterial03 & 0\\
+\hline
+ManufacturingProcess25 & 5 & BiologicalMaterial04 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess26 & 5 & BiologicalMaterial05 & 0\\
+\hline
+ManufacturingProcess27 & 5 & BiologicalMaterial06 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess28 & 5 & BiologicalMaterial07 & 0\\
+\hline
+ManufacturingProcess29 & 5 & BiologicalMaterial08 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess30 & 5 & BiologicalMaterial09 & 0\\
+\hline
+ManufacturingProcess31 & 5 & BiologicalMaterial10 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess33 & 5 & BiologicalMaterial11 & 0\\
+\hline
+ManufacturingProcess34 & 5 & BiologicalMaterial12 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess35 & 5 & ManufacturingProcess09 & 0\\
+\hline
+ManufacturingProcess36 & 5 & ManufacturingProcess13 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess02 & 3 & ManufacturingProcess15 & 0\\
+\hline
+ManufacturingProcess06 & 2 & ManufacturingProcess16 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess01 & 1 & ManufacturingProcess17 & 0\\
+\hline
+ManufacturingProcess04 & 1 & ManufacturingProcess18 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess05 & 1 & ManufacturingProcess19 & 0\\
+\hline
+ManufacturingProcess07 & 1 & ManufacturingProcess20 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess08 & 1 & ManufacturingProcess21 & 0\\
+\hline
+ManufacturingProcess12 & 1 & ManufacturingProcess32 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess14 & 1 & ManufacturingProcess37 & 0\\
+\hline
+ManufacturingProcess22 & 1 & ManufacturingProcess38 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess23 & 1 & ManufacturingProcess39 & 0\\
+\hline
+ManufacturingProcess24 & 1 & ManufacturingProcess42 & 0\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess40 & 1 & ManufacturingProcess43 & 0\\
+\hline
+ManufacturingProcess41 & 1 & ManufacturingProcess44 & 0\\
+\hline
+=======
 \fontsize{8}{10}\selectfont
 \begin{tabular}{lr>{\bfseries\raggedright\arraybackslash}p{0.1cm}lr}
 \toprule
@@ -304,6 +377,7 @@ ManufacturingProcess34 & 5 &  & ManufacturingProcess24 & 1\\
 \rowcolor{gray!6}  ManufacturingProcess35 & 5 &  & ManufacturingProcess40 & 1\\
 ManufacturingProcess36 & 5 &  & ManufacturingProcess41 & 1\\
 \bottomrule
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
@@ -330,6 +404,18 @@ below:
 
 \caption{\label{tab:kj-6.3c}PLS Performance Metrics on Training Subset}
 \centering
+<<<<<<< HEAD
+\begin{tabular}[t]{l|r}
+\hline
+  & x\\
+\hline
+\rowcolor{gray!6}  RMSE & 1.3116314\\
+\hline
+Rsquared & 0.4896581\\
+\hline
+\rowcolor{gray!6}  MAE & 1.0584889\\
+\hline
+=======
 \fontsize{8}{10}\selectfont
 \begin{tabular}{rrr}
 \toprule
@@ -337,6 +423,7 @@ below:
 \midrule
 \rowcolor{gray!6}  1.5626 & 0.3953 & 1.1845\\
 \bottomrule
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
@@ -359,6 +446,18 @@ MAE.
 
 \caption{\label{tab:kj-6.3d-1}PLS Performance Metrics on Test Subset}
 \centering
+<<<<<<< HEAD
+\begin{tabular}[t]{l|r}
+\hline
+  & x\\
+\hline
+\rowcolor{gray!6}  RMSE & 1.222201\\
+\hline
+Rsquared & 0.579859\\
+\hline
+\rowcolor{gray!6}  MAE & 0.988292\\
+\hline
+=======
 \fontsize{8}{10}\selectfont
 \begin{tabular}{rrr}
 \toprule
@@ -366,6 +465,7 @@ MAE.
 \midrule
 \rowcolor{gray!6}  1.5222 & 0.2212 & 1.2885\\
 \bottomrule
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
@@ -414,6 +514,24 @@ knowledge to adjust the processes to emulate the highest yield outputs.
 
 \caption{\label{tab:kj-6.3f-2}Variable Correlation with Yield}
 \centering
+<<<<<<< HEAD
+\begin{tabular}[t]{l|r}
+\hline
+  & Yield\\
+\hline
+\rowcolor{gray!6}  Yield & 1.0000000\\
+\hline
+ManufacturingProcess32 & 0.6083321\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess17 & -0.4258069\\
+\hline
+ManufacturingProcess13 & -0.5036797\\
+\hline
+\rowcolor{gray!6}  ManufacturingProcess36 & -0.4907962\\
+\hline
+ManufacturingProcess09 & 0.5034705\\
+\hline
+=======
 \fontsize{8}{10}\selectfont
 \begin{tabular}{lr}
 \toprule
@@ -425,6 +543,7 @@ BiologicalMaterial02 & 0.4815\\
 BiologicalMaterial03 & 0.4451\\
 \rowcolor{gray!6}  ManufacturingProcess36 & -0.5014\\
 \bottomrule
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 \end{tabular}
 \end{table}
 
@@ -453,6 +572,12 @@ The package `mlbench` contains a function called `mlbench.friedman1` that simula
 \begin{subquestion}{(a).} Tune several models on these data. For example: 
 \end{subquestion}
 
+<<<<<<< HEAD
+Model 1 MARS Regression: MARS, otherwise known as multivariate adapitive
+regression splines is a non parametric regression technique that
+automatically captures non-linearity and interaction between predictors.
+The basic MARS model has the following form:
+=======
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }
@@ -464,14 +589,89 @@ The package `mlbench` contains a function called `mlbench.friedman1` that simula
 \end{Shaded}
 
 \#\#\#Model 1:
+>>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
 
-Model 2:
+\[
+\overset { \wedge  }{ f } =\sum _{ i=1 }^{ k }{ { c }_{ i }{ B }_{ i }(x) } 
+\]
 
-Model 3:
+The model computes the sum of basis functions B multiplied by constant
+coefficients c.The basis function can either be a constant, a hinge
+function, or a product of hinge functions. By definition, a hinge
+function is a piecewise function that converges at a point known as a
+knot.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-1-1.pdf}
+
+Model 2 SVM: SVM, also known as support vector machine is a method that
+can be applied to classification and regression tasks. On a high level,
+SVM creates a hyperplane in n dimensional space. This hyperplane acts
+like a classification boundary which can be linear or non linear. This
+boundary classifies information from a feature space.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-2-1.pdf}
+
+Model 3 NNET:
+
+NNEt otherwise known as a Neural Network, is a method inspired by a
+biological neuron system. It uses a system of nodes that are parallel to
+the way neurons work. It is ideal for capturing non-linear relationships
+that would otherwise be complicated in a multiple linear regression
+model. NNET evolves internally based on the calculated weights of each
+input. The basic structure is shown below:
+
+\[
+Y=\sum { (weight\quad *\quad input)\quad +\quad bias } 
+\]
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-3-1.pdf}
 
 \begin{subquestion}{(b).}
 Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
 \end{subquestion}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-1}Model Performance}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+\textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
+\hline
+\rowcolor{gray!6}  knnTrain & 3.6521 & 3.6521 & 3.6521\\
+\hline
+knnTest & 3.2041 & 0.6820 & 2.5683\\
+\hline
+\rowcolor{gray!6}  MARSTrain & 4.4548 & 0.9389 & 3.7461\\
+\hline
+MARSTest & 1.1723 & 0.9449 & 0.9325\\
+\hline
+\rowcolor{gray!6}  SVMTrain & 2.4940 & 0.8561 & 1.9931\\
+\hline
+SVMTest & 2.0699 & 0.8263 & 1.5723\\
+\hline
+\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{NNETTrain} & \textbf{13.7411} & \textbf{0.8021} & \textbf{5.5596}\\
+\hline
+\rowcolor[HTML]{d9f2e6}  \textbf{NNETTest} & \textbf{2.5669} & \textbf{0.7427} & \textbf{1.9506}\\
+\hline
+\end{tabular}
+\end{table}
+
+MARS appears to give the best performance based on RMSE, R squared and
+MAE on test set. The above table shows how our other selected models
+stack up against the best performing MARS model. We now evaluate the
+variable importance for our best performing model.
+
+\includegraphics{Homework-Two_files/figure-latex/kj-7.2-4b-1.pdf}
+
+The variable importance table for MARS indicates that variables X1
+through X5 were picked as the most important. Out of our collection of
+important variables used in MARS, X1 is the most important.
+
+It is very likely that the lack of contribution allotted to the X6-X10
+variables which bolster the R Squared and RMSE performance and noise
+from these variables did not reduce the predictive strength of this
+model as it does in small quantities in the other three models.
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 7.5}
 
@@ -479,17 +679,97 @@ Which models appear to give the best performance? Does MARS select the informati
 Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
 \end{question}
 
+We pulled in the data processing method from 6.3. This includes
+imputation and removal of zero processing. Please refer to 6.3 for a
+more detailed look at the EDA involved with this data set. We tunned a
+KNN model, NNET model, MARS, and SVM model using specifications from the
+literature.
+
 \begin{subquestion}{(a).}
 Which nonlinear regression model gives the optimal resampling and test set performance? 
 \end{subquestion}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-1}Model Performance on ChemicalManufacturing Data}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+\textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
+\hline
+\rowcolor{gray!6}  knnTrain & 1.4835 & 0.4245 & 1.1746\\
+\hline
+knnTest & 1.4078 & 0.4477 & 1.1041\\
+\hline
+\rowcolor{gray!6}  MARSTrain & 1.6367 & 0.6488 & 1.1614\\
+\hline
+MARSTest & 1.3726 & 0.4682 & 1.1300\\
+\hline
+\rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{SVMTrain} & \textbf{1.4142} & \textbf{0.7144} & \textbf{1.1448}\\
+\hline
+\rowcolor[HTML]{d9f2e6}  \textbf{SVMTest} & \textbf{1.2061} & \textbf{0.5715} & \textbf{0.9833}\\
+\hline
+\rowcolor{gray!6}  NNETTrain & 9.9082 & 0.3704 & 6.2548\\
+\hline
+NNETTest & 1.4683 & 0.3987 & 1.1936\\
+\hline
+\end{tabular}
+\end{table}
+
+Radial SVM outperformed the other models across all key KPI's. The next
+best model was MARS. In part b, we will address what variables are
+dominant in our SVM model.
 
 \begin{subquestion}{(b).}
 Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
 \end{subquestion}
 
+\includegraphics{Homework-Two_files/figure-latex/kj-7.5b-1.pdf}
+
+\texttt{ManufacturingProcess} Variables dominate the ranking of
+important variables with ManufacturingProcess14 at the top.
+ManufacturingProcess32 was at the top of the important variables list
+when it came to our linear model with some Biological Process within the
+top 10.
+
 \begin{subquestion}{(c).}
 Explore the relationships between the top predictors and the response for the predictors that are unique to the optimal nonlinear regression model. Do these plots reveal intuition about the biological or process predictors and their relationship with yield?
 \end{subquestion}
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-1}Correlation}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{l|r}
+\hline
+VALUE & Yield\\
+\hline
+Yield & 1.0000000\\
+\hline
+ManufacturingProcess14 & -0.0099574\\
+\hline
+ManufacturingProcess38 & -0.0864593\\
+\hline
+ManufacturingProcess03 & -0.1189520\\
+\hline
+ManufacturingProcess37 & -0.1593141\\
+\hline
+ManufacturingProcess02 & -0.1953977\\
+\hline
+\end{tabular}}
+\end{table}
+
+We examined the top 5 predictors that were flagged as being the most
+important before the importance measure dropped.There are some pretty
+clear differences in the data which might explain both the overall poor
+performance of the linear models as well as the improved significance of
+Process-Based variables in the non-linear models.
+
+Of the \texttt{ManfuacturingProcess} variables, they appear to be either
+tight clusters or discrete values which predict an array of possible
+Yields, which is directly opposed the the definition of linearly
+separable data base on earlier examination of correlation plots.
 
 \hypertarget{AS-3}{%
 \chapter*{Assignment 3}\label{AS-3}}

@@ -1,0 +1,664 @@
+---
+title: 'PROJECT 2: PREDICTING PH'
+author: 'Jeremy O'Brien'
+date: '10 December 2019'
+output: 
+  pdf_document:
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    keep_tex: yes
+    toc: true
+    number_sections: no
+documentclass: report
+subparagraph: yes
+---
+
+```{r setup, include = F, cache = F}
+require('knitr')
+opts_knit$set(root.dir = 'C:/Users/jlobr/OneDrive/Learning/_CUNY_SPS_MSDS/2019_3_Autumn/DATA 624/Repo/Project_Two')
+```
+
+```{r formatting, echo = F, message=F, warning=F, error=F, comment=NA}
+source('C:/Users/jlobr/OneDrive/Learning/_CUNY_SPS_MSDS/2019_3_Autumn/DATA 624/Repo/Project_Two/defaults.R')
+```
+
+```{r source-script, echo = F, message=F, warning=F, error=F, comment=NA, results='hide', cache=T}
+source('C:/Users/jlobr/OneDrive/Learning/_CUNY_SPS_MSDS/2019_3_Autumn/DATA 624/Repo/Project_Two/drafts/Proj2-JO.R') #code
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(psych)
+library(ggplot2)
+library(mice)
+library(xtable)
+library(GGally)
+library(ggstance)
+library(grid)
+library(gridExtra)
+library(ggpubr)
+library(caret)
+library(data.table)
+library(recipes)
+library(Metrics)
+```
+
+\thispagestyle{empty}
+\newpage
+\clearpage
+\pagenumbering{arabic} 
+
+# Introduction {-#intro}
+
+[JO: imported JM's intro as-is]
+
+This project is designed to evaluate production data from a beverage manufacturing company. Our assignment is to predict `PH`, a Key Performance Indicator (KPI), with a high degree of accuracy through predictive modeling. After thorough examination, we approached this task by splitting the provided data into training and test sets. We evaluated several models on this split and found that **what-ever-worked-best** method yielded the best results. 
+
+Each group member worked individually to create their own solution. We built our final submission by collaboratively evaluating and combining each others' approaches. Our introduction should further outline individual responsibilities. For example, **so-and-so** was responsible for **xyz task**. 
+
+For replication and grading purposes, we made our code avaliable in the appendix section. This code, along with the provided data, score-set results, and individual contributions, can also be accessed through our group github repository: 
+\begin{compactitem}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to R Source Code}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to Provided Data}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to Excel Results}
+  \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to Individual Work}
+\end{compactitem}
+
+# Data Exploration 
+
+The beverage dataset includes 2,571 cases, 32 predictor variables, and a single response variable.  One of these predictor variables  (Brand Code) is categorical with four levels - A through D; for the purpose of our analysis we have interpreted these to represent four distinct beverage brands. 
+
+While we found missing observations in both reponse and predictor variables, in our assessment the extent of NAs did not suggest a systemic issue in measurement or recording that imputation could not remedy. 
+
+The response variable (PH) is missing a total of four observations (< 1%).  Most (30) predictor variables are missing at least one observation, but only eleven are missing more than 1% of total cases and only three are missing more than 2% of total cases.  These are: MFR (continuous, 8.2%), BrandCode (categorical, 4.7%), and FillerSpeed (continuous, 2.2%).
+
+[JO: replaced my chart with JM's table for less noise in object calls and because didn't add anything]
+
+```{r}
+Tbl_Top_MissingData <- MissingData %>% 
+  top_n(11, n) %>%
+  column_to_rownames("predictor") %>% 
+  kable(caption = "Variables with Highest Frequency of NA Values", 
+        booktabs = T, 
+        digits = 1) %>% 
+  kable_styling() %>% 
+  row_spec() 
+
+Tbl_Top_MissingData
+```
+
+## Response Variable
+
+[JO: replaced my histograms with JM's because hers are much more elegant]
+
+```{r, fig.height=5, fig.cap="Distribution of Response Variable: pH", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .5)}
+
+Plt_pH1 <- StudentData %>% 
+  dplyr::select(PH) %>% 
+  mutate(type = "pH") %>% 
+  ggplot(aes(PH)) + 
+  geom_histogram(aes(y = ..density..), 
+                 bins = 40, 
+                 fill = "#57A0D3", 
+                 alpha = .65) + 
+  geom_density(alpha = .2, color = "#000000",
+               size=.65) +
+  scale_x_continuous() + 
+  scale_y_continuous(limits = c(0,3.5)) + 
+  labs(x = "",
+       y = "") +
+  theme_bw() + 
+  theme(axis.title.x = element_blank(), 
+        axis.ticks.length.x = unit(0, "cm")) + 
+  facet_wrap(~type)
+
+Plt_pH2 <- StudentData %>% 
+  select(PH) %>% 
+  mutate(type = "pH") %>%
+  ggplot(aes(PH, "")) + 
+  geom_boxploth(fill = "#57A0D3", 
+                outlier.colour = "#4682B4",
+                alpha = .65)+ 
+  theme_bw()+theme(legend.title = element_blank(), 
+                   strip.background = element_blank(), 
+                   strip.text.x = element_blank(),
+                   axis.title.x = element_blank(), 
+                   axis.ticks.length.x = unit(0, "cm")) +
+  labs(x = "", y = "") + 
+  scale_y_discrete(labels = 'pH') + 
+  scale_x_continuous() + 
+  facet_wrap(~type, 
+             nrow = 1, 
+             strip.position = "top")
+
+Plt_pH3 <- StudentData %>% 
+  filter(!is.na(BrandCode)) %>% 
+  ggplot(aes(PH, "")) + 
+  geom_boxploth(aes(fill = BrandCode),
+                outlier.colour = "#4682B4",
+                alpha=.3) + 
+  scale_fill_manual() + 
+  theme_bw() + 
+  theme(legend.position = "none", 
+        strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.title.x = element_blank(), 
+        axis.text.y = element_blank()) + 
+  labs(x = "", y = "") + 
+  scale_x_continuous() + 
+  facet_wrap(~BrandCode, 
+             nrow=1, 
+             strip.position = "top", 
+             scales = 'fixed')
+
+Plt_pH4 <- StudentData %>% 
+  dplyr::select(PH, BrandCode) %>% 
+  filter(!is.na(BrandCode)) %>% 
+  ggplot(aes(PH)) + 
+  geom_histogram(aes(y = ..density.., 
+                     fill = BrandCode), 
+                 bins = 20, 
+                 alpha = .65) +
+  geom_density(alpha = .2, 
+               color = "#000000",
+               size = .65) +
+  scale_fill_manual() +
+  scale_x_continuous() + 
+  scale_y_continuous(limits = c(0,3.5)) + 
+  labs(x = "", y = "") +
+  facet_wrap(~BrandCode, nrow = 1) +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.ticks.length.x = unit(0, "cm"), 
+        axis.text.y = element_blank(), 
+        legend.position = "none")
+
+Plt_pH_lay <- rbind(c(1, 2, 2), c(3, 4, 4))
+
+grid.arrange(Plt_pH1, 
+             Plt_pH4, 
+             Plt_pH2, 
+             Plt_pH3, 
+             layout_matrix = Plt_pH_lay, 
+             heights = c(2, 1), 
+             padding = unit(0, 'cm')
+             )
+```
+
+The response variable PH is a logarithmically scaled measure of how acidic or basic a water-based solution is (https://en.wikipedia.org/wiki/PH).  It ranges from 0 (acidic) and to 14 (alkaline); 7 is neutral (e.g. room temperature water).
+
+In aggregate, PH distribution is approximately normal and centered around 8.546 (i.e. slightly base), with some negative skew / outliers. 
+When evaluated by BrandCode:
+- A (293 observations) appears to be multimodal and have the most outliers, with a mean slightly lower than the aggregate (8.495)
+- B (1293 observations) appears to be bimodal with a number of outliers, as well as a mean nearest the aggregate (8.562)
+- C (304 observations) appears to be bimodal and is the most acid (8.419)
+- D (615 observations) is the most normal distribution and also has the highest alkalinity (8.603)
+
+## Predictor Variables
+
+With few exceptions, most predictor variables have skewed distributions and outliers (as indicated by points above / below the red lines).
+
+When evaluated by BrandCode, it's apparent that the distribution of CarbPressure, CarbRel, CarbVolume, HydPressure4, PCVolume, and Temperature vary based on brand.  Additonally, the distribution of AlchRel, Bailing, BailingLvl1, Density, and PressureSetpoint is such that they don't overlap across all brands, showing very distinct groupings.
+
+[JO: replaced my histograms with JM's because hers are much more elegant and explain better]
+
+```{r, fig.height=5}
+Plt_Outlier1 <- ggplot(outlier_with, 
+                       aes(value)) + 
+  geom_density(aes(fill = BrandCode), 
+               color="#999999", 
+               alpha = .3) + 
+  labs(title = "Density Distribution of Numeric Predictor Variables", 
+       subtitle = "With Outliers", 
+       x = "", y = "") + 
+  geom_vline(data = outlier_with, 
+             mapping = aes(xintercept = outlier_lower), 
+             color = "#ff8080") +
+  geom_vline(data = outlier_with, 
+             mapping = aes(xintercept = outlier_upper), 
+             color = "#ff8080") + 
+  facet_wrap(~key, 
+             scales = 'free', 
+             nrow = 3) +
+  theme_bw() +
+  theme(axis.text.y = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(), 
+        legend.position = "none") +
+  scale_fill_manual()
+
+Plt_Outlier2 <- ggplot(outlier_wo, 
+                       aes(value)) + 
+  geom_density(aes(fill = BrandCode), 
+               color = "#999999", 
+               alpha = .3) + 
+  labs(subtitle = "Without Outliers", 
+       x = "", y = "") + 
+  facet_wrap(~key, 
+             scales = 'free', 
+             nrow = 1) + 
+  theme_bw() +
+  theme(axis.text.y = element_blank(),
+        axis.title.x= element_blank(),
+        axis.text.x = element_blank(), 
+        legend.position = "bottom", 
+        legend.key.size = unit(.4, "cm")) +
+  scale_fill_manual()
+
+grid.arrange(Plt_Outlier1, 
+             Plt_Outlier2, 
+             nrow=2, 
+             heights = c(3, 2))
+```
+
+As no predictor variable shows a particularly pronounced monotonic linear relationship with response, a non-linear approach to modeling seems warranted. 
+
+[JO: replaced my histograms with JM's because hers are much more elegant and explain better]
+
+```{r, fig.height=5}
+Plt_Scatter1 <- outlier_with %>% mutate(PH=as.numeric(as.character(PH))) %>% ggplot(aes(x=value, y=PH)) + geom_jitter(aes(color=BrandCode), alpha=.15) + stat_smooth(color="#000000", method = "loess") + labs(title="pH~Predictor Scatterplots", subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free_x', nrow = 3) + theme_bw() + theme(axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "none", legend.key.size = unit(.4, "cm"))+scale_color_manual(values=c("#999999", "#95C8D8", "#008081", "#034D92"))
+Plt_Scatter2 <- outlier_wo %>% mutate(PH=as.numeric(as.character(PH))) %>% ggplot(aes(x=value, y=PH)) + geom_jitter(aes(color=BrandCode), alpha=.15) + stat_smooth(color="#000000", method = "loess") + labs(subtitle="Without Outliers", x="", y="")+ facet_wrap(~key, scales = 'free_x', nrow = 1)+ theme_bw()+theme(axis.title.x=element_blank(),axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(.4, "cm"))+scale_color_manual(values=c("#999999", "#95C8D8", "#008081", "#034D92"))
+
+grid.arrange(Plt_Scatter1, Plt_Scatter2, nrow=2, heights=c(3,2))
+```
+
+The dataset exhibits multicollinearity, with strong positive relationships between certain subsets of predictor variables:
+- Bailing, BailingLvl, CarbRel, CarbVolume, and Density
+- CarbTemp and CarbPressure
+- HydrPressure1 and HydrPressure2; HydrPressure2 and HydrPressure3; and HydrPressure3 and MntFlow
+- OxygenFiller and FillerLevel
+- FillerSpeed and MFR
+
+```{r, fig.height = 3.5, fig.width=10}
+Plt_Corr <- StudentData %>% 
+  select_if(is.numeric) %>% 
+  dplyr::select(-PH) %>% 
+  ggcorr(method = 'pairwise.complete.obs', 
+         geom = "tile", 
+         label = F, 
+         hjust = .95, 
+         layout.exp = 7,
+         label_round =1 , 
+         low = "#95C8D8", 
+         mid = "grey90",
+         high = "#034D92") + 
+  theme_bw() + 
+  theme(legend.key.size = unit(.6, "cm"), 
+        legend.justification = c(.05, .98), 
+        legend.position = c(.05, .98)) +
+  labs(title = "Predictor Variable Correlation Matrix")
+
+g = ggplot_build(Plt_Corr); g$data[[2]]$size = 2
+
+grid::grid.draw(ggplot_gtable(g))
+```
+
+# Data Preparation
+
+In our exploration, we detected missing data, extreme outliers, and multicollinearity. We kept these factors in mind and applied strategic transformations when preparing our models to evaluate their performance with and without normalization changes.
+
+**Train/Test Splits:**   
+
+[JLO: I originally used a 75-25 split for train-test, but reran with 80-20 for ease of comparison]
+
+We divided the production dataset using an 80/20 split to create a train and test set. All models incorporated k-folds cross-validation set at 10 folds to protect against overfitting the data. We set up unique model tuning grids to find the optimal parameters for each regression type to ensure the highest accuracy within our predictions.
+
+**Data Imputation:**  
+
+[JLO: I also employed MICE]
+
+We applied a Multiple Imputation by Chained Equations (MICE) algorthim to predict the missing data using sequential regression. This method filled in all incomplete cases, including `BrandCode`, our one unordered categorical variable.  
+
+**Pre-Processing:**  
+
+[JLO: I originally did 1 and 2, but added 3 for ease of comparison]
+
+Due to the strong non-normality exhibited in the data, we tested our models using three different approaches: (1) No pre-processing techniques, (2) centering and scaling, and (3) removing zero (and near-zero) variance and box-cox, centering, and scaling transformations.
+
+# Modeling
+
+We compared the effectiveness of the Boosted Regressions Tree and Cubist models.
+
+## Boosted Regression Tree Model
+
+[Boosting references:
+Overview: https://medium.com/mlreview/gradient-boosting-from-scratch-1e317ae4587d
+Tuning: https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/
+Early stopping: https://towardsdatascience.com/understanding-gradient-boosting-machines-9be756fe76ab]
+
+In contrast to bagging - which leverages an ensemble of independent learners then averaged to reduce variance and error - boosting works sequentially so that learners more efficiently prioritize error over the course of procedural iterations.  As the name would suggest, gradient boosting machines (GBM) do so by using gradients in the loss function to identify improvements, splitting greedily until a stopping procedure is reached.
+
+We first performed a grid search across GBM hyper-parameters, cross-validating to evaluate which pre-processing approach delivered the best RMSE.  These hyper-parameters included:
+- The total number of trees
+- The maximum depth of each tree, or interaction depth
+- The minimum number of observations per branch, or terminal node (larger better for regression and faster computation, model seldom sensitive to it)
+- Shrinkage, which penalizes the importance of incremental iterations and so controls the learning rate of the procedure
+
+In conjunction with tuned tree volume, interaction depth, and shrinkage, scaling and centering data produced the best performance for the boosted model.  As GBM models are prone to overfitting, we then employed an 'early stopping' technique to further refine optimal tree volume.
+
+[JO: replaced my performance plots with JM's for consistent look]
+
+```{r, fig.height=2.5}
+boost1_plot <- ggplot(boost_fit1)+
+  theme_bw()+
+  theme(legend.position = "none") + 
+  labs(title = "Boosted 1", 
+       y = "RMSE (CV)", 
+       x = "") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c('#999999', '#57A0D3', '#95C8D8', '#008081', '#034D92', '#011232')) +
+  scale_shape(guide = FALSE) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005), 
+                     limits = c(0.105, 0.155))
+
+boost2_plot <- ggplot(boost_fit2)+
+  theme_bw()+
+  theme(legend.position = "none", 
+        axis.title.y = element_blank(), 
+        axis.text.y = element_blank()) + 
+  labs(title = "Boosted 2", 
+       y = "") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c('#999999', '#57A0D3', '#95C8D8', '#008081', '#034D92', '#011232')) +
+  scale_shape(guide = FALSE) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005), 
+                     limits = c(0.105, 0.155))
+
+boost3_plot <- ggplot(boost_fit3)+
+  theme_bw()+
+  theme(legend.justification = c(1,1), 
+        legend.position = c(.98,.98), 
+        axis.title.y = element_blank(), 
+        axis.text.y = element_blank(), 
+        legend.direction = 'horizontal', 
+        legend.key.size = unit(.1, "cm"), 
+        legend.box.background = element_rect(color = "#999999", 
+                                             size = 1), 
+        legend.text = element_text(color = "#999999"))+
+  labs(title = "Boosted 3", x = "", y = "") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c('#999999', '#57A0D3', '#95C8D8', '#008081', '#034D92', '#011232')) +
+  scale_shape(guide=FALSE) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005), 
+                     limits = c(0.105, 0.155))
+
+ggarrange(boost1_plot, 
+          boost2_plot, 
+          boost3_plot, 
+          ncol=3, 
+          common.legend = TRUE, 
+          legend = "bottom")
+
+```
+
+## Cubist
+
+[Cubist references:
+Background:  https://www.rulequest.com/cubist-win.html
+Overview:  https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/56e3056a3c44d8779a61988a/1457718645593/cubist_BRUG.pdf
+Mechanics:  http://ftp.uni-bayreuth.de/math/statlib/R/CRAN/doc/vignettes/caret/caretTrain.pdf]
+
+For a continuous response variable, a rule-based Cubist model functions like a piecewise linear model: each rule is a conjunction of conditions associated with a linear expression, and those rules can overlap with each other.  Adding to the interpretive complexity of those rules, Cubist models can also integrate an instance-based, nearest-neighbor approach that performs a composite prediction based on actual values of neighbors, predicted values of neighbors, and predicted values of observations of interest.  
+
+Accordingly, hyper-parameters for Cubist models include:
+- The number of rule-based models, or committees - these issue separate predictions that are averaged (5 recommended to balance computational cost with ensemble benefits)
+- The number of neighbors over which to predict response values based on similar training observations
+
+Based on cross-validation and a grid search across hyper-parameters, we found the best RMSE performance with an instance-based model that factoring in many neighbors built on non-pre-processed training data.
+
+[JO: replaced my performance plots with JM's for consistent look]
+
+```{r, fig.height=2.5}
+cub1_plot <- ggplot(cub_fit1)+
+  theme_bw()+
+  theme(legend.position = "none") + 
+  labs(title = "Cubist 1", 
+       y = "RMSE (CV)", 
+       x = "") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c('#999999', '#57A0D3', '#95C8D8', '#008081', '#034D92', '#011232')) +
+  scale_shape(guide = FALSE) +
+  scale_x_continuous(labels = scales::number_format(accuracy = 1), breaks = c(0, 2, 4, 6, 8, 10)) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005), limits = c(0.105, 0.160))
+
+cub2_plot <- ggplot(cub_fit2)+
+  theme_bw()+
+  theme(legend.position = "none", 
+        axis.title.y = element_blank(), 
+        axis.text.y = element_blank()) + 
+  labs(title = "Cubist 2", 
+       y = "") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c('#999999', '#57A0D3', '#95C8D8', '#008081', '#034D92', '#011232')) +
+  scale_shape(guide = FALSE) +
+  scale_x_continuous(labels = scales::number_format(accuracy = 1), breaks = c(0, 2, 4, 6, 8, 10)) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005), limits = c(0.105, 0.160))
+
+cub3_plot <- ggplot(cub_fit3)+
+  theme_bw()+
+  theme(legend.justification = c(1,1), 
+        legend.position = c(.98,.98), 
+        axis.title.y = element_blank(), 
+        axis.text.y = element_blank(), 
+        legend.direction = 'horizontal', 
+        legend.key.size = unit(.1, "cm"), 
+        legend.box.background = element_rect(color = "#999999", 
+                                             size = 1), 
+        legend.text = element_text(color = "#999999"))+
+  labs(title = "Cubist 3", x = "", y = "") +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_color_manual(values = c('#999999', '#57A0D3', '#95C8D8', '#008081', '#034D92', '#011232')) +
+  scale_shape(guide = FALSE) +
+  scale_x_continuous(labels = scales::number_format(accuracy = 1), breaks = c(0, 2, 4, 6, 8, 10)) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.005), limits = c(0.105, 0.160))
+
+ggarrange(cub1_plot, 
+          cub2_plot, 
+          cub3_plot, 
+          ncol=3, 
+          common.legend = TRUE, 
+          legend = "bottom")
+```
+
+
+# Regression Analysis
+
+#### Accuracy 
+
+Of the models included here, the Cubist model performed the best with strongest R2 and lowest error scores.  Interestingly, it delivered even better performance in predicting response values for the test set than the training set [discuss with group].  
+
+[JO: added error rates to JM's table for easier comparison]
+
+```{r}
+Tbl_Accuracy %>% 
+  kable(digits = 5,
+        booktabs = T, 
+        caption = "Accuracy Measures") %>% 
+  kable_styling() %>% 
+  column_spec(1:9,  # adjust color by column
+              color = "#0074D9",
+              bold = T)
+```
+
+#### Variable Importance
+
+While MnfFlow was the variable with the highest importance for both the Boosted and Cubist models, otherwise there was lack of consistencty in variable overall and relative importance.  For the GBM model, MnfFlow was far and away the most important variable, while for the Cubist model many other variable played important roles.
+
+```{r, fig.height=2.5}
+Plt_Boost_VarImp <- BOOST_VarImp$importance %>% 
+  as.data.frame.array() %>% 
+  rownames_to_column("Variable") %>% 
+  top_n(10, Overall) %>% 
+  ggplot(aes(x = reorder(Variable, Overall), y = Overall)) +
+  geom_point() +
+  geom_segment(aes(x = Variable, xend = Variable, y = 0, yend = Overall)) + 
+  coord_flip() + 
+  labs(y = "Overall", x = "", title = "Boosted") + 
+  theme_bw() + 
+  theme(axis.title.y = element_blank(), 
+        axis.title.x = element_blank()) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 1,
+                                                    decimal.mark = '.')); 
+
+Plt_Cub_VarImp <- CUB_VarImp$importance %>% 
+  as.data.frame.array() %>% 
+  rownames_to_column("Variable") %>% 
+  top_n(10, Overall) %>% 
+  ggplot(aes(x = reorder(Variable, Overall), y = Overall)) + 
+  geom_point() + 
+  geom_segment(aes(x = Variable, xend = Variable, y = 0, yend = Overall)) + 
+  coord_flip() + 
+  labs(y = "Overall", x = "", title = "Cubist") + 
+  theme_bw() + 
+  theme(axis.title.y = element_blank(), 
+        axis.title.x = element_blank()) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 1,decimal.mark = '.'));
+
+grid.arrange(Plt_Boost_VarImp, 
+             Plt_Cub_VarImp, 
+             nrow = 1, 
+             bottom = textGrob("Overall Variable Importance"))
+```
+
+# Conclusion
+
+This section should contain final thoughts and save/discuss our student evaluation predictions.
+
+# Appendix {-#Appendix}
+
+```{r, eval=F, echo=T}
+
+# SEEDING
+set.seed(58677)
+
+
+# CUSTOM FUNCTIONS
+gather_if <- function(data, FUN, key = "key", value = "value", na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
+  data %>% {gather(., key = key, value = value , names(.)[sapply(., FUN = FUN)], na.rm = na.rm, convert = convert, factor_key = factor_key )}} 
+
+flattenCorrMatrix <- function(cormat) {
+  ut <- upper.tri(cormat)
+  data.table(row = rownames(cormat)[row(cormat)[ut]], column = rownames(cormat)[col(cormat)[ut]], cor  = (cormat)[ut])}
+
+
+# DATA EXPLORATION
+## Import data
+StudentData <- read_xlsx('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx')
+StudentEvaluation <- read_xlsx('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx')
+
+## Data Tidying
+names(StudentData) <- gsub(" ", "", names(StudentData))
+StudentData <- StudentData %>% mutate(BrandCode=as.factor(BrandCode))
+
+## Summary Stats
+summary_stats <- describe(StudentData)
+
+## Missing Data Analysis
+MissingData <- StudentData %>% summarise_all(funs(sum(is.na(.)))) %>%  t() %>% as.data.frame() %>% rename("n"=V1) %>% rownames_to_column("predictor") %>% arrange(desc(n)) %>% mutate(`%`=round((n/nrow(StudentData)*100),2)) 
+
+## Outiers Analysis
+outliers <-StudentData %>%  mutate(PH=as.factor(PH))%>% gather_if(is.numeric, 'key', 'value') %>% filter(!is.na(value)) %>%  group_by(key)  %>%  mutate(outlier_lower = quantile(value, probs=.25, na.rm = T)-1.5 * IQR(value, na.rm = T), outlier_upper = 1.5 * IQR(value, na.rm = T)+quantile(value, probs = .75, na.rm = T), outlier=ifelse(value<outlier_lower, "TRUE", ifelse(value>outlier_upper, "TRUE", "FALSE"))) 
+outlier_with <- outliers %>% filter(any(outlier=="TRUE")) %>% filter(!is.na(BrandCode)) 
+outlier_wo <- outliers %>% filter(all(outlier!="TRUE")) %>% filter(!is.na(BrandCode)) 
+outlier_freq <- outliers %>% select(key, outlier) %>% table() %>% as.data.frame.array() %>% rownames_to_column("variable") %>% arrange(desc(`TRUE`)) %>% mutate(`%`=round(`TRUE`/(`FALSE`+`TRUE`)*100,2)) %>% top_n(5,`%`)
+
+## Correlation
+cor <- StudentData %>% select(-PH, -BrandCode) %>% cor(use = "pairwise.complete.obs")
+cor_freq <- findCorrelation(cor, .7, names = T)
+cor_flat <- flattenCorrMatrix(cor) %>% arrange(row, desc(cor)) %>% filter(cor >.75 | cor < -0.75) 
+cor_flat_left <- cor_flat %>% slice(1:10) %>% mutate(id = row_number())
+cor_flat_right <- cor_flat %>% slice(11:20) %>% mutate(id = row_number())
+
+
+# DATA PREPARATION
+## Imputation
+init <- mice(StudentData, maxit=0); meth <- init$method; predM <- init$predictorMatrix; meth[c("BrandCode")]="polyreg"
+imputed <- mice(StudentData, method=meth, predictorMatrix=predM, m=5, printFlag = F)
+BevData <- complete(imputed)
+
+## Train/Test Splits 
+trainingRows <- createDataPartition(BevData$PH, p = .80, list= FALSE)
+
+## Split Train/Test Data 
+train <- BevData[trainingRows, ]; test <- BevData[-trainingRows, ] 
+
+
+# MODELING 
+tl <- 5; trC <- trainControl(method = "cv", number = 10, savePredictions = T)
+
+
+##  MARS
+mars_grid <- expand.grid(degree=1:3, nprune = seq(5, 50, by = 10))
+mars_fit1 <- train(PH~., data=train, method = 'earth', tuneGrid = mars_grid, trControl = trC, tuneLength=tl)
+mars_fit2 <- train(PH~., data=train, method = 'earth', preProcess = c("center","scale"), tuneGrid = mars_grid, trControl = trC, tuneLength=tl)
+mars_fit3 <- train(PH~., data=train, method = 'earth', preProcess = c("nzv","zv", "BoxCox", "center","scale"), tuneGrid = mars_grid, trControl = trC, tuneLength=tl)
+
+mars_test_pred1 <- predict(mars_fit1, newdata = test); 
+mars_test_pred2 <- predict(mars_fit2, newdata = test);
+mars_test_pred3 <- predict(mars_fit2, newdata = test) 
+
+
+## eNET
+enet_grid <- expand.grid(lambda=c(0,0.05,.1), fraction=seq(0.05,1, length=20))
+enet_fit1 <- train(PH~., data=train, method = "enet", metric="RMSE", tuneGrid = enet_grid, tuneLength = tl, trControl = trC)
+enet_fit2 <- train(PH~., data=train, method = "enet", preProcess = c("center", "scale"), metric="RMSE", tuneGrid = enet_grid, tuneLength = tl, trControl = trC)
+enet_fit3 <- train(PH~., data=train, method = "enet", preProcess = c("nzv","zv", "BoxCox", "center","scale"), metric="RMSE", tuneGrid = enet_grid, trControl=trC, tuneLength=tl)
+
+enet_test_pred1 <- predict(enet_fit1, newdata = test); 
+enet_test_pred2 <- predict(enet_fit2, newdata = test);
+enet_test_pred3 <- predict(enet_fit2, newdata = test)
+
+
+## CUBIST
+
+cub_grid <- expand.grid(committees = c(1:10), neighbors = c(0, seq(1, 9, by = 2)))  # neighbors must be integer between 1 and 9
+
+cub_fit1 <- train(PH ~ ., data = train, method = 'cubist', trCtrl = trC, tuneGrid = cub_grid, verbose = F)
+cub_fit2 <- train(PH ~ ., data = train, method = 'cubist', preProcess = c('center', 'scale'), trCtrl = trC, tuneGrid = cub_grid)
+cub_fit3 <- train(PH ~ ., data = train, method = 'cubist', preProcess = c('nzv', 'zv', 'BoxCox'), trCtrl = trC, tuneGrid = cub_grid)
+
+cub_fit1$bestTune; min(cub_fit1$results$RMSE)  # Cubist winner: 10 committees, 9 neighbors, RMSE of .1064531
+cub_fit2$bestTune; min(cub_fit2$results$RMSE)
+cub_fit3$bestTune; min(cub_fit3$results$RMSE)
+
+cub_test_pred1 <- predict(cub_fit1, newdata = test)
+cub_test_pred2 <- predict(cub_fit2, newdata = test)
+cub_test_pred3 <- predict(cub_fit3, newdata = test)
+
+
+# ACCURACY 
+MARS_MAPE_TRN <- Metrics::mape(mars_fit1$pred$obs, mars_fit1$pred$pred)
+eNET_MAPE_TRN <- Metrics::mape(enet_fit3$pred$obs, enet_fit3$pred$pred)
+BOOST_MAPE_TRN <- Metrics::mape(boost_fit5$pred$obs, train$PH)
+CUB_MAPE_TRN <- Metrics::mape(predict(cub_fit1, newdata = train), train$PH)  # cubist train object does not return #pred object
+
+MARS_MAPE_TST <- Metrics::mape(test$PH, mars_test_pred1)
+eNET_MAPE_TST <- Metrics::mape(test$PH, enet_test_pred3)
+BOOST_MAPE_TST <- Metrics::mape(test$PH, boost_test_pred5)
+CUB_MAPE_TST <- Metrics::mape(test$PH, cub_test_pred1)
+
+MARS_PERF_TRN <- mars_fit1$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% dplyr::select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable="MARS_Train") %>% column_to_rownames("Variable") %>% t(); 
+eNET_PERF_TRN <- enet_fit3$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% dplyr::select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable="eNET_Train") %>% column_to_rownames("Variable") %>% t(); 
+BOOST_PERF_TRN <- boost_fit5$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% dplyr::select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable = 'Boost_Train') %>% column_to_rownames('Variable') %>% t();
+CUB_PERF_TRN <- cub_fit1$results %>% as.data.frame() %>% filter(RMSE == min(RMSE)) %>% dplyr::select(RMSE, Rsquared, MAE) %>% distinct() %>% mutate(Variable = 'Cubist_Train') %>% column_to_rownames('Variable') %>% t();
+
+MARS_PERF_TST <- postResample(pred = mars_test_pred1, obs = test$PH)
+eNET_PERF_TST <- postResample(pred = enet_test_pred3, obs = test$PH)
+BOOST_PERF_TST <- postResample(pred = boost_test_pred5, obs = test$PH)
+CUB_PERF_TST <- postResample(pred = cub_test_pred1, obs = test$PH)
+
+bind1 <- cbind(MARS_PERF_TRN, 'MARS_Test' = MARS_PERF_TST, eNET_PERF_TRN, 'eNET_Test' = eNET_PERF_TST, BOOST_PERF_TRN, 'Boost_Test' = BOOST_PERF_TST, CUB_PERF_TRN, 'Cubist_Test' = CUB_PERF_TST)
+bind2 <- cbind(MARS_MAPE_TRN, MARS_MAPE_TST, eNET_MAPE_TRN, eNET_MAPE_TST, BOOST_MAPE_TRN, BOOST_MAPE_TST, CUB_MAPE_TRN, CUB_MAPE_TST); row.names(bind2) <- 'MAPE'
+Tbl_Accuracy <- rbind(bind1, bind2)
+
+
+# VARIABLE IMPORTANCE 
+MARS_VarImp <- varImp(mars_fit1, scale = T)
+eNET_VarImp <- varImp(enet_fit3, scale = T)
+BOOST_VarImp <- varImp(boost_fit5, scale = T)
+CUB_VarImp <- varImp(cub_fit1, scale = T)
+
+
+```
