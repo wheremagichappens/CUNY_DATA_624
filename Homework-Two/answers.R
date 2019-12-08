@@ -3,16 +3,16 @@
 ## Look out for duplicate variable names between questions
 
 # DEPENDENCIES
-<<<<<<< HEAD
+
 
 # Predicitve Modeling
-libraries('AppliedPredictiveModeling', 'mice','caret', 'tidyverse','impute','pls','caTools','mlbench')
+libraries('AppliedPredictiveModeling', 'mice','caret', 'tidyverse','impute','pls','caTools','mlbench','randomForest','party','gbm','Cubist','rpart')
 # Formatting Libraries
 libraries('default', 'knitr', 'kableExtra','gridExtra','sqldf')
 # Plotting Libraries
-libraries('ggplot2', 'grid', 'ggfortify')
+libraries('ggplot2', 'grid', 'ggfortify','rpart.plot')
 
-=======
+
 # Data Wrangling 
 library(AppliedPredictiveModeling); library(mice); library(caret); library(tidyverse); library(pls); library(caTools); library(mlbench); library(stringr);
 # Formatting
@@ -26,7 +26,7 @@ medium_gold <- "#cbbda5"
 light_gold <- "#dcd3c3"
 
 # SET SEED
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
+
 set.seed(58677)
 
 # ASSIGNMENT 1 
@@ -54,15 +54,15 @@ miceImp <- mice(ChemicalManufacturingProcess, printFlag = FALSE)
 CMP_DF <-mice::complete(miceImp)
 
 # (6.3c)
-<<<<<<< HEAD
+
 #code
 set.seed(58677)   #  set seed to ensure you always have same random numbers generated
 
-sample = sample.split(df_final, SplitRatio = 0.80) # splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE
+sample = sample.split(CMP_DF, SplitRatio = 0.80) # splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE
 
-chem_train =subset(df_final,sample ==TRUE) # creates a training dataset named train1 with rows which are marked as TRUE
+chem_train =subset(CMP_DF,sample ==TRUE) # creates a training dataset named train1 with rows which are marked as TRUE
 
-chem_test=subset(df_final, sample==FALSE)
+chem_test=subset(CMP_DF, sample==FALSE)
 
 #code
 pls_model <- plsr(Yield~., data=chem_train,
@@ -99,8 +99,8 @@ eval_plot <- ggplot(pls2test_eval, aes(obs, pred)) +
   labs(title="Observed vs. Predicted Results for Test Data",
        subtitle="Partial Least Squares Model")+ 
   geom_point()+
-  coord_flip()+
-=======
+  coord_flip()
+
 CMP.sample = sample.split(CMP_DF, SplitRatio = 0.80) # splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE
 CMP.train = subset(CMP_DF, CMP.sample ==TRUE) # creates a training dataset named train1 with rows which are marked as TRUE
 CMP.test = subset(CMP_DF, CMP.sample==FALSE)
@@ -132,7 +132,6 @@ Plt_CMP.test.obs_vs_pred <- ggplot(CMP.pls.test.obs_vs_pred, aes(Observed, Predi
   labs(title="Test Set: Observed vs. Predicted Values")+ 
   scale_x_continuous(labels = scales::number_format(accuracy = 1))+
   scale_y_continuous(labels = scales::number_format(accuracy = 1))+
->>>>>>> 637359e0cee9ea361822a3520e3358469efe2efa
   theme_bw()+
   theme(plot.title = element_text(color="#745010", size=10, face="bold"))
 
@@ -393,7 +392,7 @@ hwsvmimp_plot2 <- ggplot(head(hw2svmImp2, 15), aes(x=reorder(rowname, Overall), 
 
 # (7.5c)
 #alterate apprach (use plot importance to identify top few important features)
-hw2imp <- df_final %>%select(Yield, 
+hw2imp <- CMP_DF %>%select(Yield, 
   ManufacturingProcess14,
   ManufacturingProcess02, 
   ManufacturingProcess03,
@@ -406,30 +405,292 @@ hw2cor_df<-tibble::rownames_to_column(hw2cor_pre_df, "VALUE")
 
 hw2cor_df2<-sqldf("select VALUE, Yield from hw2cor_df order by Yield desc")%>% 
 kable(caption="Correlation") %>% 
-kable_styling(latex_options="scale_down")
+kable_styling()
 
 
 # ASSIGNMENT 3
 # KJ 8.1-8.3; KJ 8.7
 
 # (8.1a)
+set.seed(200)
+simulated <- mlbench.friedman1(200, sd = 1) 
+simulated <- cbind(simulated$x, simulated$y)
+simulated <- as.data.frame(simulated) 
+colnames(simulated)[ncol(simulated)] <- "y"
+
+# revert seed back to our set group number: 
+set.seed(58677)
+
+model1 <- randomForest(y ~ ., data = simulated, 
+                       importance = TRUE, 
+                       ntree = 1000)
+
+rfImp1 <- varImp(model1, scale = FALSE)
+
+rfImp1.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(model1, scale = FALSE))), "VALUE")    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+#colnames(hw3_rfdt3) <- c("Value","Importance")
+
+rfImp1plot<-ggplot(rfImp1.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
+  geom_point(color ='darkorange') + 
+  geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
+  labs(title="Variable Importance", subtitle="Random Forest Model for Simulated Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
 
 # (8.1b)
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+
+hw3model2 <- randomForest(y ~ ., data = simulated, 
+                       importance = TRUE, 
+                       ntree = 1000)
+rfImp2 <- varImp(hw3model2, scale = FALSE)
+
+rfImp2.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(hw3model2, scale = FALSE))), "VALUE")    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+rfImp2plot<-ggplot(rfImp2.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
+  geom_point(color ='darkorange') + 
+  geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
+  labs(title="Variable Importance", subtitle="Random Forest Model for Simulated Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+
+
+
+#hw3rf2_imp_table<- rfImp2%>% kable(caption="Random Forest Variable Importance on Simulated Dataset") %>% kable_styling()
+
 
 # (8.1c)
+#hw3_rfmodel3 <- cforest(y ~ ., data=simulated)
+#rfdt3 <-as.data.frame(as.matrix(varimp(rf_mod3)))
+#hw3_rfdt3 <-tibble::rownames_to_column(as.data.frame(as.matrix(varimp(hw3_rfmodel3))), "VALUE")    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+#colnames(hw3_rfdt3) <- c("Value","Importance")
+
+#hw3_rfdt3a <- hw3_rfdt3[order(-hw3_rfdt3$Importance),]
+
+#hw3_rfdt3.tbl <- hw3_rfdt3a  %>% kable(caption="Unconditional CForest Model: Variable Importance") %>% kable_styling() %>% row_spec()
+
+#hw3_rfdt3b <-  tibble::rownames_to_column(as.data.frame(as.matrix(varimp(hw3_rfmodel3,conditional=T))), "VALUE")   #as.data.frame(as.matrix(varimp(hw3_rfmodel3, conditional=T)))
+
+#colnames(hw3_rfdt3b) <- c("Value","Importance")
+
+#hw3_rfdt3ba <- hw3_rfdt3b[order(-hw3_rfdt3b$Importance),]
+
+#hw3_rfdt3b.tbl<-hw3_rfdt3ba  %>%  kable(caption="Conditional CForest Model: Variable Importance") %>% kable_styling() %>% row_spec()
+
+
+# Now remove correlated predictor
+simulated$duplicate1 <- NULL
+bagCtrl <- cforest_control(mtry = ncol(simulated) - 1)
+baggedTree <- party::cforest(y ~ ., data = simulated, controls = bagCtrl)
+cfImp <- party::varimp(baggedTree, conditional = T)
+#cfImp <- kable(sort(cfImp, decreasing = TRUE))
+cfImp1 <- party::varimp(baggedTree, conditional = F)
+#cfImp1 <- kable(sort(cfImp1, decreasing = TRUE))
+# Keep correlated predictor
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+bagCtrl <- cforest_control(mtry = ncol(simulated) - 1)
+baggedTree <- party::cforest(y ~ ., data = simulated, controls = bagCtrl)
+cfImp2 <- party::varimp(baggedTree, conditional = T)
+#cfImp2 <- kable(sort(cfImp2, decreasing = TRUE))
+cfImp22 <- party::varimp(baggedTree, conditional = F)
+#cfImp22 <- kable(sort(cfImp22, decreasing = TRUE))
+simulated$duplicate1 <- NULL
+
+a <- data.frame(features = rownames(rfImp1), RF = rfImp1[,1])
+b <- data.frame(features = rownames(rfImp2), RF.cor = rfImp2[,1])
+c <- data.frame(features = names(cfImp), CF.cond = cfImp)
+d <- data.frame(features = names(cfImp1), CF = cfImp1)
+e <- data.frame(features = names(cfImp2), CF.cor.cond = cfImp2)
+f <- data.frame(features = names(cfImp22), CF.cor = cfImp22)
+aa <- merge(a,d, all=T)
+bb <- merge(b,f,all=T)
+cc <- merge(c,e,all=T)
+dd <-merge(aa,bb,all=T)
+hw3final_df <- merge(dd,cc,all=T)
+hw3final_df <- rbind(hw3final_df[-3,], hw3final_df[3,])
+rownames(hw3final_df) <- c(1:11)
+
+hw3final_dfb<-hw3final_df%>%  kable(caption="Conditional vs Unconditional CForest Model: Variable Importance") %>% kable_styling() %>% row_spec()
+
 
 # (8.1d)
 
+#GBM
+gbmModel_nodup <- gbm(y ~ ., data = simulated, distribution = "gaussian", n.trees=1000)
+
+#gbmModel_nodupb <-caret::varImp(gbmModel_nodup)    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+gbmModel_wdup <- gbm(y ~ ., data = simulated, distribution = "gaussian", n.trees=1000)
+
+#gbmModel_wdupb <-varImp(gbmModel_wdup)   #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+
+simulated$duplicate1 <- NULL
+
+#Cubist
+cubistMod_nodup <- cubist(simulated[-11], simulated$y, committees = 100)
+
+cubistMod_nodupb <-varImp(cubistMod_nodup)
+
+cubistMod_nodupb.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(cubistMod_nodup))), "VALUE")    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+cubistMod_nodupbplot<-ggplot(cubistMod_nodupb.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
+  geom_point(color ='darkorange') + 
+  geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
+  labs(title="Variable Importance", subtitle="Cubist Model without Duplicate", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+
+
+
+simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
+cubistMod_wdup <- cubist(simulated[-11], simulated$y, committees = 100)
+
+cubistMod_wdupb <-varImp(cubistMod_wdup)
+
+cubistMod_wdupb.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(cubistMod_wdup))), "VALUE")    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+cubistMod_wdupbplot<-ggplot(cubistMod_wdupb.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
+  geom_point(color ='darkorange') + 
+  geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
+  labs(title="Variable Importance", subtitle="Cubist Model With Duplicate", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+
+
+
+simulated$duplicate1 <- NULL
+
+
+
 # (8.2)
+
+random_predictor <- data.frame(V1=sample(1:2, 100, replace=TRUE), V2=sample(1:100, 100, replace=TRUE),V3=sample(1:1000, 100, replace=TRUE), V4=sample(1:5000, 100, replace=TRUE))
+sim_df <- random_predictor %>% mutate(y=V1*V2*V3+rnorm(100))
+sim_rf <- randomForest(y ~ ., data = sim_df, importance = TRUE, ntree = 1000)
+sim_varImp <- varImp(sim_rf, scale=T)
+
+sim_varImp.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(sim_rf))), "VALUE")    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
+
+sim_varImp.plot<-ggplot(cubistMod_wdupb.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
+  geom_point(color ='darkorange') + 
+  geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
+  labs(title="Variable Importance", subtitle="Simulated Importance", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+
 
 # (8.3a)
 
+#No code needed for this problem 
+
 # (8.3b)
+
+#No code needed for this problem 
 
 # (8.3c)
 
+#No code needed for this problem 
+
+
 # (8.7a)
+#GBM
+gbmGrid_87 <- expand.grid(interaction.depth = seq(1, 7, by = 2),
+                      shrinkage = c(0.01, 0.1),
+                      n.trees = seq(100, 1000, by = 50),
+                      n.minobsinnode = 10)
+
+gbmTune_87 <- train(Yield~.,
+                  data=chem_train,
+                 method = "gbm",
+                 verbose = FALSE,
+                 tuneGrid = gbmGrid_87)
+#gbmTune_87
+#plot(gbmTune_87)
+#min(gbmTune_87$results$RMSE, na.rm = TRUE)
+# 0.01       7                   850     1.254821  0.5470138  0.9589064
+gbmPred_87 <- predict(gbmTune_87, newdata = chem_test)
+gb_test_87 <- postResample(pred = gbmPred_87, obs = chem_test$Yield)
+
+# Random Forest
+
+rf_87_grid <- expand.grid(mtry= seq(100, 1000, by=50))
+
+rfTune_87 <-  train(Yield~.,
+                  data=chem_train,
+                          method = 'rf',
+                          ntree = 50,
+                          tuneGrid = rf_87_grid)
+#plot(rfTune_87)
+#min(rfTune_87$results$RMSE, na.rm = TRUE)
+rfPred_87 <- predict(rfTune_87, newdata = chem_test)
+rf_test_87 <- postResample(pred = rfPred_87, obs = chem_test$Yield)
+rf_87<-randomForest(Yield~.,
+                  data=chem_train,
+                    importance = TRUE,
+                    ntree = 900)
+ #  Cubist
+set.seed(58677)
+cb_grid_87 <- expand.grid(committees = c(25:45), neighbors = c(1, 3, 5 ))
+cbTune_87 <- train(Yield~.,
+                  data=chem_train,
+                   method = "cubist",
+                   metric="RMSE",
+                   na.action = na.pass,
+                   tuneGrid = cb_grid_87,
+                   trControl = trainControl(method = 'cv'))
+#plot(cbTune_87)
+#min(cbTune_87$results$RMSE, na.rm = TRUE)
+cbPred_87 <- predict(cbTune_87, newdata = chem_test)
+cb_test_87 <- postResample(pred = cbPred_87, obs = chem_test$Yield)
+
+
+hw2.3.dperformance_table <- rbind("GBM"=c("RMSE"=max(gbmTune_87$results$RMSE),
+  "RSquared"=max(gbmTune_87$results$Rsquared),
+  "MAE"=max(gbmTune_87$results$MAE)),
+"GBMTest"=gb_test_87, 
+
+"RFTrain"=c("RMSE"=max(rfTune_87$results$RMSE),
+  "RSquared"=max(rfTune_87$results$Rsquared),
+  "MAE"=max(rfTune_87$results$MAE)),
+   "RFTest"=rf_test_87,
+
+    "CubistTrain"=c(max(cbTune_87$results$RMSE),
+      max(cbTune_87$results$Rsquared),
+      max(cbTune_87$results$MAE)),
+    "CubistTest"=cb_test_87) %>% kable(caption="Tree Model Performance on ChemicalManufacturing Data", digits=4) %>% kable_styling() %>% row_spec() %>% row_spec(row=5:6, background ="#d9f2e6")
+
+
 
 # (8.7b)
 
+#Boosted Model
+import <-varImp(gbmTune_87)
+import <- as.data.frame(import$importance) %>% rownames_to_column("Variable") %>% filter(Overall>0)%>%arrange(Overall)
+boost<- ggplot(import[1:10,], aes(x=reorder(Variable, Overall), y=Overall)) +
+    geom_point(color ='#b33a3a') +
+    geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall), color = '#b33a3a') +
+    labs(title="Variable Importance Chemical Manufacturing", subtitle="Gradient Boosted Trees", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+#rf Model
+import <- varImp(rf_87, scale = FALSE)
+import <- as.data.frame(import) %>% rownames_to_column("Variable") %>% filter(Overall>0)%>%arrange(Overall)
+random <- ggplot(import[1:10,], aes(x=reorder(Variable, Overall), y=Overall)) +
+  geom_point(color ='#3ab3b3') +
+  geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall), color = '#3ab3b3') +
+  labs(title="Variable Importance Chemical Manufacturing", subtitle="Random Forest", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+# Cubist Model
+import <-varImp(cbTune_87)
+import <- as.data.frame(import$importance) %>% rownames_to_column("Variable") %>% filter(Overall>0)%>%arrange(Overall)
+cube<- ggplot(import[1:10,], aes(x=reorder(Variable, Overall), y=Overall)) +
+  geom_point(color ='#77b33a') +
+  geom_segment(aes(x=Variable,xend=Variable,y=0,yend=Overall), color = '#77b33a') +
+  labs(title="Variable Importance Chemical Manufacturing", subtitle="Cubist Trees", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+
+
 # (8.7c)
+
+rpartTune <- train(Yield~.,
+                  data=chem_train,
+                     method = "rpart2",
+                     tuneLength = 10,
+                     trControl = trainControl(method = "cv"))
+#plot(rpartTune)
+best_rpart <- rpart(Yield~., data =chem_train,
+                    control = rpart.control(maxdepth = 4))
+#decision_plot <- rpart.plot(best_rpart,
+           # type = 1,
+           # extra = 1)
