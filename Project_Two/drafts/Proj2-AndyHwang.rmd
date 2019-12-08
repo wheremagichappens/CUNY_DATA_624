@@ -1,3 +1,4 @@
+
 ---
 title: 'DATA 624 PROJECT 2: Regression modeling - PH prediction'
 author: 'Sang Yoon (Andy) Hwang'
@@ -902,6 +903,916 @@ df_eval2 <- subset(df_eval, select = -PH)
 pred_eval <- predict(rf_model2, subset(df_final22))
 write.csv(pred_eval, 'prediction.csv')
 ```
+
+
+
+
+=======
+---
+title: 'DATA 624 PROJECT 2: Regression modeling - PH prediction'
+author: 'Sang Yoon (Andy) Hwang'
+date: '10 December 2019'
+output: 
+  pdf_document:
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    keep_tex: yes
+    toc: true
+    number_sections: no
+documentclass: report
+subparagraph: yes
+---
+
+```{r formatting, echo = F, message=F, warning=F, error=F, comment=NA}
+#source('~/GitHub/CUNY_DATA_624/Project_Two/defaults.R')
+source('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/defaults.R')
+```
+
+```{r, echo=F}
+library(tidyverse)
+library(readxl)
+library(psych)
+library(ggplot2)
+library(mice)
+library(xtable)
+library(GGally)
+library(ggstance)
+library(grid)
+library(gridExtra)
+library(ggpubr)
+library(caret)
+library(data.table)
+library(recipes)
+library(Metrics)
+library(randomForest)
+library(robustX)        # BACON
+library(ggcorrplot)     # Vis corr matrix
+library(e1071)          # Misc stats functions
+```
+
+```{r, echo=F}
+df <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentData.xlsx')
+#df <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx')
+df_eval <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/StudentEvaluation.xlsx')
+#df_eval <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx')
+dict <- read_excel('C:/Users/ahwang/Desktop/Cuny/DATA624/project2/data/DataDictionary.xlsx')
+#dict <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/DataDictionary.xlsx')
+
+# remove space in-between variable names
+colnames(df) <- gsub(" ","",colnames(df))
+```
+
+\thispagestyle{empty}
+\newpage
+\clearpage
+\pagenumbering{arabic} 
+
+# Introduction {-#intro}
+
+The goal of this project is to predict `PH`, a measure of acidity/alkalinity, using train data set from a beverage company which consists of 2571 rows of data and 33 variables. After creating models based on training data, we will test on scoring set of 267 rows with 32 variables (excluding target variable which is `PH` in our training set)
+
+As a group project, each member of the group is responsible for creating their own models of choice. For instance, my own selections were `PLS` and `Bagged Tree`. However, the choice of models can be altered after careful review of data exploration - it may require different type of model in case data suffers from outliers or any other data related issues.  
+
+Explaining why some necessary steps were applied before modeling and model A was preferred to Model B is often a topic in academic papers which is a meaningful topic that helps audience learn the concept of bagged regression and least square method better. 
+
+The final version of report will contain all of our approaches with results of `MAPE` for each model with detailed explanation of why/what/how each model of choice was chosen.
+
+# Data Exploration 
+
+## Data dictionary
+
+The table below describes the variables in the train data set.
+
+```{r, fig.align='center', warning=FALSE, fig.height=6, echo=F}
+kable(dict, caption="Data dictionary", booktabs=T)%>%kable_styling()%>%row_spec()
+```
+
+## Summary statistics
+
+Since we are implementing models which do not require hard assumptions of joint distribution of variables, normality assumption is not required. We will focus on how to handle missing values only.
+
+It is apparent, from below, that we have variables that are missing values - we will impute NULLs with MICE later on.
+
+```{r, warning=FALSE, fig.height=4, fig.width=4, cache=T, echo=F}
+# Create a table summarizing the training data
+# create lists of desired summary stats for calculation
+statFuns <- 
+  funs(missing = sum(is.na(.))
+       , min = min(., na.rm = TRUE)
+       , Q1 = quantile(., .25, na.rm = TRUE)
+       , mean = mean(., na.rm = TRUE)
+       , median = median(., na.rm = TRUE)
+       , Q3 = quantile(., .75, na.rm = TRUE)
+       , max = max(., na.rm = TRUE)
+       , sd = sd(., na.rm = TRUE)
+  )
+
+# Create data frame of basic summary stats
+dfSumTrain  <- 
+  df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>% 
+  dplyr::select(-`BrandCode`) %>% 
+  summarise_all(statFuns) %>% 
+  gather() %>% 
+  separate(key, c('metric', 'stat'), sep = '(_)(?!.*_)') %>% 
+  spread(stat, value) %>% 
+  dplyr::select(metric, names(statFuns))
+
+dfSumTrain %>% kable(caption="Summary statistics", booktabs=T)%>%kable_styling()%>%row_spec()
+```
+
+Since `Brand code` is categorical, creating summary statistics was not possible. Instead, we implemented table summary of the distribution of each value. Note that we are missing 120 values.
+
+```{r, echo=F}
+table(df$`BrandCode`, useNA = "ifany")%>%kable(caption="Frequency distribution of BrandCode", booktabs=T)%>%kable_styling()%>%row_spec()
+```
+
+## Visualizations
+
+### Missing data
+
+With the help of visualization, it is easier to navigate how much each variable is missing. Note that `MFR` has the most number of missing values.
+
+```{r, fig.align='center', warning=FALSE, fig.height=6, cache=T, echo=F}
+dfSumTrain %>% 
+  group_by(metric) %>% 
+  mutate(miss_perc = missing / !!nrow(df)) %>% 
+  dplyr::select(metric,missing, miss_perc) %>% 
+  ggplot(data = ., aes(x = reorder(metric, -miss_perc) , y = miss_perc)) + 
+  geom_bar(stat = 'identity') +
+  coord_flip() + 
+  geom_text(aes(label = missing), hjust = -0.1, size = 3) + 
+  labs(x = NULL, y = NULL, Title = '% Missing') + 
+  theme_bw() +
+  theme(legend.position = 'none') + 
+  scale_y_continuous(labels = scales::percent)
+```
+
+### Univariate distributions
+
+We notice that there are some variables such as `Temperature` and `Oxygen Filler` that are highly positively skewed. There are potentials of presence of outliers for skewed variables.
+
+```{r, fig.align='center', warning=FALSE, fig.height=6, cache=T, echo=F}
+df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  dplyr::select(-BrandCode) %>% 
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(value)) + 
+  geom_histogram(bins = 30, aes(y = ..density..)) +
+  geom_density(alpha = 0.3, color = NA, fill = 'lightgreen') + 
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL, y = NULL) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+As we expected, there are many outliers in `Temperature` and `Oxygen Filler`. Note that `MFR` greatly suffers from the presence of outliers.
+
+From the presence of multiple outliers, we then have to explain why/what/how we decided to add `Random Forest` as an additional model and apply necessary pre-processing before modeling `PLS` and `Bagged Tree`, if needed. If number of outlier
+
+Althought tree-based models, including`Bagged Tree`, are generally robust to outliers and multicollinearity, it does not necessarily mean Model A in tree-based is always equally good as another model in tree-based. Ensembled model such as `Random Forest` is potentially even more robust to outliers and multicollinearity than `Bagged Tree` since only a subset of features are selected at random out of the total and the best split feature from the subset is used to split each node in a tree, unlike in bagging where all features are considered for splitting a node. This makes `Random Forest` a potentially good alternative for `Bagged Tree`. 
+
+Partial least squares regression (PLS regression) is used as an alternative for ordinary least squares regression in the presence of multicollinearity. Although `PLS` is quite sensitive to outliers, like in `OLS`, small number of outliers will not necessarily worsen the predictive ability. In fact, depending on the situations, removing outlier will rather decrease `MAPE` on test set. Since the benefit of removing outlier cannot be predicted in our case, we will compare `MAPE` on test set between `PLS` model without outliers and `PLS` model without handling outliers to select the best model.
+
+Reference:
+
+(https://www.hindawi.com/journals/jam/2018/7696302/ - "PLS regression is sensitive to outliers and leverages. Thus several robust versions have been proposed in the literature, but only for linear PLS. Hubert [7] proposed two robust versions of the SIMPLS algorithm by using a robust estimation for the variance-covariance matrix. Kondylis and Hadi [8] used the BACON algorithm to eliminate outliers, resulting in a robust linear PLS."
+)
+
+```{r, fig.align='center', warning=FALSE, cache=T, fig.height=12, fig.width=8, echo=F}
+df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  dplyr::select(-BrandCode) %>% 
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(x = '', y = value)) + 
+  geom_boxplot() + 
+  geom_violin(alpha = 0.3, color = NA, fill = 'lightgreen') + 
+  labs(x = NULL, y = NULL) + 
+  theme_bw() +
+  theme(axis.ticks.y=element_blank()) + 
+  facet_wrap(~key, scales = 'free', ncol = 2) + 
+  coord_flip()
+```
+
+### Bivariate relationships 
+
+Note that `Oxygen Filler` has weak positive relationship with `PH`. On the other hand, we  know that `Temparature` has weak negative relationship with `PH`. All of the predictors have really weak relationship with `PH` suggesting that linear models might not work well.
+
+```{r, fig.align='center', warning=FALSE, fig.height=6, cache=T, echo=F}
+df %>% 
+  dplyr::select(-BrandCode) %>% 
+  gather(key, value, -PH) %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(x = value, y = PH)) + 
+  geom_point() + 
+  geom_smooth(method = 'gam') + 
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+### Correlation Matrix
+
+We confirmed that there are several highly correlated predictors. This is another reason why `Random Forest` would be more preferred to `Bagged Tree` model. In fact, `Random Forest` is more robust to strong correlation than `Bagged Tree`. Although multicollinearity is not a big problem for tree-based models and `PLS`, it can cause some problem when it comes to inferring the importance of certain predictors in tree model. Multicollinearity means that some predictors are shown as highly correlated with other combincations of predictors in variable importance. According to the reference, it may mislead business audience to think that some features are not more important than others vice-versa. However, we really do not know whether the reader of this paper would treat highly correlated variable such as `HydPressure3` and `HydPressure2` differently or not. Therefore, we will just keep the variables as they are.
+
+Reference:
+
+("For example, the two surface area predictors have an extremely high correlation (0.96) and each is used in the tree shown in Fig. 8.4. It is possible that the small difference
+between these predictors is strongly driving the choice between the two, but
+it is more likely to be due to small, random differences in the variables.
+Because of this, more predictors may be selected than actually needed. In
+addition, the variable importance values are affected. If the solubility data
+only contained one of the surface area predictors, then this predictor would
+have likely been used twice in the tree, therefore inflating its importance
+value. Instead, including both surface area predictors in the data causes their
+importance to have only moderate values." Page 181 of Applied Predictive Modeling - Max KJ)
+
+```{r, fig.align='center', warning=FALSE, fig.height=8, echo=F}
+# Calculate pairwise pearson correlation and display as upper matrix plot
+df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  dplyr::select(-c('BrandCode','PH')) %>% 
+  cor(method = 'pearson', use = 'pairwise.complete.obs') %>% 
+  ggcorrplot(corr = ., method = 'square', type = 'upper'
+             , lab = TRUE, lab_size = 3, lab_col = 'grey20')
+```
+
+# Data preparation
+
+Before modeling can be done, the issues identified during the data exploration, namely, zero variance predictors, outliers and missing data need to be addressed.
+
+## Imputation
+
+After reviewing a few methods of multiple imputation techniques, Multiple Imputation Chained Equations (MICE) was selected for its strength in handling imputation for observations with more than one predictor missing. For categorical variable such as `Brand Code` will be imputed by mode. For `BACON` to work, we will also convert `Brand Code` to numeric.
+
+We will also remove zero variance Predictors using `nearZeroVar`. It diagnoses predictors that have one unique value or predictors that have both of the following characteristics: 1. they have very few unique values relative to the number of samples and 2. the ratio of the frequency of the most common value to the frequency of the second most common value is large.
+We confirmed that `HydPressure1` is dropped as a result.
+
+For outlier handling, we will use `BACON`, short for 'Blocked Adaptive Computationally-Efficient Outlier Nominators'. It is a robust algorithm (set), with an implementation for regression or multivariate covariance estimation. The function produces index with `FALSE` to identify rows with outliers. This index will be used as `subset` to fit outlier-free train `subset` in the process of hyper-parameter tuning in `train` function and re-train the final model with best tuned hyperparameters. The result of `BACON` confirmed that only about 0.9%  or 19 of train set are detected as outliers. Note that we have total 2058 of rows in tran set.
+
+```{r, cache=T, results = 'hide', warning=F, message=F, echo=F}
+# set seed for split to allow for reproducibility
+set.seed(58677)
+
+# use mice w/ default settings to impute missing data
+miceImput <- mice(df, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice <- complete(miceImput)
+df_mice$BrandCode[is.na(df_mice$BrandCode)] <- 'B'
+#table(df_mice$BrandCode, useNA = "ifany")
+
+# Look for any features with no variance:
+zero_cols <- nearZeroVar( df_mice )
+df_final <- df_mice[,-zero_cols] # drop these zero variance columns 
+df_final$BrandCode <- as.factor(df_final$BrandCode)
+
+# convert categorical factor into numeric
+M <- df_final
+must_convert<-sapply(M,is.factor) # logical vector telling if a variable needs to be displayed as numeric
+BrandNumeric <- sapply(M[,must_convert],unclass)    # data.frame of all categorical variables now displayed as numeric
+df_final2<-cbind(M[,!must_convert],BrandNumeric)        # complete data.frame with all variables put together
+
+# split data train/test
+# df for random forest
+training <- df_final$PH %>%createDataPartition(p = 0.8, list = FALSE)
+df_train <- df_final[training, ]
+df_test <- df_final[-training, ]
+
+# df for PLS and Bagging
+training2 <- df_final2$PH %>%createDataPartition(p = 0.8, list = FALSE)
+df_train2 <- df_final2[training2, ]
+df_test2 <- df_final2[-training2, ]
+
+# X and y split for BACON fit
+x <- subset(df_train2, select = -c(PH) )
+x <- as.matrix(x)
+y <- df_train2[, c('PH')]
+
+bacon_fit <- BACON(x = x, y = y)
+```
+
+# Modeling
+
+## Model 1: Bagged Tree
+
+```{r, fig.align='center', warning=FALSE, fig.height=6, cache=T, echo=F}
+set.seed(58677)
+bagged_model <- train( PH~., data = df_train, method="treebag",
+                   tuneLength=10, 
+                #   subset = bacon_fit$subset,
+                    trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_bag_pred <- predict(bagged_model)
+bagged_model$results$MAPE <- Metrics::mape(df_train$PH, train_bag_pred)
+
+bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(bagged_model))
+```
+MAPE is `r bagged_model$results$MAPE` where as top 3 important predictors are `CarbRel`, `OxygenFiler` and `Usuagecont`. Since `Bagged Tree` uses all features for splitting a node unlike `Random Forest` which uses only a subset of features at random out of the total for splitting each node in a tree, the order of feature importances between two models can be quite different.
+
+## Model 2: PLS with BACON
+
+```{r, cache=T, fig.align='center', warning=FALSE, fig.height=6, echo=F}
+set.seed(58677)
+df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
+
+pls_model <- train( PH~., data = df_train2, method="pls",
+                   tuneLength=10, 
+                   subset = bacon_fit$subset,
+                   preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_pls_pred <- predict(pls_model)
+pls_model$results$MAPE <- Metrics::mape(df_train2$PH, train_pls_pred)
+
+pls_model$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS with BACON", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(pls_model))
+```
+## Model 2-2: PLS
+
+```{r, cache=T, fig.align='center', warning=FALSE, fig.height=6, echo=F}
+set.seed(58677)
+#df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
+
+pls_model2 <- train( PH~., data = df_train, method="pls",
+                   tuneLength=10, 
+                #   subset = bacon_fit$subset,
+                   preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_pls_pred2 <- predict(pls_model2)
+pls_model2$results$MAPE <- Metrics::mape(df_train$PH, train_pls_pred2)
+
+pls_model2$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(pls_model2))
+```
+
+The final value used for both was ncomp = 10. MAPE for `PLS-BACON` is `r pls_model$results$MAPE[10]` and for `PLS` it is `r pls_model2$results$MAPE[10]`. Top 3 important predictors for `PLS-BACON` are `MnfFlow`, `Usuagecont` and `BowlSetpoint` and for `PLS` they are `MnfFlow`, `BrandCodeC` and `Usuagecont`. The order of variable importance, again, is quite different from `Bagged Tree` as `PLS` model is not a tree-based model.
+
+Note that PLS is a dimension reduction technique with some similarity to principal component analysis. The predictor variables are mapped to a smaller set of variables and within that smaller space we perform a regression against the outcome variable. In contrast to principal component analysis where the dimension reduction ignores the outcome variable, the `PLS` procedure aims to choose new mapped variables that maximally explain the outcome variable. 
+
+```{r, cache=T, echo=F}
+## Model 3-1: Random Forest with BACON
+
+# set.seed(58677)
+# rf_model <- train( PH~., data = df_train2, method="rf",
+#                    tuneLength=10, 
+#                    subset = bacon_fit$subset,
+#                    importance = TRUE,
+#                    trControl=trainControl(method="cv",number=5) )
+# 
+# # create MAPE table
+# train_rf_pred <- predict(rf_model)
+# rf_model$results$MAPE <- Metrics::mape(df_train2$PH, train_rf_pred)
+# 
+# rf_model$results%>%kable(caption="Model Summary - RF with BACON", booktabs=T)%>%kable_styling()%>%row_spec()
+# 
+# # plot varImp
+# plot(varImp(rf_model))
+# 
+# Although `BACON` is not needed for `Random Forest`, it would not bother using it anyway. We will expermient the effect of `BACON` in `Random Forest`. The final value used for the model was ncomp = 10. MAPE is `r rf_model$results$MAPE` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. 
+```
+## Model 3: Random Forest
+
+```{r, cache=T, fig.align='center', warning=FALSE, fig.height=6, echo=F}
+set.seed(58677)
+
+# Algorithm Tune (tuneRF)
+#bestmtry <- tuneRF(df_train[, -25], df_train[,25], stepFactor=1.5, improve=1e-5, ntree=2500)
+
+##mtry <- ( (ncol(df_train) -1) / 3 ) or sqrt(ncol(df_train) - 1) # By default, # of predictors / 3 for regression, sqrt(# of predictors) for classification https://www.hackerearth.com/practice/machine-learning/machine-learning-algorithms/tutorial-random-forest-parameter-tuning-r/tutorial/
+
+# from above result, we got mtry= 31 and ntree=2500 as optimal parameters
+rf_model2 <- randomForest(PH~., data=df_train, method="rf", mtry= 31, importance = TRUE, ntree = 2500)
+
+# create MAPE table
+train_rf_pred2 <- predict(rf_model2)
+
+s <- data.frame(
+RMSE = Metrics::rmse(df_train$PH, train_rf_pred2),
+Rsquared = caret::R2(df_train$PH, train_rf_pred2),
+MAPE = Metrics::mape(df_train$PH, train_rf_pred2) )
+
+s%>%kable(caption="Model Summary - RF", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+Random_Forest_Variance_Importance <- rf_model2
+varImpPlot(Random_Forest_Variance_Importance)
+```
+
+The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is `r s$MAPE` where as top 3 important predictors are `MnfFlow`, `BrandCode` and `PressureVacuum` for %incMSE and `MnfFlow`, `BrandCode` and `OxygenFiller` for IncNodePurity. Unlike `PLS`, `Random Forest` can produce 2 different variable importance plots. 
+
+The first graph shows how much MSE would increase if a variable is assigned with values by random permutation. The second plot is based on `node purity` which is measured by the difference between RSS before and after the split on that variable (`Gini Index`). In short, each graph shows how much MSE or Impurity increases when each variable is randomly permuted.
+
+# Evaluation
+
+```{r, echo=F}
+# Make predictions
+p1 <- bagged_model %>% predict(df_test)
+p2 <- pls_model %>% predict(df_test2)
+p22 <- pls_model2 %>% predict(df_test)
+p3 <- rf_model2 %>% predict(df_test)
+
+# Model performance metrics
+sum_t <- data.frame(
+  MODEL = c('Bagged Tree',
+            'PLS - BACON',
+            'PLS',
+            'RF'),
+  RMSE = c(caret::RMSE(p1, df_test$PH),
+           caret::RMSE(p2, df_test2$PH),
+           caret::RMSE(p22, df_test$PH),
+           caret::RMSE(p3, df_test$PH) ),
+  Rsquare = c(caret::R2(p1, df_test$PH),
+              caret::R2(p2, df_test2$PH),
+              caret::R2(p22, df_test$PH),
+              caret::R2(p3, df_test$PH)),
+  MAPE = c(Metrics::mape(p1, df_test$PH),
+             Metrics::mape(p2, df_test2$PH),
+             Metrics::mape(p22, df_test$PH),
+             Metrics::mape(p3, df_test$PH))
+            )
+
+sum_t%>%kable(caption="Evaluation Summary on test set", booktabs=T)%>%kable_styling()%>%row_spec()
+```
+
+From the table, we confirmed that `Random Forest` is a clear winner with the lowest MAPE on test set. Also, note that `PLS` without removing outlier is better model than `PLS-BACON`. This is not a surprising result since the number of outliers was very small (19 out of 2058) and hence removing outlier is unnecessary process for our case.
+
+## Insight & Conclusion
+
+```{r, fig.align='center', warning=FALSE, fig.height=6, echo=F}
+# code
+
+top_var <- c('MnfFlow','PressureVacuum', 'OxygenFiller')
+
+featurePlot(df_train[, top_var],
+            df_train$PH,
+            plot = "scatter",
+            between = list(x = 1, y = 1),
+            type = c("g", "p", "smooth"),
+            layout = c(3,1),
+            labels = rep("", 2))
+
+# ggplot(df_train[df_train$BrandCode == 'B',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+# 
+# ggplot(df_train[df_train$BrandCode == 'A',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+# 
+# ggplot(df_train[df_train$BrandCode == 'C',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+# 
+# ggplot(df_train[df_train$BrandCode == 'D',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+ggplot(df_train, aes(x=MnfFlow, y=PH, color=BrandCode, shape=BrandCode)) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) +
+  theme_bw()+theme()
+
+ggplot(df_train, aes(x=PressureVacuum, y=PH, color=BrandCode, shape=BrandCode)) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) +
+  theme_bw()+theme()
+
+ggplot(df_train, aes(x=OxygenFiller, y=PH, color=BrandCode, shape=BrandCode)) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) +
+  theme_bw()+theme()
+```
+
+We graphed top 4 most important variables from Random Forest's `varImp` of MSE and NodePurity. Given that `Brand Code` is categorical, we grouped 3 continous variables into `Brand Code`. 
+
+The first feature plot shows that 3 continous variables have very weak relationship with `PH`. `MnfFlow` has slight negative relationship where as `PressureVacuum` and `OxygenFiller` have slight positive relationship.
+
+From grouping by `Brand Code`, we see that for `PH` vs `MnfFlow` and `PH vs PressureVacuum`, it seems like predictors have the most negative relationship with `PH` with code = `B`. For `PH vs OxygenFiller`, code = `C` seems to have the most negative relationship with `PH`.
+
+We can recommend business users to put more attention on increasing `MnfFlow` or decreasing `PressureVacuum` (especially code = `B` for both) and `OxygenFiller` (especially code = `C`) than any other predictors if their goal is to decrease `PH`.  
+
+## Prediction
+
+```{r, cache=T, echo=F}
+# remove space in-between variable names
+colnames(df_eval) <- gsub(" ","",colnames(df_eval))
+# remove column with zero-variance
+set.seed(58677)
+
+# use mice w/ default settings to impute missing data
+miceImput2 <- mice(df_eval, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice2 <- complete(miceImput2)
+#table(df_eval$BrandCode, useNA = 'ifany')
+df_mice2$BrandCode[is.na(df_mice2$BrandCode)] <- 'B'
+#table(df_mice$BrandCode, useNA = "ifany")
+
+# Look for any features with no variance:
+#zero_cols <- nearZeroVar( df_mice2 )
+df_final22 <- df_mice2[,-zero_cols] # drop these zero variance columns 
+df_final22$BrandCode <- as.factor(df_final22$BrandCode)
+
+df_eval2 <- subset(df_eval, select = -PH)
+
+pred_eval <- predict(rf_model2, subset(df_final22))
+write.csv(pred_eval, 'prediction.csv')
+```
+
+Let's export the prediction values of `Random Forest` (the best model) on `StudentEvaluation` as CSV file.
+
+# Appendix {-#Appendix}
+
+```{r, eval=F, echo=T}
+library(tidyverse)
+library(readxl)
+library(psych)
+library(ggplot2)
+library(mice)
+library(xtable)
+library(GGally)
+library(ggstance)
+library(grid)
+library(gridExtra)
+library(ggpubr)
+library(caret)
+library(data.table)
+library(recipes)
+library(Metrics)
+library(randomForest)
+library(robustX)        # BACON
+library(ggcorrplot)     # Vis corr matrix
+library(e1071)          # Misc stats functions
+
+df <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentData.xlsx')
+df_eval <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/StudentEvaluation.xlsx')
+dict <- read_excel('~/GitHub/CUNY_DATA_624/Project_Two/data/DataDictionary.xlsx')
+
+# remove space in-between variable names
+colnames(df) <- gsub(" ","",colnames(df))
+
+# Data Exploration 
+## Data dictionary
+
+kable(dict, caption="Data dictionary", booktabs=T)%>%kable_styling()%>%row_spec()
+
+## Summary statistics
+
+# Create a table summarizing the training data
+# create lists of desired summary stats for calculation
+statFuns <- 
+  funs(missing = sum(is.na(.))
+       , min = min(., na.rm = TRUE)
+       , Q1 = quantile(., .25, na.rm = TRUE)
+       , mean = mean(., na.rm = TRUE)
+       , median = median(., na.rm = TRUE)
+       , Q3 = quantile(., .75, na.rm = TRUE)
+       , max = max(., na.rm = TRUE)
+       , sd = sd(., na.rm = TRUE)
+       , mad = mad(., na.rm = TRUE)
+       , skewness = skewness(., na.rm = TRUE)
+       , kurtosis = kurtosis(., na.rm = TRUE)
+  )
+
+# Create data frame of basic summary stats
+dfSumTrain  <- 
+  df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>% 
+  dplyr::select(-`BrandCode`) %>% 
+  summarise_all(statFuns) %>% 
+  gather() %>% 
+  separate(key, c('metric', 'stat'), sep = '(_)(?!.*_)') %>% 
+  spread(stat, value) %>% 
+  dplyr::select(metric, names(statFuns))
+
+dfSumTrain %>% kable(caption="Summary statistics", booktabs=T)%>%kable_styling()%>%row_spec()
+
+table(df$`BrandCode`, useNA = "ifany")%>%kable(caption="Frequency distribution of BrandCode", booktabs=T)%>%kable_styling()%>%row_spec()
+
+## Visualizations
+
+### Missing data
+
+dfSumTrain %>% 
+  group_by(metric) %>% 
+  mutate(miss_perc = missing / !!nrow(df)) %>% 
+  dplyr::select(metric,missing, miss_perc) %>% 
+  ggplot(data = ., aes(x = reorder(metric, -miss_perc) , y = miss_perc)) + 
+  geom_bar(stat = 'identity') +
+  coord_flip() + 
+  geom_text(aes(label = missing), hjust = -0.1, size = 3) + 
+  labs(x = NULL, y = NULL, Title = '% Missing') + 
+  theme_bw() +
+  theme(legend.position = 'none') + 
+  scale_y_continuous(labels = scales::percent)
+
+### Univariate distributions
+
+df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  dplyr::select(-BrandCode) %>% 
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(value)) + 
+  geom_histogram(bins = 30, aes(y = ..density..)) +
+  geom_density(alpha = 0.3, color = NA, fill = 'lightgreen') + 
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL, y = NULL) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  dplyr::select(-BrandCode) %>% 
+  gather() %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(x = '', y = value)) + 
+  geom_boxplot() + 
+  geom_violin(alpha = 0.3, color = NA, fill = 'lightgreen') + 
+  labs(x = NULL, y = NULL) + 
+  theme_bw() +
+  theme(axis.ticks.y=element_blank()) + 
+  facet_wrap(~key, scales = 'free', ncol = 2) + 
+  coord_flip()
+
+### Bivariate relationships 
+
+df %>% 
+  dplyr::select(-BrandCode) %>% 
+  gather(key, value, -PH) %>% 
+  group_by(key) %>% 
+  ggplot(data = ., aes(x = value, y = PH)) + 
+  geom_point() + 
+  geom_smooth(method = 'gam') + 
+  facet_wrap(~key, scales = 'free') + 
+  labs(x = NULL) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+### Correlation Matrix
+
+# Calculate pairwise pearson correlation and display as upper matrix plot
+df %>% 
+  # union(dfEval %>% mutate(TARGET_WINS = as.numeric(NA))) %>%
+  dplyr::select(-c('BrandCode','PH')) %>% 
+  cor(method = 'pearson', use = 'pairwise.complete.obs') %>% 
+  ggcorrplot(corr = ., method = 'square', type = 'upper'
+             , lab = TRUE, lab_size = 3, lab_col = 'grey20')
+
+# Data preparation
+## Imputation
+
+# set seed for split to allow for reproducibility
+set.seed(58677)
+
+# use mice w/ default settings to impute missing data
+miceImput <- mice(df, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice <- complete(miceImput)
+df_mice$BrandCode[is.na(df_mice$BrandCode)] <- 'B'
+#table(df_mice$BrandCode, useNA = "ifany")
+
+# Look for any features with no variance:
+zero_cols <- nearZeroVar( df_mice )
+df_final <- df_mice[,-zero_cols] # drop these zero variance columns 
+df_final$BrandCode <- as.factor(df_final$BrandCode)
+
+# convert categorical factor into numeric
+M <- df_final
+must_convert<-sapply(M,is.factor) # logical vector telling if a variable needs to be displayed as numeric
+BrandNumeric <- sapply(M[,must_convert],unclass)    # data.frame of all categorical variables now displayed as numeric
+df_final2<-cbind(M[,!must_convert],BrandNumeric)        # complete data.frame with all variables put together
+
+# split data train/test
+# df for random forest
+training <- df_final$PH %>%createDataPartition(p = 0.8, list = FALSE)
+df_train <- df_final[training, ]
+df_test <- df_final[-training, ]
+
+# df for PLS and Bagging
+training2 <- df_final2$PH %>%createDataPartition(p = 0.8, list = FALSE)
+df_train2 <- df_final2[training2, ]
+df_test2 <- df_final2[-training2, ]
+
+# X and y split for BACON fit
+x <- subset(df_train2, select = -c(PH) )
+x <- as.matrix(x)
+y <- df_train2[, c('PH')]
+
+bacon_fit <- BACON(x = x, y = y)
+
+# Modeling
+
+## Model 1: Bagged Tree
+
+set.seed(58677)
+bagged_model <- train( PH~., data = df_train, method="treebag",
+                       tuneLength=10, 
+                  #     subset = bacon_fit$subset,
+                       trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_bag_pred <- predict(bagged_model)
+bagged_model$results$MAPE <- Metrics::mape(df_train$PH, train_bag_pred)
+
+bagged_model$results[,c(2,3,8)]%>%kable(caption="Model Summary - Bagged Tree", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(bagged_model))
+
+## Model 2: PLS with BACON
+
+set.seed(58677)
+df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
+
+pls_model <- train( PH~., data = df_train2, method="pls",
+                    tuneLength=10, 
+                    subset = bacon_fit$subset,
+                    preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_pls_pred <- predict(pls_model)
+pls_model$results$MAPE <- Metrics::mape(df_train2$PH, train_pls_pred)
+
+pls_model$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS with BACON", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(pls_model))
+
+## Model 2-2: PLS
+set.seed(58677)
+#df_final2$BrandNumeric <- as.factor(df_final2$BrandNumeric)
+
+pls_model2 <- train( PH~., data = df_train, method="pls",
+                   tuneLength=10, 
+                #   subset = bacon_fit$subset,
+                   preProcess=c("center","scale"), trControl=trainControl(method="cv",number=5) )
+
+# create MAPE table
+train_pls_pred2 <- predict(pls_model2)
+pls_model2$results$MAPE <- Metrics::mape(df_train$PH, train_pls_pred2)
+
+pls_model2$results[10,c(2,3,8)]%>%kable(caption="Model Summary - PLS", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+plot(varImp(pls_model2))
+
+## Model 3-1: Random Forest with BACON
+
+# set.seed(58677)
+# rf_model <- train( PH~., data = df_train2, method="rf",
+#                    tuneLength=10, 
+#                    subset = bacon_fit$subset,
+#                    importance = TRUE,
+#                    trControl=trainControl(method="cv",number=5) )
+# 
+# # create MAPE table
+# train_rf_pred <- predict(rf_model)
+# rf_model$results$MAPE <- Metrics::mape(df_train2$PH, train_rf_pred)
+# 
+# rf_model$results%>%kable(caption="Model Summary - RF with BACON", booktabs=T)%>%kable_styling()%>%row_spec()
+# 
+# # plot varImp
+# plot(varImp(rf_model))
+# 
+# Although `BACON` is not needed for `Random Forest`, it would not bother using it anyway. We will expermient the effect of `BACON` in `Random Forest`. The final value used for the model was ncomp = 10. MAPE is `r rf_model$results$MAPE` where as top 3 important predictors are `MnfFlow`, `Usuagecont` and `BowlSetpoint`. 
+
+## Model 3: Random Forest
+
+set.seed(58677)
+
+# Algorithm Tune (tuneRF)
+#bestmtry <- tuneRF(df_train[, -25], df_train[,25], stepFactor=1.5, improve=1e-5, ntree=2500)
+
+##mtry <- ( (ncol(df_train) -1) / 3 ) or sqrt(ncol(df_train) - 1) # By default, # of predictors / 3 for regression, sqrt(# of predictors) for classification https://www.hackerearth.com/practice/machine-learning/machine-learning-algorithms/tutorial-random-forest-parameter-tuning-r/tutorial/
+
+# from above result, we got mtry= 31 and ntree=2500 as optimal parameters
+rf_model2 <- randomForest(PH~., data=df_train, method="rf", mtry= 31, importance = TRUE, ntree = 2500)
+
+# create MAPE table
+train_rf_pred2 <- predict(rf_model2)
+
+s <- data.frame(
+  RMSE = Metrics::rmse(df_train$PH, train_rf_pred2),
+  Rsquared = caret::R2(df_train$PH, train_rf_pred2),
+  MAPE = Metrics::mape(df_train$PH, train_rf_pred2) )
+
+s%>%kable(caption="Model Summary - RF", booktabs=T)%>%kable_styling()%>%row_spec()
+
+# plot varImp
+Random_Forest_Variance_Importance <- rf_model2
+varImpPlot(Random_Forest_Variance_Importance)
+
+# Evaluation
+
+# Make predictions
+p1 <- bagged_model %>% predict(df_test)
+p2 <- pls_model %>% predict(df_test2)
+p22 <- pls_model %>% predict(df_test)
+p3 <- rf_model2 %>% predict(df_test)
+
+# Model performance metrics
+sum_t <- data.frame(
+  MODEL = c('Bagged Tree',
+            'PLS - BACON',
+            'PLS',
+            'RF'),
+  RMSE = c(caret::RMSE(p1, df_test$PH),
+           caret::RMSE(p2, df_test2$PH),
+           caret::RMSE(p22, df_test$PH),
+           caret::RMSE(p3, df_test$PH) ),
+  Rsquare = c(caret::R2(p1, df_test$PH),
+              caret::R2(p2, df_test2$PH),
+              caret::R2(p22, df_test$PH),
+              caret::R2(p3, df_test$PH)),
+  MAPE = c(Metrics::mape(p1, df_test$PH),
+           Metrics::mape(p2, df_test2$PH),
+           Metrics::mape(p22, df_test$PH),
+           Metrics::mape(p3, df_test$PH))
+)
+
+sum_t%>%kable(caption="Evaluation Summary on test set", booktabs=T)%>%kable_styling()%>%row_spec()
+
+## Insight & Conclusion
+
+# code
+top_var <- c('MnfFlow','PressureVacuum', 'OxygenFiller')
+
+featurePlot(df_train[, top_var],
+            df_train$PH,
+            plot = "scatter",
+            between = list(x = 1, y = 1),
+            type = c("g", "p", "smooth"),
+            layout = c(3,1),
+            labels = rep("", 2))
+
+# ggplot(df_train[df_train$BrandCode == 'B',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+# 
+# ggplot(df_train[df_train$BrandCode == 'A',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+# 
+# ggplot(df_train[df_train$BrandCode == 'C',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+# 
+# ggplot(df_train[df_train$BrandCode == 'D',], aes(x=MnfFlow, y=PH, shape=BrandCode, color=BrandCode)) + 
+#   geom_point()
+ggplot(df_train, aes(x=MnfFlow, y=PH, color=BrandCode, shape=BrandCode)) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) +
+  theme_bw()+theme()
+
+ggplot(df_train, aes(x=PressureVacuum, y=PH, color=BrandCode, shape=BrandCode)) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) +
+  theme_bw()+theme()
+
+ggplot(df_train, aes(x=OxygenFiller, y=PH, color=BrandCode, shape=BrandCode)) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE) +
+  theme_bw()+theme()
+
+## Prediction
+
+# remove space in-between variable names
+colnames(df_eval) <- gsub(" ","",colnames(df_eval))
+# remove column with zero-variance
+set.seed(58677)
+
+# use mice w/ default settings to impute missing data
+miceImput2 <- mice(df_eval, printFlag = FALSE)
+
+# add imputed data to original data set
+df_mice2 <- complete(miceImput2)
+#table(df_eval$BrandCode, useNA = 'ifany')
+df_mice2$BrandCode[is.na(df_mice2$BrandCode)] <- 'B'
+#table(df_mice$BrandCode, useNA = "ifany")
+
+# Look for any features with no variance:
+#zero_cols <- nearZeroVar( df_mice2 )
+df_final22 <- df_mice2[,-zero_cols] # drop these zero variance columns 
+df_final22$BrandCode <- as.factor(df_final22$BrandCode)
+
+df_eval2 <- subset(df_eval, select = -PH)
+
+pred_eval <- predict(rf_model2, subset(df_final22))
+write.csv(pred_eval, 'prediction.csv')
+```
+
 
 
 
