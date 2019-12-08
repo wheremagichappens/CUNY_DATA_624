@@ -68,7 +68,11 @@
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\usepackage{graphicx,grffile}
+\usepackage{graphicx}
+% grffile has become a legacy package: https://ctan.org/pkg/grffile
+\IfFileExists{grffile.sty}{%
+\usepackage{grffile}
+}{}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -226,8 +230,22 @@ File for final submission of Project 2.
 \clearpage
 \pagenumbering{arabic}
 
-\hypertarget{executive-summary}{%
-\chapter{Executive Summary}\label{executive-summary}}
+\hypertarget{will-update-sunday-morning}{%
+\chapter{Will Update Sunday Morning}\label{will-update-sunday-morning}}
+
+{[}CONTENT EDITORS: ADD IN SUMMARY OF CONCLUSION AND ANY SUPPORTING
+INSIGHT FROM LAST SECTION{]}
+
+\hypertarget{introduction}{%
+\chapter{Introduction}\label{introduction}}
+
+pH is a central component to the manufacturing of a commercial beverage
+as it is an indicator of both the process health and the ultimate flavor
+appeal of the final product. In fact pH plays a role in multiple facets
+of the a drinks appeal. The flavor, mouthfeel and the aesthetic
+experience of a given product is distinctly tied to the pH relative to
+other beverage qualities that brands use distinguish themselves from
+other liquid refreshments.
 
 Because it is to central to the design of a product's drinking
 experience, pH is a key performance indicator in the beverage
@@ -241,29 +259,15 @@ closely controlling pH in our beverages with predictive modeling with
 the potential to catch and correct variations in process which negative
 impact our taget pH.
 
-{[}CONTENT EDITORS: ADD IN SUMMARY OF CONCLUSION AND ANY SUPPORTING
-INSIGHT FROM LAST SECTION{]}
+Each group member worked individually to experiment with preprocessing
+while exploring a distinct set of model methods. Upon review, our team
+created a singular preprocessing protocol and data set, based on our
+most successful methods and evaluated our most performant models built
+over these data.
 
-\hypertarget{approach}{%
-\chapter{Approach}\label{approach}}
-
-After thorough examination, we approached this task by splitting the
-provided data into training and test sets. We evaluated several models
-on this split and found that \textbf{what-ever-worked-best} method
-yielded the best results.
-
-Each group member worked individually to create their own solution. We
-built our final submission by collaboratively evaluating and combining
-each others' approaches.
-
-{[}CONTENT EDITORS: ADD IN FOLLOWING LAST: Our introduction should
-further outline individual responsibilities. For example,
-\textbf{so-and-so} was responsible for \textbf{xyz task}.{]}
-
-{[}FORMAT EDITORS: UPDATE BELOW{]} For replication and grading purposes,
-we made our code avaliable in the appendix section. This code, along
-with the provided data, score-set results, and individual contributions,
-can also be accessed through our group github repository:
+\hypertarget{links-to-work-product-lame-title---do-we-keep-this-section}{%
+\subsubsection{Links to Work Product {[}lame title - do we keep this
+section?{]}}\label{links-to-work-product-lame-title---do-we-keep-this-section}}
 
 \begin{compactitem}
   \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to R Source Code}
@@ -274,12 +278,6 @@ can also be accessed through our group github repository:
 
 \hypertarget{data-exploration}{%
 \chapter{Data Exploration}\label{data-exploration}}
-
-Preparing the data was the most discussed and influential part of our
-modeling process. It was clear from early on that in order to build a
-useful model with such a narrow range of expected pH values, how we
-groomed our data and the decisions we made would likely be as or more
-influential than the model we ultimately chose.
 
 The beverage dataset includes 2,571 cases, 32 predictor variables, and a
 single response variable. One of these predictor variables (Brand Code)
@@ -300,84 +298,25 @@ total cases. These are: 1. MFR (continuous, 8.2\%) 2. BrandCode
 {[}CONTENT EDITORS: DO WE STILL WANT TO CREATE MISSING DATA TABLE? IF
 SO, MISSINGDATA OBJECT NEEDS TO BE REBUILT IN MODEL\_PREP.R{]}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{## TO DO}
-\NormalTok{Tbl_Top_MissingData <-}\StringTok{ }\NormalTok{MissingData }\OperatorTok{%>%}\StringTok{ }\KeywordTok{top_n}\NormalTok{(}\DecValTok{11}\NormalTok{, n) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{column_to_rownames}\NormalTok{(}\StringTok{"predictor"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption =} \StringTok{"Variables with Highest Frequency of NA Values"}\NormalTok{, }
-  \DataTypeTok{booktabs =}\NormalTok{ T, }\DataTypeTok{digits =} \DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{row_spec}\NormalTok{()}
-
-\NormalTok{Tbl_Top_MissingData}
-\end{Highlighting}
-\end{Shaded}
-
 \hypertarget{response-variable}{%
 \section{Response Variable}\label{response-variable}}
 
-{[}CONTENT EDITORS: DO WE STILL WANT TO CREATE VARIABLE HISTOGRAMS?{]}
+{[}Density Plots{]}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{## TO DO (remove echo/eval when ready)}
+Our target variable pH, is a continuous variable. pH is the inverse
+logarithmic scaled measure of hydrogen ions in solutions and reflects
+how acidic or basic a water-based solution is. Centered around a neutral
+value of 7, pH ranges from highly acidic 0 and to highly alkaline at 14.
 
-\NormalTok{Plt_pH1 <-}\StringTok{ }\NormalTok{StudentData }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(PH) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{type =} \StringTok{"pH"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(PH)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ ..density..), }
- \DataTypeTok{bins =} \DecValTok{40}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"#57A0D3"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.65}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.2}\NormalTok{, }
- \DataTypeTok{color =} \StringTok{"#000000"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.65}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{() }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{3.5}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }
- \DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{axis.ticks.length.x =} \KeywordTok{unit}\NormalTok{(}\DecValTok{0}\NormalTok{, }\StringTok{"cm"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{type)}
-
-\NormalTok{Plt_pH2 <-}\StringTok{ }\NormalTok{StudentData }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(PH) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{type =} \StringTok{"pH"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(PH, }\StringTok{""}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"#57A0D3"}\NormalTok{, }
- \DataTypeTok{outlier.colour =} \StringTok{"#4682B4"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.65}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{strip.background =} \KeywordTok{element_blank}\NormalTok{(), }
-  \DataTypeTok{strip.text.x =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }
-  \DataTypeTok{axis.ticks.length.x =} \KeywordTok{unit}\NormalTok{(}\DecValTok{0}\NormalTok{, }\StringTok{"cm"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }
- \DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{labels =} \StringTok{"pH"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{() }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{type, }\DataTypeTok{nrow =} \DecValTok{1}\NormalTok{, }\DataTypeTok{strip.position =} \StringTok{"top"}\NormalTok{)}
-
-\NormalTok{Plt_pH3 <-}\StringTok{ }\NormalTok{StudentData }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(}\StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(PH, }\StringTok{""}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{), }
- \DataTypeTok{outlier.colour =} \StringTok{"#4682B4"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.3}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_fill_manual}\NormalTok{() }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{, }\DataTypeTok{strip.background =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{strip.text.x =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{()) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{1}\NormalTok{, }
- \DataTypeTok{strip.position =} \StringTok{"top"}\NormalTok{, }\DataTypeTok{scales =} \StringTok{"fixed"}\NormalTok{)}
-
-\NormalTok{Plt_pH4 <-}\StringTok{ }\NormalTok{StudentData }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(PH, }\StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(}\StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(PH)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ ..density.., }
- \DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{), }\DataTypeTok{bins =} \DecValTok{20}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.65}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.2}\NormalTok{, }
- \DataTypeTok{color =} \StringTok{"#000000"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.65}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_fill_manual}\NormalTok{() }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }
- \FloatTok{3.5}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{, }
- \DataTypeTok{nrow =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{axis.ticks.length.x =} \KeywordTok{unit}\NormalTok{(}\DecValTok{0}\NormalTok{, }\StringTok{"cm"}\NormalTok{), }\DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
-
-\NormalTok{Plt_pH_lay <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{), }\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{))}
-
-\KeywordTok{grid.arrange}\NormalTok{(Plt_pH1, Plt_pH4, Plt_pH2, Plt_pH3, }\DataTypeTok{layout_matrix =}\NormalTok{ Plt_pH_lay, }
- \DataTypeTok{heights =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DataTypeTok{padding =} \KeywordTok{unit}\NormalTok{(}\DecValTok{0}\NormalTok{, }\StringTok{"cm"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-The response variable PH is a logarithmically scaled measure of how
-acidic or basic a water-based solution is
-(\url{https://en.wikipedia.org/wiki/PH}). It ranges from 0 (acidic) and
-to 14 (alkaline); 7 is neutral (e.g.~room temperature water).
-
-In aggregate, PH distribution is approximately normal and centered
-around 8.546 (i.e.~slightly base), with some negative skew / outliers.
-When evaluated by BrandCode: - A (293 observations) appears to be
-multimodal and have the most outliers, with a mean slightly lower than
-the aggregate (8.495) - B (1293 observations) appears to be bimodal with
-a number of outliers, as well as a mean nearest the aggregate (8.562) -
-C (304 observations) appears to be bimodal and is the most acid (8.419)
-- D (615 observations) is the most normal distribution and also has the
-highest alkalinity (8.603)
+In total, the pH variable is approximately normally distributed,
+centered around 8.546 (i.e.~slightly base), with some negative skew /
+outliers. When evaluated by BrandCode: - A (293 observations) appears to
+be multimodal and have the most outliers, with a mean slightly lower
+than the aggregate (8.495) - B (1293 observations) appears to be bimodal
+with a number of outliers, as well as a mean nearest the aggregate
+(8.562) - C (304 observations) appears to be bimodal and is the most
+acid (8.419) - D (615 observations) is the most normal distribution and
+also has the highest alkalinity (8.603) - Missing Values
 
 \hypertarget{predictor-variables}{%
 \section{Predictor Variables}\label{predictor-variables}}
@@ -396,35 +335,9 @@ by brand type.
 {[}CONTENT EDITORS: DO WE STILL WANT TO CREATE THESE TABLES? IF SO,
 OUTLIER\_WITH OBJECT NEEDS TO BE REBUILT IN MODEL\_PREP.R{]}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{## TO DO (remove echo/eval when ready)}
-
-\NormalTok{Plt_Outlier1 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(outlier_with, }\KeywordTok{aes}\NormalTok{(value)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{), }
- \DataTypeTok{color =} \StringTok{"#999999"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.3}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Density Distribution of Numeric Predictor Variables"}\NormalTok{, }
- \DataTypeTok{subtitle =} \StringTok{"With Outliers"}\NormalTok{, }\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ outlier_with, }
- \DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{xintercept =}\NormalTok{ outlier_lower), }\DataTypeTok{color =} \StringTok{"#ff8080"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ outlier_with, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{xintercept =}\NormalTok{ outlier_upper), }
-  \DataTypeTok{color =} \StringTok{"#ff8080"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{key, }\DataTypeTok{scales =} \StringTok{"free"}\NormalTok{, }
- \DataTypeTok{nrow =} \DecValTok{3}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_fill_manual}\NormalTok{()}
-
-\NormalTok{Plt_Outlier2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(outlier_wo, }\KeywordTok{aes}\NormalTok{(value)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{), }
- \DataTypeTok{color =} \StringTok{"#999999"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.3}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{subtitle =} \StringTok{"Without Outliers"}\NormalTok{, }
- \DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{key, }\DataTypeTok{scales =} \StringTok{"free"}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{, }
- \DataTypeTok{legend.key.size =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.4}\NormalTok{, }\StringTok{"cm"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_fill_manual}\NormalTok{()}
-
-\KeywordTok{grid.arrange}\NormalTok{(Plt_Outlier1, Plt_Outlier2, }\DataTypeTok{nrow =} \DecValTok{2}\NormalTok{, }\DataTypeTok{heights =} \KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }
- \DecValTok{2}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-As no predictor variable shows a particularly pronounced monotonic
-linear relationship with response, a non-linear approach to modeling
-seems warranted.
+\textbf{{[} is this going to be evidenced by our graphs? As no predictor
+variable shows a particularly pronounced monotonic linear relationship
+with response, a non-linear approach to modeling seems warranted. {]}}
 
 {[}FIGURE SUCH AND SUCH{]} helps to further visualize the effect
 \texttt{BrandCode} has on our predictor and \texttt{pH} values. For
@@ -433,80 +346,40 @@ Other variables, such as \texttt{PSCO2}, \texttt{BowlSetpoint},
 \texttt{MinFlow}, and \texttt{PressureSetup} show unique features likely
 related to system processes.
 
-{[}CONTENT EDITORS: DO WE STILL WANT TO CREATE THESE TABLES? IF SO,
-OUTLIER\_WITH OBJECT NEEDS TO BE REBUILT IN MODEL\_PREP.R{]}
+\hypertarget{correlations}{%
+\subsection{Correlations}\label{correlations}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{## TO DO (remove echo/eval when ready)}
-\NormalTok{Plt_Scatter1 <-}\StringTok{ }\NormalTok{outlier_with }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{PH =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(PH))) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ value, }\DataTypeTok{y =}\NormalTok{ PH)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_jitter}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =} \StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{), }
- \DataTypeTok{alpha =} \FloatTok{0.15}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{color =} \StringTok{"#000000"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"loess"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"pH~Predictor Scatterplots"}\NormalTok{, }\DataTypeTok{subtitle =} \StringTok{"Without Outliers"}\NormalTok{, }
-  \DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{key, }\DataTypeTok{scales =} \StringTok{"free_x"}\NormalTok{, }
- \DataTypeTok{nrow =} \DecValTok{3}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }
- \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{, }
- \DataTypeTok{legend.key.size =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.4}\NormalTok{, }\StringTok{"cm"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#999999"}\NormalTok{, }
- \StringTok{"#95C8D8"}\NormalTok{, }\StringTok{"#008081"}\NormalTok{, }\StringTok{"#034D92"}\NormalTok{))}
+The plot below shows that BallingAlch, RelBalling, LvlDensityCarb,
+RelBrand, CodeDCarb., VolumeCarb, Pressure are all highly correlated
+with each other, but not particularly highly correlated with the
+outcome, pH variable. They are all 25\% or less correlated with pH, as
+pH is with most other variables both positive and negative. No extreme
+heroics were necessary here, despite their being some variables which
+are highly correlated with each other, because they were sufficiently
+uncorrelated with the outcome variable and it is not clear how much
+these are influenced by Brand Code such that removing some may
+preferentially bias certain brands.
 
-
-\NormalTok{Plt_Scatter2 <-}\StringTok{ }\NormalTok{outlier_wo }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{PH =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(PH))) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ value, }\DataTypeTok{y =}\NormalTok{ PH)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_jitter}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =} \StringTok{`}\DataTypeTok{Brand Code}\StringTok{`}\NormalTok{), }
- \DataTypeTok{alpha =} \FloatTok{0.15}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{color =} \StringTok{"#000000"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"loess"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{subtitle =} \StringTok{"Without Outliers"}\NormalTok{, }\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{key, }\DataTypeTok{scales =} \StringTok{"free_x"}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(), }
-  \DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{, }\DataTypeTok{legend.key.size =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.4}\NormalTok{, }
-   \StringTok{"cm"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#999999"}\NormalTok{, }
- \StringTok{"#95C8D8"}\NormalTok{, }\StringTok{"#008081"}\NormalTok{, }\StringTok{"#034D92"}\NormalTok{))}
-
-\KeywordTok{grid.arrange}\NormalTok{(Plt_Scatter1, Plt_Scatter2, }\DataTypeTok{nrow =} \DecValTok{2}\NormalTok{, }\DataTypeTok{heights =} \KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }
- \DecValTok{2}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-Collinearity measures between numeric predictors indicate that several
-of these variables are heavily related, with correlation values
-exceeding \(\pm{0.7}\).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{## TO DO (remove echo/eval when ready)}
-
-\NormalTok{Plt_Corr <-}\StringTok{ }\NormalTok{StudentData }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select_if}\NormalTok{(is.numeric) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{PH) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{ }\KeywordTok{ggcorr}\NormalTok{(}\DataTypeTok{method =} \StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{geom =} \StringTok{"tile"}\NormalTok{, }
-  \DataTypeTok{label =}\NormalTok{ F, }\DataTypeTok{hjust =} \FloatTok{0.95}\NormalTok{, }\DataTypeTok{layout.exp =} \DecValTok{7}\NormalTok{, }\DataTypeTok{label_round =} \DecValTok{1}\NormalTok{, }
-  \DataTypeTok{low =} \StringTok{"#95C8D8"}\NormalTok{, }\DataTypeTok{mid =} \StringTok{"grey90"}\NormalTok{, }\DataTypeTok{high =} \StringTok{"#034D92"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.key.size =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.6}\NormalTok{, }\StringTok{"cm"}\NormalTok{), }
- \DataTypeTok{legend.justification =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.98}\NormalTok{), }\DataTypeTok{legend.position =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }
-  \FloatTok{0.98}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Predictor Variable Correlation Matrix"}\NormalTok{)}
-
-\NormalTok{g =}\StringTok{ }\KeywordTok{ggplot_build}\NormalTok{(Plt_Corr)}
-\NormalTok{g}\OperatorTok{$}\NormalTok{data[[}\DecValTok{2}\NormalTok{]]}\OperatorTok{$}\NormalTok{size =}\StringTok{ }\DecValTok{2}
-
-\NormalTok{grid}\OperatorTok{::}\KeywordTok{grid.draw}\NormalTok{(}\KeywordTok{ggplot_gtable}\NormalTok{(g))}
-\end{Highlighting}
-\end{Shaded}
+{[}NEW CHART WITH 2 Sets of Labels?{]}
 
 \hypertarget{data-preparation}{%
 \chapter{Data Preparation}\label{data-preparation}}
 
-In our exploration, we detected missing data, extreme outliers, and
-multicollinearity. We kept these factors in mind and applied strategic
-transformations when preparing our models to evaluate their performance
-with and without normalization changes.
+Preparing the data was the most discussed and influential part of our
+modeling process. It was clear from early on that in order to build a
+useful model with such a narrow range of expected pH values, how we
+groomed our data and the decisions we made would likely be as or more
+influential than the model we ultimately chose.
 
 \textbf{Train/Test Splits:}
 
 Prior to all pre-processing, we divided the production dataset using an
 80/20 split to create a train and test sets.
 
-{[}BETHANY / JULIANN: PLEASE CONFIRM THIS IS STILL ACCURATE:
-
-All models incorporated k-folds cross-validation set at 10 folds to
-protect against overfitting the data. We set up unique model tuning
-grids to find the optimal parameters for each regression type to ensure
-the highest accuracy within our predictions.
+All training models incorporated k-folds cross-validation set at 10
+folds to protect against overfitting the data. We set up unique model
+tuning grids to find the optimal parameters for each regression type to
+ensure the highest accuracy within our predictions.
 
 For both KNN and SVM models a grid of seeds was created from our
 original seed to ensure that out repeated cross validation would be
@@ -586,10 +459,10 @@ PREPRCESSED MODELS (SET 2) HERE{]}.
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-7}Train1 Performance}
+\caption{\label{tab:unnamed-chunk-6}Train1 Performance}
 \centering
 \fontsize{8}{10}\selectfont
-\begin{tabular}{rrrrl}
+\begin{tabular}[t]{rrrrl}
 \toprule
 MAPE & RMSE & RSquared & MAE & Method\\
 \midrule
@@ -603,10 +476,10 @@ MAPE & RMSE & RSquared & MAE & Method\\
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-7}Train2 Performance}
+\caption{\label{tab:unnamed-chunk-6}Train2 Performance}
 \centering
 \fontsize{8}{10}\selectfont
-\begin{tabular}{rrrrl}
+\begin{tabular}[t]{rrrrl}
 \toprule
 MAPE & RMSE & RSquared & MAE & Method\\
 \midrule
@@ -622,10 +495,10 @@ MAPE & RMSE & RSquared & MAE & Method\\
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-8}Test1 Performance}
+\caption{\label{tab:unnamed-chunk-7}Test1 Performance}
 \centering
 \fontsize{8}{10}\selectfont
-\begin{tabular}{rrrrl}
+\begin{tabular}[t]{rrrrl}
 \toprule
 MAPE & RMSE & Rsquared & MAE & Method\\
 \midrule
@@ -639,10 +512,10 @@ MAPE & RMSE & Rsquared & MAE & Method\\
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-8}Test2 Performance}
+\caption{\label{tab:unnamed-chunk-7}Test2 Performance}
 \centering
 \fontsize{8}{10}\selectfont
-\begin{tabular}{rrrrl}
+\begin{tabular}[t]{rrrrl}
 \toprule
 MAPE & RMSE & Rsquared & MAE & Method\\
 \midrule
@@ -668,12 +541,17 @@ VARIMP-ABLE SO WE CAN USE THAT IN INTERPRETATION / CONCLUSIONS{]}
 \section{Model 1: Support Vector Machines (SVM)
 Regression}\label{model-1-support-vector-machines-svm-regression}}
 
-{[}BETHANY TO WORDSMITH RATIONALE FOR USING SVM MODEL{]}
+{[}BETHANY TO WORDSMITH RATIONALE FOR USING SVM MODEL{]} Support vector
+machine (SVM) regression with a radial bias functin kernel is a
+promising choice for predicting beverage pH because it excels when
+working with data which may not be linearly separable, which comes into
+play with this data specifically because pH is non-linear.
 
-The support vector machine, although less efficient than the k-nearest
-neighbor to train, provided robust final model using a radial kernel
-with a cost of 10, passed as the tune length settling on
-\(\sigma = 0.020\) and \(cost = 8\) returning a \(RMSE = 0.1127\)
+Although less efficient than the k-nearest neighbor and Multiple
+Adaptive Regression Splines to train, the SVM provided robust final
+model using a radial kernel with a cost of 10, passed as the tune length
+settling on \(\sigma = 0.020\) and \(cost = 8\) returning a
+\(RMSE = 0.1127\)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -689,64 +567,30 @@ Regression}\label{model-2-cubist-tree-regression}}
 {[}JEREMY: CONDENSING BELOW WITH RATIONALE FOR USING MODEL IN BULLET
 FORM BY EVENING SAT 12/7 - BETHANY WILL WORDSMITH{]}
 
-{[}BETHANY: PLEASE IGNORE BELOW DESCRIPTION UNTIL SAT EVENING
-
-For a continuous response variable, a rule-based Cubist model functions
-like a piecewise linear model: each rule is a conjunction of conditions
-associated with a linear expression, and those rules can overlap with
-each other. Adding to the interpretive complexity of those rules, Cubist
-models can also integrate an instance-based, nearest-neighbor approach
-that performs a composite prediction based on actual values of
-neighbors, predicted values of neighbors, and predicted values of
-observations of interest.
-
-Accordingly, hyper-parameters for Cubist models include: - The number of
-rule-based models, or committees - these issue separate predictions that
-are averaged (5 recommended to balance computational cost with ensemble
-benefits) - The number of neighbors over which to predict response
-values based on similar training observations
-
+· Cubist regression models provide a balance between predictive accuracy
+interpretability · For a continuous response variable, Cubist models
+functions like as piecewise linear model · The model creating rules
+(which can overlap) to subset the data and then regression models to
+each subset to arrive at a prediction. · They can also integrate
+instance-based, nearest neighbors ensembling and boosting using
+committees. · Based on cross-validation {[}ASSUMING THIS IS STILL
+CORRECT{]} and grid search across hyper-parameters, we found best RMSE
+with an instance-based model tuned to 5 neighbors and 50 committees.
 Based on cross-validation and a grid search across hyper-parameters, we
 found the best RMSE performance with an instance-based model that
 factoring in many neighbors built on non-pre-processed training data.
-
-References: Background: \url{https://www.rulequest.com/cubist-win.html}
-Overview:
-\url{https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/56e3056a3c44d8779a61988a/1457718645593/cubist_BRUG.pdf}
-Mechanics:
-\url{http://ftp.uni-bayreuth.de/math/statlib/R/CRAN/doc/vignettes/caret/caretTrain.pdf}{]}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# remove echo/eval later [JEREMY: ADD IN VARIMP /}
-\CommentTok{# PERFORMANCE CHART FOR SVM AS ALIGNED WITH GROUP]}
-\end{Highlighting}
-\end{Shaded}
 
 \hypertarget{model-3-multivariate-adaptive-regression-splines-mars-regression}{%
 \section{Model 3: Multivariate Adaptive Regression Splines (MARS)
 Regression}\label{model-3-multivariate-adaptive-regression-splines-mars-regression}}
 
-{[}VINICIO / JULIANN: PLEASE ADD CONCISE BULLETS FOR USING MARS MODEL BY
-EVENING SAT 12/7 - BETHANY WILL WORDSMITH{]}
+Multivariate regression splines (MARS) are more flexible about
+relationships between preditors and the outcome variable than linear
+regression models yet maintain their ease of interpretation.
 
-MARS modeling was selected to assess the non-linear features in our
-data. This method uses a weighted sum to models non-linearities and
-interactions between variables. The model assesses cut-points between
-features that create the smallest error and prunes insignificant points
-to improve model accuracy.
-
-Our RMSE Cross Validation plots show us that pre-processing
-transformations did not have improve the MARS model. The model performed
-best on our training data when no transformations were applied.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# remove echo/eval later [VINICIO / JULIANN: ADD IN}
-\CommentTok{# VARIMP / PERFORMANCE CHART FOR SVM AS ALIGNED WITH}
-\CommentTok{# GROUP]}
-\end{Highlighting}
-\end{Shaded}
+MARS models also perform well without major pre processing steps with
+reasonable bias-variance trade-off and are computationally efficient as
+well as optimized work on very large data sets efficiently.
 
 \hypertarget{model-4-random-forest-regression}{%
 \section{Model 4: Random Forest
@@ -769,13 +613,6 @@ assigned with values by random permutation. The second plot is based on
 before and after the split on that variable (\texttt{Gini\ Index}). In
 short, each graph shows how much MSE or Impurity increases when each
 variable is randomly permuted.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# remove echo/eval later [ANDY: ADD IN VARIMP /}
-\CommentTok{# PERFORMANCE CHART FOR SVM AS ALIGNED WITH GROUP]}
-\end{Highlighting}
-\end{Shaded}
 
 \hypertarget{interpretation}{%
 \chapter{Interpretation}\label{interpretation}}
@@ -811,6 +648,8 @@ Cubist Model Overview:
 \url{https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/56e3056a3c44d8779a61988a/1457718645593/cubist_BRUG.pdf}
 Cubist Model Mechanics:
 \url{http://ftp.uni-bayreuth.de/math/statlib/R/CRAN/doc/vignettes/caret/caretTrain.pdf}{]}
+
+(\url{https://en.wikipedia.org/wiki/PH}).
 
 
 \end{document}

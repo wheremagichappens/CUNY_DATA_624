@@ -22,13 +22,13 @@ subparagraph: yes
 File for final submission of Project 2. 
 
 ```{r formatting, echo = F, message=F, warning=F, error=F, comment=NA}
-#source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Project_Two/defaults.R')
-source('~/GitHub/CUNY_DATA_624/Project_Two/defaults.R')
+source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Project_Two/defaults.R')
+#source('~/GitHub/CUNY_DATA_624/Project_Two/defaults.R')
 ```
 
 ```{r load-source, echo = F, message=F, warning=F, error=F, comment=NA, results='hide', cache=T}
-#source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Project_Two/script.R')
-source('~/GitHub/CUNY_DATA_624/Project_Two/script.R')
+source('https://raw.githubusercontent.com/JeremyOBrien16/CUNY_DATA_624/master/Project_Two/script.R')
+#source('~/GitHub/CUNY_DATA_624/Project_Two/script.R')
 ```
 
 ```{r}
@@ -54,30 +54,26 @@ library(Metrics)
 \clearpage
 \pagenumbering{arabic} 
 
+# Will Update Sunday Morning
 
-# Executive Summary
+[CONTENT EDITORS: ADD IN SUMMARY OF CONCLUSION AND ANY SUPPORTING INSIGHT FROM LAST SECTION]
+
+
+# Introduction
+pH is a central component to the manufacturing of a commercial beverage as it is an indicator of both the process health and the ultimate flavor appeal of the final product. In fact pH plays a role in multiple facets of the a drinks appeal. The flavor, mouthfeel and the aesthetic experience of a given product is distinctly tied to the pH relative to other beverage qualities that brands use distinguish themselves from other liquid refreshments.
 
 Because it is to central to the design of a product's drinking experience, pH is a key performance indicator in the beverage manufacturing process and is tested for and tracked diligently, as the final pH is dependent on
 and vulnerable to even slight changes in production methods. 
 
 Having monitored and recorded these production variables, as well as the final pH, we have the opportunity to improve production outcomes by more closely controlling pH in our beverages with predictive modeling with the potential to catch and correct variations in process which negative impact our taget pH.
 
-[CONTENT EDITORS: ADD IN SUMMARY OF CONCLUSION AND ANY SUPPORTING INSIGHT FROM LAST SECTION]
+Each group member worked individually to experiment with preprocessing while exploring a distinct set of model methods. Upon review, our team created a singular preprocessing protocol and data set, based on our most successful methods and evaluated our most performant models built over these data.  
 
 
-# Approach
-
-After thorough examination, we approached this task by splitting the provided data into training and test sets. We evaluated several models on this split and found that **what-ever-worked-best** method yielded the best results. 
-
-Each group member worked individually to create their own solution. We built our final submission by collaboratively evaluating and combining each others' approaches. 
-
-[CONTENT EDITORS: ADD IN FOLLOWING LAST:
-Our introduction should further outline individual responsibilities. For example, **so-and-so** was responsible for **xyz task**.
-]
 
 
-[FORMAT EDITORS: UPDATE BELOW]
-For replication and grading purposes, we made our code avaliable in the appendix section. This code, along with the provided data, score-set results, and individual contributions, can also be accessed through our group github repository: 
+#### Links to Work Product [lame title - do we keep this section?]
+
 \begin{compactitem}
   \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to R Source Code}
   \item \href{https://github.com/JeremyOBrien16/CUNY_DATA_624/tree/master/Project_Two}{Pretend I'm a working link to Provided Data}
@@ -88,7 +84,7 @@ For replication and grading purposes, we made our code avaliable in the appendix
 
 # Data Exploration 
 
-Preparing the data was the most discussed and influential part of our modeling process. It was clear from early on that in order to build a useful model with such a narrow range of expected pH values,  how we groomed our data and the decisions we made would likely be as or more influential than the model we ultimately chose.
+
 
 The beverage dataset includes 2,571 cases, 32 predictor variables, and a single response variable.  One of these predictor variables (Brand Code) is categorical with four levels - A through D; for the purpose of our analysis we interpreted these to represent four distinct beverage brands. 
 
@@ -101,7 +97,7 @@ While we found missing observations in both response and predictor variables, in
 
 [CONTENT EDITORS: DO WE STILL WANT TO CREATE MISSING DATA TABLE?  IF SO, MISSINGDATA OBJECT NEEDS TO BE REBUILT IN MODEL_PREP.R]
 
-```{r, echo=T, eval=F}
+```{r, echo=FALSE, eval=F}
 ## TO DO
 Tbl_Top_MissingData <- MissingData %>% 
   top_n(11, n) %>%
@@ -118,9 +114,9 @@ Tbl_Top_MissingData
 
 ## Response Variable
 
-[CONTENT EDITORS: DO WE STILL WANT TO CREATE VARIABLE HISTOGRAMS?]
+[Density Plots]
 
-```{r, fig.height=5, fig.cap="Distribution of Response Variable: pH", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .5), echo=T, eval=F}
+```{r, echo = FALSE, fig.height=5, fig.cap="Distribution of Response Variable: pH", out.width = "1\\textwidth",  fig.align="right", wrapfigure = list("r", .5),eval=F}
 ## TO DO (remove echo/eval when ready)
 
 Plt_pH1 <- StudentData %>% 
@@ -213,13 +209,14 @@ grid.arrange(Plt_pH1,
              )
 ```
 
-The response variable PH is a logarithmically scaled measure of how acidic or basic a water-based solution is (https://en.wikipedia.org/wiki/PH).  It ranges from 0 (acidic) and to 14 (alkaline); 7 is neutral (e.g. room temperature water).
+Our target variable pH, is a continuous variable. pH is the inverse logarithmic scaled measure of hydrogen ions in solutions and reflects how acidic or basic a water-based solution is.   Centered around a neutral value of 7, pH ranges from highly acidic 0 and to highly alkaline at 14.
 
-In aggregate, PH distribution is approximately normal and centered around 8.546 (i.e. slightly base), with some negative skew / outliers. When evaluated by BrandCode:
+In total, the pH variable is approximately normally distributed, centered around 8.546 (i.e. slightly base), with some negative skew / outliers. When evaluated by BrandCode:
 - A (293 observations) appears to be multimodal and have the most outliers, with a mean slightly lower than the aggregate (8.495)
 - B (1293 observations) appears to be bimodal with a number of outliers, as well as a mean nearest the aggregate (8.562)
 - C (304 observations) appears to be bimodal and is the most acid (8.419)
 - D (615 observations) is the most normal distribution and also has the highest alkalinity (8.603)
+- Missing Values
 
 
 ## Predictor Variables
@@ -230,7 +227,7 @@ The density plots also contain an overlay of the only categorical indicator, `Br
 
 [CONTENT EDITORS: DO WE STILL WANT TO CREATE THESE TABLES?  IF SO, OUTLIER_WITH OBJECT NEEDS TO BE REBUILT IN MODEL_PREP.R]
 
-```{r, fig.height=5, echo=T, eval=F}
+```{r, echo=FALSE, fig.height=5, eval=F}
 ## TO DO (remove echo/eval when ready)
 
 Plt_Outlier1 <- ggplot(outlier_with, 
@@ -283,66 +280,15 @@ grid.arrange(Plt_Outlier1,
 
 ```
 
-As no predictor variable shows a particularly pronounced monotonic linear relationship with response, a non-linear approach to modeling seems warranted. 
+**[ is this going to be evidenced by our graphs? As no predictor variable shows a particularly pronounced monotonic linear relationship with response, a non-linear approach to modeling seems warranted. ]**
 
 [FIGURE SUCH AND SUCH] helps to further visualize the effect `BrandCode` has on our predictor and `pH` values. For example, `AlchRel` shows distinct `BrandCode` groupings. Other variables, such as `PSCO2`, `BowlSetpoint`, `MinFlow`, and `PressureSetup` show unique features likely related to system processes. 
 
-[CONTENT EDITORS: DO WE STILL WANT TO CREATE THESE TABLES?  IF SO, OUTLIER_WITH OBJECT NEEDS TO BE REBUILT IN MODEL_PREP.R]
+### Correlations
+The plot below shows that BallingAlch, RelBalling, LvlDensityCarb, RelBrand, CodeDCarb., VolumeCarb, Pressure are all highly correlated with each other, but not particularly highly correlated with the outcome, pH variable. They are all 25% or less correlated with pH, as pH is with most other variables both positive and negative. No extreme heroics were necessary here, despite their being some variables which are highly correlated with each other, because they were sufficiently uncorrelated with the outcome variable and it is not clear how much these are influenced by Brand Code such that removing some may preferentially bias certain brands.
 
-```{r, fig.height=5, echo=T, eval=F}
-## TO DO (remove echo/eval when ready)
-Plt_Scatter1 <- outlier_with %>% 
-  mutate(PH = as.numeric(as.character(PH))) %>% 
-  ggplot(aes(x = value, y = PH)) + 
-  geom_jitter(aes(color = `Brand Code`), 
-              alpha = .15) + 
-  stat_smooth(color = "#000000", 
-              method = "loess") + 
-  labs(title = "pH~Predictor Scatterplots", 
-       subtitle = "Without Outliers", 
-       x = "", y = "") + 
-  facet_wrap(~ key, 
-             scales = 'free_x', 
-             nrow = 3) + 
-  theme_bw() + 
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(), 
-        legend.position = "none", 
-        legend.key.size = unit(.4, "cm")) + 
-  scale_color_manual(values = c("#999999", "#95C8D8", "#008081", "#034D92"))
-
-
-Plt_Scatter2 <- outlier_wo %>% 
-  mutate(PH = as.numeric(as.character(PH))) %>% 
-  ggplot(aes(x = value, 
-             y = PH)) + 
-  geom_jitter(aes(color = `Brand Code`), 
-              alpha=.15) + 
-  stat_smooth(color = "#000000", 
-              method = "loess") + 
-  labs(subtitle = "Without Outliers", 
-       x = "", y = "") + 
-  facet_wrap(~ key, 
-             scales = 'free_x', 
-             nrow = 1) + 
-  theme_bw() +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(), 
-        legend.position = "bottom", 
-        legend.key.size = unit(.4, "cm")) +
-  scale_color_manual(values = c("#999999", "#95C8D8", "#008081", "#034D92"))
-
-grid.arrange(Plt_Scatter1, 
-             Plt_Scatter2, 
-             nrow = 2, 
-             heights = c(3,2)
-             )
-
-```
-
-Collinearity measures between numeric predictors indicate that several of these variables are heavily related, with correlation values exceeding $\pm{0.7}$. 
-
-```{r, fig.height = 3.5, fig.width=10, echo=T, eval=F}
+[NEW CHART WITH 2 Sets of Labels?]
+```{r, echo=FALSE, fig.height = 3.5, fig.width=10, eval=F}
 ## TO DO (remove echo/eval when ready)
 
 Plt_Corr <- StudentData %>% 
@@ -372,16 +318,16 @@ grid::grid.draw(ggplot_gtable(g))
 
 # Data Preparation
 
-In our exploration, we detected missing data, extreme outliers, and multicollinearity. We kept these factors in mind and applied strategic transformations when preparing our models to evaluate their performance with and without normalization changes.
+Preparing the data was the most discussed and influential part of our modeling process. It was clear from early on that in order to build a useful model with such a narrow range of expected pH values,  how we groomed our data and the decisions we made would likely be as or more influential than the model we ultimately chose.
+
 
 
 **Train/Test Splits:**   
 
 Prior to all pre-processing, we divided the production dataset using an 80/20 split to create a train and test sets. 
 
-[BETHANY / JULIANN: PLEASE CONFIRM THIS IS STILL ACCURATE:
 
-All models incorporated k-folds cross-validation set at 10 folds to protect against overfitting the data. We set up unique model tuning grids to find the optimal parameters for each regression type to ensure the highest accuracy within our predictions.
+All training models incorporated k-folds cross-validation set at 10 folds to protect against overfitting the data. We set up unique model tuning grids to find the optimal parameters for each regression type to ensure the highest accuracy within our predictions.
 
 For both KNN and SVM models a grid of seeds was created from our original seed to ensure that out repeated cross validation would be repeateable. The same seeds were used in both the SVM and KNN.
 
@@ -426,7 +372,7 @@ We assessed the effectiveness of more than ten different non-linear regression m
 
 **Train Performance:**
 
-```{r}
+```{r echo=FALSE}
 tbl.perf.train1 %>% 
   kable(caption="Train1 Performance", booktabs=T, digits=4) %>% 
   kable_styling() 
@@ -439,7 +385,7 @@ tbl.perf.train2 %>%
 
 **Test Accuracy:**
 
-```{r}
+```{r echo=FALSE}
 tbl.perf.test1 %>% 
   kable(caption="Test1 Performance", booktabs=T, digits=4) %>% 
   kable_styling() 
@@ -462,8 +408,9 @@ tbl.perf.test2 %>%
 ## Model 1: Support Vector Machines (SVM) Regression
 
 [BETHANY TO WORDSMITH RATIONALE FOR USING SVM MODEL]
+Support vector machine (SVM) regression with a radial bias functin kernel is a promising choice for predicting beverage pH because it excels when working with data which may not be linearly separable, which comes into play with this data specifically because pH is non-linear.
 
-The support vector machine, although less efficient than the k-nearest neighbor to train, provided robust final model using a radial kernel with a cost of 10, passed as the tune length settling on  $\sigma =  0.020$ and $cost = 8$ returning a $RMSE = 0.1127$
+Although less efficient than the k-nearest neighbor  and Multiple Adaptive Regression Splines to train, the SVM provided robust final model using a radial kernel with a cost of 10, passed as the tune length settling on  $\sigma =  0.020$ and $cost = 8$ returning a $RMSE = 0.1127$
 
 ```{r, echo=T, eval=F}
 #remove echo/eval later
@@ -476,22 +423,16 @@ The support vector machine, although less efficient than the k-nearest neighbor 
 
 [JEREMY: CONDENSING BELOW WITH RATIONALE FOR USING MODEL IN BULLET FORM BY EVENING SAT 12/7 - BETHANY WILL WORDSMITH]
 
-[BETHANY: PLEASE IGNORE BELOW DESCRIPTION UNTIL SAT EVENING
-
-For a continuous response variable, a rule-based Cubist model functions like a piecewise linear model: each rule is a conjunction of conditions associated with a linear expression, and those rules can overlap with each other.  Adding to the interpretive complexity of those rules, Cubist models can also integrate an instance-based, nearest-neighbor approach that performs a composite prediction based on actual values of neighbors, predicted values of neighbors, and predicted values of observations of interest.  
-
-Accordingly, hyper-parameters for Cubist models include:
-- The number of rule-based models, or committees - these issue separate predictions that are averaged (5 recommended to balance computational cost with ensemble benefits)
-- The number of neighbors over which to predict response values based on similar training observations
-
+·       Cubist regression models provide a balance between predictive accuracy interpretability
+·       For a continuous response variable, Cubist models functions like as piecewise linear model
+·       The model creating rules (which can overlap) to subset the data and then regression models to each subset to arrive at a prediction. 
+·       They can also integrate instance-based, nearest neighbors ensembling and boosting using committees.
+·       Based on cross-validation [ASSUMING THIS IS STILL CORRECT] and grid search across hyper-parameters, we found best RMSE with an instance-based model tuned to 5 neighbors and 50 committees.
 Based on cross-validation and a grid search across hyper-parameters, we found the best RMSE performance with an instance-based model that factoring in many neighbors built on non-pre-processed training data.
 
-References:
-Background:  https://www.rulequest.com/cubist-win.html
-Overview:  https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/56e3056a3c44d8779a61988a/1457718645593/cubist_BRUG.pdf
-Mechanics:  http://ftp.uni-bayreuth.de/math/statlib/R/CRAN/doc/vignettes/caret/caretTrain.pdf]
 
-```{r, echo=T, eval=F}
+
+```{r, echo=FALSE, eval=F}
 #remove echo/eval later
 # [JEREMY: ADD IN VARIMP / PERFORMANCE CHART FOR SVM AS ALIGNED WITH GROUP]
 
@@ -500,13 +441,11 @@ Mechanics:  http://ftp.uni-bayreuth.de/math/statlib/R/CRAN/doc/vignettes/caret/c
 
 ## Model 3: Multivariate Adaptive Regression Splines (MARS) Regression
 
-[VINICIO / JULIANN: PLEASE ADD CONCISE BULLETS FOR USING MARS MODEL BY EVENING SAT 12/7 - BETHANY WILL WORDSMITH]
+Multivariate regression splines (MARS) are more flexible about relationships between preditors and the outcome variable than linear regression models yet maintain their ease of interpretation. 
 
-MARS modeling was selected to assess the non-linear features in our data. This method uses a weighted sum to models non-linearities and interactions between variables. The model assesses cut-points between features that create the smallest error and prunes insignificant points to improve model accuracy.  
+MARS models also perform well without major pre processing steps with reasonable bias-variance trade-off and are computationally efficient as well as optimized work on very large data sets efficiently.
 
-Our RMSE Cross Validation plots show us that pre-processing transformations did not have improve the MARS model. The model performed best on our training data when no transformations were applied.   
-
-```{r, echo=T, eval=F}
+```{r, echo=FALSE, eval=F}
 #remove echo/eval later
 # [VINICIO / JULIANN: ADD IN VARIMP / PERFORMANCE CHART FOR SVM AS ALIGNED WITH GROUP]
 
@@ -521,7 +460,7 @@ The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is **r s$M
 
 The first graph shows how much MSE would increase if a variable is assigned with values by random permutation. The second plot is based on `node purity` which is measured by the difference between RSS before and after the split on that variable (`Gini Index`). In short, each graph shows how much MSE or Impurity increases when each variable is randomly permuted.
 
-```{r, echo=T, eval=F}
+```{r, echo=FALSE, eval=F}
 #remove echo/eval later
 # [ANDY: ADD IN VARIMP / PERFORMANCE CHART FOR SVM AS ALIGNED WITH GROUP]
 
@@ -554,3 +493,6 @@ Shelton, Robert B. “PH Values Of Common Drinks.” Robert B. Shelton, DDS MAGD
 Cubist Model Background: https://www.rulequest.com/cubist-win.html
 Cubist Model Overview:  https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/56e3056a3c44d8779a61988a/1457718645593/cubist_BRUG.pdf
 Cubist Model Mechanics:  http://ftp.uni-bayreuth.de/math/statlib/R/CRAN/doc/vignettes/caret/caretTrain.pdf]
+
+
+(https://en.wikipedia.org/wiki/PH).
