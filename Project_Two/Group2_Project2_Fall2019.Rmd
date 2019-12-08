@@ -70,6 +70,32 @@ Having monitored and recorded these production variables, as well as the final p
 Each group member worked individually to experiment with preprocessing while exploring a distinct set of model methods. Upon review, our team created a singular preprocessing protocol and data set, based on our most successful methods and evaluated our most performant models built over these data.  
 
 
+# Executive Summary (By: Andy - feel free to revise this if you like)
+##pH level breakdown:
+
+* pH = a measure of hydrogen ion concentration, a measure of the acidity or alkalinity of a solution.
+* 0 <= pH <= 14
+* pH < 7 acidic
+* pH = 7 neutrality
+* pH > 7 basic
+
+##Examples of pH values of lab chemicals and household products:
+
+* 0: hydrochloric acid
+* 2.0: lemon juice
+* 2.2: vinegar
+* 4.0: wine
+* 7.0: pure water (neutral)
+* 7.4: human blood
+* 13.0: lye
+* 14.0: sodium hydroxide
+
+The pH scale measures how acidic or basic a substance is. Acidic and basic are two extremes that describe chemicals, just like hot and cold are two extremes that describe temperature. A substance that is neither acidic nor basic is neutral. The pH scale measures how acidic or basic a substance is. It ranges from 0 to 14. A pH of 7, such as pure water is neutral. A pH less than 7 is acidic and greater than 7 is basic. Each whole pH value below 7 is ten times more acidic than the next higher value. For example, a pH of 4 is ten times more acidic than a pH of 5 and 100 times (10 x 10) more acidic than a pH of 6. The same holds true for pH values above 7, each of which is ten times more basic than the next lower whole value. Dental erosion (DE) is the chemical dissolution of tooth structure in the absence of bacteria when the environment is acidic (pH < 4.0). 
+
+For these reasons, since businesses must comply with health regulation to keep the level of pH in critical range, it is important to predict its values to avoid any business loss.
+
+(reference: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4808596/)
+
 
 
 #### Links to Work Product [lame title - do we keep this section?]
@@ -456,14 +482,17 @@ MARS models also perform well without major pre processing steps with reasonable
 
 [ANDY: PLEASE ADD CONCISE BULLETS WITH RATIONALE FOR USING RF MODEL BY EVENING SAT 12/7 - BETHANY WILL WORDSMITH]
 
-The optimal parameters for model was mtry = 31 and ntree = 2500. MAPE is **r s$MAPE** where as top 3 important predictors are `MnfFlow`, `BrandCode` and `PressureVacuum` for %incMSE and `MnfFlow`, `BrandCode` and `OxygenFiller` for IncNodePurity. Unlike `PLS`, `Random Forest` can produce 2 different variable importance plots. 
+* `Random Forest` is robust to outliers and multicollinearity since only a subset of features are selected at random out of the total and the best split feature from the subset is used to split each node in a tree.
 
-The first graph shows how much MSE would increase if a variable is assigned with values by random permutation. The second plot is based on `node purity` which is measured by the difference between RSS before and after the split on that variable (`Gini Index`). In short, each graph shows how much MSE or Impurity increases when each variable is randomly permuted.
+* `Random Forest` require almost no input preparation. They can handle binary features, categorical features, numerical features without any need for scaling.
 
-```{r, echo=FALSE, eval=F}
+* `Random Forest` can be easily grown in parallel. The same cannot be said about boosted models or large neural networks.
+
+
+```{r, echo=FALSE, cache=T, eval=F}
 #remove echo/eval later
 # [ANDY: ADD IN VARIMP / PERFORMANCE CHART FOR SVM AS ALIGNED WITH GROUP]
-
+plot(varImp(fit_models1$rf))
 ```
 
 
