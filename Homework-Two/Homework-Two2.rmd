@@ -21,9 +21,6 @@ subparagraph: yes
 
 # Getting Started {-#Overview}
 
-## Overview
-
-Include details on our process in creating this document. 
 
 ## Dependencies 
 
@@ -80,11 +77,13 @@ Plt_CMP.Yield
 \begin{subquestion}{(b).} A small percentage of cells in the predictor set contain missing values. Use an imputation function to fill in these missing values (e.g., see Sect. 3.8). 
 \end{subquestion}
 
-`ManufacturingProcess03` has the largest volume of missing data followed by `ManufacturingProcess11`. Given that each variable has less than 25% of data missing, we should introduce methods of imputation. For our purposes, we will use the MICE method. MICE is formally known as Multiple Imputation with Chained Equations. On a high level, MICE is built off a technique known as the Gibbs sampler.  
+`ManufacturingProcess03` has the largest volume of missing data followed by `ManufacturingProcess11`. Given that each variable is missing less than 25% of its data, we should impute that data. For our purposes, we will use MICE (Multiple Imputation with Chained Equations) methods.
 
-The Gibbs sampler is a Markov chain based on Monte Carlo. MICE iterates drawing estimates of missing values and parameters related to the distribution of said variables. Chained equations are generally faster than the Monte Carlo based Gibbs sampler. MICE has 5 imputations listed as its default. Predictive mean matching is also a default method for MICE. PMM does a better job at keeping non-linear relationships within individual variables. 
+MICE is based on the Gibbs sampler, a Markov chain that uses Monte Carlo methods. MICE iteratively draws estimates of missing values and parameters related to the distribution of said variables. Chained equations are generally faster than the Monte Carlo-based Gibbs sampler. MICE defaults to 5 imputations and predictive mean matching (PMM), the latter of which does a better job at keeping non-linear relationships within individual variables. 
 
-In addition to MICE, we drop variables that have near zero variance, however we point out that only one variable was dropped. We still include it as a process step to follow the literature's specifications. After completing MICE, we no longer had missing data in our set. We examined other imputation methods such as KNN but determined that there was no significant change in the summary statistics across different imputation methods.
+In addition to imputing using MICE, we also drop variables that have near zero variance - though this only removes one variable, and we still include it as a process step per the textbook's specifications. 
+
+Following imputation there is no more missing data in the set. We examined other imputation methods such as KNN but found no significant difference in summary statistics.
  
 
 ```{r kj-6.3b, echo=F}
@@ -94,16 +93,15 @@ CMP.total_na %>% kable(caption="Variables with Missing Values", booktabs=T) %>% 
 \begin{subquestion}{(c).} Split the data into a training and a test set, pre-process the data, and tune a model of your choice from this chapter. What is the optimal value of the performance metric? 
 \end{subquestion}
 
-We will build a PLS model also known as partial least squares. PLS is a statistical method that fits a linear regression model by projecting the feature variables and response variable to some new space via a mapping function. Because of this projection mechanism, for both predictors and the response, the method becomes bilinear or simply known as linear with respect to each of the variable types. PLS also has certain advantages over other methods such as being more robust to dealing with issues arising from multicollinearity. 
+We will build a PLS model also known as partial least squares. PLS is a statistical method that fits a linear regression model by projecting the feature variables and response variable to some new space using a mapping function. PLS has certain advantages over other methods, including being more robust to multicollinearity and the issues attending it.
 
-For our PLS model, we partitioned the data by taking 80% of the data as training and the remaining 20% as testing subsets. We also apply center and scaling arguments set to true. We built a standard PLS model and evaluated the root mean summary areas to determine the optimal number of components to select.  We generate performance metrics for our best tune below:
- 
+We partitioned the data into an 80-20 train-test split and preprocessed it by centering and scaling. We built a standard PLS model and evaluated the root mean summary areas to determine the optimal number of components to select. Tuning of the model yields the following performance:
 
 ```{r kj-6.3c, echo=F}
 CMP.pls.train.perf %>% kable(caption="PLS Performance Metrics on Training Subset", booktabs=T) %>% kable_styling() %>% row_spec()
 ```
 
-Our Baseline PLS model generates a RMSE of `r round(CMP.pls.train.perf$RMSE, 2)`. In addition, the model captures `r round(CMP.pls.train.perf$Rsquared, 4)*100` % of data variability. We include the visualizations pertaining to the train set cross-validation RMSE tunes and a plot comparing the observed and predicted outcome from our model.
+The Baseline PLS model generates an RMSE of `r round(CMP.pls.train.perf$RMSE, 2)` and accounts for `r round(CMP.pls.train.perf$Rsquared, 4)*100`% of variance, as highlighted in the charts below:
 
 ```{r kj-6.3c2, fig.height=2.75, echo=F}
 grid.arrange(Plt_CMP.RMSE, Plt_CMP.fit.obs_vs_pred, ncol=2)
@@ -113,13 +111,14 @@ grid.arrange(Plt_CMP.RMSE, Plt_CMP.fit.obs_vs_pred, ncol=2)
 \begin{subquestion}{(d).} Predict the response for the test set. What is the value of the performance metric and how does this compare with the resampled performance metric on the training set? 
 \end{subquestion}
 
-We see a decreased R squared against the test data with `r round(CMP.pls.test.perf$Rsquared, 2)*100`% of the data variability accounted for. We also see the RMSE `r ifelse(CMP.pls.train.perf$RMSE>CMP.pls.test.perf$RMSE, "decrease", "increase")` to `r round(CMP.pls.test.perf$RMSE, 2)` from our training results of `r round(CMP.pls.train.perf$RMSE, 2)`. There is also a slight `r ifelse(CMP.pls.train.perf$MAE>CMP.pls.test.perf$MAE, "decrease", "increase")` in the MAE. 
+The $R^2$ is greater for the test data, with `r round(CMP.pls.test.perf$Rsquared, 2)*100`% of the data variance explained. The RMSE has also dropped from the training results of `r round(CMP.pls.train.perf$RMSE, 2)` to the test result of
+`r round(CMP.pls.test.perf$RMSE, 2)`. There is also a slight increased in the MAE. 
 
 ```{r kj-6.3d-1, echo=F}
 CMP.pls.test.perf  %>% kable(caption="PLS Performance Metrics on Test Subset", booktabs=T) %>% kable_styling() %>% row_spec()
 ```
 
-We also plotted the observed and predicted values from our test set against each other below. The deviation from the fitted line tells us that our selected linear model may not provide the best predictions for `Yield`.
+Deviation in the line fitted to predicted vs. observed values below suggested that the selected linear model may not provide the best predictions for `Yield`.
 
 ```{r kj-6.3d-2, fig.height=2, fig.width=5, fig.align='center', echo=F}
 Plt_CMP.test.obs_vs_pred
@@ -129,7 +128,7 @@ Plt_CMP.test.obs_vs_pred
 \begin{subquestion}{(e).} Which predictors are most important in the model you have trained? Do either the biological or process predictors dominate the list? 
 \end{subquestion}
 
-VarImp allows us to identify the variables by name and compute their importance. `ManufacturingProcess32` was flagged as the most important predictor overall and within the group of other Manufacturing Process variables. `BiologicalMaterial06` ranked second and was the most important variable within the BiologicalMaterial group. The variable importance rankings are mixed with `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Bio")) %>% nrow()` variables belonging to Biology and `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Manufacturing")) %>% nrow()` Manufacturing Process variables within the top 15 predictors. 
+VarImp identifies the variables by their importance. `ManufacturingProcess32` is the most important predictor overall as well as within the group of other Manufacturing Process variables. `BiologicalMaterial06` ranked second and was the most important variable amongst the BiologicalMaterial group. The variable importance rankings are a mix; amonst the top 15 predictors, `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Bio")) %>% nrow()` are BiologicalMaterials variabels and `r CMP.pls.imp.df %>% head(15) %>% filter(str_detect(Variable, "Manufacturing")) %>% nrow()` are ManufacturingProcess variables.
 
 ```{r kj-6.3e, echo=F}
 Plt_CMP.pls.imp
@@ -138,15 +137,15 @@ Plt_CMP.pls.imp
 \begin{subquestion}{(f).} Explore the relationships between each of the top predictors and the response. How could this information be helpful in improving yield in future runs of the manufacturing process?
 \end{subquestion}
 
-We used a scatter plot to visualize the relationship between our top five important predictors against our response variable, `Yield`.  All but `ManufacturingProcess32` show a moderate positive, linear relationship with yield. 
+A scatter plot helps to visualize relationship between our top five important predictors against the response variable `Yield`.  All but `ManufacturingProcess32` show a moderate positive, linear relationship with `Yield`. 
 
 ```{r kj-6.3f-1, echo=F, echo=F}
 Plt_CMP.Scatter
 ```
 
-We further examined this relationship by analyzing the correlation strength between our top five important response variables with the `Yield`. Out of which, `ManufacturingProcess32` showed the strongest, positive correlation with our response variable.  
+We further examined this relationship by analyzing the five response variables most correlated with with the `Yield`, of which `ManufacturingProcess32` was at the fore.  
 
-From a business point of view, our aim is to increase yield since we know that yield ties into revenue. We do not have insight into what mechanics go into each manufacturing process but we can use this knowledge to adjust the processes to emulate the highest yield outputs.
+From a business point of view, the aim is to increase yield as this is connected to revenue. While we don't have specific into the mechanics of each manufacturing process, we can use this knowledge to adjust the processes to emulate the highest yield outputs.
 
 ```{r kj-6.3f-2, echo=F}
 CMP_DF.corr.tbl %>% kable(caption="Variable Correlation with Yield", booktabs=T) %>%
@@ -191,15 +190,15 @@ knnPred <- predict(knnModel, newdata = testData$x)
 postResample(pred = knnPred, obs = testData$y)
 ```
 
-###Model 1-MARS Regression: 
+### Model 1-MARS Regression: 
 
-MARS, otherwise known as multivariate adaptive regression splines is a non-parametric regression technique that automatically captures non-linearity and interaction between predictors. The basic MARS model has the following form:
+MARS (Multivariate Adaptive Regression Splines) is a non-parametric regression technique that automatically captures non-linearity and interaction between predictors. The basic MARS model takes the following form:
 
 $$
 \overset { \wedge  }{ f } =\sum _{ i=1 }^{ k }{ { c }_{ i }{ B }_{ i }(x) } 
 $$
 
-The model computes the sum of basis functions B multiplied by constant coefficients C.The basis function can either be a constant, a hinge function, or a product of hinge functions. By definition, a hinge function is a piecewise function that converges at a point known as a knot. 
+The model computes the sum of basis functions $B$ multiplied by constant coefficients $C$. The basis function can either be a constant, a hinge function, or a product of hinge functions. By definition, a hinge function is a piecewise function that converges at a point known as a knot. 
 
 
 ```{r kj-7.2-1, echo=F}
@@ -208,9 +207,9 @@ The model computes the sum of basis functions B multiplied by constant coefficie
 hw2mars_modplot
 ```
 
-###Model 2 SVM:
+### Model 2 SVM:
 
-SVM, also known as support vector machine is a method that can be applied to classification and regression tasks. On a high level, SVM creates a hyperplane in n dimensional space. This hyperplane acts like a classification boundary which can be linear or nonlinear. This boundary classifies information from a feature space.  
+SVM (Support Vector Machies) is a method that can be applied to classification and regression tasks. SVM creates a hyperplane in n dimensional space which acts as a margin-maximizing classification boundary, either linear or nonlinear. This boundary classifies information from a feature space.
 
 ```{r kj-7.2-2, echo=F}
 #code
@@ -218,9 +217,9 @@ SVM, also known as support vector machine is a method that can be applied to cla
 hw2svm_modplot
 ```
 
-###Model 3 NNET:
+### Model 3 NNET:
 
-NNEt otherwise known as a Neural Network, is a method inspired by a biological neuron system. It uses a system of nodes that are parallel to the way neurons work. It is ideal for capturing non-linear relationships that would otherwise be complicated in most multiple linear regression models. NNET evolves internally based on the calculated weights of each input. The basic structure is shown below:
+NNET (Neural Networks) is a method inspired by biological neuron systems. It uses a system of nodes that parallel the way neurons work, and is ideal for capturing non-linear relationships that would otherwise be complicated in most multiple linear regression models. NNET evolves internally based on the calculated weights of each input. The basic structure is shown below:
 
 $$
 Y=\sum { (weight\quad *\quad input)\quad +\quad bias } 
@@ -236,22 +235,22 @@ hw2nnet_modplot
 Which models appear to give the best performance? Does MARS select the informative predictors (those named X1-X5)?
 \end{subquestion}
 
+MARS appears to give the best performance based on RMSE, $R^2$, and MAE on test set. The performance metrics below show how other models stack up against the MARS model.
+
 ```{r kj-7.2-4, echo=F}
 #code
 hw2.2.bperformance_table #%>% kable(caption="Model Performance", digits=4) %>% kable_styling() %>% row_spec() %>% row_spec(row=3:4,background ="#d9f2e6")
 
 ```
 
-MARS appears to give the best performance based on RMSE, R squared and MAE on test set. The above table shows how our other selected models stack up against the best performing MARS model. We now evaluate the variable importance for our best performing model. 
+The chart below demonstrates that variables `X1` through `X5` are all important, with `X1` the most important. It is very likely that the lack of contribution from variables `X6` through `X10` bolster the models $R^2$ and RMSE performance, and that noise from these variables did not reduce the predictive strength of this model as it does in small quantities in the other three models. 
 
 ```{r kj-7.2-4b, echo=F}
 #code
 hwmarsimp_plot
 ```
 
-The variable importance table for MARS indicates that variables X1 through X5 were picked as the most important. Out of our collection of important variables used in MARS, X1 is the most important. 
 
-It is very likely that the lack of contribution allotted to the X6-X10 variables which bolster the R Squared and RMSE performance and noise from these variables did not reduce the predictive strength of this model as it does in small quantities in the other three models. 
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 7.5}
 
@@ -259,7 +258,9 @@ It is very likely that the lack of contribution allotted to the X6-X10 variables
 Exercise 6.3 describes data for a chemical manufacturing process. Use the same data imputation, data splitting, and pre-processing steps as before and train several nonlinear regression models.
 \end{question}
 
-We pulled in the data processing method from 6.3. This includes imputation and removal of near zero variance features as processing steps. Please refer to 6.3 for a more detailed look at the EDA involved with this data set. We tuned a KNN model, NNET model, MARS, and SVM model using specifications from the literature 
+We prepared data identically as in 6.3, imputing, removing near zero variance features, and preproecessing. Please refer to 6.3 for a more detailed look at the EDA involved with this data set. 
+
+We tuned KNN, NNET, MARS, and SVM models using specifications from the textbook. 
 
 ```{r kj-7.5, eval=FALSE, include=FALSE, echo=F}
 # Call code from 6.3
@@ -270,12 +271,12 @@ We pulled in the data processing method from 6.3. This includes imputation and r
 Which nonlinear regression model gives the optimal resampling and test set performance? 
 \end{subquestion}
 
+SVM using a radial basis kernel outperformed the other models across all performance metrics, followed by MARS regression. In part b, we will address what variables are dominant in our SVM model. 
+
 ```{r kj-7.5a, echo=F}
 # code
 hw2.2.cperformance_table
 ```
-
-Radial SVM outperformed the other models across all key KPIs. Radial SVM is generally a more flexible basis function kernel than the base linear kernel. The next best model was MARS regression. In part b, we will address what variables are dominant in our SVM model. 
 
 \begin{subquestion}{(b).}
 Which predictors are most important in the optimal nonlinear regression model? Do either the biological or process variables dominate the list? How do the top ten important predictors compare to the top ten predictors from the optimal linear model? 
@@ -286,7 +287,7 @@ Which predictors are most important in the optimal nonlinear regression model? D
 hwsvmimp_plot2
 ```
 
-`ManufacturingProcess` Variables dominate the ranking of important variables with ManufacturingProcess14 at the top. ManufacturingProcess32 was at the top of the important variables list when it came to our linear model with some Biological Process within the top 10. 
+For the SVM model, `ManufacturingProcess` variables dominate the importance rankings, with `ManufacturingProcess14` at the top. On the other hand, for the linear model `ManufacturingProcess32` was the most important variable with a number of `BiologicalProcess` variables within the top 10. 
 
    
 \begin{subquestion}{(c).}
@@ -298,9 +299,9 @@ Explore the relationships between the top predictors and the response for the pr
 hw2cor_df2
 ```
 
-We examined the top 5 predictors that were flagged as being the most important before the importance measure dropped. There are some pretty clear differences in the data which might explain both the overall poor performance of the linear models as well as the improved significance of Process-Based variables in the non-linear models.
+We examined the top 5 predictors identified as the most important variables before the importance measure dropped. There are some pretty clear differences in the data which might explain both the overall poor performance of the linear models as well as the improved significance of `ManufacturingProcess` variables in the non-linear models.
 
-Of the `ManfuacturingProcess` variables, they appear to be either tight clusters or discrete values which predict an array of possible Yields, which is directly opposed the definition of linearly separable data base on earlier examination of correlation plots.
+Of the `ManfuacturingProcess` variables, they appear to be either tight clusters or discrete values which predict an array of possible `Yield`. This is directly opposed the definition of linearly separable data base on earlier examination of correlation plots.
  
 
 # Assignment 3 {-#AS-3}
@@ -319,7 +320,7 @@ colnames(simulated)[ncol(simulated)] <- "y"
 
 \begin{subquestion}{(a).} Fit a random forest model to all of the predictors, then estimate the variable importance scores. Did the random forest model significantly use the uninformative predictors (V6-V10)?\end{subquestion}
 
-The code to the RF model has been provided to us through the literature.
+The code for the RF model is provided by the textbook.
 
 What is the code actually doing? We should dive into the theory. The importance is calculated with the following formula:
 
@@ -327,7 +328,7 @@ $$
 ni_j=W_{left(j)}C_{left(j)}-W_{right(j)}C_{right(j)}
 $$
 
-Let's deconstruct the theory. $ni_j$ stands for node importance. $w_j$ is the weighted number of samples reaching node j. $c_j$ is the impurity value of node j. Left(j) is the child node from left split on node j and right(j) is the child node from right split on node j. Once $ni_j$ is calculated, the importance for each variable on a decision tree is calculated with formula I. Formula I is then normalized as shown as formula II. The final feature importance is the average over all trees. We simply find the sum of the features importance value and then divide by all trees T, shown in formula III.
+Let's deconstruct the theory. $ni_j$ stands for node importance. $w_j$ is the weighted number of samples reaching node $j$. $c_j$ is the impurity value of node $j$. $left(j)$ is the child node from the left split on node $j$ and $right(j)$ is the child node from right split on node $j$. Once $ni_j$ is calculated, the importance for each variable on a decision tree is calculated with formula I. Formula I is then normalized as shown as formula II. The final feature importance is the average over all trees. We simply find the sum of the features importance value and then divide by all trees T, shown in formula III.
 
 $$
 I) \  fi_j \ =\frac{ (\sum_{j \ node \ split \ on \ i}) ni_j }{ ( \sum_{all \ nodes}) ni_k}\\
@@ -351,11 +352,11 @@ rfImp1 <- varImp(model1, scale = FALSE)
 rfImp1plot
 ```
 
-Variables V6 to V10 were some of the least important variables, all with a measure less than 1. Variables V1 through V5 were the most important with variable V1 coming in at the top spot. 
+Variables `V6` through `V10` were some of the least important variables, all with a measure less than 1. Variables `V1` through `V5` were the most important, with variable `V1` in the top spot. 
 
 \begin{subquestion}{(b).} Now add an additional predictor that is highly correlated with one of the informative predictors. Fit another random forest model to these data. Did the importance score for V1 change? What happens when you add another predictor that is also highly correlated with V1? For example:\end{subquestion}
 
-We add a feature that has a strong correlation of .93 with existing feature V1. We will call this new feature `duplicate 1`
+We add a feature that has a strong correlation of .93 with existing feature `V1` which we'll call `duplicate 1`
 
 ```{r kj-8.1b-ex, eval=F, echo=F}
 simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
@@ -367,7 +368,7 @@ simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1
 rfImp2plot
 ```
 
-Note that `V1` decreased importance by roughly 2 measures. V4 is now the most important predictor. It looks like the importance score for `V1` was partly absorbed by new predictor which underestimates true importance of `V1` - the score sum of `V1` and `duplicate1` are similar to the V1 score in (a). It makes sense as `duplicate1` contains almost the same information as `V1`.
+Note that `V1` decreased importance by roughly 2 measures. `V4` is now the most important predictor. It looks like the importance score for `V1` was partly absorbed by new predictor which underestimates true importance of `V1` - the score sum of `V1` and `duplicate1` are similar to the `V1` score in (a). It makes sense as `duplicate1` contains almost the same information as `V1`.
 
 \begin{subquestion}{(c).} Use the `cforest` function in the party package to fit a random forest model using conditional inference trees. The party package function `varimp` can calculate predictor importance. The `conditional` argument of that function toggles between the traditional importance measure and the modified version described in Strobl et al. (2007). Do these importances show the same pattern as the traditional random forest model?\end{subquestion}
 
@@ -379,21 +380,23 @@ hw3final_dfb
 
 We performed both `varimp(, conditional = T)` and `varimp(, conditional = F)` to compare `varimp` of `cforest` in terms of permutation importance and conditional permutation importance.
 
-1. RF vs CF 
+**1. RF vs CF **
 Given that no correlated term is added, the importance pattern is similar except for the fact that V4 is now the most important feature in CF.
 
-2. RF vs CF (with correlated term added)
-Given that correlated term is added, the importance score for `duplicate1` is much smaller in CF. This is the pin point difference between importance based on Gini coefficient (decision tree) and permutation test using p-value (conditional inference tree). 
+**2. RF vs CF (with correlated term added)**
+Given that the correlated term is added, the importance score for `duplicate1` is much smaller in CF. This is the pinpoint difference between importance based on Gini coefficient (decision tree) and permutation test using p-value (conditional inference tree).
 
-3. CF conditional vs CF with correlated term added and conditional
-When `conditional = T`, we perform conditional permutation test for measuring feature importance instead. Note that `duplicate1` has even smaller importance in `CF.cor.cond` than in `CF.cor`. For `CF.cor.cond`, notice `V1` became 3rd most important feature when it was 2nd most important for `CF.cor`. This is because conditional permutation helps uncovering the spurious correlation between `V1` and `duplicate1`.
+**3. CF conditional vs CF with correlated term added and conditional**
+When `conditional = T`, we perform conditional permutation test for measuring feature importance instead. Note that `duplicate1` has even smaller importance in `CF.cor.cond` than in `CF.cor`. For `CF.cor.cond`, notice `V1` became 3rd most important feature when it was 2nd most important for `CF.cor`. This is because conditional permutation helps to uncover the spurious correlation between `V1` and `duplicate1`.
 
-In summary, we learned that `CF` model surpresses the importance score of `duplicate1` which helps maintain the importance of `V1`. When `conditional = TRUE` in `varimp` for `CF` model, the importance score of `duplicate1` is even smaller.
+In summary, we learned that `CF` model surpresses the importance score of `duplicate1`, which helps to maintain the importance of `V1`. When `conditional = TRUE` in `varimp` for `CF` model, the importance score of `duplicate1` is even smaller.
 
 
 \begin{subquestion}{(d).} Repeat this process with different tree models, such as boosted trees and Cubist. Does the same pattern occur?\end{subquestion}
 
-Extracting the relative importance from a BGM object requires the use of the native model summary. 
+Extracting the relative importance from a GBM object requires the use of the native model summary.  The summary returns the variable name along with a measure of its influence on the target variable. 
+
+From the GBM tree, we can see `V4` is the most influential. `V1` and correlated `duplicate1` are also much more influential. `V6` through `V10` do not break the top half of our list of influential variables.
 
 #### GBM Without Duplicate 
 
@@ -409,26 +412,25 @@ summary(gbmModel_nodup)
 summary(gbmModel_wdup)
 ```
 
+The Cubist model is a rather unique variation on trees. Each leaf in the tree - and each intermediate step between leafs - contains a linear regression model. Every layer in the tree alters the predicitons used within each leaf contained model. In other words, the selection of predictors in leaf $n$ is based on the previous splits. Predictions are made via linear models on the terminal node.
+
 ```{r kj-8.1db, echo=F}
 #code
 cubistMod_nodupbplot;cubistMod_wdupbplot
 ```
-
-The summary returns the variable name along with a measure of influence on the target variable. From our GBM tree, we can see v4 is the most influential. V1 and correlated duplicate1 are also much more influential. V6-V10 does not break the top half of our list of influential variables.
-
-The next model we want to try is the cubist model. The cubist model is a rather unique variation on trees. Each leaf in the tree contains a linear regression model. Every layer in the tree alters the predicitons used within each leaf contained model. In other words, the selection of predictors in leaf n is based on the previous splis. It should be noted that each intermediate step between leafs also contain a linear model. Predictions are made via linear models on the on the terminal node.
 
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 8.2}
 
 \begin{question}{Kuhn and Johnson 8.2}Use a simulation to show tree bias with different granularities.\end{question}
 
+Basic regression trees split predictor variables into small groups based on response variable. According to the literature, "predictors with a higher number of distinct values are favored over more granular predictors."
+
 ```{r kj-8.2, echo=F}
 #code
 sim_varImp.plot
 ```
 
-Basic regression trees split predictor variables into small groups based on response variable. According to the literature, "predictors with a higher number of distinct values are favored over more granular predictors."
 
 \addcontentsline{toc}{subsection}{Kuhn and Johnson 8.3}
 
@@ -436,9 +438,11 @@ Basic regression trees split predictor variables into small groups based on resp
  
 \begin{subquestion}{(a).} Why does the model on the right focus its importance on just the first few of predictors, whereas the model on the left spreads importance across more predictors? \end{subquestion}
 
-Because the model on the right has hig learning rate and high bagging fractions, it is doing two things, using 90% of the variables in each tree and using 90% of the error for a given model. Imagine there were ten variables in this model, if you used a bagging fraction of .9, the every tree would have 9 of the ten trees in it, only one variable would be different from the set of 9 trees in the first  model each time. The means that most of the possbile break-points in the trees would be the same from tree to tree, only offering new opportunities for initial splits when the most dominating variabl is removed. Because of this, you would very likely find the model making the same first few decisions each time. And with a learning rate of  .9, 90% of the error is added in from each tree,this means that in addition to consistently choosing from one or a few initial splits, you are also maximizing their contributions to the models. 
+Because the model on the right has both high learning rates and high bagging fractions, it does two things: first, it uses 90% of the variables in each tree, second, it uses 90% of the error for a given model. 
 
-Because of these two factors, the trees contributing to the Stockastic Boosted Tree in this example will make very few decisions (maening they will make the same decisions repeately). That lack of variation in initial choices means that the number of paths the learning can take is limited, and with a high learning rate, a core set of variables is selected early on from the trees built very similarly. In essence, the model never has the opportunity to evaluate other possible variables because the greediness of the model makes the same first few choices every time(
+Imagine a ten-variable model, with a bagging fraction of .9 every tree would have nine of the ten trees in it and only one variable would be different from the set of 9 trees in the first model each time. In this case, most of the possible break-points would be the same from tree to tree and  different initial splits would only be possible when the dominant variable is removed. As a result, these modles would likely make the same first few decisions each time. Given that with a .9 learning rate 90% of the error is added in from each tree, in addition to consistently choosing from one or a few initial splits the models are also maximizing the contributions of those splits. 
+
+Given these learning rates and bagging fractions, the trees contributing to the Stochastic Boosted Tree in this example will make the same decisions repeatedely, yielding very few unique decisions overall. Lack of variation in initial choices means that the number of paths the learning can take is limited, and with a high learning rate a core set of variables is selected early on from the similarly built trees. In essence, the model never has the opportunity to evaluate other possible variables because the greediness of the model makes the same first few choices every time.
 
 
 ```{r kj-8.3a, eval=FALSE, include=FALSE, echo=F}
@@ -447,9 +451,9 @@ Because of these two factors, the trees contributing to the Stockastic Boosted T
 
 \begin{subquestion}{(b).} Which model do you think would be more predictive of other samples?\end{subquestion}
 
-The .9, .9  model would likely be overfit to the training data, because the variation in values within those most important variables may not be reflective of the general population. So, this model will be tuned to choose from sample members following the samples distribution of values in those most important features at the expense of recognizing  potiential splits in other variables which might be more common in the poolation that the sample.
+The .9 / .9 model would likely overfit the training data, because the variation in values within those most important variables may not reflect the general population. This model will be tuned to choose from sample members following the samples' distributions along the most important features at the expense of recognizing potential splits in other features which might be more common in the general population. 
   
-With a learning rate of .1 and a bagging fraction of .1, the left model is more likely to build truly weak predictors, from smallers sets of variables, consider more distinct breaking points, and therefore extend better to wild data not fully described by the first few variables in the importance summarise_layers
+With a learning rate of .1 and a bagging fraction of .1, the left model is more likely to build truly weak predictors, from smallers sets of variables, consider more distinct breaking points, and therefore extend better to wild data not fully described by the first few variables in the importance summarise_layers.
   
 
 ```{r kj-8.3b, eval=FALSE, include=FALSE, echo=F}
@@ -458,9 +462,13 @@ With a learning rate of .1 and a bagging fraction of .1, the left model is more 
 
 \begin{subquestion}{(c).} How would increasing interaction depth affect the slope of predictor importance for either model in Fig.8.24?\end{subquestion}
 
-Increasing the tree depth would affect both models, but differently. The model with bagging fraction and learning rate equal to .1, increasing the number of nodes in the tree would likely increase the importance of the lower variables, creating a less polynomial slope. this is because making more decisions, means giving weight the variables and values where those decisions are made. This would give importance to those variables.
+Increasing the tree depth would affect both models, but differently. 
 
-For the model with bagging fraction and learning rate equal to .9, increasing the depth would likely not change the slope of the lower variables much at all just ad new variable or two to the top. The difference is that in this model, with the high fraction and learning rate, we again will still be making most of the same decisions, from tree to tree, so the only increases in importance come from the added nodes, which will be downstream, and they too are highly likely to be the same from tree to tree, such that you will add a importance low on the scale to those variables upon which the new nodes break (or upper variables with a second or third break will grow in importance). So you might see a reshuffling of upper nodes and the slight increase of a one or two less important variables. However, the overall slope, of quickly going to zero will be contrained by the high bagging fraction and learning rate.
+For the model with bagging fraction and learning rate equal to .1, increasing the number of nodes in the tree would likely increase the importance of less important variables, creating a less polynomial slope. The reason for this is that making more decisions means giving weight to the variables and values where those decisions are made.
+
+For the model with bagging fraction and learning rate equal to .9, increasing the depth would likely not change the slope of less important lower variables, just adding a new variable or two to the top. 
+
+In this model with high bagging fraction and learning rate we will still be making most of the same decisions from tree to tree. Increases in importance will come from nodes added downstream, and these are likely to be the same from tree to tree. As a result, you might find added importance low on the scale for those variables upon which the new nodes break, or for variables higher on the scale with a second or third break. This might lead to a reshuffling of upper nodes and a slight increase of one or two less important variables, but the overall slope quickly going to zero will be constrained by the high bagging fraction and learning rate.
   
 
 ```{r kj-8.3c, eval=FALSE, include=FALSE, echo=F}
@@ -479,7 +487,7 @@ Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. 
 hw2.3.dperformance_table
 ```
 
-The cubist model is the most optimal based on the r squared value. Cubist both on the train and test data has a lower `RMSE` across the different tree models we selected. 
+The Cubist model is the optimal based on the $R^2$ value. Cubist has a lower `RMSE` both on the train and test data across the different selected tree models.
 
 
 \begin{subquestion}{(b).} Which predictors are most important in the optimal tree-based regression model? Do either the biological or process variables dominate the list? How do the top 10 important predictors compare to the top 10 predictors from the optimal linear and nonlinear models?\end{subquestion}
@@ -489,9 +497,9 @@ The cubist model is the most optimal based on the r squared value. Cubist both o
 grid.arrange(boost, random, cube, ncol=3)
 ```
 
-In all the models the Manufacturing processes dominate the list, with slight differences on where in the list and how much influence each has.
+In all the models the `ManufacturingProcess` variables dominate the list, with slight differences in position and influence.
 
-Comparing the top 10 variables in each model reveals some strong differences. the Boosted tree follows a rather linear drop-off of importance through a list of exclusively process-based variables. The random forest falls off slower in the first five variables but becomes rapidly linear. All but the last variable in this list are also process based, the last is a biological material variable. The cubist tree, however takes on a very different depreciation, as the values are discrete, with the next six process variables all at exactly thre and the last three variables at 2. Other than the first and last variables all of the cubists top 10 are manufacturing process variable names.
+Comparing the top 10 variables in each model reveals some strong differences. The Boosted Tree model sees a rather linear drop-off of importance through a list of exclusively `ManufacturingProcess` variables. The Random Forest model falls off slower in the first five variables but becomes rapidly linear; all but the last are `ManufacturingProcess` variables. The Cubist tree depreciates differently at seemingly discrete levels; other than the first and last variables, all are `ManufacturingProcess` variables.
 
 \begin{subquestion}{(c).} Plot the optimal single tree with the distribution of yield in the terminal nodes. Does this view of the data provide additional knowledge about the biological or process predictors and their relationship with yield?\end{subquestion}
 
@@ -501,7 +509,7 @@ rpart.plot(best_rpart,
           extra = 1)
 ```
 
-Based on this regression tree, the differences between process and matrial is that process variables differentiate more observations at each break, which is why the break first, they increase the purity most quickly. However, the final decisions seem to be based rather wholly on biological material variables, such that only looking at Process or prunning too soon, might lead to overfitting.
+Based on this regression tree, the differences between `ManufacturingProcess` and `BiologicalMaterials` is that the formerdifferentiate more observations at each break and so break first.  While this increases node purity quickly, the final decisions seem to be based rather wholly on the latter variables.  Accordingly, looking only at `ManufacturingProcess` variables or prunning too early could lead to overfitting.
 
 # R Script {-#R-Script}
 
