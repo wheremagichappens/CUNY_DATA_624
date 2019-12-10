@@ -983,7 +983,7 @@ rfImp1.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(model1, sc
 rfImp1plot<-ggplot(rfImp1.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
   geom_point(color ='darkorange') + 
   geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
-  labs(title="Variable Importance", subtitle="Random Forest Model for Simulated Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+  labs(title="Variable Importance", subtitle="Random Forest Model for Simulated Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme(legend.position = "none") +  scale_y_continuous(limits = c(-0.15, 9))
 
 # (8.1b)
 simulated$duplicate1 <- simulated$V1 + rnorm(200) * .1 
@@ -998,7 +998,7 @@ rfImp2.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(hw3model2,
 rfImp2plot<-ggplot(rfImp2.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
   geom_point(color ='darkorange') + 
   geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
-  labs(title="Variable Importance", subtitle="Random Forest Model for Simulated Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+  labs(title="Variable Importance", subtitle="Random Forest Model (with duplicate 1) for Simulated Data", x="", y="Importance")+ coord_flip()+theme_bw()+theme(legend.position = "none") +  scale_y_continuous(limits = c(-0.15, 9))
 
 
 
