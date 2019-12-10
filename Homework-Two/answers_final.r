@@ -321,6 +321,17 @@ hw2nnet_mod2 <- train(Yield~.,
                   MaxNWts = 10 * (ncol(chem_train) + 1) + 5 + 1,
                   maxit = 500)
 
+# Save an hw2nnet_mod2 to a file
+#saveRDS(hw2nnet_mod2, file = "~/GitHub/CUNY_DATA_624/Homework-Two/hw2nnet_mod2.rds")
+save.image("~/GitHub/CUNY_DATA_624/Homework-Two/hw2nnet_mod2.rds")
+
+# Restore the object
+#getwd()
+setwd('~/GitHub/CUNY_DATA_624/Homework-Two')
+load(file = "hw2nnet_mod2.rds")
+
+
+
 #MARS 
 # Define the candidate models to test
 marsGrid_75 <- expand.grid(.degree = 1:2, .nprune = 2:38)
