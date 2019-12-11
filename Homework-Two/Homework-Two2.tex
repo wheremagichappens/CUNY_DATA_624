@@ -196,12 +196,10 @@
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Predicitve Modeling}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mice"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }\StringTok{"tidyverse"}\NormalTok{, }
-    \StringTok{"impute"}\NormalTok{, }\StringTok{"pls"}\NormalTok{, }\StringTok{"caTools"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{, }\StringTok{"randomForest"}\NormalTok{, }\StringTok{"party"}\NormalTok{, }
-    \StringTok{"gbm"}\NormalTok{, }\StringTok{"Cubist"}\NormalTok{, }\StringTok{"rpart"}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"AppliedPredictiveModeling"}\NormalTok{, }\StringTok{"mice"}\NormalTok{, }\StringTok{"caret"}\NormalTok{, }\StringTok{"tidyverse"}\NormalTok{, }\StringTok{"impute"}\NormalTok{, }\StringTok{"pls"}\NormalTok{, }
+    \StringTok{"caTools"}\NormalTok{, }\StringTok{"mlbench"}\NormalTok{, }\StringTok{"randomForest"}\NormalTok{, }\StringTok{"party"}\NormalTok{, }\StringTok{"gbm"}\NormalTok{, }\StringTok{"Cubist"}\NormalTok{, }\StringTok{"rpart"}\NormalTok{)}
 \CommentTok{# Formatting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{, }\StringTok{"gridExtra"}\NormalTok{, }\StringTok{"sqldf"}\NormalTok{, }
-    \StringTok{"tibble"}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{"default"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{, }\StringTok{"gridExtra"}\NormalTok{, }\StringTok{"sqldf"}\NormalTok{, }\StringTok{"tibble"}\NormalTok{)}
 \CommentTok{# Plotting Libraries}
 \KeywordTok{libraries}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"grid"}\NormalTok{, }\StringTok{"ggfortify"}\NormalTok{, }\StringTok{"rpart.plot"}\NormalTok{)}
 
@@ -435,8 +433,8 @@ The package `mlbench` contains a function called `mlbench.friedman1` that simula
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{200}\NormalTok{)}
 \NormalTok{trainingData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
 
-\NormalTok{## We convert the 'x' data from a matrix to a data frame One}
-\NormalTok{## reason is that this will give the columns names.}
+\NormalTok{## We convert the 'x' data from a matrix to a data frame One reason is that this}
+\NormalTok{## will give the columns names.}
 
 \NormalTok{trainingData}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x)}
 \NormalTok{testData <-}\StringTok{ }\KeywordTok{mlbench.friedman1}\NormalTok{(}\DecValTok{5000}\NormalTok{, }\DataTypeTok{sd =} \DecValTok{1}\NormalTok{)}
@@ -451,8 +449,8 @@ The package `mlbench` contains a function called `mlbench.friedman1` that simula
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }
-    \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{), }\DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{)}
+\NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }\DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }
+    \StringTok{"scale"}\NormalTok{), }\DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{)}
 \NormalTok{knnModel}
 \NormalTok{knnPred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(knnModel, }\DataTypeTok{newdata =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{x)}
 \KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ knnPred, }\DataTypeTok{obs =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{y)}
@@ -937,13 +935,13 @@ Refer to Exercises 6.3 and 7.5 which describe a chemical manufacturing process. 
 \hline
 \textbf{ } & \textbf{RMSE} & \textbf{RSquared} & \textbf{MAE}\\
 \hline
-\rowcolor{gray!6}  GBM & 1.4363 & 0.5957 & 1.1565\\
+\rowcolor{gray!6}  GBM & 1.4669 & 0.5860 & 1.1585\\
 \hline
-GBMTest & 1.1658 & 0.6654 & 0.9339\\
+GBMTest & 1.1637 & 0.6722 & 0.9276\\
 \hline
-\rowcolor{gray!6}  RFTrain & 1.2430 & 0.5706 & 0.9350\\
+\rowcolor{gray!6}  RFTrain & 1.2344 & 0.5498 & 0.9307\\
 \hline
-RFTest & 1.2145 & 0.6674 & 0.9638\\
+RFTest & 1.1169 & 0.7363 & 0.9037\\
 \hline
 \rowcolor{gray!6}  \rowcolor[HTML]{d9f2e6}  \textbf{CubistTrain} & \textbf{0.9882} & \textbf{0.7519} & \textbf{0.7678}\\
 \hline
@@ -999,46 +997,39 @@ early could lead to overfitting.
 \KeywordTok{library}\NormalTok{(easypackages)}
 \KeywordTok{library}\NormalTok{(formatR)}
 
-\CommentTok{# Set default augments for code chunks}
-\NormalTok{knitr}\OperatorTok{::}\NormalTok{opts_chunk}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\DataTypeTok{echo =}\NormalTok{ F, }\DataTypeTok{message=}\NormalTok{F, }\DataTypeTok{warning=}\NormalTok{F, }\DataTypeTok{error=}\NormalTok{F, }\DataTypeTok{comment=}\OtherTok{NA}\NormalTok{, }\DataTypeTok{tidy=}\NormalTok{T, }\DataTypeTok{tidy.opts=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{width.cutoff=}\DecValTok{60}\NormalTok{), }\DataTypeTok{fig.width=}\DecValTok{10}\NormalTok{, }\DataTypeTok{fig.height =} \DecValTok{3}\NormalTok{)}
+\CommentTok{# Load .rd file}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Homework-Two'}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\DataTypeTok{file =} \StringTok{"hw2.rds"}\NormalTok{)}
 
-\CommentTok{# Set default augments for `kable()` }
-\KeywordTok{default}\NormalTok{(kable) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{format=}\StringTok{"latex"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{)}
-
-\CommentTok{# Set default augments for `kable_styling()` }
-\KeywordTok{default}\NormalTok{(kable_styling)  <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{latex_options =} \KeywordTok{c}\NormalTok{(}\StringTok{"HOLD_position"}\NormalTok{, }\StringTok{"striped"}\NormalTok{), }\DataTypeTok{font_size=}\DecValTok{8}\NormalTok{)}
-\KeywordTok{default}\NormalTok{(row_spec) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{row=}\DecValTok{0}\NormalTok{, }\DataTypeTok{bold=}\NormalTok{T)}
-
-\CommentTok{# Set default augments for ggplot2 `theme()`}
-\KeywordTok{default}\NormalTok{(theme) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{8}\NormalTok{),}
-                       \DataTypeTok{axis.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{8}\NormalTok{),}
-                       \DataTypeTok{axis.title.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color=}\StringTok{"#7d7464"}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{0}\NormalTok{, }\DataTypeTok{hjust =} \OtherTok{NULL}\NormalTok{),}
-                       \DataTypeTok{axis.title.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color=}\StringTok{"#7d7464"}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{10}\NormalTok{),}
-                       \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color=}\StringTok{"#745010"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{12}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{),}
-                       \DataTypeTok{plot.subtitle =}\NormalTok{ (}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{color=}\StringTok{"#868b8c"}\NormalTok{)),}
-                       \DataTypeTok{legend.title =}\NormalTok{ (}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{color=}\StringTok{"#745010"}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{)),}
-                       \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{color=}\StringTok{"#000000"}\NormalTok{, }
-                                                       \DataTypeTok{fill=}\StringTok{"#eee9e1"}\NormalTok{, }\DataTypeTok{size=}\NormalTok{.}\DecValTok{75}\NormalTok{,}\DataTypeTok{linetype=}\StringTok{"solid"}\NormalTok{),}
-                       \DataTypeTok{strip.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{8}\NormalTok{, }\DataTypeTok{color =} \StringTok{"#000000"}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{))}
+\CommentTok{# SOURCE DEFAULT SETTINGS}
+\KeywordTok{source}\NormalTok{(}\StringTok{'~/GitHub/CUNY_DATA_624/Homework-Two/defaults.R'}\NormalTok{)}
+\CommentTok{# SOURCE HW ANSWERS}
+\CommentTok{#source('~/GitHub/CUNY_DATA_624/Homework-Two/answers_final.R')}
+\CommentTok{#load(file = "hw2nnet_mod2.rds")}
+\KeywordTok{load}\NormalTok{(}\DataTypeTok{file =} \StringTok{"hw2.rds"}\NormalTok{)}
 
 \CommentTok{# SOURCE HW ANSWERS}
 
-\NormalTok{## Ensure constistent variable naming convention per question}
-\NormalTok{## Look out for duplicate variable names between questions}
-
 \CommentTok{# DEPENDENCIES}
-
-
 \CommentTok{# Predicitve Modeling}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'AppliedPredictiveModeling'}\NormalTok{, }\StringTok{'mice'}\NormalTok{,}\StringTok{'caret'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{,}\StringTok{'impute'}\NormalTok{,}\StringTok{'pls'}\NormalTok{,}\StringTok{'caTools'}\NormalTok{,}\StringTok{'mlbench'}\NormalTok{,}\StringTok{'randomForest'}\NormalTok{,}\StringTok{'party'}\NormalTok{,}\StringTok{'gbm'}\NormalTok{,}\StringTok{'Cubist'}\NormalTok{,}\StringTok{'rpart'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'AppliedPredictiveModeling'}\NormalTok{, }
+          \StringTok{'mice'}\NormalTok{,}
+          \StringTok{'caret'}\NormalTok{, }
+          \StringTok{'tidyverse'}\NormalTok{,}
+          \StringTok{'impute'}\NormalTok{,}\StringTok{'pls'}\NormalTok{,}\StringTok{'caTools'}\NormalTok{,}\StringTok{'mlbench'}\NormalTok{,}
+          \StringTok{'randomForest'}\NormalTok{,}\StringTok{'party'}\NormalTok{,}\StringTok{'gbm'}\NormalTok{,}\StringTok{'Cubist'}\NormalTok{,}\StringTok{'rpart'}\NormalTok{)}
 \CommentTok{# Formatting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'default'}\NormalTok{, }\StringTok{'knitr'}\NormalTok{, }\StringTok{'kableExtra'}\NormalTok{,}\StringTok{'gridExtra'}\NormalTok{,}\StringTok{'sqldf'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'default'}\NormalTok{, }\StringTok{'knitr'}\NormalTok{, }
+          \StringTok{'kableExtra'}\NormalTok{,}\StringTok{'gridExtra'}\NormalTok{,}\StringTok{'sqldf'}\NormalTok{)}
 \CommentTok{# Plotting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'ggfortify'}\NormalTok{,}\StringTok{'rpart.plot'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }
+          \StringTok{'ggfortify'}\NormalTok{,}\StringTok{'rpart.plot'}\NormalTok{)}
 
 
 \CommentTok{# Data Wrangling }
-\KeywordTok{library}\NormalTok{(AppliedPredictiveModeling); }\KeywordTok{library}\NormalTok{(mice); }\KeywordTok{library}\NormalTok{(caret); }\KeywordTok{library}\NormalTok{(tidyverse); }\KeywordTok{library}\NormalTok{(pls); }\KeywordTok{library}\NormalTok{(caTools); }\KeywordTok{library}\NormalTok{(mlbench); }\KeywordTok{library}\NormalTok{(stringr);}
+\KeywordTok{library}\NormalTok{(AppliedPredictiveModeling); }\KeywordTok{library}\NormalTok{(mice); }
+\KeywordTok{library}\NormalTok{(caret); }\KeywordTok{library}\NormalTok{(tidyverse); }\KeywordTok{library}\NormalTok{(pls); }
+\KeywordTok{library}\NormalTok{(caTools); }\KeywordTok{library}\NormalTok{(mlbench); }\KeywordTok{library}\NormalTok{(stringr);}
 \CommentTok{# Formatting}
 \KeywordTok{library}\NormalTok{(default); }\KeywordTok{library}\NormalTok{(knitr); }\KeywordTok{library}\NormalTok{(kableExtra); }
 \CommentTok{# Plotting}
@@ -1059,17 +1050,33 @@ early could lead to overfitting.
 
 \CommentTok{# (6.3a) }
 \NormalTok{Plt_CMP.Yield <-}\KeywordTok{ggplot}\NormalTok{(ChemicalManufacturingProcess, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Yield))}\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{color=}\NormalTok{dark_gold, }\DataTypeTok{fill =}\NormalTok{ light_gold)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{color=}\NormalTok{light_gold, }\DataTypeTok{fill =}\NormalTok{ light_gold)}\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{labels =}\NormalTok{ scales}\OperatorTok{::}\KeywordTok{number_format}\NormalTok{(}\DataTypeTok{accuracy =}\NormalTok{ .}\DecValTok{1}\NormalTok{))}\OperatorTok{+}
 \StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Distribution of Yield"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color=}\StringTok{"#745010"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{), }\DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{())}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{color=}\StringTok{"#745010"}\NormalTok{, }
+                                             \DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{), }
+                   \DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{())}
 
 \CommentTok{# (6.3b) }
 
 \CommentTok{# Total NA Values}
 \CommentTok{#na_table<- table(is.na(ChemicalManufacturingProcess))}
-\NormalTok{CMP_na <-}\StringTok{ }\NormalTok{ChemicalManufacturingProcess }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{Yield) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise_all}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\KeywordTok{sum}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(.)))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{t}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Predictor"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(V1 }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(V1)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{n=}\NormalTok{V1)}
-\NormalTok{CMP_na_left <-CMP_na }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{14}\NormalTok{); CMP_na_right <-}\StringTok{ }\NormalTok{CMP_na }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(}\DecValTok{15}\OperatorTok{:}\DecValTok{28}\NormalTok{); CMP.total_na <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(CMP_na_left, }\StringTok{`}\DataTypeTok{ }\StringTok{`}\NormalTok{=}\StringTok{" "}\NormalTok{, CMP_na_right)}
+\NormalTok{CMP_na <-}\StringTok{ }\NormalTok{ChemicalManufacturingProcess }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{Yield) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarise_all}\NormalTok{(}\KeywordTok{funs}\NormalTok{(}\KeywordTok{sum}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(.)))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{t}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Predictor"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(V1 }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(V1)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{n=}\NormalTok{V1)}
+
+\NormalTok{CMP_na_left <-CMP_na }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{slice}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{14}\NormalTok{); }
+
+\NormalTok{CMP_na_right <-}\StringTok{ }\NormalTok{CMP_na }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{slice}\NormalTok{(}\DecValTok{15}\OperatorTok{:}\DecValTok{28}\NormalTok{); }
+
+\NormalTok{CMP.total_na <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(CMP_na_left, }\StringTok{`}\DataTypeTok{ }\StringTok{`}\NormalTok{=}\StringTok{" "}\NormalTok{, CMP_na_right)}
 
 \CommentTok{# use mice w/ default settings to impute missing data}
 \NormalTok{miceImp <-}\StringTok{ }\KeywordTok{mice}\NormalTok{(ChemicalManufacturingProcess, }\DataTypeTok{printFlag =} \OtherTok{FALSE}\NormalTok{)}
@@ -1082,24 +1089,27 @@ early could lead to overfitting.
 \CommentTok{#code}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)   }\CommentTok{#  set seed to ensure you always have same random numbers generated}
 
-\NormalTok{sample =}\StringTok{ }\KeywordTok{sample.split}\NormalTok{(CMP_DF, }\DataTypeTok{SplitRatio =} \FloatTok{0.80}\NormalTok{) }\CommentTok{# splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE}
+\NormalTok{sample =}\StringTok{ }\KeywordTok{sample.split}\NormalTok{(CMP_DF, }\DataTypeTok{SplitRatio =} \FloatTok{0.80}\NormalTok{) }
+\CommentTok{# splits the data in the ratio mentioned in SplitRatio. }
+\CommentTok{# After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE}
 
-\NormalTok{chem_train =}\KeywordTok{subset}\NormalTok{(CMP_DF,sample }\OperatorTok{==}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# creates a training dataset named train1 with rows which are marked as TRUE}
+\NormalTok{chem_train =}\KeywordTok{subset}\NormalTok{(CMP_DF,sample }\OperatorTok{==}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# creates a training dataset named train1}
+\CommentTok{# with rows which are marked as TRUE}
 
 \NormalTok{chem_test=}\KeywordTok{subset}\NormalTok{(CMP_DF, sample}\OperatorTok{==}\OtherTok{FALSE}\NormalTok{)}
 
 \CommentTok{#code}
 \NormalTok{pls_model <-}\StringTok{ }\KeywordTok{plsr}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data=}\NormalTok{chem_train,}
-            \DataTypeTok{method =} \StringTok{'kernelpls'}\NormalTok{,}
-            \DataTypeTok{scale =} \OtherTok{TRUE}\NormalTok{,}
-            \DataTypeTok{center =} \OtherTok{TRUE}\NormalTok{)}
+                  \DataTypeTok{method =} \StringTok{'kernelpls'}\NormalTok{,}
+                  \DataTypeTok{scale =} \OtherTok{TRUE}\NormalTok{,}
+                  \DataTypeTok{center =} \OtherTok{TRUE}\NormalTok{)}
 
 
 \NormalTok{pls_model2 <-}\StringTok{ }\KeywordTok{plsr}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data=}\NormalTok{chem_train,}
-            \DataTypeTok{method =} \StringTok{'kernelpls'}\NormalTok{,}
-            \DataTypeTok{scale =} \OtherTok{TRUE}\NormalTok{,}
-            \DataTypeTok{center =} \OtherTok{TRUE}\NormalTok{,}
-            \DataTypeTok{ncomp =}\DecValTok{41}\NormalTok{)}
+                   \DataTypeTok{method =} \StringTok{'kernelpls'}\NormalTok{,}
+                   \DataTypeTok{scale =} \OtherTok{TRUE}\NormalTok{,}
+                   \DataTypeTok{center =} \OtherTok{TRUE}\NormalTok{,}
+                   \DataTypeTok{ncomp =}\DecValTok{41}\NormalTok{)}
 
 
 \CommentTok{#  Train Metrics}
@@ -1117,7 +1127,9 @@ early could lead to overfitting.
 
 
 
-\NormalTok{caret}\OperatorTok{::}\KeywordTok{defaultSummary}\NormalTok{(pls2test_eval)}\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"PLS Performance Metrics on Test Subset"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{()}\CommentTok{# %>% row_spec()}
+\NormalTok{caret}\OperatorTok{::}\KeywordTok{defaultSummary}\NormalTok{(pls2test_eval)}\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"PLS Performance Metrics on Test Subset"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{()}\CommentTok{# %>% row_spec()}
 
 \NormalTok{eval_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(pls2test_eval, }\KeywordTok{aes}\NormalTok{(obs, pred)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Observed vs. Predicted Results for Test Data"}\NormalTok{,}
@@ -1125,13 +1137,23 @@ early could lead to overfitting.
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}
 \StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}
 
-\NormalTok{CMP.sample =}\StringTok{ }\KeywordTok{sample.split}\NormalTok{(CMP_DF, }\DataTypeTok{SplitRatio =} \FloatTok{0.80}\NormalTok{) }\CommentTok{# splits the data in the ratio mentioned in SplitRatio. After splitting marks these rows as logical TRUE and the the remaining are marked as logical FALSE}
-\NormalTok{CMP.train =}\StringTok{ }\KeywordTok{subset}\NormalTok{(CMP_DF, CMP.sample }\OperatorTok{==}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# creates a training dataset named train1 with rows which are marked as TRUE}
+\NormalTok{CMP.sample =}\StringTok{ }\KeywordTok{sample.split}\NormalTok{(CMP_DF, }\DataTypeTok{SplitRatio =} \FloatTok{0.80}\NormalTok{) }
+\CommentTok{# splits the data in the ratio mentioned in SplitRatio. }
+\CommentTok{# After splitting marks these rows as logical TRUE and the the remaining }
+\CommentTok{# are marked as logical FALSE}
+\NormalTok{CMP.train =}\StringTok{ }\KeywordTok{subset}\NormalTok{(CMP_DF, CMP.sample }\OperatorTok{==}\OtherTok{TRUE}\NormalTok{) }
+\CommentTok{# creates a training dataset named train1 with rows which are marked as TRUE}
 \NormalTok{CMP.test =}\StringTok{ }\KeywordTok{subset}\NormalTok{(CMP_DF, CMP.sample}\OperatorTok{==}\OtherTok{FALSE}\NormalTok{)}
 
 \CommentTok{# Train model }
-\NormalTok{CMP.pls.fit <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data=}\NormalTok{CMP.train, }\DataTypeTok{method =} \StringTok{'pls'}\NormalTok{, }\DataTypeTok{preProcess=}\KeywordTok{c}\NormalTok{(}\StringTok{'zv'}\NormalTok{, }\StringTok{'nzv'}\NormalTok{, }\StringTok{'center'}\NormalTok{, }\StringTok{'scale'}\NormalTok{),}\DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{, }\DataTypeTok{number =} \DecValTok{5}\NormalTok{, }\DataTypeTok{savePredictions =}\NormalTok{ T), }\DataTypeTok{tuneLength=}\DecValTok{10}\NormalTok{)}
-\NormalTok{CMP.pls.fit.obs_vs_pred <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\DataTypeTok{Observed =}\NormalTok{ CMP.pls.fit}\OperatorTok{$}\NormalTok{finalModel}\OperatorTok{$}\NormalTok{model}\OperatorTok{$}\NormalTok{.outcome, }\DataTypeTok{Predicted =}\NormalTok{ CMP.pls.fit}\OperatorTok{$}\NormalTok{finalModel}\OperatorTok{$}\NormalTok{fitted.values) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }
+\NormalTok{CMP.pls.fit <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data=}\NormalTok{CMP.train, }\DataTypeTok{method =} \StringTok{'pls'}\NormalTok{, }
+                     \DataTypeTok{preProcess=}\KeywordTok{c}\NormalTok{(}\StringTok{'zv'}\NormalTok{, }\StringTok{'nzv'}\NormalTok{, }\StringTok{'center'}\NormalTok{, }\StringTok{'scale'}\NormalTok{),}
+                     \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{, }\DataTypeTok{number =} \DecValTok{5}\NormalTok{, }
+                                              \DataTypeTok{savePredictions =}\NormalTok{ T), }
+                     \DataTypeTok{tuneLength=}\DecValTok{10}\NormalTok{)}
+\NormalTok{CMP.pls.fit.obs_vs_pred <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\DataTypeTok{Observed =}\NormalTok{ CMP.pls.fit}\OperatorTok{$}\NormalTok{finalModel}\OperatorTok{$}\NormalTok{model}\OperatorTok{$}\NormalTok{.outcome, }
+                                 \DataTypeTok{Predicted =}\NormalTok{ CMP.pls.fit}\OperatorTok{$}\NormalTok{finalModel}\OperatorTok{$}\NormalTok{fitted.values) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{() }
 \NormalTok{Plt_CMP.fit.obs_vs_pred <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(CMP.pls.fit.obs_vs_pred, }\KeywordTok{aes}\NormalTok{(Observed, Predicted)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color=}\NormalTok{medium_gold) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"lm"}\NormalTok{, }\DataTypeTok{color=}\NormalTok{dark_gold, }\DataTypeTok{fill=}\NormalTok{light_gold)}\OperatorTok{+}
@@ -1142,14 +1164,29 @@ early could lead to overfitting.
 \StringTok{  }\KeywordTok{theme}\NormalTok{()}
 
 \CommentTok{#  Train Metrics}
-\NormalTok{CMP.pls.train.perf <-}\StringTok{ }\NormalTok{CMP.pls.fit}\OperatorTok{$}\NormalTok{results }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(RMSE}\OperatorTok{==}\KeywordTok{min}\NormalTok{(RMSE)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(RMSE, Rsquared, MAE)}
-\NormalTok{Plt_CMP.RMSE <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(CMP.pls.fit) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{color=}\NormalTok{dark_gold) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color=}\NormalTok{medium_gold)}\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"PLS Cross-Validation"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"RMSE"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Components"}\NormalTok{)}\OperatorTok{+}\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{labels =}\NormalTok{ scales}\OperatorTok{::}\KeywordTok{number_format}\NormalTok{(}\DataTypeTok{accuracy =} \DecValTok{1}\NormalTok{))}
+\NormalTok{CMP.pls.train.perf <-}\StringTok{ }\NormalTok{CMP.pls.fit}\OperatorTok{$}\NormalTok{results }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(RMSE}\OperatorTok{==}\KeywordTok{min}\NormalTok{(RMSE)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(RMSE, Rsquared, MAE)}
+
+\NormalTok{Plt_CMP.RMSE <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(CMP.pls.fit) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{color=}\NormalTok{dark_gold) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color=}\NormalTok{medium_gold)}
+\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"PLS Cross-Validation"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"RMSE"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Components"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{labels =}\NormalTok{ scales}\OperatorTok{::}\KeywordTok{number_format}\NormalTok{(}\DataTypeTok{accuracy =} \DecValTok{1}\NormalTok{))}
 
 \CommentTok{# (6.3d)}
 \NormalTok{## Test Predictions & Metrics}
 \NormalTok{CMP.pls.pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(CMP.pls.fit, CMP.test)}
-\NormalTok{CMP.pls.test.perf <-}\StringTok{ }\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ CMP.pls.pred, }\DataTypeTok{obs =}\NormalTok{ CMP.test}\OperatorTok{$}\NormalTok{Yield) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{t}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }
-\NormalTok{CMP.pls.test.obs_vs_pred <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\DataTypeTok{Predicted =}\NormalTok{ CMP.pls.pred, }\DataTypeTok{Observed =}\NormalTok{ CMP.test}\OperatorTok{$}\NormalTok{Yield) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }
+\NormalTok{CMP.pls.test.perf <-}\StringTok{ }\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ CMP.pls.pred, }\DataTypeTok{obs =}\NormalTok{ CMP.test}\OperatorTok{$}\NormalTok{Yield) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{t}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{() }
+
+\NormalTok{CMP.pls.test.obs_vs_pred <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(}\DataTypeTok{Predicted =}\NormalTok{ CMP.pls.pred, }\DataTypeTok{Observed =}\NormalTok{ CMP.test}\OperatorTok{$}\NormalTok{Yield)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{() }
+
 \NormalTok{Plt_CMP.test.obs_vs_pred <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(CMP.pls.test.obs_vs_pred, }\KeywordTok{aes}\NormalTok{(Observed, Predicted)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color=}\NormalTok{medium_gold) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"lm"}\NormalTok{, }\DataTypeTok{color=}\NormalTok{dark_gold, }\DataTypeTok{fill=}\NormalTok{light_gold)}\OperatorTok{+}
@@ -1162,24 +1199,35 @@ early could lead to overfitting.
 \CommentTok{# (6.3e) }
 \NormalTok{CMP.pls.imp <-}\StringTok{ }\NormalTok{caret}\OperatorTok{::}\KeywordTok{varImp}\NormalTok{(CMP.pls.fit, }\DataTypeTok{scale=}\NormalTok{T)}
 
-\NormalTok{CMP.pls.imp.df <-}\StringTok{ }\NormalTok{CMP.pls.imp}\OperatorTok{$}\NormalTok{importance }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{)}\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(Overall))}
-    
-\NormalTok{Plt_CMP.pls.imp <-}\StringTok{ }\NormalTok{CMP.pls.imp.df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{top_n}\NormalTok{(}\DecValTok{15}\NormalTok{, Overall) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{colour =}\NormalTok{ medium_gold) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}\DataTypeTok{xend=}\NormalTok{Variable,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall),}\DataTypeTok{colour =}\NormalTok{ dark_gold) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Top 15 Predictors"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Variable"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Scaled Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\NormalTok{CMP.pls.imp.df <-}\StringTok{ }\NormalTok{CMP.pls.imp}\OperatorTok{$}\NormalTok{importance }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(Overall))}
+
+\NormalTok{Plt_CMP.pls.imp <-}\StringTok{ }\NormalTok{CMP.pls.imp.df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{top_n}\NormalTok{(}\DecValTok{15}\NormalTok{, Overall) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{colour =}\NormalTok{ medium_gold) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}\DataTypeTok{xend=}\NormalTok{Variable,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall),}\DataTypeTok{colour =}\NormalTok{ dark_gold) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Top 15 Predictors"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{"Variable"}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Scaled Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{labels =} \ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{paste0}\NormalTok{(x, }\StringTok{"%"}\NormalTok{))}\OperatorTok{+}
 \StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
-\StringTok{    }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
-\StringTok{    }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{())}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{())}
 
 \CommentTok{# (6.3f)}
 \CommentTok{# Scatter Plot Comparison}
-\NormalTok{CMP.varImp.top5 <-}\StringTok{ }\NormalTok{CMP.pls.imp.df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{top_n}\NormalTok{(}\DecValTok{5}\NormalTok{, Overall) }
-\NormalTok{CMP_DF.gather <-}\StringTok{ }\NormalTok{CMP_DF }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(Variable, Value, }\OperatorTok{-}\NormalTok{Yield) }
-\NormalTok{Plt_CMP.Scatter <-}\StringTok{ }\NormalTok{CMP_DF.gather }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Variable }\OperatorTok{%in%}\StringTok{ }\NormalTok{CMP.varImp.top5}\OperatorTok{$}\NormalTok{Variable) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{CMP.varImp.top5 <-}\StringTok{ }\NormalTok{CMP.pls.imp.df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{top_n}\NormalTok{(}\DecValTok{5}\NormalTok{, Overall) }
+
+\NormalTok{CMP_DF.gather <-}\StringTok{ }\NormalTok{CMP_DF }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{gather}\NormalTok{(Variable, Value, }\OperatorTok{-}\NormalTok{Yield) }
+
+\NormalTok{Plt_CMP.Scatter <-}\StringTok{ }\NormalTok{CMP_DF.gather }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Variable }\OperatorTok{%in%}\StringTok{ }\NormalTok{CMP.varImp.top5}\OperatorTok{$}\NormalTok{Variable) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Value, }\DataTypeTok{y=}\NormalTok{Yield)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color=}\NormalTok{medium_gold)}\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{"lm"}\NormalTok{, }\DataTypeTok{color=}\NormalTok{dark_gold, }\DataTypeTok{fill=}\NormalTok{light_gold)}\OperatorTok{+}
@@ -1191,7 +1239,11 @@ early could lead to overfitting.
 \CommentTok{# Correlation}
 \NormalTok{CMP_DF.subset <-}\StringTok{ }\NormalTok{CMP_DF[(}\KeywordTok{names}\NormalTok{(CMP_DF) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(CMP.varImp.top5}\OperatorTok{$}\NormalTok{Variable, }\StringTok{"Yield"}\NormalTok{))]}
 \NormalTok{CMP_DF.corr <-}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{cor}\NormalTok{(CMP_DF.subset)))}
-\NormalTok{CMP_DF.corr.tbl <-}\StringTok{ }\NormalTok{CMP_DF.corr }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(Yield) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{'Variable'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Variable}\OperatorTok{!=}\StringTok{"Yield"}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(Yield))}
+\NormalTok{CMP_DF.corr.tbl <-}\StringTok{ }\NormalTok{CMP_DF.corr }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(Yield) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{'Variable'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Variable}\OperatorTok{!=}\StringTok{"Yield"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(Yield))}
 
 \CommentTok{# ASSIGNMENT 2}
 \CommentTok{# KJ 7.2; KJ 7.5}
@@ -1235,38 +1287,67 @@ early could lead to overfitting.
 \CommentTok{#featurePlot(trainingData$x, trainingData$y) }
 
 \CommentTok{# created ggplot instead of featurePlot()}
- 
-\NormalTok{Sim.featurePlot <-}\StringTok{ }\NormalTok{trainingData }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(x, value, }\OperatorTok{-}\NormalTok{y) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{str_replace}\NormalTok{(x, }\StringTok{"x."}\NormalTok{,}\StringTok{""}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(x)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{as.factor}\NormalTok{(x)) }
-\NormalTok{Sim.featurePlot}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(Sim.featurePlot}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"X1"}\NormalTok{,}\StringTok{"X2"}\NormalTok{, }\StringTok{"X3"}\NormalTok{, }\StringTok{"X4"}\NormalTok{, }\StringTok{"X5"}\NormalTok{, }\StringTok{"X6"}\NormalTok{, }\StringTok{"X7"}\NormalTok{, }\StringTok{"X8"}\NormalTok{, }\StringTok{"X9"}\NormalTok{, }\StringTok{"X10"}\NormalTok{))}
-\NormalTok{Plt_Sim.featurePlot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(Sim.featurePlot, }\KeywordTok{aes}\NormalTok{(value, y)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color=}\NormalTok{dark_gold, }\DataTypeTok{alpha=}\NormalTok{.}\DecValTok{5}\NormalTok{)}\OperatorTok{+}\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{x, }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }\DataTypeTok{scales =} \StringTok{"fixed"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"XY Scatter Plots of Simulated Data"}\NormalTok{)}
+
+\NormalTok{Sim.featurePlot <-}\StringTok{ }\NormalTok{trainingData }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{gather}\NormalTok{(x, value, }\OperatorTok{-}\NormalTok{y) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{str_replace}\NormalTok{(x, }\StringTok{"x."}\NormalTok{,}\StringTok{""}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(x)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{as.factor}\NormalTok{(x)) }
+\NormalTok{Sim.featurePlot}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(Sim.featurePlot}\OperatorTok{$}\NormalTok{x, }
+                            \DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"X1"}\NormalTok{,}\StringTok{"X2"}\NormalTok{, }\StringTok{"X3"}\NormalTok{, }\StringTok{"X4"}\NormalTok{, }
+                                       \StringTok{"X5"}\NormalTok{, }\StringTok{"X6"}\NormalTok{, }\StringTok{"X7"}\NormalTok{, }\StringTok{"X8"}\NormalTok{, }\StringTok{"X9"}\NormalTok{,}\StringTok{"X10"}\NormalTok{))}
+\NormalTok{Plt_Sim.featurePlot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(Sim.featurePlot, }\KeywordTok{aes}\NormalTok{(value, y)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color=}\NormalTok{dark_gold, }\DataTypeTok{alpha=}\NormalTok{.}\DecValTok{5}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{x, }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }\DataTypeTok{scales =} \StringTok{"fixed"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"XY Scatter Plots of Simulated Data"}\NormalTok{)}
 \CommentTok{# revert seed back to our set group number: }
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)}
 
 \CommentTok{# (7.2a)}
 \CommentTok{#mars}
 \NormalTok{marsGrid <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{degree =}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, }\DataTypeTok{nprune=}\KeywordTok{seq}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DataTypeTok{by=}\DecValTok{2}\NormalTok{))}
-\NormalTok{hw2mars_mod <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method=}\StringTok{'earth'}\NormalTok{, }\DataTypeTok{tuneGrid =}\NormalTok{ marsGrid, }\DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
-\NormalTok{hw2mars_modplot<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(hw2mars_mod)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"MARS Cross-Validated RMSE Profile"}\NormalTok{)}
+\NormalTok{hw2mars_mod <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }
+                     \DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }
+                     \DataTypeTok{method=}\StringTok{'earth'}\NormalTok{, }
+                     \DataTypeTok{tuneGrid =}\NormalTok{ marsGrid, }
+                     \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
+
+\NormalTok{hw2mars_modplot<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(hw2mars_mod)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"MARS Cross-Validated RMSE Profile"}\NormalTok{)}
 
 \CommentTok{#svm}
-\NormalTok{hw2svm_mod <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method=}\StringTok{'svmRadial'}\NormalTok{, }\DataTypeTok{tuneLength =} \DecValTok{14}\NormalTok{, }\DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
+\NormalTok{hw2svm_mod <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }
+                    \DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }
+                    \DataTypeTok{method=}\StringTok{'svmRadial'}\NormalTok{, }
+                    \DataTypeTok{tuneLength =} \DecValTok{14}\NormalTok{, }
+                    \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
 \CommentTok{#hw2svm_mod$finalModel}
-\NormalTok{hw2svm_modplot<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(hw2svm_mod)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"SVM Cross-Validated RMSE Profile"}\NormalTok{)}
+\NormalTok{hw2svm_modplot<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(hw2svm_mod)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"SVM Cross-Validated RMSE Profile"}\NormalTok{)}
 
 
 \NormalTok{##nnet (Taken from Andy)}
 \CommentTok{# hyperparameter tuning for nnet}
 \NormalTok{nnetGrid <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{.size =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{), }\DataTypeTok{.decay =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.01}\NormalTok{, .}\DecValTok{1}\NormalTok{))}
 
-\NormalTok{hw2nnet_mod <-}\StringTok{ }\KeywordTok{train}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x, trainingData}\OperatorTok{$}\NormalTok{y,}\DataTypeTok{method =} \StringTok{"nnet"}\NormalTok{, }\DataTypeTok{tuneGrid =}\NormalTok{ nnetGrid,}\DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method=}\StringTok{"cv"}\NormalTok{),}
-\NormalTok{ ## Automatically standardize data prior to modeling and prediction}
- \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
- \DataTypeTok{linout =} \OtherTok{TRUE}\NormalTok{,}
- \DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{,}
- \DataTypeTok{MaxNWts =} \DecValTok{10} \OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{ncol}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x) }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{)  }\OperatorTok{+}\StringTok{ }\DecValTok{10} \OperatorTok{+}\StringTok{  }\DecValTok{1}\NormalTok{,}
- \DataTypeTok{maxit =} \DecValTok{500}\NormalTok{)}
+\NormalTok{hw2nnet_mod <-}\StringTok{ }\KeywordTok{train}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x, }
+\NormalTok{                     trainingData}\OperatorTok{$}\NormalTok{y,}
+                     \DataTypeTok{method =} \StringTok{"nnet"}\NormalTok{, }
+                     \DataTypeTok{tuneGrid =}\NormalTok{ nnetGrid,}
+                     \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method=}\StringTok{"cv"}\NormalTok{),}
+\NormalTok{                     ## Automatically standardize data prior to modeling and prediction}
+                     \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
+                     \DataTypeTok{linout =} \OtherTok{TRUE}\NormalTok{,}
+                     \DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{,}
+                     \DataTypeTok{MaxNWts =} \DecValTok{10} \OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{ncol}\NormalTok{(trainingData}\OperatorTok{$}\NormalTok{x) }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{)  }\OperatorTok{+}\StringTok{ }\DecValTok{10} \OperatorTok{+}\StringTok{  }\DecValTok{1}\NormalTok{,}
+                     \DataTypeTok{maxit =} \DecValTok{500}\NormalTok{)}
 
-\NormalTok{hw2nnet_modplot<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(hw2nnet_mod)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"NNET Cross-Validated RMSE Profile"}\NormalTok{)}
+\NormalTok{hw2nnet_modplot<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(hw2nnet_mod)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"NNET Cross-Validated RMSE Profile"}\NormalTok{)}
 
 
 \CommentTok{# (7.2b)}
@@ -1281,24 +1362,29 @@ early could lead to overfitting.
 \NormalTok{hw2nnetPerf <-}\StringTok{ }\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ hw2nnetPred, }\DataTypeTok{obs =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{y)}
 
 \NormalTok{hw2.}\FloatTok{2.}\NormalTok{bperformance_table <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\StringTok{"knnTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(knnModel}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(knnModel}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(knnModel}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE)),}
-\StringTok{"knnTest"}\NormalTok{=knn_performance, }
-\StringTok{"MARSTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-  \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-   \StringTok{"MARSTest"}\NormalTok{=hw2marsPerf,}
-    \StringTok{"SVMTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2svm_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-      \KeywordTok{max}\NormalTok{(hw2svm_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-      \KeywordTok{max}\NormalTok{(hw2svm_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-    \StringTok{"SVMTest"}\NormalTok{=hw2svmPerf,}
-    \StringTok{"NNETTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2nnet_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \KeywordTok{max}\NormalTok{(hw2nnet_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-  \KeywordTok{max}\NormalTok{(hw2nnet_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-   \StringTok{"NNETTest"}\NormalTok{=hw2nnetPerf) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Performance"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{(}\DataTypeTok{row=}\DecValTok{3}\OperatorTok{:}\DecValTok{4}\NormalTok{, }\DataTypeTok{background =}\StringTok{"#d9f2e6"}\NormalTok{)}
+                                               \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(knnModel}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                               \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(knnModel}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE)),}
+                                  \StringTok{"knnTest"}\NormalTok{=knn_performance, }
+                                  \StringTok{"MARSTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                                \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                                \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"MARSTest"}\NormalTok{=hw2marsPerf,}
+                                  \StringTok{"SVMTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2svm_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                               \KeywordTok{max}\NormalTok{(hw2svm_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                               \KeywordTok{max}\NormalTok{(hw2svm_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"SVMTest"}\NormalTok{=hw2svmPerf,}
+                                  \StringTok{"NNETTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2nnet_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                                \KeywordTok{max}\NormalTok{(hw2nnet_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                                \KeywordTok{max}\NormalTok{(hw2nnet_mod}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"NNETTest"}\NormalTok{=hw2nnetPerf) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Performance"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{(}\DataTypeTok{row=}\DecValTok{3}\OperatorTok{:}\DecValTok{4}\NormalTok{, }\DataTypeTok{background =}\StringTok{"#d9f2e6"}\NormalTok{)}
 
 \CommentTok{#hw2marsImp <- varImp(hw2mars_mod)}
-\CommentTok{#hw2marsImptbl <- hw2marsImp$importance %>% kable(caption="MARS Model - Variable Importance", digits=2) %>% kable_styling()}
+\CommentTok{#hw2marsImptbl <- hw2marsImp$importance %>% }
+\NormalTok{##kable(caption="MARS Model - Variable Importance", digits=2) %>% kable_styling()}
 
 \NormalTok{hw2marsImp <-}\StringTok{ }\NormalTok{caret}\OperatorTok{::}\KeywordTok{varImp}\NormalTok{(hw2mars_mod)}
 \CommentTok{#hw2marsImp<-hw2marsImp%>%}
@@ -1312,56 +1398,57 @@ early could lead to overfitting.
 \StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{() }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(Overall) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{rowname =}\NormalTok{ forcats}\OperatorTok{::}\KeywordTok{fct_inorder}\NormalTok{(rowname ))}
-    
-\NormalTok{hwmarsimp_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{head}\NormalTok{(hw2marsImp, }\DecValTok{15}\NormalTok{), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(rowname, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{colour =} \StringTok{'violetred4'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{rowname,}\DataTypeTok{xend=}\NormalTok{rowname,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall),}\DataTypeTok{colour =} \StringTok{'violetred4'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
-         \DataTypeTok{subtitle=}\StringTok{"MARS for Simulated Data Set"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Variable"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
-\StringTok{    }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
-\StringTok{    }\KeywordTok{theme}\NormalTok{()}
+
+\NormalTok{hwmarsimp_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{head}\NormalTok{(hw2marsImp, }\DecValTok{15}\NormalTok{), }
+                         \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(rowname, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{colour =} \StringTok{'violetred4'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{rowname,}\DataTypeTok{xend=}\NormalTok{rowname,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall),}\DataTypeTok{colour =} \StringTok{'violetred4'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"MARS for Simulated Data Set"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Variable"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{()}
 
 \CommentTok{# (7.5a)}
 \NormalTok{##knn }
 \NormalTok{hw2knn_mod2 <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
-                  \DataTypeTok{method =} \StringTok{"knn"}\NormalTok{,}
-                  \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
-                  \DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{)}
+                     \DataTypeTok{data=}\NormalTok{chem_train,}
+                     \DataTypeTok{method =} \StringTok{"knn"}\NormalTok{,}
+                     \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
+                     \DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{)}
 
 \CommentTok{#nnet}
 \NormalTok{nnetGrid_}\DecValTok{75}\NormalTok{ <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{.decay =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.01}\NormalTok{, .}\DecValTok{1}\NormalTok{),}
-                        \DataTypeTok{.size =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{),}
-                        \DataTypeTok{.bag =} \OtherTok{FALSE}\NormalTok{)}
+                           \DataTypeTok{.size =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{),}
+                           \DataTypeTok{.bag =} \OtherTok{FALSE}\NormalTok{)}
 
 \NormalTok{hw2nnet_mod2 <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
-                  \DataTypeTok{method =} \StringTok{"avNNet"}\NormalTok{,}
-                  \DataTypeTok{tuneGrid =}\NormalTok{ nnetGrid_}\DecValTok{75}\NormalTok{,}
-                  \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
-                  \DataTypeTok{linout =} \OtherTok{TRUE}\NormalTok{,}
-                  \DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{,}
-                  \DataTypeTok{MaxNWts =} \DecValTok{10} \OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{ncol}\NormalTok{(chem_train) }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{,}
-                  \DataTypeTok{maxit =} \DecValTok{500}\NormalTok{)}
+                      \DataTypeTok{data=}\NormalTok{chem_train,}
+                      \DataTypeTok{method =} \StringTok{"avNNet"}\NormalTok{,}
+                      \DataTypeTok{tuneGrid =}\NormalTok{ nnetGrid_}\DecValTok{75}\NormalTok{,}
+                      \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
+                      \DataTypeTok{linout =} \OtherTok{TRUE}\NormalTok{,}
+                      \DataTypeTok{trace =} \OtherTok{FALSE}\NormalTok{,}
+                      \DataTypeTok{MaxNWts =} \DecValTok{10} \OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{ncol}\NormalTok{(chem_train) }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{,}
+                      \DataTypeTok{maxit =} \DecValTok{500}\NormalTok{)}
 
 \CommentTok{#MARS }
 \CommentTok{# Define the candidate models to test}
 \NormalTok{marsGrid_}\DecValTok{75}\NormalTok{ <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{.degree =} \DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, }\DataTypeTok{.nprune =} \DecValTok{2}\OperatorTok{:}\DecValTok{38}\NormalTok{)}
 
 \NormalTok{hw2mars_mod2 <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
-                   \DataTypeTok{method =} \StringTok{"earth"}\NormalTok{,}
-                   \DataTypeTok{tuneGrid =}\NormalTok{ marsGrid_}\DecValTok{75}\NormalTok{,}
-                   \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
+                      \DataTypeTok{data=}\NormalTok{chem_train,}
+                      \DataTypeTok{method =} \StringTok{"earth"}\NormalTok{,}
+                      \DataTypeTok{tuneGrid =}\NormalTok{ marsGrid_}\DecValTok{75}\NormalTok{,}
+                      \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
 
 \CommentTok{#SVM}
 \NormalTok{hw2svm_mod2 <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
-                   \DataTypeTok{method =} \StringTok{"svmRadial"}\NormalTok{,}
-                   \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
-                   \DataTypeTok{tuneLength =} \DecValTok{14}\NormalTok{,}
-                   \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
+                     \DataTypeTok{data=}\NormalTok{chem_train,}
+                     \DataTypeTok{method =} \StringTok{"svmRadial"}\NormalTok{,}
+                     \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{),}
+                     \DataTypeTok{tuneLength =} \DecValTok{14}\NormalTok{,}
+                     \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
 
 
 \CommentTok{#model performances }
@@ -1377,21 +1464,25 @@ early could lead to overfitting.
 \NormalTok{hw2nnetPerf2 <-}\StringTok{ }\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ hw2nnetPred2, }\DataTypeTok{obs =}\NormalTok{ chem_test}\OperatorTok{$}\NormalTok{Yield)}
 
 \NormalTok{hw2.}\FloatTok{2.}\NormalTok{cperformance_table <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\StringTok{"knnTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2knn_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2knn_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-  \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2knn_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-\StringTok{"knnTest"}\NormalTok{=hw2knnPerf2, }
-\StringTok{"MARSTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-  \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-   \StringTok{"MARSTest"}\NormalTok{=hw2marsPerf2,}
-    \StringTok{"SVMTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2svm_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-      \KeywordTok{max}\NormalTok{(hw2svm_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-      \KeywordTok{max}\NormalTok{(hw2svm_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-    \StringTok{"SVMTest"}\NormalTok{=hw2svmPerf2,}
-    \StringTok{"NNETTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2nnet_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \KeywordTok{max}\NormalTok{(hw2nnet_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-  \KeywordTok{max}\NormalTok{(hw2nnet_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-   \StringTok{"NNETTest"}\NormalTok{=hw2nnetPerf2) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Performance on ChemicalManufacturing Data"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{(}\DataTypeTok{row=}\DecValTok{5}\OperatorTok{:}\DecValTok{6}\NormalTok{, }\DataTypeTok{background =}\StringTok{"#d9f2e6"}\NormalTok{)}
+                                               \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2knn_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                               \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2knn_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"knnTest"}\NormalTok{=hw2knnPerf2, }
+                                  \StringTok{"MARSTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                                \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                                \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(hw2mars_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"MARSTest"}\NormalTok{=hw2marsPerf2,}
+                                  \StringTok{"SVMTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2svm_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                               \KeywordTok{max}\NormalTok{(hw2svm_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                               \KeywordTok{max}\NormalTok{(hw2svm_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"SVMTest"}\NormalTok{=hw2svmPerf2,}
+                                  \StringTok{"NNETTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(hw2nnet_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                                \KeywordTok{max}\NormalTok{(hw2nnet_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                                \KeywordTok{max}\NormalTok{(hw2nnet_mod2}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"NNETTest"}\NormalTok{=hw2nnetPerf2) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Model Performance on ChemicalManufacturing Data"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{(}\DataTypeTok{row=}\DecValTok{5}\OperatorTok{:}\DecValTok{6}\NormalTok{, }\DataTypeTok{background =}\StringTok{"#d9f2e6"}\NormalTok{)}
 
 \CommentTok{# (7.5b)}
 \CommentTok{#hw2svmImp2 <- varImp(hw2svm_mod2)}
@@ -1404,32 +1495,34 @@ early could lead to overfitting.
 \StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{() }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(Overall) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{rowname =}\NormalTok{ forcats}\OperatorTok{::}\KeywordTok{fct_inorder}\NormalTok{(rowname )) }
-    
+
 \NormalTok{hwsvmimp_plot2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{head}\NormalTok{(hw2svmImp2, }\DecValTok{15}\NormalTok{), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(rowname, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{colour =} \StringTok{'violetred4'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{rowname,}\DataTypeTok{xend=}\NormalTok{rowname,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall),}\DataTypeTok{colour =} \StringTok{'violetred4'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
-         \DataTypeTok{subtitle=}\StringTok{"SVM Model Importance for ChemicalManufacturing Data"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Variable"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
-\StringTok{    }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
-\StringTok{    }\KeywordTok{theme}\NormalTok{()}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{colour =}\NormalTok{ light_gold) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{rowname,}\DataTypeTok{xend=}\NormalTok{rowname,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall),}\DataTypeTok{colour =}\NormalTok{ light_gold) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"SVM Model Importance for ChemicalManufacturing Data"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{"Variable"}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{()}
 
 \CommentTok{# (7.5c)}
 \CommentTok{#alterate apprach (use plot importance to identify top few important features)}
 \NormalTok{hw2imp <-}\StringTok{ }\NormalTok{CMP_DF }\OperatorTok{%>%}\KeywordTok{select}\NormalTok{(Yield, }
-\NormalTok{  ManufacturingProcess14,}
-\NormalTok{  ManufacturingProcess02, }
-\NormalTok{  ManufacturingProcess03,}
-\NormalTok{   ManufacturingProcess38, }
-\NormalTok{   ManufacturingProcess37 )}
+\NormalTok{                           ManufacturingProcess14,}
+\NormalTok{                           ManufacturingProcess02, }
+\NormalTok{                           ManufacturingProcess03,}
+\NormalTok{                           ManufacturingProcess38, }
+\NormalTok{                           ManufacturingProcess37 )}
 
 \NormalTok{hw2cor_pre_df<-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{cor}\NormalTok{(hw2imp)))}
 
 \NormalTok{hw2cor_df<-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(hw2cor_pre_df, }\StringTok{"VALUE"}\NormalTok{)}
 
 \NormalTok{hw2cor_df2<-}\KeywordTok{sqldf}\NormalTok{(}\StringTok{"select VALUE, Yield from hw2cor_df order by Yield desc"}\NormalTok{)}\OperatorTok{%>%}\StringTok{ }
-\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Correlation"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\KeywordTok{kable_styling}\NormalTok{()}
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Correlation"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{()}
 
 
 \CommentTok{# ASSIGNMENT 3}
@@ -1451,33 +1544,56 @@ early could lead to overfitting.
 
 \NormalTok{rfImp1 <-}\StringTok{ }\KeywordTok{varImp}\NormalTok{(model1, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{)}
 
-\NormalTok{rfImp1.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(model1, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{))), }\StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
+\NormalTok{rfImp1.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(model1, }
+                                                                      \DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{))),}
+                                       \StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
 
 \CommentTok{#colnames(hw3_rfdt3) <- c("Value","Importance")}
 
 \NormalTok{rfImp1plot<-}\KeywordTok{ggplot}\NormalTok{(rfImp1.df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'darkorange'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{VALUE,}\DataTypeTok{xend=}\NormalTok{VALUE,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall, }\DataTypeTok{color =} \StringTok{'darkorange'}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Random Forest Model for Simulated Data"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.15}\NormalTok{, }\DecValTok{9}\NormalTok{))}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{VALUE,}
+                   \DataTypeTok{xend=}\NormalTok{VALUE,}
+                   \DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall, }
+                   \DataTypeTok{color =} \StringTok{'darkorange'}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Random Forest Model for Simulated Data"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}\StringTok{  }
+\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.15}\NormalTok{, }\DecValTok{9}\NormalTok{))}
 
 \CommentTok{# (8.1b)}
 \NormalTok{simulated}\OperatorTok{$}\NormalTok{duplicate1 <-}\StringTok{ }\NormalTok{simulated}\OperatorTok{$}\NormalTok{V1 }\OperatorTok{+}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{200}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{.}\DecValTok{1} 
 
 \NormalTok{hw3model2 <-}\StringTok{ }\KeywordTok{randomForest}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ simulated, }
-                       \DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{, }
-                       \DataTypeTok{ntree =} \DecValTok{1000}\NormalTok{)}
+                          \DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{, }
+                          \DataTypeTok{ntree =} \DecValTok{1000}\NormalTok{)}
 \NormalTok{rfImp2 <-}\StringTok{ }\KeywordTok{varImp}\NormalTok{(hw3model2, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{)}
 
-\NormalTok{rfImp2.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(hw3model2, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{))), }\StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
+\NormalTok{rfImp2.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(hw3model2, }
+                                                                      \DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{))), }
+                                       \StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
 
 \NormalTok{rfImp2plot<-}\KeywordTok{ggplot}\NormalTok{(rfImp2.df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'darkorange'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{VALUE,}\DataTypeTok{xend=}\NormalTok{VALUE,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall, }\DataTypeTok{color =} \StringTok{'darkorange'}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Random Forest Model (with duplicate 1) for Simulated Data"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.15}\NormalTok{, }\DecValTok{9}\NormalTok{))}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Random Forest Model (with duplicate 1) for Simulated Data"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}\StringTok{  }
+\StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.15}\NormalTok{, }\DecValTok{9}\NormalTok{))}
 
 
 
-\CommentTok{#hw3rf2_imp_table<- rfImp2%>% kable(caption="Random Forest Variable Importance on Simulated Dataset") %>% kable_styling()}
+\CommentTok{#hw3rf2_imp_table<- rfImp2%>%}
+\CommentTok{# kable(caption="Random Forest Variable Importance on Simulated Dataset") %>% }
+\CommentTok{#   kable_styling()}
 
 
 \CommentTok{# (8.1c)}
@@ -1489,15 +1605,23 @@ early could lead to overfitting.
 
 \CommentTok{#hw3_rfdt3a <- hw3_rfdt3[order(-hw3_rfdt3$Importance),]}
 
-\CommentTok{#hw3_rfdt3.tbl <- hw3_rfdt3a  %>% kable(caption="Unconditional CForest Model: Variable Importance") %>% kable_styling() %>% row_spec()}
+\CommentTok{#hw3_rfdt3.tbl <- hw3_rfdt3a  %>% }
+\CommentTok{# kable(caption="Unconditional CForest Model: Variable Importance") %>% }
+\CommentTok{#   kable_styling() %>% }
+\CommentTok{#   row_spec()}
 
-\CommentTok{#hw3_rfdt3b <-  tibble::rownames_to_column(as.data.frame(as.matrix(varimp(hw3_rfmodel3,conditional=T))), "VALUE")   #as.data.frame(as.matrix(varimp(hw3_rfmodel3, conditional=T)))}
+\CommentTok{#hw3_rfdt3b <-  tibble::rownames_to_column(as.data.frame(as.matrix(varimp(hw3_rfmodel3,conditional=T))),}
+\CommentTok{# "VALUE")   }
+\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3, conditional=T)))}
 
 \CommentTok{#colnames(hw3_rfdt3b) <- c("Value","Importance")}
 
 \CommentTok{#hw3_rfdt3ba <- hw3_rfdt3b[order(-hw3_rfdt3b$Importance),]}
 
-\CommentTok{#hw3_rfdt3b.tbl<-hw3_rfdt3ba  %>%  kable(caption="Conditional CForest Model: Variable Importance") %>% kable_styling() %>% row_spec()}
+\CommentTok{#hw3_rfdt3b.tbl<-hw3_rfdt3ba  %>%  }
+\CommentTok{# kable(caption="Conditional CForest Model: Variable Importance") %>% }
+\CommentTok{#   kable_styling() %>% }
+\CommentTok{#   row_spec()}
 
 
 \CommentTok{# Now remove correlated predictor}
@@ -1532,19 +1656,26 @@ early could lead to overfitting.
 \NormalTok{hw3final_df <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(hw3final_df[}\OperatorTok{-}\DecValTok{3}\NormalTok{,], hw3final_df[}\DecValTok{3}\NormalTok{,])}
 \KeywordTok{rownames}\NormalTok{(hw3final_df) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{11}\NormalTok{)}
 
-\NormalTok{hw3final_dfb<-hw3final_df}\OperatorTok{%>%}\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Conditional vs Unconditional CForest Model: Variable Importance"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{()}
+\NormalTok{hw3final_dfb<-hw3final_df}\OperatorTok{%>%}\StringTok{  }
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Conditional vs Unconditional CForest Model: Variable Importance"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{()}
 
 
 \CommentTok{# (8.1d)}
 
 \CommentTok{#GBM}
-\NormalTok{gbmModel_nodup <-}\StringTok{ }\KeywordTok{gbm}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ simulated, }\DataTypeTok{distribution =} \StringTok{"gaussian"}\NormalTok{, }\DataTypeTok{n.trees=}\DecValTok{1000}\NormalTok{)}
+\NormalTok{gbmModel_nodup <-}\StringTok{ }\KeywordTok{gbm}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ simulated, }
+                      \DataTypeTok{distribution =} \StringTok{"gaussian"}\NormalTok{, }
+                      \DataTypeTok{n.trees=}\DecValTok{1000}\NormalTok{)}
 
 \CommentTok{#gbmModel_nodupb <-caret::varImp(gbmModel_nodup)    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
 
 
 \NormalTok{simulated}\OperatorTok{$}\NormalTok{duplicate1 <-}\StringTok{ }\NormalTok{simulated}\OperatorTok{$}\NormalTok{V1 }\OperatorTok{+}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{200}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{.}\DecValTok{1} 
-\NormalTok{gbmModel_wdup <-}\StringTok{ }\KeywordTok{gbm}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ simulated, }\DataTypeTok{distribution =} \StringTok{"gaussian"}\NormalTok{, }\DataTypeTok{n.trees=}\DecValTok{1000}\NormalTok{)}
+\NormalTok{gbmModel_wdup <-}\StringTok{ }\KeywordTok{gbm}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ simulated, }
+                     \DataTypeTok{distribution =} \StringTok{"gaussian"}\NormalTok{, }
+                     \DataTypeTok{n.trees=}\DecValTok{1000}\NormalTok{)}
 
 \CommentTok{#gbmModel_wdupb <-varImp(gbmModel_wdup)   #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
 
@@ -1552,30 +1683,54 @@ early could lead to overfitting.
 \NormalTok{simulated}\OperatorTok{$}\NormalTok{duplicate1 <-}\StringTok{ }\OtherTok{NULL}
 
 \CommentTok{#Cubist}
-\NormalTok{cubistMod_nodup <-}\StringTok{ }\KeywordTok{cubist}\NormalTok{(simulated[}\OperatorTok{-}\DecValTok{11}\NormalTok{], simulated}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{committees =} \DecValTok{100}\NormalTok{)}
+\NormalTok{cubistMod_nodup <-}\StringTok{ }\KeywordTok{cubist}\NormalTok{(simulated[}\OperatorTok{-}\DecValTok{11}\NormalTok{], }
+\NormalTok{                          simulated}\OperatorTok{$}\NormalTok{y, }
+                          \DataTypeTok{committees =} \DecValTok{100}\NormalTok{)}
 
 \NormalTok{cubistMod_nodupb <-}\KeywordTok{varImp}\NormalTok{(cubistMod_nodup)}
 
-\NormalTok{cubistMod_nodupb.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(cubistMod_nodup))), }\StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
+\NormalTok{cubistMod_nodupb.df <-}
+\StringTok{  }\NormalTok{tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(cubistMod_nodup))), }\StringTok{"VALUE"}\NormalTok{) }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
 
-\NormalTok{cubistMod_nodupbplot<-}\KeywordTok{ggplot}\NormalTok{(cubistMod_nodupb.df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
+\NormalTok{cubistMod_nodupbplot<-}\KeywordTok{ggplot}\NormalTok{(cubistMod_nodupb.df, }
+                             \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall),}\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'darkorange'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{VALUE,}\DataTypeTok{xend=}\NormalTok{VALUE,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall, }\DataTypeTok{color =} \StringTok{'darkorange'}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Cubist Model without Duplicate"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{VALUE,}
+                   \DataTypeTok{xend=}\NormalTok{VALUE,}
+                   \DataTypeTok{y=}\DecValTok{0}\NormalTok{,}
+                   \DataTypeTok{yend=}\NormalTok{Overall, }
+                   \DataTypeTok{color =} \StringTok{'darkorange'}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Cubist Model without Duplicate"}\NormalTok{,}
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
 
 
 
 \NormalTok{simulated}\OperatorTok{$}\NormalTok{duplicate1 <-}\StringTok{ }\NormalTok{simulated}\OperatorTok{$}\NormalTok{V1 }\OperatorTok{+}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{200}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{.}\DecValTok{1} 
-\NormalTok{cubistMod_wdup <-}\StringTok{ }\KeywordTok{cubist}\NormalTok{(simulated[}\OperatorTok{-}\DecValTok{11}\NormalTok{], simulated}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{committees =} \DecValTok{100}\NormalTok{)}
+\NormalTok{cubistMod_wdup <-}\StringTok{ }\KeywordTok{cubist}\NormalTok{(simulated[}\OperatorTok{-}\DecValTok{11}\NormalTok{], }
+\NormalTok{                         simulated}\OperatorTok{$}\NormalTok{y, }
+                         \DataTypeTok{committees =} \DecValTok{100}\NormalTok{)}
 
 \NormalTok{cubistMod_wdupb <-}\KeywordTok{varImp}\NormalTok{(cubistMod_wdup)}
 
-\NormalTok{cubistMod_wdupb.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(cubistMod_wdup))), }\StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
+\NormalTok{cubistMod_wdupb.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(cubistMod_wdup))), }
+\StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
 
-\NormalTok{cubistMod_wdupbplot<-}\KeywordTok{ggplot}\NormalTok{(cubistMod_wdupb.df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
+\NormalTok{cubistMod_wdupbplot<-}\KeywordTok{ggplot}\NormalTok{(cubistMod_wdupb.df, }
+                            \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall),}
+                                \DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'darkorange'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{VALUE,}\DataTypeTok{xend=}\NormalTok{VALUE,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall, }\DataTypeTok{color =} \StringTok{'darkorange'}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Cubist Model With Duplicate"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Cubist Model With Duplicate"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
 
 
 
@@ -1585,17 +1740,26 @@ early could lead to overfitting.
 
 \CommentTok{# (8.2)}
 
-\NormalTok{random_predictor <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{V1=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{), }\DataTypeTok{V2=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{),}\DataTypeTok{V3=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{1000}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{), }\DataTypeTok{V4=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{))}
+\NormalTok{random_predictor <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{V1=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{), }
+                               \DataTypeTok{V2=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{),}
+                               \DataTypeTok{V3=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{1000}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{), }
+                               \DataTypeTok{V4=}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{5000}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{))}
 \NormalTok{sim_df <-}\StringTok{ }\NormalTok{random_predictor }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{y=}\NormalTok{V1}\OperatorTok{*}\NormalTok{V2}\OperatorTok{*}\NormalTok{V3}\OperatorTok{+}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{))}
 \NormalTok{sim_rf <-}\StringTok{ }\KeywordTok{randomForest}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ sim_df, }\DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{ntree =} \DecValTok{1000}\NormalTok{)}
 \NormalTok{sim_varImp <-}\StringTok{ }\KeywordTok{varImp}\NormalTok{(sim_rf, }\DataTypeTok{scale=}\NormalTok{T)}
 
-\NormalTok{sim_varImp.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(sim_rf))), }\StringTok{"VALUE"}\NormalTok{)    }\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
+\NormalTok{sim_varImp.df <-tibble}\OperatorTok{::}\KeywordTok{rownames_to_column}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{varImp}\NormalTok{(sim_rf))), }
+                                           \StringTok{"VALUE"}\NormalTok{)    }
+\CommentTok{#as.data.frame(as.matrix(varimp(hw3_rfmodel3)))}
 
-\NormalTok{sim_varImp.plot<-}\KeywordTok{ggplot}\NormalTok{(cubistMod_wdupb.df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
+\NormalTok{sim_varImp.plot<-}\KeywordTok{ggplot}\NormalTok{(cubistMod_wdupb.df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(VALUE, Overall), }
+                                                \DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'darkorange'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{VALUE,}\DataTypeTok{xend=}\NormalTok{VALUE,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall, }\DataTypeTok{color =} \StringTok{'darkorange'}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Simulated Importance"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Simulated Importance"}\NormalTok{,}
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
 
 
 \CommentTok{# (8.3a)}
@@ -1614,15 +1778,15 @@ early could lead to overfitting.
 \CommentTok{# (8.7a)}
 \CommentTok{#GBM}
 \NormalTok{gbmGrid_}\DecValTok{87}\NormalTok{ <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{interaction.depth =} \KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DataTypeTok{by =} \DecValTok{2}\NormalTok{),}
-                      \DataTypeTok{shrinkage =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.01}\NormalTok{, }\FloatTok{0.1}\NormalTok{),}
-                      \DataTypeTok{n.trees =} \KeywordTok{seq}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DataTypeTok{by =} \DecValTok{50}\NormalTok{),}
-                      \DataTypeTok{n.minobsinnode =} \DecValTok{10}\NormalTok{)}
+                          \DataTypeTok{shrinkage =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.01}\NormalTok{, }\FloatTok{0.1}\NormalTok{),}
+                          \DataTypeTok{n.trees =} \KeywordTok{seq}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DataTypeTok{by =} \DecValTok{50}\NormalTok{),}
+                          \DataTypeTok{n.minobsinnode =} \DecValTok{10}\NormalTok{)}
 
 \NormalTok{gbmTune_}\DecValTok{87}\NormalTok{ <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
-                 \DataTypeTok{method =} \StringTok{"gbm"}\NormalTok{,}
-                 \DataTypeTok{verbose =} \OtherTok{FALSE}\NormalTok{,}
-                 \DataTypeTok{tuneGrid =}\NormalTok{ gbmGrid_}\DecValTok{87}\NormalTok{)}
+                    \DataTypeTok{data=}\NormalTok{chem_train,}
+                    \DataTypeTok{method =} \StringTok{"gbm"}\NormalTok{,}
+                    \DataTypeTok{verbose =} \OtherTok{FALSE}\NormalTok{,}
+                    \DataTypeTok{tuneGrid =}\NormalTok{ gbmGrid_}\DecValTok{87}\NormalTok{)}
 \CommentTok{#gbmTune_87}
 \CommentTok{#plot(gbmTune_87)}
 \CommentTok{#min(gbmTune_87$results$RMSE, na.rm = TRUE)}
@@ -1635,23 +1799,24 @@ early could lead to overfitting.
 \NormalTok{rf_87_grid <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{mtry=} \KeywordTok{seq}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DataTypeTok{by=}\DecValTok{50}\NormalTok{))}
 
 \NormalTok{rfTune_}\DecValTok{87}\NormalTok{ <-}\StringTok{  }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
-                          \DataTypeTok{method =} \StringTok{'rf'}\NormalTok{,}
-                          \DataTypeTok{ntree =} \DecValTok{50}\NormalTok{,}
-                          \DataTypeTok{tuneGrid =}\NormalTok{ rf_87_grid)}
+                    \DataTypeTok{data=}\NormalTok{chem_train,}
+                    \DataTypeTok{method =} \StringTok{'rf'}\NormalTok{,}
+                    \DataTypeTok{ntree =} \DecValTok{50}\NormalTok{,}
+                    \DataTypeTok{tuneGrid =}\NormalTok{ rf_87_grid)}
 \CommentTok{#plot(rfTune_87)}
 \CommentTok{#min(rfTune_87$results$RMSE, na.rm = TRUE)}
 \NormalTok{rfPred_}\DecValTok{87}\NormalTok{ <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(rfTune_}\DecValTok{87}\NormalTok{, }\DataTypeTok{newdata =}\NormalTok{ chem_test)}
 \NormalTok{rf_test_}\DecValTok{87}\NormalTok{ <-}\StringTok{ }\KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ rfPred_}\DecValTok{87}\NormalTok{, }\DataTypeTok{obs =}\NormalTok{ chem_test}\OperatorTok{$}\NormalTok{Yield)}
 \NormalTok{rf_}\DecValTok{87}\NormalTok{<-}\KeywordTok{randomForest}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
+                    \DataTypeTok{data=}\NormalTok{chem_train,}
                     \DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{,}
                     \DataTypeTok{ntree =} \DecValTok{900}\NormalTok{)}
- \CommentTok{#  Cubist}
+\CommentTok{#  Cubist}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{58677}\NormalTok{)}
-\NormalTok{cb_grid_}\DecValTok{87}\NormalTok{ <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{committees =} \KeywordTok{c}\NormalTok{(}\DecValTok{25}\OperatorTok{:}\DecValTok{45}\NormalTok{), }\DataTypeTok{neighbors =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{ ))}
+\NormalTok{cb_grid_}\DecValTok{87}\NormalTok{ <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{committees =} \KeywordTok{c}\NormalTok{(}\DecValTok{25}\OperatorTok{:}\DecValTok{45}\NormalTok{), }
+                          \DataTypeTok{neighbors =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{ ))}
 \NormalTok{cbTune_}\DecValTok{87}\NormalTok{ <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
+                   \DataTypeTok{data=}\NormalTok{chem_train,}
                    \DataTypeTok{method =} \StringTok{"cubist"}\NormalTok{,}
                    \DataTypeTok{metric=}\StringTok{"RMSE"}\NormalTok{,}
                    \DataTypeTok{na.action =}\NormalTok{ na.pass,}
@@ -1664,19 +1829,21 @@ early could lead to overfitting.
 
 
 \NormalTok{hw2.}\FloatTok{3.}\NormalTok{dperformance_table <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\StringTok{"GBM"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(gbmTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(gbmTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-  \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(gbmTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-\StringTok{"GBMTest"}\NormalTok{=gb_test_}\DecValTok{87}\NormalTok{, }
-
-\StringTok{"RFTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(rfTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-  \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(rfTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-  \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(rfTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-   \StringTok{"RFTest"}\NormalTok{=rf_test_}\DecValTok{87}\NormalTok{,}
-
-    \StringTok{"CubistTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(cbTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
-      \KeywordTok{max}\NormalTok{(cbTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
-      \KeywordTok{max}\NormalTok{(cbTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
-    \StringTok{"CubistTest"}\NormalTok{=cb_test_}\DecValTok{87}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Tree Model Performance on ChemicalManufacturing Data"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{(}\DataTypeTok{row=}\DecValTok{5}\OperatorTok{:}\DecValTok{6}\NormalTok{, }\DataTypeTok{background =}\StringTok{"#d9f2e6"}\NormalTok{)}
+                                          \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(gbmTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                          \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(gbmTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"GBMTest"}\NormalTok{=gb_test_}\DecValTok{87}\NormalTok{, }
+                                  
+                                  \StringTok{"RFTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(rfTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                              \StringTok{"RSquared"}\NormalTok{=}\KeywordTok{max}\NormalTok{(rfTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                              \StringTok{"MAE"}\NormalTok{=}\KeywordTok{max}\NormalTok{(rfTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"RFTest"}\NormalTok{=rf_test_}\DecValTok{87}\NormalTok{,}
+                                  
+                                  \StringTok{"CubistTrain"}\NormalTok{=}\KeywordTok{c}\NormalTok{(}\KeywordTok{max}\NormalTok{(cbTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{RMSE),}
+                                                  \KeywordTok{max}\NormalTok{(cbTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{Rsquared),}
+                                                  \KeywordTok{max}\NormalTok{(cbTune_}\DecValTok{87}\OperatorTok{$}\NormalTok{results}\OperatorTok{$}\NormalTok{MAE)),}
+                                  \StringTok{"CubistTest"}\NormalTok{=cb_test_}\DecValTok{87}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Tree Model Performance on ChemicalManufacturing Data"}\NormalTok{, }\DataTypeTok{digits=}\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{(}\DataTypeTok{row=}\DecValTok{5}\OperatorTok{:}\DecValTok{6}\NormalTok{, }\DataTypeTok{background =}\StringTok{"#d9f2e6"}\NormalTok{)}
 
 
 
@@ -1684,61 +1851,126 @@ early could lead to overfitting.
 
 \CommentTok{#Boosted Model}
 \NormalTok{import <-}\KeywordTok{varImp}\NormalTok{(gbmTune_}\DecValTok{87}\NormalTok{)}
-\NormalTok{import <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(import}\OperatorTok{$}\NormalTok{importance) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Overall}\OperatorTok{>}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{arrange}\NormalTok{(Overall)}
-\NormalTok{boost<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(import[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,], }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}
-\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'#b33a3a'}\NormalTok{) }\OperatorTok{+}
-\StringTok{    }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}\DataTypeTok{xend=}\NormalTok{Variable,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall), }\DataTypeTok{color =} \StringTok{'#b33a3a'}\NormalTok{) }\OperatorTok{+}
-\StringTok{    }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance Chemical Manufacturing"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Gradient Boosted Trees"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
+\NormalTok{import <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(import}\OperatorTok{$}\NormalTok{importance) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Overall}\OperatorTok{>}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{arrange}\NormalTok{(Overall)}
+\NormalTok{boost<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(import[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,], }
+               \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall),}
+                   \DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'#b33a3a'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}
+                   \DataTypeTok{xend=}\NormalTok{Variable,}
+                   \DataTypeTok{y=}\DecValTok{0}\NormalTok{,}
+                   \DataTypeTok{yend=}\NormalTok{Overall), }
+               \DataTypeTok{color =} \StringTok{'#b33a3a'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance Chemical Manufacturing"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Gradient Boosted Trees"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
 \CommentTok{#rf Model}
 \NormalTok{import <-}\StringTok{ }\KeywordTok{varImp}\NormalTok{(rf_}\DecValTok{87}\NormalTok{, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{)}
-\NormalTok{import <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(import) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Overall}\OperatorTok{>}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{arrange}\NormalTok{(Overall)}
-\NormalTok{random <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(import[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,], }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}
+\NormalTok{import <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(import) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Overall}\OperatorTok{>}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{arrange}\NormalTok{(Overall)}
+\NormalTok{random <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(import[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,], }
+                 \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall),}
+                     \DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'#3ab3b3'}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}\DataTypeTok{xend=}\NormalTok{Variable,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall), }\DataTypeTok{color =} \StringTok{'#3ab3b3'}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance Chemical Manufacturing"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Random Forest"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}
+                   \DataTypeTok{xend=}\NormalTok{Variable,}
+                   \DataTypeTok{y=}\DecValTok{0}\NormalTok{,}
+                   \DataTypeTok{yend=}\NormalTok{Overall), }
+               \DataTypeTok{color =} \StringTok{'#3ab3b3'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance Chemical Manufacturing"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Random Forest"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
 \CommentTok{# Cubist Model}
 \NormalTok{import <-}\KeywordTok{varImp}\NormalTok{(cbTune_}\DecValTok{87}\NormalTok{)}
-\NormalTok{import <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(import}\OperatorTok{$}\NormalTok{importance) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Overall}\OperatorTok{>}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{arrange}\NormalTok{(Overall)}
-\NormalTok{cube<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(import[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,], }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall), }\DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}
+\NormalTok{import <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(import}\OperatorTok{$}\NormalTok{importance) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rownames_to_column}\NormalTok{(}\StringTok{"Variable"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Overall}\OperatorTok{>}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{arrange}\NormalTok{(Overall)}
+\NormalTok{cube<-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(import[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,], }
+              \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{reorder}\NormalTok{(Variable, Overall), }
+                  \DataTypeTok{y=}\NormalTok{Overall)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =}\StringTok{'#77b33a'}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}\DataTypeTok{xend=}\NormalTok{Variable,}\DataTypeTok{y=}\DecValTok{0}\NormalTok{,}\DataTypeTok{yend=}\NormalTok{Overall), }\DataTypeTok{color =} \StringTok{'#77b33a'}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance Chemical Manufacturing"}\NormalTok{, }\DataTypeTok{subtitle=}\StringTok{"Cubist Trees"}\NormalTok{, }\DataTypeTok{x=}\StringTok{""}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Variable,}
+                   \DataTypeTok{xend=}\NormalTok{Variable,}
+                   \DataTypeTok{y=}\DecValTok{0}\NormalTok{,}
+                   \DataTypeTok{yend=}\NormalTok{Overall),}
+               \DataTypeTok{color =} \StringTok{'#77b33a'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Variable Importance Chemical Manufacturing"}\NormalTok{, }
+       \DataTypeTok{subtitle=}\StringTok{"Cubist Trees"}\NormalTok{,}
+       \DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"Importance"}\NormalTok{)}\OperatorTok{+}\KeywordTok{coord_flip}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{()}
 
 
 \CommentTok{# (8.7c)}
 
 \NormalTok{rpartTune <-}\StringTok{ }\KeywordTok{train}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{.,}
-                  \DataTypeTok{data=}\NormalTok{chem_train,}
-                     \DataTypeTok{method =} \StringTok{"rpart2"}\NormalTok{,}
-                     \DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{,}
-                     \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
+                   \DataTypeTok{data=}\NormalTok{chem_train,}
+                   \DataTypeTok{method =} \StringTok{"rpart2"}\NormalTok{,}
+                   \DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{,}
+                   \DataTypeTok{trControl =} \KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"cv"}\NormalTok{))}
 \CommentTok{#plot(rpartTune)}
 \NormalTok{best_rpart <-}\StringTok{ }\KeywordTok{rpart}\NormalTok{(Yield}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{chem_train,}
                     \DataTypeTok{control =} \KeywordTok{rpart.control}\NormalTok{(}\DataTypeTok{maxdepth =} \DecValTok{4}\NormalTok{))}
 \CommentTok{#decision_plot <- rpart.plot(best_rpart,}
-           \CommentTok{# type = 1,}
-           \CommentTok{# extra = 1)}
+\CommentTok{# type = 1,}
+\CommentTok{# extra = 1)}
 
 
 \NormalTok{## Libraries for .rmd file}
 
 \CommentTok{# Predicitve Modeling}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'AppliedPredictiveModeling'}\NormalTok{, }\StringTok{'mice'}\NormalTok{,}\StringTok{'caret'}\NormalTok{, }\StringTok{'tidyverse'}\NormalTok{,}\StringTok{'impute'}\NormalTok{,}\StringTok{'pls'}\NormalTok{,}\StringTok{'caTools'}\NormalTok{,}\StringTok{'mlbench'}\NormalTok{,}\StringTok{'randomForest'}\NormalTok{,}\StringTok{'party'}\NormalTok{,}\StringTok{'gbm'}\NormalTok{,}\StringTok{'Cubist'}\NormalTok{, }\StringTok{'rpart'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'AppliedPredictiveModeling'}\NormalTok{, }
+          \StringTok{'mice'}\NormalTok{,}
+          \StringTok{'caret'}\NormalTok{, }
+          \StringTok{'tidyverse'}\NormalTok{,}
+          \StringTok{'impute'}\NormalTok{,}
+          \StringTok{'pls'}\NormalTok{,}
+          \StringTok{'caTools'}\NormalTok{,}
+          \StringTok{'mlbench'}\NormalTok{,}
+          \StringTok{'randomForest'}\NormalTok{,}
+          \StringTok{'party'}\NormalTok{,}
+          \StringTok{'gbm'}\NormalTok{,}
+          \StringTok{'Cubist'}\NormalTok{, }
+          \StringTok{'rpart'}\NormalTok{)}
 
 \CommentTok{# Formatting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'default'}\NormalTok{, }\StringTok{'knitr'}\NormalTok{, }\StringTok{'kableExtra'}\NormalTok{,}\StringTok{'gridExtra'}\NormalTok{,}\StringTok{'sqldf'}\NormalTok{,}\StringTok{'tibble'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'default'}\NormalTok{, }
+          \StringTok{'knitr'}\NormalTok{, }
+          \StringTok{'kableExtra'}\NormalTok{,}
+          \StringTok{'gridExtra'}\NormalTok{,}
+          \StringTok{'sqldf'}\NormalTok{,}
+          \StringTok{'tibble'}\NormalTok{)}
 
 \CommentTok{# Plotting Libraries}
-\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }\StringTok{'grid'}\NormalTok{, }\StringTok{'ggfortify'}\NormalTok{,}\StringTok{'rpart.plot'}\NormalTok{)}
+\KeywordTok{libraries}\NormalTok{(}\StringTok{'ggplot2'}\NormalTok{, }
+          \StringTok{'grid'}\NormalTok{, }
+          \StringTok{'ggfortify'}\NormalTok{,}
+          \StringTok{'rpart.plot'}\NormalTok{)}
 
 \CommentTok{# Data Wrangling }
-\KeywordTok{library}\NormalTok{(AppliedPredictiveModeling); }\KeywordTok{library}\NormalTok{(mice); }\KeywordTok{library}\NormalTok{(caret); }\KeywordTok{library}\NormalTok{(tidyverse); }\KeywordTok{library}\NormalTok{(pls); }\KeywordTok{library}\NormalTok{(caTools); }\KeywordTok{library}\NormalTok{(mlbench); }\KeywordTok{library}\NormalTok{(stringr)}
+\KeywordTok{library}\NormalTok{(AppliedPredictiveModeling); }
+\KeywordTok{library}\NormalTok{(mice);}
+\KeywordTok{library}\NormalTok{(caret); }
+\KeywordTok{library}\NormalTok{(tidyverse); }
+\KeywordTok{library}\NormalTok{(pls); }
+\KeywordTok{library}\NormalTok{(caTools); }
+\KeywordTok{library}\NormalTok{(mlbench); }
+\KeywordTok{library}\NormalTok{(stringr)}
 
 \CommentTok{# Formatting}
-\KeywordTok{library}\NormalTok{(default); }\KeywordTok{library}\NormalTok{(knitr); }\KeywordTok{library}\NormalTok{(kableExtra); }
+\KeywordTok{library}\NormalTok{(default); }
+\KeywordTok{library}\NormalTok{(knitr); }
+\KeywordTok{library}\NormalTok{(kableExtra); }
 
 \CommentTok{# Plotting}
-\KeywordTok{library}\NormalTok{(ggplot2); }\KeywordTok{library}\NormalTok{(grid); }\KeywordTok{library}\NormalTok{(ggfortify); }\KeywordTok{library}\NormalTok{(gridExtra)}
+\KeywordTok{library}\NormalTok{(ggplot2); }
+\KeywordTok{library}\NormalTok{(grid); }
+\KeywordTok{library}\NormalTok{(ggfortify); }
+\KeywordTok{library}\NormalTok{(gridExtra)}
 
 
 \CommentTok{# Assignment 1}
@@ -1749,16 +1981,32 @@ early could lead to overfitting.
 \NormalTok{Plt_CMP.Yield}
 
 \NormalTok{## kj-6.3b}
-\NormalTok{CMP.total_na }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Variables with Missing Values"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ F, }\DataTypeTok{position =} \StringTok{"center"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{column_spec}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DataTypeTok{bold =}\NormalTok{ T, }\DataTypeTok{border_left =}\NormalTok{ F, }\DataTypeTok{border_right =}\NormalTok{ F, }\DataTypeTok{width =} \StringTok{'0.1cm'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{()}
+\NormalTok{CMP.total_na }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Variables with Missing Values"}\NormalTok{, }
+                       \DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}\StringTok{  }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ F, }
+                \DataTypeTok{position =} \StringTok{"center"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{column_spec}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DataTypeTok{bold =}\NormalTok{ T, }
+              \DataTypeTok{border_left =}\NormalTok{ F, }
+              \DataTypeTok{border_right =}\NormalTok{ F, }
+              \DataTypeTok{width =} \StringTok{'0.1cm'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{()}
 
 \NormalTok{## kj-6.3c}
-\NormalTok{CMP.pls.train.perf }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"PLS Performance Metrics on Training Subset"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{()}
+\NormalTok{CMP.pls.train.perf }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"PLS Performance Metrics on Training Subset"}\NormalTok{, }
+        \DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{()}
 
 \NormalTok{## kj-6.3c2}
 \KeywordTok{grid.arrange}\NormalTok{(Plt_CMP.RMSE, Plt_CMP.fit.obs_vs_pred, }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
 
 \NormalTok{## kj-6.3d-1}
-\NormalTok{CMP.pls.test.perf  }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"PLS Performance Metrics on Test Subset"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{()}
+\NormalTok{CMP.pls.test.perf }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"PLS Performance Metrics on Test Subset"}\NormalTok{, }
+        \DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{()}
 
 \NormalTok{## kj-6.3d-2}
 
@@ -1769,8 +2017,11 @@ early could lead to overfitting.
 \NormalTok{Plt_CMP.Scatter}
 
 \NormalTok{## kj-6.3f-2}
-\NormalTok{CMP_DF.corr.tbl }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Variable Correlation with Yield"}\NormalTok{, }\DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ F) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{row_spec}\NormalTok{()}
+\NormalTok{CMP_DF.corr.tbl }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\DataTypeTok{caption=}\StringTok{"Variable Correlation with Yield"}\NormalTok{,}
+        \DataTypeTok{booktabs=}\NormalTok{T) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ F) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{row_spec}\NormalTok{()}
 
 
 \CommentTok{# Assignment 2}
@@ -1788,7 +2039,11 @@ early could lead to overfitting.
 \NormalTok{Plt_Sim.featurePlot}
 
 \NormalTok{## kj-7.2-ex4, echo=T, eval=F}
-\NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }\DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }\DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{), }\DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{) }
+\NormalTok{knnModel <-}\StringTok{ }\KeywordTok{train}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{x, }
+                  \DataTypeTok{y =}\NormalTok{ trainingData}\OperatorTok{$}\NormalTok{y, }
+                  \DataTypeTok{method =} \StringTok{"knn"}\NormalTok{, }
+                  \DataTypeTok{preProc =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{), }
+                  \DataTypeTok{tuneLength =} \DecValTok{10}\NormalTok{) }
 \NormalTok{knnModel }
 \NormalTok{knnPred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(knnModel, }\DataTypeTok{newdata =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{x) }
 \KeywordTok{postResample}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ knnPred, }\DataTypeTok{obs =}\NormalTok{ testData}\OperatorTok{$}\NormalTok{y)}
@@ -1806,7 +2061,10 @@ early could lead to overfitting.
 \NormalTok{hw2nnet_modplot}
 
 \NormalTok{## kj-7.2-4}
-\NormalTok{hw2.}\FloatTok{2.}\NormalTok{bperformance_table }\CommentTok{#%>% kable(caption="Model Performance", digits=4) %>% kable_styling() %>% row_spec() %>% row_spec(row=3:4,background ="#d9f2e6")}
+\NormalTok{hw2.}\FloatTok{2.}\NormalTok{bperformance_table }
+\CommentTok{#%>% kable(caption="Model Performance", digits=4) }
+\CommentTok{#%>% kable_styling() }
+\CommentTok{#%>% row_spec() %>% row_spec(row=3:4,background ="#d9f2e6")}
 
 \NormalTok{## kj-7.2-4b}
 \NormalTok{hwmarsimp_plot}

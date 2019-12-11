@@ -4,6 +4,8 @@
 
 # DEPENDENCIES
 
+#setwd('~/GitHub/CUNY_DATA_624/Homework-Two')
+#load(file = "hw2nnet_mod2.rds")
 
 # Predicitve Modeling
 libraries('AppliedPredictiveModeling', 'mice','caret', 'tidyverse','impute','pls','caTools','mlbench','randomForest','party','gbm','Cubist','rpart')
@@ -34,8 +36,8 @@ set.seed(58677)
 data("ChemicalManufacturingProcess")
 
 # (6.3a) 
-Plt_CMP.Yield <-ggplot(ChemicalManufacturingProcess, aes(x = Yield))+
-  geom_histogram(color=dark_gold, fill = light_gold)+
+Plt_CMP.Yield <- ggplot(ChemicalManufacturingProcess, aes(x = Yield))+
+  geom_histogram(color=dark_gold, fill=light_gold)+
   scale_x_continuous(labels = scales::number_format(accuracy = .1))+
   labs(title="Distribution of Yield") +
   theme_bw()+theme(plot.title = element_text(color="#745010", size=10, face="bold"), axis.title.y = element_blank())
@@ -311,24 +313,24 @@ nnetGrid_75 <- expand.grid(.decay = c(0, 0.01, .1),
                         .size = c(1:10),
                         .bag = FALSE)
 
-hw2nnet_mod2 <- train(Yield~.,
-                  data=chem_train,
-                  method = "avNNet",
-                  tuneGrid = nnetGrid_75,
-                  preProc = c("center", "scale"),
-                  linout = TRUE,
-                  trace = FALSE,
-                  MaxNWts = 10 * (ncol(chem_train) + 1) + 5 + 1,
-                  maxit = 500)
+#hw2nnet_mod2 <- train(Yield~.,
+#                  data=chem_train,
+#                  method = "avNNet",
+#                  tuneGrid = nnetGrid_75,
+#                  preProc = c("center", "scale"),
+#                  linout = TRUE,
+#                  trace = FALSE,
+#                  MaxNWts = 10 * (ncol(chem_train) + 1) + 5 + 1,
+#                  maxit = 500)
 
 # Save an hw2nnet_mod2 to a file
 #saveRDS(hw2nnet_mod2, file = "~/GitHub/CUNY_DATA_624/Homework-Two/hw2nnet_mod2.rds")
-save.image("~/GitHub/CUNY_DATA_624/Homework-Two/hw2nnet_mod2.rds")
+#save.image("~/GitHub/CUNY_DATA_624/Homework-Two/hw2nnet_mod2.rds")
 
 # Restore the object
 #getwd()
-setwd('~/GitHub/CUNY_DATA_624/Homework-Two')
-load(file = "hw2nnet_mod2.rds")
+#setwd('~/GitHub/CUNY_DATA_624/Homework-Two')
+#load(file = "hw2nnet_mod2.rds")
 
 
 
@@ -393,8 +395,8 @@ hw2svmImp2<-hw2svmImp2$importance %>%
   mutate(rowname = forcats::fct_inorder(rowname )) 
     
 hwsvmimp_plot2 <- ggplot(head(hw2svmImp2, 15), aes(x=reorder(rowname, Overall), y=Overall)) + 
-    geom_point(colour = 'violetred4') + 
-    geom_segment(aes(x=rowname,xend=rowname,y=0,yend=Overall),colour = 'violetred4') + 
+    geom_point(colour = light_gold) + 
+    geom_segment(aes(x=rowname,xend=rowname,y=0,yend=Overall),colour = light_gold) + 
     labs(title="Variable Importance", 
          subtitle="SVM Model Importance for ChemicalManufacturing Data", x="Variable", y="Importance")+ 
     coord_flip()+
@@ -545,11 +547,11 @@ cubistMod_nodup <- cubist(simulated[-11], simulated$y, committees = 100)
 cubistMod_nodupb <-varImp(cubistMod_nodup)
 
 cubistMod_nodupb.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(cubistMod_nodup))), "VALUE")    #as.data.frame(as.matrix(varimp(hw3_rfmodel3)))
-
+load('hw2.rds')
 cubistMod_nodupbplot<-ggplot(cubistMod_nodupb.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
   geom_point(color ='darkorange') + 
   geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
-  labs(title="Variable Importance", subtitle="Cubist Model without Duplicate", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+  labs(title="Variable Importance", subtitle="Cubist Model without Duplicate", x="", y="Importance")+ coord_flip()+theme_bw()+theme(legend.position = "none")
 
 
 
@@ -563,7 +565,7 @@ cubistMod_wdupb.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(c
 cubistMod_wdupbplot<-ggplot(cubistMod_wdupb.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
   geom_point(color ='darkorange') + 
   geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
-  labs(title="Variable Importance", subtitle="Cubist Model With Duplicate", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+  labs(title="Variable Importance", subtitle="Cubist Model With Duplicate", x="", y="Importance")+ coord_flip()+theme_bw()+theme(legend.position = "none")
 
 
 
@@ -583,7 +585,7 @@ sim_varImp.df <-tibble::rownames_to_column(as.data.frame(as.matrix(varImp(sim_rf
 sim_varImp.plot<-ggplot(cubistMod_wdupb.df, aes(x=reorder(VALUE, Overall), y=Overall)) + 
   geom_point(color ='darkorange') + 
   geom_segment(aes(x=VALUE,xend=VALUE,y=0,yend=Overall, color = 'darkorange')) + 
-  labs(title="Variable Importance", subtitle="Simulated Importance", x="", y="Importance")+ coord_flip()+theme_bw()+theme()
+  labs(title="Variable Importance", subtitle="Simulated Importance", x="", y="Importance")+ coord_flip()+theme_bw()+theme(legend.position = "none")
 
 
 # (8.3a)
@@ -706,3 +708,7 @@ best_rpart <- rpart(Yield~., data =chem_train,
 #decision_plot <- rpart.plot(best_rpart,
            # type = 1,
            # extra = 1)
+
+#setwd('~/GitHub/CUNY_DATA_624/Homework-Two')
+#save.image("~/GitHub/CUNY_DATA_624/Homework-Two/hw2.rds")
+load(file = "hw2.rds")

@@ -7,7 +7,7 @@ library(easypackages)
 library(formatR)
 
 # Set default augments for code chunks
-knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, comment=NA, tidy=T, tidy.opts=list(width.cutoff=60), fig.width=10, fig.height = 3)
+knitr::opts_chunk$set(echo = F, message=F, warning=F, error=F, tidy.opts=list(width.cutoff=80),tidy=TRUE, comment=NA, fig.width=10, fig.height = 3)
 
 # Set default augments for `kable()` 
 default(kable) <- list(format="latex", digits=4)
