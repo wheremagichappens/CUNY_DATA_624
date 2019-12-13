@@ -1,11 +1,7 @@
 ---
-title: "Homework Part 2"
+title: "Applied Predictive Modeling - Kuhn and Johnson"
 author: 
-- Vinicio Haro
 - Sang Yoon (Andy) Hwang
-- Julian McEachern
-- Jeremy O'Brien
-- Bethany Poulin
 output: 
   pdf_document:
     includes:
